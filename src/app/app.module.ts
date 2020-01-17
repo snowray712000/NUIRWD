@@ -3,10 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { OneVerseComponent } from './one-verse/one-verse.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    OneVerseComponent,
   ],
   imports: [
     BrowserModule,
