@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-
-
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory } from '@angular/core';
+import { OneVerseViewDirective } from './one-verse-view.directive';
+import { ShowPureTextComponent } from './show-pure-text/show-pure-text.component';
+import { ShowTitleAComponent } from './show-title-a/show-title-a.component';
+import { ShowMarkerComponent } from './show-marker/show-marker.component';
 
 @Component({
   selector: 'app-one-verse',
@@ -10,7 +12,9 @@ import { Component, OnInit } from '@angular/core';
 export class OneVerseComponent implements OnInit {
   private content: Array<ShowBase>;
   private address: VerseAddress;
-  constructor() {
+  private showComponentFactoryGetter: IShowComponentFactoryGet;
+  @ViewChild(OneVerseViewDirective, undefined) view: OneVerseViewDirective;
+  constructor(private resolveFactory: ComponentFactoryResolver) {
     this.testInitial();
   }
 
@@ -23,9 +27,6 @@ export class OneVerseComponent implements OnInit {
     if (this.address != undefined)
       return;
 
-    //this.text = '地是空虛混沌，淵面黑暗；　神的靈運行在水面上。';
-    //this.sec = 2;
-
     this.address = new VerseAddress(1, 6, 1);
     const contents: Array<ShowBase> = [
       new ShowTitleA('神對人類的罪惡感到憂傷'),
@@ -36,10 +37,56 @@ export class OneVerseComponent implements OnInit {
     this.content = contents;
   }
 
+  getFactory(showObj: ShowBase): ComponentFactory<any> {
+    return undefined;
+  }
   ngOnInit() {
+    this.view.viewRef.clear();
+
+    if (this.showComponentFactoryGetter == undefined)
+      this.showComponentFactoryGetter = new ShowComponentFactoryGetter(this.resolveFactory);
+
+    this.content.forEach(a1 => {
+      const fact = this.showComponentFactoryGetter.getFact(a1);
+
+      if (fact != undefined) {
+        const comp = this.view.viewRef.createComponent(fact);
+        comp.instance.data = a1;
+      }
+
+    });
   }
 
 }
+interface IShowComponentFactoryGet {
+  getFact(showObj: ShowBase): ComponentFactory<any>;
+}
+class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
+
+  private factorys: Array<ɵComponentFactory<any>>;
+  constructor(private resolveFactory: ComponentFactoryResolver) {
+    this.initial_factorys();
+  }
+
+  initial_factorys() {
+    this.factorys = [
+      this.resolveFactory.resolveComponentFactory(ShowPureTextComponent),
+      this.resolveFactory.resolveComponentFactory(ShowTitleAComponent),
+      this.resolveFactory.resolveComponentFactory(ShowMarkerComponent),
+    ];
+  }
+  getFact(showObj: ShowBase): ComponentFactory<any> {
+    if (showObj instanceof ShowPureText)
+      return this.factorys[0];
+    if (showObj instanceof ShowTitleA)
+      return this.factorys[1];
+    if (showObj instanceof ShowMarker)
+      return this.factorys[2];
+    return undefined;
+  }
+
+}
+
 class VerseAddress {
   public book: number;
   public chap: number;
@@ -54,7 +101,7 @@ class VerseAddress {
 abstract class ShowBase {
   abstract toString(): string;
 }
-class ShowPureText extends ShowBase {
+export class ShowPureText extends ShowBase {
   public text: string;
 
   constructor(text: string) {
@@ -66,7 +113,7 @@ class ShowPureText extends ShowBase {
     return this.text;
   }
 }
-class ShowTitleA extends ShowBase {
+export class ShowTitleA extends ShowBase {
   public text: string;
 
   toString(): string {
@@ -78,7 +125,7 @@ class ShowTitleA extends ShowBase {
     this.text = text;
   }
 }
-class ShowMarker extends ShowBase {
+export class ShowMarker extends ShowBase {
   public numRef: number;
   public ver: string;
   public address: VerseAddress;
