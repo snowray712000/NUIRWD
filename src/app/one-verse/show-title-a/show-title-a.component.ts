@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShowTitleA } from '../one-verse.component';
+import { ShowTitleA } from 'src/app/one-verse/show-data/ShowBase';
 
 @Component({
   selector: 'app-show-title-a',
@@ -14,8 +14,9 @@ export class ShowTitleAComponent implements OnInit {
   }
 
   get text(): string {
-    if (this.data == undefined)
-      return "";
+    if (this.data === undefined) {
+      return '';
+    }
     return this.data.text;
   }
 }

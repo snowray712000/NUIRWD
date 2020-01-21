@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShowMarker } from '../one-verse.component';
+import { ShowMarker } from 'src/app/one-verse/show-data/ShowBase';
 
 @Component({
   selector: 'app-show-marker',
@@ -14,8 +14,9 @@ export class ShowMarkerComponent implements OnInit {
   }
 
   get numRef(): number {
-    if ( this.data == undefined)
+    if (this.data === undefined) {
       return -1;
+    }
     return this.data.numRef;
   }
 }

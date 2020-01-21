@@ -3,6 +3,10 @@ import { OneVerseViewDirective } from './one-verse-view.directive';
 import { ShowPureTextComponent } from './show-pure-text/show-pure-text.component';
 import { ShowTitleAComponent } from './show-title-a/show-title-a.component';
 import { ShowMarkerComponent } from './show-marker/show-marker.component';
+import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
+import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
+import { ShowBase, ShowTitleA, ShowPureText, ShowMarker } from './show-data/ShowBase';
+import { VerseAddress } from './show-data/VerseAddress';
 
 @Component({
   selector: 'app-one-verse',
@@ -24,8 +28,9 @@ export class OneVerseComponent implements OnInit {
   }
 
   testInitial() {
-    if (this.address != undefined)
+    if (this.address !== undefined) {
       return;
+    }
 
     this.address = new VerseAddress(1, 6, 1);
     const contents: Array<ShowBase> = [
@@ -43,101 +48,17 @@ export class OneVerseComponent implements OnInit {
   ngOnInit() {
     this.view.viewRef.clear();
 
-    if (this.showComponentFactoryGetter == undefined)
+    if (this.showComponentFactoryGetter === undefined) {
       this.showComponentFactoryGetter = new ShowComponentFactoryGetter(this.resolveFactory);
+    }
 
     this.content.forEach(a1 => {
       const fact = this.showComponentFactoryGetter.getFact(a1);
-
-      if (fact != undefined) {
+      if (fact !== undefined) {
         const comp = this.view.viewRef.createComponent(fact);
         comp.instance.data = a1;
       }
-
     });
   }
-
-}
-interface IShowComponentFactoryGet {
-  getFact(showObj: ShowBase): ComponentFactory<any>;
-}
-class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
-
-  private factorys: Array<ɵComponentFactory<any>>;
-  constructor(private resolveFactory: ComponentFactoryResolver) {
-    this.initial_factorys();
-  }
-
-  initial_factorys() {
-    this.factorys = [
-      this.resolveFactory.resolveComponentFactory(ShowPureTextComponent),
-      this.resolveFactory.resolveComponentFactory(ShowTitleAComponent),
-      this.resolveFactory.resolveComponentFactory(ShowMarkerComponent),
-    ];
-  }
-  getFact(showObj: ShowBase): ComponentFactory<any> {
-    if (showObj instanceof ShowPureText)
-      return this.factorys[0];
-    if (showObj instanceof ShowTitleA)
-      return this.factorys[1];
-    if (showObj instanceof ShowMarker)
-      return this.factorys[2];
-    return undefined;
-  }
-
 }
 
-class VerseAddress {
-  public book: number;
-  public chap: number;
-  public sec: number;
-
-  constructor(book: number, chap: number, sec: number) {
-    this.book = book;
-    this.chap = chap;
-    this.sec = sec;
-  }
-}
-abstract class ShowBase {
-  abstract toString(): string;
-}
-export class ShowPureText extends ShowBase {
-  public text: string;
-
-  constructor(text: string) {
-    super();
-    this.text = text;
-  }
-
-  toString(): string {
-    return this.text;
-  }
-}
-export class ShowTitleA extends ShowBase {
-  public text: string;
-
-  toString(): string {
-    return this.text;
-  }
-
-  constructor(text: string) {
-    super();
-    this.text = text;
-  }
-}
-export class ShowMarker extends ShowBase {
-  public numRef: number;
-  public ver: string;
-  public address: VerseAddress;
-
-  constructor(numRef: number, verBible: string, address: VerseAddress) {
-    super();
-    this.numRef = numRef;
-    this.ver = verBible;
-    this.address = address;
-  }
-
-  toString(): string {
-    return `【${this.numRef}】`;
-  }
-}

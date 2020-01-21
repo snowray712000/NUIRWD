@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { OneVerseComponent, ShowPureText } from './one-verse/one-verse.component';
+import { OneVerseComponent } from './one-verse/one-verse.component';
 import { OneVerseViewDirective } from './one-verse/one-verse-view.directive';
 import { ShowPureTextComponent } from './one-verse/show-pure-text/show-pure-text.component';
 import { ShowTitleAComponent } from './one-verse/show-title-a/show-title-a.component';
