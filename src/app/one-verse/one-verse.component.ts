@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory, Output } from '@angular/core';
 import { OneVerseViewDirective } from './one-verse-view.directive';
 import { ShowPureTextComponent } from './show-pure-text/show-pure-text.component';
 import { ShowTitleAComponent } from './show-title-a/show-title-a.component';
@@ -7,6 +7,7 @@ import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
 import { ShowBase, ShowTitleA, ShowPureText, ShowMarker } from './show-data/ShowBase';
 import { VerseAddress } from './show-data/VerseAddress';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'app-one-verse',
@@ -17,6 +18,7 @@ export class OneVerseComponent implements OnInit {
   private content: Array<ShowBase>;
   private address: VerseAddress;
   private showComponentFactoryGetter: IShowComponentFactoryGet;
+  @Output() events = new EventEmitter();
   @ViewChild(OneVerseViewDirective, undefined) view: OneVerseViewDirective;
   constructor(private resolveFactory: ComponentFactoryResolver) {
     this.testInitial();
@@ -57,6 +59,10 @@ export class OneVerseComponent implements OnInit {
       if (fact !== undefined) {
         const comp = this.view.viewRef.createComponent(fact);
         comp.instance.data = a1;
+        if (comp.instance.events !== undefined) {
+          const r1 = comp.instance.events as EventEmitter;
+          r1.on('show', param => this.events.emit('show', param));
+        }
       }
     });
   }
