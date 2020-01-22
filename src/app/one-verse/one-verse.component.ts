@@ -8,6 +8,9 @@ import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
 import { ShowBase, ShowTitleA, ShowPureText, ShowMarker } from './show-data/ShowBase';
 import { VerseAddress } from './show-data/VerseAddress';
 import { EventEmitter } from 'events';
+import { IOneVerseInitialor } from './test-data/IOneVerseInitialor';
+import { OneVerseTest01 } from './test-data/OneVerseTest01';
+import { OneVerseTest02 } from './test-data/OneVerseTest02';
 
 @Component({
   selector: 'app-one-verse',
@@ -18,10 +21,14 @@ export class OneVerseComponent implements OnInit {
   private content: Array<ShowBase>;
   private address: VerseAddress;
   private showComponentFactoryGetter: IShowComponentFactoryGet;
+  private initialor: IOneVerseInitialor;
   @Output() events = new EventEmitter();
   @ViewChild(OneVerseViewDirective, undefined) view: OneVerseViewDirective;
-  constructor(private resolveFactory: ComponentFactoryResolver) {
-    this.testInitial();
+  constructor(
+    private resolveFactory: ComponentFactoryResolver) {
+
+    this.initialor = new OneVerseTest02();
+
   }
 
   get sec(): number { return this.address.sec; }
@@ -34,20 +41,23 @@ export class OneVerseComponent implements OnInit {
       return;
     }
 
-    this.address = new VerseAddress(1, 6, 1);
-    const contents: Array<ShowBase> = [
-      new ShowTitleA('神對人類的罪惡感到憂傷'),
-      new ShowPureText('當人'),
-      new ShowMarker(223, 'cnet', this.address),
-      new ShowPureText('在世上多起來，又生女兒的時候，')
-    ];
-    this.content = contents;
+    if (this.initialor === undefined) {
+      throw new Error('not implement');
+    }
+
+    this.address = this.initialor.address();
+    this.content = this.initialor.content();
+    console.log(this.address);
+    console.log(this.content);
+
+
   }
 
   getFactory(showObj: ShowBase): ComponentFactory<any> {
     return undefined;
   }
   ngOnInit() {
+    this.testInitial();
     this.view.viewRef.clear();
 
     if (this.showComponentFactoryGetter === undefined) {
