@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { IOneVerseInitialor } from './test-data/IOneVerseInitialor';
 import { OneVerseTest01 } from './test-data/OneVerseTest01';
 import { OneVerseTest02 } from './test-data/OneVerseTest02';
+import { OneVerseTest03 } from './test-data/OneVerseTest03';
 
 @Component({
   selector: 'app-one-verse',
@@ -27,7 +28,7 @@ export class OneVerseComponent implements OnInit {
   constructor(
     private resolveFactory: ComponentFactoryResolver) {
 
-    this.initialor = new OneVerseTest02();
+    this.initialor = new OneVerseTest03();
 
   }
 
@@ -71,7 +72,11 @@ export class OneVerseComponent implements OnInit {
         comp.instance.data = a1;
         if (comp.instance.events !== undefined) {
           const r1 = comp.instance.events as EventEmitter;
-          r1.on('show', param => this.events.emit('show', param));
+          r1.on('show', param => {
+            console.log('show event');
+            console.log(param);
+            this.events.emit('show', param);
+          });
         }
       }
     });

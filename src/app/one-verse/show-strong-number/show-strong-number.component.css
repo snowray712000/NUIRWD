@@ -1,0 +1,7 @@
+.sn {
+  color: rgba(130, 50, 50, 0.5);
+  cursor: pointer;
+}
+.sn:hover {
+  color: rgba(250, 50, 50, 1);
+}

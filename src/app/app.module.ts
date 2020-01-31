@@ -8,6 +8,7 @@ import { OneVerseViewDirective } from './one-verse/one-verse-view.directive';
 import { ShowPureTextComponent } from './one-verse/show-pure-text/show-pure-text.component';
 import { ShowTitleAComponent } from './one-verse/show-title-a/show-title-a.component';
 import { ShowMarkerComponent } from './one-verse/show-marker/show-marker.component';
+import { ShowStrongNumberComponent } from './one-verse/show-strong-number/show-strong-number.component';
 
 
 @NgModule({
@@ -18,11 +19,13 @@ import { ShowMarkerComponent } from './one-verse/show-marker/show-marker.compone
     ShowPureTextComponent,
     ShowTitleAComponent,
     ShowMarkerComponent,
+    ShowStrongNumberComponent,
   ],
   entryComponents: [
     ShowPureTextComponent,
     ShowTitleAComponent,
     ShowMarkerComponent,
+    ShowStrongNumberComponent,
   ],
   imports: [
     BrowserModule,
