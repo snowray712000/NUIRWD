@@ -1,0 +1,8 @@
+img {
+  background-image: url("/assets/camera.png");
+  min-width: 1.5em;
+  min-height: 1.0em;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
