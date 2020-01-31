@@ -6,6 +6,8 @@ import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowBase, ShowPureText, ShowTitleA, ShowMarker } from './show-data/ShowBase';
 import { ShowStrongNumberComponent } from './show-strong-number/show-strong-number.component';
 import { ShowStrongNumber } from './show-data/ShowStrongNumber';
+import { ShowBibleVersionComponent } from './show-bible-version/show-bible-version.component';
+import { ShowBibleVersion } from './show-data/ShowBibleVersion';
 
 /// <summary> 裡面有 static 處理，多個地方使用，都會用同一組 component factory </summary>
 export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
@@ -24,6 +26,7 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
       this.resolveFactory.resolveComponentFactory(ShowTitleAComponent),
       this.resolveFactory.resolveComponentFactory(ShowMarkerComponent),
       this.resolveFactory.resolveComponentFactory(ShowStrongNumberComponent),
+      this.resolveFactory.resolveComponentFactory(ShowBibleVersionComponent),
     ];
   }
   getFact(showObj: ShowBase): ComponentFactory<any> {
@@ -38,6 +41,9 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
     }
     if (showObj instanceof ShowStrongNumber) {
       return ShowComponentFactoryGetter.factorys[3];
+    }
+    if (showObj instanceof ShowBibleVersion) {
+      return ShowComponentFactoryGetter.factorys[4];
     }
     return undefined;
   }
