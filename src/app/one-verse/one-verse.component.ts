@@ -5,7 +5,7 @@ import { ShowTitleAComponent } from './show-title-a/show-title-a.component';
 import { ShowMarkerComponent } from './show-marker/show-marker.component';
 import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
-import { ShowBase, ShowTitleA, ShowPureText, ShowMarker } from './show-data/ShowBase';
+import { ShowBase, ShowPureText, ShowMarker } from './show-data/ShowBase';
 import { VerseAddress } from './show-data/VerseAddress';
 import { EventEmitter } from 'events';
 import { IOneVerseInitialor } from './test-data/IOneVerseInitialor';
@@ -17,6 +17,7 @@ import { OneVerseTest05 } from './test-data/OneVerseTest05';
 import { OneVerseTest06 } from './test-data/OneVerseTest06';
 import { OneVerseTest07 } from './test-data/OneVerseTest07';
 import { OneVerseTest08 } from './test-data/OneVerseTest08';
+import { OneVerseTest09 } from './test-data/OneVerseTest09';
 
 @Component({
   selector: 'app-one-verse',
@@ -33,7 +34,7 @@ export class OneVerseComponent implements OnInit {
   constructor(
     private resolveFactory: ComponentFactoryResolver) {
 
-    this.initialor = new OneVerseTest08();
+    this.initialor = new OneVerseTest09();
 
   }
 

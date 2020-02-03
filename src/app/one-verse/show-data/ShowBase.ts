@@ -15,18 +15,7 @@ export class ShowPureText extends ShowBase {
     return this.text;
   }
 }
-export class ShowTitleA extends ShowBase {
-  public text: string;
 
-  toString(): string {
-    return this.text;
-  }
-
-  constructor(text: string) {
-    super();
-    this.text = text;
-  }
-}
 export class ShowMarker extends ShowBase {
   public numRef: number;
   public ver: string;

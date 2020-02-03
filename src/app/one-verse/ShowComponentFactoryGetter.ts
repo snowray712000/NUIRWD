@@ -3,7 +3,7 @@ import { ShowPureTextComponent } from './show-pure-text/show-pure-text.component
 import { ShowTitleAComponent } from './show-title-a/show-title-a.component';
 import { ShowMarkerComponent } from './show-marker/show-marker.component';
 import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
-import { ShowBase, ShowPureText, ShowTitleA, ShowMarker } from './show-data/ShowBase';
+import { ShowBase, ShowPureText, ShowMarker } from './show-data/ShowBase';
 import { ShowStrongNumberComponent } from './show-strong-number/show-strong-number.component';
 import { ShowStrongNumber } from './show-data/ShowStrongNumber';
 import { ShowBibleVersionComponent } from './show-bible-version/show-bible-version.component';
@@ -16,6 +16,7 @@ import { ShowNotBibleTextComponent } from './show-not-bible-text/show-not-bible-
 import { ShowNotBibleText } from './show-data/ShowNotBibleText';
 import { ShowName } from './show-data/ShowName';
 import { ShowNameComponent } from './show-name/show-name.component';
+import { ShowTitleA } from './show-data/ShowTitleA';
 
 /// <summary> 裡面有 static 處理，多個地方使用，都會用同一組 component factory </summary>
 export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
