@@ -14,6 +14,8 @@ import { ShowMapComponent } from './show-map/show-map.component';
 import { ShowMap } from './show-data/ShowMap';
 import { ShowNotBibleTextComponent } from './show-not-bible-text/show-not-bible-text.component';
 import { ShowNotBibleText } from './show-data/ShowNotBibleText';
+import { ShowName } from './show-data/ShowName';
+import { ShowNameComponent } from './show-name/show-name.component';
 
 /// <summary> 裡面有 static 處理，多個地方使用，都會用同一組 component factory </summary>
 export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
@@ -36,6 +38,7 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
       this.resolveFactory.resolveComponentFactory(ShowPhotoComponent),
       this.resolveFactory.resolveComponentFactory(ShowMapComponent),
       this.resolveFactory.resolveComponentFactory(ShowNotBibleTextComponent),
+      this.resolveFactory.resolveComponentFactory(ShowNameComponent),
     ];
   }
   getFact(showObj: ShowBase): ComponentFactory<any> {
@@ -62,6 +65,9 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
     }
     if (showObj instanceof ShowNotBibleText) {
       return ShowComponentFactoryGetter.factorys[7];
+    }
+    if (showObj instanceof ShowName) {
+      return ShowComponentFactoryGetter.factorys[8];
     }
     return undefined;
   }

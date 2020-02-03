@@ -16,6 +16,7 @@ import { OneVerseTest04 } from './test-data/OneVerseTest04';
 import { OneVerseTest05 } from './test-data/OneVerseTest05';
 import { OneVerseTest06 } from './test-data/OneVerseTest06';
 import { OneVerseTest07 } from './test-data/OneVerseTest07';
+import { OneVerseTest08 } from './test-data/OneVerseTest08';
 
 @Component({
   selector: 'app-one-verse',
@@ -32,7 +33,7 @@ export class OneVerseComponent implements OnInit {
   constructor(
     private resolveFactory: ComponentFactoryResolver) {
 
-    this.initialor = new OneVerseTest07();
+    this.initialor = new OneVerseTest08();
 
   }
 
