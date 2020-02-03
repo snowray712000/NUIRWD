@@ -12,6 +12,7 @@ import { ShowStrongNumberComponent } from './one-verse/show-strong-number/show-s
 import { ShowBibleVersionComponent } from './one-verse/show-bible-version/show-bible-version.component';
 import { ShowPhotoComponent } from './one-verse/show-photo/show-photo.component';
 import { ShowMapComponent } from './one-verse/show-map/show-map.component';
+import { ShowNotBibleTextComponent } from './one-verse/show-not-bible-text/show-not-bible-text.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { ShowMapComponent } from './one-verse/show-map/show-map.component';
     ShowBibleVersionComponent,
     ShowPhotoComponent,
     ShowMapComponent,
+    ShowNotBibleTextComponent,
   ],
   entryComponents: [
     ShowPureTextComponent,
@@ -35,6 +37,7 @@ import { ShowMapComponent } from './one-verse/show-map/show-map.component';
     ShowBibleVersionComponent,
     ShowPhotoComponent,
     ShowMapComponent,
+    ShowNotBibleTextComponent,
   ],
   imports: [
     BrowserModule,
