@@ -17,6 +17,8 @@ import { ShowNotBibleText } from './show-data/ShowNotBibleText';
 import { ShowName } from './show-data/ShowName';
 import { ShowNameComponent } from './show-name/show-name.component';
 import { ShowTitleA } from './show-data/ShowTitleA';
+import { ShowReferenceComponent } from './show-reference/show-reference.component';
+import { ShowReference } from './show-data/ShowReference';
 
 /// <summary> 裡面有 static 處理，多個地方使用，都會用同一組 component factory </summary>
 export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
@@ -40,6 +42,7 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
       this.resolveFactory.resolveComponentFactory(ShowMapComponent),
       this.resolveFactory.resolveComponentFactory(ShowNotBibleTextComponent),
       this.resolveFactory.resolveComponentFactory(ShowNameComponent),
+      this.resolveFactory.resolveComponentFactory(ShowReferenceComponent),
     ];
   }
   getFact(showObj: ShowBase): ComponentFactory<any> {
@@ -69,6 +72,9 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
     }
     if (showObj instanceof ShowName) {
       return ShowComponentFactoryGetter.factorys[8];
+    }
+    if (showObj instanceof ShowReference) {
+      return ShowComponentFactoryGetter.factorys[9];
     }
     return undefined;
   }
