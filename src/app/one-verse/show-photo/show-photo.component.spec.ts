@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowPhotoComponent } from './show-photo.component';
+import { ShowPhoto } from '../show-data/ShowPhoto';
 
 describe('ShowPhotoComponent', () => {
   let component: ShowPhotoComponent;
@@ -16,6 +17,7 @@ describe('ShowPhotoComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowPhotoComponent);
     component = fixture.componentInstance;
+    component.data = new ShowPhoto(1360);
     fixture.detectChanges();
   });
 

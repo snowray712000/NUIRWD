@@ -5,7 +5,7 @@ import { ShowMarker } from '../show-data/ShowBase';
 import { VerseAddress } from '../show-data/VerseAddress';
 import { By } from '@angular/platform-browser';
 
-describe('ShowMarkerComponent', () => {
+describe('Show002 - MarkerComponent', () => {
   let component: ShowMarkerComponent;
   let fixture: ComponentFixture<ShowMarkerComponent>;
 

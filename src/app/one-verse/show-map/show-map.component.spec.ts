@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowMapComponent } from './show-map.component';
+import { ShowMap } from '../show-data/ShowMap';
 
 describe('ShowMapComponent', () => {
   let component: ShowMapComponent;
@@ -16,6 +17,7 @@ describe('ShowMapComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowMapComponent);
     component = fixture.componentInstance;
+    component.data = new ShowMap(5);
     fixture.detectChanges();
   });
 

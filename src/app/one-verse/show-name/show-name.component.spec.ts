@@ -17,7 +17,7 @@ describe('ShowNameComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowNameComponent);
     component = fixture.componentInstance;
-    component.data = new ShowName('unit test, show-name.');
+    component.data = new ShowName('以挪士');
     fixture.detectChanges();
   });
 
