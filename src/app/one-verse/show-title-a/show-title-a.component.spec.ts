@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowTitleAComponent } from './show-title-a.component';
+import { ShowTitleA } from '../show-data/ShowTitleA';
+import { ShowPureText } from '../show-data/ShowBase';
+import { ShowMap } from '../show-data/ShowMap';
 
 describe('ShowTitleAComponent', () => {
   let component: ShowTitleAComponent;
@@ -16,6 +19,13 @@ describe('ShowTitleAComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowTitleAComponent);
     component = fixture.componentInstance;
+    // test09
+    component.data = new ShowTitleA([
+      new ShowPureText('以色列'),
+      new ShowMap(526),
+      new ShowPureText('忘記主愛'),
+    ]);
+
     fixture.detectChanges();
   });
 

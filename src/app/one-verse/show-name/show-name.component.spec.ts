@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowNameComponent } from './show-name.component';
+import { ShowName } from '../show-data/ShowName';
 
 describe('ShowNameComponent', () => {
   let component: ShowNameComponent;
@@ -16,6 +17,7 @@ describe('ShowNameComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowNameComponent);
     component = fixture.componentInstance;
+    component.data = new ShowName('unit test, show-name.');
     fixture.detectChanges();
   });
 

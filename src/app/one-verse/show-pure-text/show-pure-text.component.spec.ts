@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowPureTextComponent } from './show-pure-text.component';
+import { ShowPureText } from '../show-data/ShowBase';
 
 describe('ShowPureTextComponent', () => {
   let component: ShowPureTextComponent;
@@ -8,18 +9,23 @@ describe('ShowPureTextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShowPureTextComponent ]
+      declarations: [ShowPureTextComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ShowPureTextComponent);
     component = fixture.componentInstance;
+    component.data = new ShowPureText('當人');
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('show correct show', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('span').textContent).toContain('當人');
   });
 });
