@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowReferenceComponent } from './show-reference.component';
-import { ShowReference } from '../show-data/ShowReference';
-import { VerseRange } from '../show-data/VerseRange';
-import { VerseAddress } from '../show-data/VerseAddress';
+import { ShowReference } from '../../show-data/ShowReference';
+import { VerseRange } from '../../show-data/VerseRange';
+import { VerseAddress } from '../../show-data/VerseAddress';
 
 describe('ShowReferenceComponent', () => {
   let component: ShowReferenceComponent;

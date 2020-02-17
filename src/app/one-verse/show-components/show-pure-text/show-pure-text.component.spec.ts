@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowPureTextComponent } from './show-pure-text.component';
-import { ShowPureText } from '../show-data/ShowBase';
+import { ShowPureText } from '../../show-data/ShowBase';
 
 describe('Show001 - PureTextComponent', () => {
   let component: ShowPureTextComponent;

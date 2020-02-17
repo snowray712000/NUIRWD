@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { ShowMap } from '../show-data/ShowMap';
+import { ShowMap } from '../../show-data/ShowMap';
 import { EventEmitter } from 'events';
 
 @Component({

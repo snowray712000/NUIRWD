@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShowBibleVersion } from '../show-data/ShowBibleVersion';
+import { ShowBibleVersion } from '../../show-data/ShowBibleVersion';
 
 @Component({
   selector: 'app-show-bible-version',

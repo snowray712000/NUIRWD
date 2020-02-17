@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowStrongNumberComponent } from './show-strong-number.component';
-import { ShowStrongNumber } from '../show-data/ShowStrongNumber';
+import { ShowStrongNumber } from '../../show-data/ShowStrongNumber';
 
 describe('Show003 - StrongNumberComponent', () => {
   let component: ShowStrongNumberComponent;

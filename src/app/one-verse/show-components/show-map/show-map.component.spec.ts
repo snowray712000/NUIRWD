@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowMapComponent } from './show-map.component';
-import { ShowMap } from '../show-data/ShowMap';
+import { ShowMap } from '../../show-data/ShowMap';
 
 describe('ShowMapComponent', () => {
   let component: ShowMapComponent;

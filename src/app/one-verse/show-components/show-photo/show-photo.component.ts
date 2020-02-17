@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { ShowPhoto } from '../show-data/ShowPhoto';
+import { ShowPhoto } from '../../show-data/ShowPhoto';
 import { EventEmitter } from 'events';
 
 @Component({

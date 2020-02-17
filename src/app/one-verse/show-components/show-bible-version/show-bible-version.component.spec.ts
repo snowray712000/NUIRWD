@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowBibleVersionComponent } from './show-bible-version.component';
-import { ShowBibleVersion } from '../show-data/ShowBibleVersion';
+import { ShowBibleVersion } from '../../show-data/ShowBibleVersion';
 
 describe('Show004 - BibleVersionComponent', () => {
   let component: ShowBibleVersionComponent;

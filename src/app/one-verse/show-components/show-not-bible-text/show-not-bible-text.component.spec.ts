@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowNotBibleTextComponent } from './show-not-bible-text.component';
-import { ShowNotBibleText } from '../show-data/ShowNotBibleText';
+import { ShowNotBibleText } from '../../show-data/ShowNotBibleText';
 
 describe('ShowNotBibleTextComponent', () => {
   let component: ShowNotBibleTextComponent;

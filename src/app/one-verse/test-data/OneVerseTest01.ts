@@ -2,7 +2,7 @@ import { ShowBase, ShowPureText, ShowMarker } from '../show-data/ShowBase';
 import { VerseAddress } from '../show-data/VerseAddress';
 import { IOneVerseInitialor } from './IOneVerseInitialor';
 import { ShowTitleA } from '../show-data/ShowTitleA';
-import { ShowTitleAComponent } from '../show-title-a/show-title-a.component';
+import { ShowTitleAComponent } from '../show-components/show-title-a/show-title-a.component';
 
 export class OneVerseTest01 implements IOneVerseInitialor {
   content(): ShowBase[] {

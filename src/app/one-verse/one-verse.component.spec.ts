@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { OneVerseComponent } from './one-verse.component';
 import { OneVerseViewDirective } from './one-verse-view.directive';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { ShowPureTextComponent } from './show-pure-text/show-pure-text.component';
+import { ShowPureTextComponent } from './show-components/show-pure-text/show-pure-text.component';
 
 describe('OneVerseComponent', () => {
   let component: OneVerseComponent;

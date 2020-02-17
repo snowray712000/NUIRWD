@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { ShowReference } from '../show-data/ShowReference';
+import { ShowReference } from '../../show-data/ShowReference';
 import { EventEmitter } from 'events';
 
 @Component({

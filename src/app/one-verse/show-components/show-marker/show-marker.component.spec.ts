@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowMarkerComponent } from './show-marker.component';
-import { ShowMarker } from '../show-data/ShowBase';
-import { VerseAddress } from '../show-data/VerseAddress';
+import { ShowMarker } from '../../show-data/ShowBase';
+import { VerseAddress } from '../../show-data/VerseAddress';
 import { By } from '@angular/platform-browser';
 
 describe('Show002 - MarkerComponent', () => {

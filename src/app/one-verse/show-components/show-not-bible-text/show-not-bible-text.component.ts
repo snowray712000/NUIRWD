@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShowNotBibleText } from '../show-data/ShowNotBibleText';
+import { ShowNotBibleText } from '../../show-data/ShowNotBibleText';
 
 @Component({
   selector: 'app-show-not-bible-text',

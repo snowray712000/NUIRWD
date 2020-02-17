@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowPhotoComponent } from './show-photo.component';
-import { ShowPhoto } from '../show-data/ShowPhoto';
+import { ShowPhoto } from '../../show-data/ShowPhoto';
 
 describe('ShowPhotoComponent', () => {
   let component: ShowPhotoComponent;

@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShowTitleAComponent } from './show-title-a.component';
-import { ShowTitleA } from '../show-data/ShowTitleA';
-import { ShowPureText } from '../show-data/ShowBase';
-import { ShowMap } from '../show-data/ShowMap';
-import { OneVerseViewDepedentComponents } from '../one-verse-view-dependent-components';
-import { OneVerseViewDirective } from '../one-verse-view.directive';
+import { ShowTitleA } from '../../show-data/ShowTitleA';
+import { ShowPureText } from '../../show-data/ShowBase';
+import { ShowMap } from '../../show-data/ShowMap';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { ShowTitleAComponent } from './show-title-a.component';
+import { OneVerseViewDirective } from '../../one-verse-view.directive';
+import { OneVerseViewDepedentComponents } from '../../one-verse-view-dependent-components';
 
 describe('ShowTitleAComponent', () => {
   let component: ShowTitleAComponent;
@@ -19,7 +19,7 @@ describe('ShowTitleAComponent', () => {
       declarations: new Array([OneVerseViewDirective, ShowTitleAComponent]).concat(OneVerseViewDepedentComponents.getDependentComponents())
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {
-        entryComponents: new Array([]).concat(OneVerseViewDepedentComponents.getDependentComponents())
+        entryComponents: OneVerseViewDepedentComponents.getDependentComponents()
       }
     })
       .compileComponents();

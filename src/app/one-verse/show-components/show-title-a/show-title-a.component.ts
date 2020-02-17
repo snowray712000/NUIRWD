@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, ViewChild, ComponentFactoryResolver } from '@angular/core';
-import { ShowTitleA } from '../show-data/ShowTitleA';
+import { ShowTitleA } from '../../show-data/ShowTitleA';
 import { EventEmitter } from 'events';
-import { OneVerseViewDirective } from '../one-verse-view.directive';
-import { IShowComponentFactoryGet } from '../IShowComponentFactoryGet';
-import { ShowComponentFactoryGetter } from '../ShowComponentFactoryGetter';
+import { OneVerseViewDirective } from '../../one-verse-view.directive';
+import { IShowComponentFactoryGet } from '../../IShowComponentFactoryGet';
+import { ShowComponentFactoryGetter } from '../../ShowComponentFactoryGetter';
 
 @Component({
   selector: 'app-show-title-a',
