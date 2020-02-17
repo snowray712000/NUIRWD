@@ -16,6 +16,7 @@ import { ShowNotBibleTextComponent } from './one-verse/show-components/show-not-
 import { ShowNameComponent } from './one-verse/show-components/show-name/show-name.component';
 import { ShowReferenceComponent } from './one-verse/show-components/show-reference/show-reference.component';
 import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-dependent-components';
+import { OneChapComponent } from './one-chap/one-chap.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-depen
     AppComponent,
     OneVerseComponent,
     OneVerseViewDirective,
+    OneChapComponent,
   ]).concat(OneVerseViewDepedentComponents.getDependentComponents())
   ,
   entryComponents: new Array([]).concat(OneVerseViewDepedentComponents.getDependentComponents()),

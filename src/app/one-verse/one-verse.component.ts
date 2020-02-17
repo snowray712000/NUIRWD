@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory, Output, Input } from '@angular/core';
 import { OneVerseViewDirective } from './one-verse-view.directive';
 import { ShowPureTextComponent } from './show-components/show-pure-text/show-pure-text.component';
 import { ShowTitleAComponent } from './show-components/show-title-a/show-title-a.component';
@@ -29,14 +29,15 @@ export class OneVerseComponent implements OnInit {
   private content: Array<ShowBase>;
   private address: VerseAddress;
   private showComponentFactoryGetter: IShowComponentFactoryGet;
-  private initialor: IOneVerseInitialor;
+  // private initialor: IOneVerseInitialor;
+  @Input() initialor: IOneVerseInitialor;
   @Output() events = new EventEmitter();
   @ViewChild(OneVerseViewDirective, undefined) view: OneVerseViewDirective;
   constructor(
     private resolveFactory: ComponentFactoryResolver) {
-
-    this.initialor = new OneVerseTest10();
-
+    if (this.initialor === undefined){
+      this.initialor = new OneVerseTest10();
+    }
   }
 
   get sec(): number { return this.address.sec; }
