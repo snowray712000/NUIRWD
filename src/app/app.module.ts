@@ -15,36 +15,17 @@ import { ShowMapComponent } from './one-verse/show-map/show-map.component';
 import { ShowNotBibleTextComponent } from './one-verse/show-not-bible-text/show-not-bible-text.component';
 import { ShowNameComponent } from './one-verse/show-name/show-name.component';
 import { ShowReferenceComponent } from './one-verse/show-reference/show-reference.component';
+import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-dependent-components';
 
 
 @NgModule({
-  declarations: [
+  declarations: new Array<any>([
     AppComponent,
     OneVerseComponent,
     OneVerseViewDirective,
-    ShowPureTextComponent,
-    ShowTitleAComponent,
-    ShowMarkerComponent,
-    ShowStrongNumberComponent,
-    ShowBibleVersionComponent,
-    ShowPhotoComponent,
-    ShowMapComponent,
-    ShowNotBibleTextComponent,
-    ShowNameComponent,
-    ShowReferenceComponent,
-  ],
-  entryComponents: [
-    ShowPureTextComponent,
-    ShowTitleAComponent,
-    ShowMarkerComponent,
-    ShowStrongNumberComponent,
-    ShowBibleVersionComponent,
-    ShowPhotoComponent,
-    ShowMapComponent,
-    ShowNotBibleTextComponent,
-    ShowNameComponent,
-    ShowReferenceComponent,
-  ],
+  ]).concat(OneVerseViewDepedentComponents.getDependentComponents())
+  ,
+  entryComponents: new Array([]).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   imports: [
     BrowserModule,
     AppRoutingModule

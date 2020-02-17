@@ -19,6 +19,7 @@ import { ShowNameComponent } from './show-name/show-name.component';
 import { ShowTitleA } from './show-data/ShowTitleA';
 import { ShowReferenceComponent } from './show-reference/show-reference.component';
 import { ShowReference } from './show-data/ShowReference';
+import { OneVerseViewDepedentComponents } from './one-verse-view-dependent-components';
 
 /// <summary> 裡面有 static 處理，多個地方使用，都會用同一組 component factory </summary>
 export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
@@ -31,19 +32,8 @@ export class ShowComponentFactoryGetter implements IShowComponentFactoryGet {
     if (ShowComponentFactoryGetter.factorys !== undefined) {
       return;
     }
-
-    ShowComponentFactoryGetter.factorys = [
-      this.resolveFactory.resolveComponentFactory(ShowPureTextComponent),
-      this.resolveFactory.resolveComponentFactory(ShowTitleAComponent),
-      this.resolveFactory.resolveComponentFactory(ShowMarkerComponent),
-      this.resolveFactory.resolveComponentFactory(ShowStrongNumberComponent),
-      this.resolveFactory.resolveComponentFactory(ShowBibleVersionComponent),
-      this.resolveFactory.resolveComponentFactory(ShowPhotoComponent),
-      this.resolveFactory.resolveComponentFactory(ShowMapComponent),
-      this.resolveFactory.resolveComponentFactory(ShowNotBibleTextComponent),
-      this.resolveFactory.resolveComponentFactory(ShowNameComponent),
-      this.resolveFactory.resolveComponentFactory(ShowReferenceComponent),
-    ];
+    ShowComponentFactoryGetter.factorys =
+      OneVerseViewDepedentComponents.getDependentComponents().map((a1) => this.resolveFactory.resolveComponentFactory(a1));
   }
   getFact(showObj: ShowBase): ComponentFactory<any> {
     if (showObj instanceof ShowPureText) {

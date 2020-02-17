@@ -4,16 +4,25 @@ import { ShowTitleAComponent } from './show-title-a.component';
 import { ShowTitleA } from '../show-data/ShowTitleA';
 import { ShowPureText } from '../show-data/ShowBase';
 import { ShowMap } from '../show-data/ShowMap';
+import { OneVerseViewDepedentComponents } from '../one-verse-view-dependent-components';
+import { OneVerseViewDirective } from '../one-verse-view.directive';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 describe('ShowTitleAComponent', () => {
   let component: ShowTitleAComponent;
   let fixture: ComponentFixture<ShowTitleAComponent>;
 
   beforeEach(async(() => {
+
     TestBed.configureTestingModule({
-      declarations: [ ShowTitleAComponent ]
+      // tslint:disable-next-line: max-line-length
+      declarations: new Array([OneVerseViewDirective, ShowTitleAComponent]).concat(OneVerseViewDepedentComponents.getDependentComponents())
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: new Array([]).concat(OneVerseViewDepedentComponents.getDependentComponents())
+      }
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
