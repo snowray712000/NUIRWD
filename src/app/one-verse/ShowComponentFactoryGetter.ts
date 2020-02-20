@@ -1,23 +1,13 @@
 import { ComponentFactory, ComponentFactoryResolver } from '@angular/core';
-import { ShowPureTextComponent } from './show-components/show-pure-text/show-pure-text.component';
-import { ShowTitleAComponent } from './show-components/show-title-a/show-title-a.component';
-import { ShowMarkerComponent } from './show-components/show-marker/show-marker.component';
 import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowBase, ShowPureText, ShowMarker } from './show-data/ShowBase';
-import { ShowStrongNumberComponent } from './show-components/show-strong-number/show-strong-number.component';
 import { ShowStrongNumber } from './show-data/ShowStrongNumber';
-import { ShowBibleVersionComponent } from './show-components/show-bible-version/show-bible-version.component';
 import { ShowBibleVersion } from './show-data/ShowBibleVersion';
-import { ShowPhotoComponent } from './show-components/show-photo/show-photo.component';
 import { ShowPhoto } from './show-data/ShowPhoto';
-import { ShowMapComponent } from './show-components/show-map/show-map.component';
 import { ShowMap } from './show-data/ShowMap';
-import { ShowNotBibleTextComponent } from './show-components/show-not-bible-text/show-not-bible-text.component';
 import { ShowNotBibleText } from './show-data/ShowNotBibleText';
 import { ShowName } from './show-data/ShowName';
-import { ShowNameComponent } from './show-components/show-name/show-name.component';
 import { ShowTitleA } from './show-data/ShowTitleA';
-import { ShowReferenceComponent } from './show-components/show-reference/show-reference.component';
 import { ShowReference } from './show-data/ShowReference';
 import { OneVerseViewDepedentComponents } from './one-verse-view-dependent-components';
 

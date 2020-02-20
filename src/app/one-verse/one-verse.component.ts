@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentFactory, ɵComponentFactory, Output, Input } from '@angular/core';
 import { OneVerseViewDirective } from './one-verse-view.directive';
-import { ShowPureTextComponent } from './show-components/show-pure-text/show-pure-text.component';
-import { ShowTitleAComponent } from './show-components/show-title-a/show-title-a.component';
-import { ShowMarkerComponent } from './show-components/show-marker/show-marker.component';
 import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
 import { ShowBase, ShowPureText, ShowMarker } from './show-data/ShowBase';
