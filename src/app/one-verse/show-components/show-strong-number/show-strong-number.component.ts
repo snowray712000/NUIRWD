@@ -13,7 +13,6 @@ export class ShowStrongNumberComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   onClick() {

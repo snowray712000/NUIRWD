@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,8 @@ import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-depen
 import { OneChapComponent } from './one-chap/one-chap.component';
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
+import { AbvService } from './fhl-api/abv.service';
+import { BibleVersionQueryService } from './fhl-api/bible-version-query.service';
 
 
 @NgModule({
@@ -25,9 +28,11 @@ import { VersionInterlaceComponent } from './version-interlace/version-interlace
   imports: [
     BrowserModule,
     FlexLayoutModule,
+    // import http after browser
+    HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [HttpClient, AbvService, BibleVersionQueryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
