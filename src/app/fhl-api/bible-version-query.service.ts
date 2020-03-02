@@ -16,9 +16,9 @@ export class BibleVersionQueryService {
     }
 
     return this.abvSr.queryAbvPhpOrCache().pipe(
-      tap(a1 => console.log(a1)),
+      // tap(a1 => console.log(a1)),
       map(a1 => this.convert(a1)),
-      tap(a1 => console.log(a1)),
+      // tap(a1 => console.log(a1)),
       tap(a1 => this.cache = a1),
     );
   }

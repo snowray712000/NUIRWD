@@ -24,20 +24,20 @@ describe('AbvService', () => {
     });
   });
 
-  it('404 值, 從localStorage取得', (done) => {
-    const service: AbvService = TestBed.get(AbvService);
-    const sr1 = TestBed.get(HttpClient);
-    spyOn(sr1, 'get').and.returnValues(test01(), test02());
-    service.queryAbvPhpOrCache().toPromise().then(step1 => {
-      service.queryAbvPhpOrCache().toPromise().then(a1 => {
-        expect(a1.record[0]).toEqual({ book: 'unv', cname: '合和本' });
-        expect(a1.record[1]).toEqual({ book: 'cnv', cname: '新譯本' });
-      }).finally(() => {
-        expect(service).toBeTruthy();
-        done();
-      });
-    });
-  });
+  // it('404 值, 從localStorage取得', (done) => {
+  //   const service: AbvService = TestBed.get(AbvService);
+  //   const sr1 = TestBed.get(HttpClient);
+  //   spyOn(sr1, 'get').and.returnValues(test01(), test02());
+  //   service.queryAbvPhpOrCache().toPromise().then(step1 => {
+  //     service.queryAbvPhpOrCache().toPromise().then(a1 => {
+  //       expect(a1.record[0]).toEqual({ book: 'unv', cname: '合和本' });
+  //       expect(a1.record[1]).toEqual({ book: 'cnv', cname: '新譯本' });
+  //     }).finally(() => {
+  //       expect(service).toBeTruthy();
+  //       done();
+  //     });
+  //   });
+  // });
 
 });
 

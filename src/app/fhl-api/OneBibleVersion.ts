@@ -1,3 +1,4 @@
+// use bible-version-query service
 export class OneBibleVersion {
   public id = -1;
   public na = ''; // unv, kjv, bhs
