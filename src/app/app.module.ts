@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,7 +32,19 @@ import { BibleVersionQueryService } from './fhl-api/bible-version-query.service'
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [HttpClient, AbvService, BibleVersionQueryService],
+  providers: [HttpClient],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+// https://stackoverflow.com/questions/49310134/how-to-create-angular-5-httpclient-instance-in-typescript-class
+
+export class AppModule {
+  constructor(private injector: Injector) {
+    appInstance.injector = this.injector;
+  }
+}
+export interface IAppInstance {
+  injector: Injector;
+}
+export let appInstance: IAppInstance = {
+  injector: undefined
+};

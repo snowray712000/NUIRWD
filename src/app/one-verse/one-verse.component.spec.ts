@@ -34,10 +34,9 @@ describe('OneVerseComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('01-純文字', (done: DoneFn) => {
+  it('01-純文字', () => {
     // tslint:disable-next-line: max-line-length
     expect(asHTMLElement(fixture.nativeElement).getElementsByClassName('verseContent')[0].textContent).toBe('我又看見一個獸從海中上來，有十角七頭，在十角上戴著十個冠冕，七頭上有褻瀆的名號。');
-    done();
   });
   it('02-attr book chap sec version', () => {
     const div1 = asHTMLElement(fixture.nativeElement).getElementsByTagName('div')[0];

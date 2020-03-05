@@ -1,10 +1,7 @@
 import { ShowBase, ShowPureText, ShowMarker } from '../show-data/ShowBase';
 import { VerseAddress } from '../show-data/VerseAddress';
 import { IOneVerseInitialor } from './IOneVerseInitialor';
-import { ShowNotBibleText } from '../show-data/ShowNotBibleText';
-import { ShowName } from '../show-data/ShowName';
 import { ShowTitleA } from '../show-data/ShowTitleA';
-import { ShowMap } from '../show-data/ShowMap';
 import { VerseRange } from '../show-data/VerseRange';
 import { ShowReference } from '../show-data/ShowReference';
 

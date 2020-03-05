@@ -1,8 +1,7 @@
-import { TestBed } from '@angular/core/testing';
 import { BibleVersionQueryService } from './bible-version-query.service';
-import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
-import { AbvService } from './abv.service';
+import { AbvService, IAbvResult, AbvResult } from './abv.service';
+import { map } from 'rxjs/operators';
 function test01() {
   const re = [
     {
@@ -16,7 +15,7 @@ function test01() {
       version: '2020/02/06 05:50:01',
     },
     {
-      book: 'ncv',
+      book: 'cnv',
       cname: '新譯本',
       proc: 0,
       strong: 0,
@@ -32,31 +31,30 @@ function test01() {
     comment: '2020/02/20 06:02:35',
     record_count: re.length,
     record: re
-  });
+  }).pipe(map(a1 => {
+    const r1 = new AbvResult();
+    r1.comment = new Date(a1.comment);
+    r1.parsing = new Date(a1.parsing);
+    r1.record = a1.record;
+    r1.record_count = r1.record.length;
+    return r1 as IAbvResult;
+  }));
 }
 
 describe('BibleVersionQueryService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-      ]
-    });
-    const sr = TestBed.get(AbvService);
-    //const fnOri = spyOn(sr, 'queryAbvPhpOrCache').and.callThrough();
-    spyOn(sr, 'queryAbvPhpOrCache').and.returnValue(test01());
   });
 
-  it('should be created', (done) => {
-    const service: BibleVersionQueryService = TestBed.get(BibleVersionQueryService);
-    service.queryBibleVersions().toPromise().then(a1 => {
+  it('Bible Version Query Service', (done) => {
+    const abv = new AbvService();
+    spyOn(abv, 'queryAbvPhpOrCache').and.returnValue((test01()));
+    const service = new BibleVersionQueryService();
+    service.queryBibleVersionsAsync().toPromise().then(a1 => {
       expect(a1).toBeTruthy();
+      expect(a1[0].na).toBe('unv');
+      expect(a1[1].na).toBe('ncv');
       done();
     });
   });
-
-  // angular test spyOn mock 用法
-  // https://jhlstudy.blogspot.com/2019/10/angular-unit-test-jasmine.html
-
 });
 

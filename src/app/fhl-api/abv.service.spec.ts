@@ -1,46 +1,26 @@
-import { TestBed } from '@angular/core/testing';
-import { AbvService, IAbvResult } from './abv.service';
-import { HttpClientModule, HttpClient, HttpResponse } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
-import { JsonPipe } from '@angular/common';
-import { promise } from 'protractor';
+import { AbvService } from './abv.service';
+import {  HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
 
 describe('AbvService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientModule]
-    });
+    const testing = initialTestBedAndAppInstance(test01());
   });
 
   it('abv.php 值', (done) => {
-    const service: AbvService = TestBed.get(AbvService);
-    const sr1 = TestBed.get(HttpClient);
-    spyOn(sr1, 'get').and.returnValue(test01());
+    const service = new AbvService();
     service.queryAbvPhpOrCache().toPromise().then(a1 => {
-      expect(a1.record[0]).toEqual({ book: 'unv', cname: '合和本' });
-      expect(a1.record[1]).toEqual({ book: 'cnv', cname: '新譯本' });
+
+      expect(a1.record[0].book).toBe('unv');
+      expect(a1.record[0].cname).toBe('和合本');
+      expect(a1.record[1].book).toBe('ncv');
+      expect(a1.record[1].cname).toBe('新譯本');
     }).finally(() => {
       done();
     });
   });
-
-  // it('404 值, 從localStorage取得', (done) => {
-  //   const service: AbvService = TestBed.get(AbvService);
-  //   const sr1 = TestBed.get(HttpClient);
-  //   spyOn(sr1, 'get').and.returnValues(test01(), test02());
-  //   service.queryAbvPhpOrCache().toPromise().then(step1 => {
-  //     service.queryAbvPhpOrCache().toPromise().then(a1 => {
-  //       expect(a1.record[0]).toEqual({ book: 'unv', cname: '合和本' });
-  //       expect(a1.record[1]).toEqual({ book: 'cnv', cname: '新譯本' });
-  //     }).finally(() => {
-  //       expect(service).toBeTruthy();
-  //       done();
-  //     });
-  //   });
-  // });
-
 });
-
 
 function test01() {
   // import { of } from 'rxjs';
@@ -50,8 +30,8 @@ function test01() {
     comment: '1970/1/1 12:34:56',
     record_count: 3,
     record: [
-      { book: 'unv', cname: '合和本' },
-      { book: 'cnv', cname: '新譯本' },
+      { book: 'unv', cname: '和合本' },
+      { book: 'ncv', cname: '新譯本' },
     ]
   };
   const re2 = new HttpResponse<string>({ body: JSON.stringify(obj), status: 200 });

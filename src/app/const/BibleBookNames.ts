@@ -1,14 +1,16 @@
+import { BookNameLang } from './BookNameLang';
+import { relative } from 'path';
+
 export class BibleBookNames {
   // [0]=["Gen", "Genesis", "創", "創世記", "Ge"]
   private static constNames: Map<number, Array<string>>;
   constructor() {
     // console.log(this.getBibleName(1));
   }
-  public static getShortChinese(idBook1based: number): string {
-    return BibleBookNames.getBibleName(idBook1based, 2);
+  public static getBookName(idBook1based: number, lang: BookNameLang) {
+    return BibleBookNames.getBibleName(idBook1based, BookNameLang[BookNameLang[lang]]);
   }
-
-  static makeSureBibleBookNamesExist(): void {
+  private static makeSureBibleBookNamesExist(): void {
     if (BibleBookNames.constNames === undefined) {
       const results = new Map<number, Array<string>>();
       // tslint:disable-next-line: max-line-length

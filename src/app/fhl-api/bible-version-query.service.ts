@@ -1,26 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OneBibleVersion } from './OneBibleVersion';
 import { AbvService, IAbvResult } from './abv.service';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class BibleVersionQueryService {
-  private cache: OneBibleVersion[];
-  constructor(private abvSr: AbvService) { }
-  queryBibleVersions(): Observable<OneBibleVersion[]> {
-    if (this.cache !== undefined) {
-      return of(this.cache);
-    }
-
-    return this.abvSr.queryAbvPhpOrCache().pipe(
+  constructor() { }
+  queryBibleVersionsAsync(): Observable<OneBibleVersion[]> {
+    return new AbvService().queryAbvPhpOrCache().pipe(
       // tap(a1 => console.log(a1)),
       map(a1 => this.convert(a1)),
       // tap(a1 => console.log(a1)),
-      tap(a1 => this.cache = a1),
+      // tap(a1 => this.cache = a1), // abv本來就有 cache 機製
     );
+  }
+  queryBibleVersions(): OneBibleVersion[] {
+    let re: OneBibleVersion[];
+    this.queryBibleVersionsAsync().subscribe(a1 => re = a1);
+    return re;
   }
 
   private convert(a1: IAbvResult): OneBibleVersion[] {
