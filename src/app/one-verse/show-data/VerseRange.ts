@@ -4,19 +4,37 @@ import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.se
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/ts-tools/obj';
 import { BookNameLang } from '../../const/BookNameLang';
+import { range } from 'src/app/linq-like/Range';
 
 export class VerseRange {
   private verses: Array<VerseAddress> = new Array<VerseAddress>();
+  public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
+    try {
+      const re = new VerseRange();
+      const r1 = describe.split(';').map(a1 => new BookNameTryGetBookId().main(a1));
+      r1.forEach(a1 => {
+        if (a1.idbook === undefined) {
+          a1.idbook = book1BasedDefault;
+        }
+        const r2 = new GetAddresses(a1.idbook).main(a1);
+        re.addRange(r2);
+      });
+      return re;
+    } catch (error) {
+      console.error('fromReferenceDescription');
+      throw error;
+    }
+  }
   // tslint:disable-next-line: no-unnecessary-initializer
   constructor() { }
   public add(v: VerseAddress): void { this.verses.push(v); }
+  public addRange(v: VerseAddress[]): void { v.forEach(a1 => this.verses.push(a1)); }
 
-  /**
-   * 產生 太 4:1-6
-   */
+  /** 產生 太 4:1-6 */
   public toStringChineseShort(): string {
     return new VersesToString(this.verses, BookNameLang.太).main();
   }
+  /** 產生 Mt 4:1-6 */
   public toStringEnglishShort(): string {
     return new VersesToString(this.verses, BookNameLang.Mt).main();
   }
@@ -24,7 +42,9 @@ export class VerseRange {
   public toString(): string {
     return this.toStringChineseShort();
   }
+
 }
+
 class VersesToString {
   private verses: VerseAddress[];
   private lang: BookNameLang;
@@ -133,14 +153,39 @@ class VersesToString {
     // 跨章處理 (若跨章要轉字串，因為23-2:3, 有可能是跨到第3章，所以只寫23-3不明確)
     this.Merging(eachChap2, parseInt(book, 10));
 
-    // 轉為字串 1:1-3,5-6,21,23-3:2,3:5-7
-    const strOnebook = new ToStringAfterMerged(eachChap2).main();
-    // console.log(strOnebook);
+    let strOnebook = '';
+    if (this.isEntireChap(eachChap2, parseInt(book, 10))) {
+      strOnebook = Object.keys(eachChap2)[0]; // 整章特例 Mt 3
+    } else {
+      // 轉為字串 1:1-3,5-6,21,23-3:2,3:5-7
+      strOnebook = new ToStringAfterMerged(eachChap2).main();
+    }
 
     const naBook = this.getBookName(book);
     return naBook + ' ' + strOnebook;
   }
+  private isEntireChap(data, book: number) {
+    if (Object.keys(data).length !== 1) {
+      return false;
+    }
+    const ky = Object.keys(data)[0];
+    if (data[ky].length !== 1) {
+      return false;
+    }
+    const elm = data[ky][0];
+    if (elm[0] !== 1) {
+      return false;
+    }
 
+    if (typeof elm === 'string') {
+      return false;
+    }
+    const r = getVerseCount(book, parseInt(ky, 10));
+    if (elm[1] !== r) {
+      return false;
+    }
+    return true;
+  }
   private isNeedMergeThisChap(data, ch: number, bk: number) {
     // 沒有下章，當然不用
     if (ObjTools.isExistKeys(data, ch + 1) === false) {
@@ -301,4 +346,209 @@ class ToStringAfterMerged {
 
     return `${el[0]}-${el[1]}`;
   }
+}
+/** BookNameTryGetBookId 的結果 */
+interface IBookNameTryGetBookIdResult {
+  idbook: number;
+  descript: string;
+}
+/** (瑪|太){0,1}(\\s*)([0-9:\\-,]+) ... to ["1:1-3,6-7,21,25,2:3-5", undefined, "", "1:1-3,6-7,21,25,2:3-5" */
+class BookNameTryGetBookId {
+  private static reg: RegExp;
+  private static maps: Map<string, number>;
+  public main(description: string): IBookNameTryGetBookIdResult {
+    if (BookNameTryGetBookId.reg === undefined) {
+      BookNameTryGetBookId.reg = this.generateRegAndMaps();
+    }
+
+    const r1 = description.match(BookNameTryGetBookId.reg);
+    if (r1 === null) {
+      throw new Error('BookNameTryGetBookId ex input:' + description);
+    }
+
+
+    return {
+      idbook: this.getIdFromMatchResult(r1[1]),
+      descript: r1[3]
+    };
+  }
+  private getIdFromMatchResult(re): number {
+    if (re === undefined) {
+      return undefined;
+    }
+    const r1 = re.toLowerCase();
+    if (BookNameTryGetBookId.maps.has(r1) === false) {
+      return undefined;
+    }
+    return BookNameTryGetBookId.maps.get(r1);
+  }
+  private generateRegAndMaps(): RegExp {
+    const r1 = [...BibleBookNames.getBookNames(BookNameLang.馬太福音)
+      , ...BibleBookNames.getBookNames(BookNameLang.Matthew)
+      , ...BibleBookNames.getBookNames(BookNameLang.Matt)
+      , ...BibleBookNames.getBookNames(BookNameLang.太)
+      , ...BibleBookNames.getBookNames(BookNameLang.Mt)];
+    const r2 = new Map<string, number>();
+    for (let idx = 0; idx < r1.length; idx++) {
+      const element = r1[idx];
+      r2.set(element.toLowerCase(), (idx % 66) + 1);
+    }
+    BookNameTryGetBookId.maps = r2;
+
+    // (瑪|太){0,1}(\\s*)([0-9:\\-,]+)
+    return new RegExp(`(${r1.join('|')}){0,1}(\\s*)([0-9:\\-,]+)`, 'i');
+    throw new Error('not implement');
+  }
+}
+interface IGetAddressesType {
+  /** 1:32-2:31 (tp:0) 1:2-32 (tp:1) 23 (23節 或 23章 tp:2) */
+  tp: number;
+  ch1: number;
+  vr1: number;
+  ch2: number;
+  vr2: number;
+}
+/** 一卷書 1:1-3,6-7,21,25,2:3-5 分解 */
+class GetAddresses {
+  /** // 只4種類似 // 1:32-2:31 // 1:2-32 // 4-7 // 23 (23節 或 23章) */
+  private static regA1 = new RegExp('(\\d+):(\\d+)-(\\d+):(\\d+)'); // ["11:32-2:31","11","32","2","31"
+  private static regA2 = new RegExp('(\\d+):(\\d+)-(\\d+)'); // ["11:32-2:31","11","32","2",
+  private static regA4 = new RegExp('(\\d+)-(\\d+)'); // 後來發現的 bug, 雖然它應該是a3，但卻是編號4的原因,因為一開始沒考慮到
+  private static regA3 = new RegExp('(\\d+)'); // ["11:32-2:31","11"
+  private idBook: number;
+  private addresses = new Array<VerseAddress>();
+  constructor(idBook: number) {
+    this.idBook = idBook;
+  }
+  public main(oneBookResult: IBookNameTryGetBookIdResult): VerseAddress[] {
+    try {
+      const r1 = oneBookResult.descript.split(',');
+      const r2 = r1.map(a1 => this.classifyType(a1));
+
+      r2.forEach(a1 => {
+        if (a1.tp === 0) {
+          this.generateFromType0(a1).forEach(a2 => this.addresses.push(a2));
+        } else if (a1.tp === 1) {
+          this.generateFromType1(a1).forEach(a2 => this.addresses.push(a2));
+        } else if (a1.tp === 2) {
+          this.generateFromType2(a1).forEach(a2 => this.addresses.push(a2));
+        } else if (a1.tp === 3) {
+          this.generateFromType3(a1).forEach(a2 => this.addresses.push(a2));
+        }
+      });
+      return this.addresses;
+    } catch (error) {
+      console.error('GetAddresses');
+      throw error;
+    }
+  }
+
+  private classifyType(des: string): IGetAddressesType {
+    const r1 = des.match(GetAddresses.regA1);
+    if (r1 !== null) {
+      return {
+        tp: 0,
+        ch1: parseInt(r1[1], 10),
+        vr1: parseInt(r1[2], 10),
+        ch2: parseInt(r1[3], 10),
+        vr2: parseInt(r1[4], 10),
+      };
+    }
+    const r2 = des.match(GetAddresses.regA2);
+    if (r2 !== null) {
+      const ch1 = parseInt(r2[1], 10);
+      const ch2 = ch1;
+      return {
+        tp: 1,
+        ch1,
+        vr1: parseInt(r2[2], 10),
+        ch2,
+        vr2: parseInt(r2[3], 10),
+      };
+    }
+    const r4 = des.match(GetAddresses.regA4);
+    if (r4 !== null) {
+      const vr1 = parseInt(r4[1], 10);
+      const vr2 = parseInt(r4[2], 10);
+      return {
+        tp: 3,
+        ch1: -1,
+        vr1,
+        ch2: -1,
+        vr2,
+      };
+    }
+    const r3 = des.match(GetAddresses.regA3);
+    if (r3 !== null) {
+      const ch1 = parseInt(r3[1], 10);
+      const vr1 = ch1;
+      return {
+        tp: 2,
+        ch1,
+        vr1,
+        ch2: -1,
+        vr2: -1,
+      };
+    }
+    return null;
+  }
+
+  private generateFromType0(add: IGetAddressesType) {
+    // 1:2-1:24
+    // 1:2-2:24
+    // 1:2-3:24
+    if (add.ch1 === add.ch2) {
+      return this.generateFromType1(add);
+    }
+
+    // 1:2 - 1:結束
+    const verse1End = getVerseCount(this.idBook, add.ch1);
+    const re = range(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+
+    // 中間章節, 例如  1:2-3:24, 第2章 從 2 開始, 有 1 章 (3-1-1)
+    if (add.ch1 + 1 < add.ch2) {
+      const r2 = range(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
+      r2.forEach(a1 => a1.forEach(a2 => re.push(a2)));
+    }
+
+    // 最後章節, 例 -3:31
+    range(1, add.vr2).map(a1 => new VerseAddress(this.idBook, add.ch2, a1)).forEach(a1 => re.push(a1));
+    return re;
+  }
+
+  private generateFromType1(add: IGetAddressesType): VerseAddress[] {
+    // 1:12-43
+    return range(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+  }
+  /** 2:1-End */
+  private generateOneChap(ch: number): VerseAddress[] {
+    const verseEnd = getVerseCount(this.idBook, ch);
+    return range(1, verseEnd).map(a2 => new VerseAddress(this.idBook, ch, a2));
+  }
+  private getLastVerseAddress(): VerseAddress {
+    if (this.addresses.length === 0) {
+      return undefined;
+    }
+
+    return this.addresses[this.addresses.length - 1];
+  }
+  /**
+   * 整章，或是一節 (當目前 this.addresses 沒有東西時)
+   */
+  private generateFromType2(add: IGetAddressesType): VerseAddress[] {
+    // 整章 or 一節
+    const last = this.getLastVerseAddress();
+    if (last === undefined) {
+      return this.generateOneChap(add.ch1);
+    }
+    return [new VerseAddress(this.idBook, last.chap, add.vr1)];
+  }
+
+  private generateFromType3(add: IGetAddressesType): VerseAddress[] {
+    // 7-9
+    const last = this.getLastVerseAddress();
+    const ch = last !== undefined ? last.chap : 1;
+    return range(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => new VerseAddress(this.idBook, ch, a1));
+  }
+
 }
