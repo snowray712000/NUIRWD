@@ -3,7 +3,10 @@ import { map, tap, retry } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { appInstance } from '../app.module';
 
-export class AbvService {
+export interface IAbvService {
+  queryAbvPhpOrCache(): Observable<IAbvResult>;
+}
+export class AbvService implements IAbvService {
   private static cache: IAbvResult;
   constructor() { }
   public queryAbvPhpOrCache(): Observable<IAbvResult> {

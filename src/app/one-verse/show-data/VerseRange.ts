@@ -1,12 +1,13 @@
 import { VerseAddress } from './VerseAddress';
 import { BibleBookNames } from '../../const/BibleBookNames';
-import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { BibleVersionQueryService, IBibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/ts-tools/obj';
 import { BookNameLang } from '../../const/BookNameLang';
 import { range } from 'src/app/linq-like/Range';
 
 export class VerseRange {
+  private bibleVersionQ: IBibleVersionQueryService;
   private verses: Array<VerseAddress> = new Array<VerseAddress>();
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
     try {
@@ -25,18 +26,23 @@ export class VerseRange {
       throw error;
     }
   }
+  /**
+   * @param bibleVersionQ 不一定用到，若有指定版本時，會用到。
+   */
   // tslint:disable-next-line: no-unnecessary-initializer
-  constructor() { }
+  constructor(bibleVersionQ: IBibleVersionQueryService = null) {
+    this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
+  }
   public add(v: VerseAddress): void { this.verses.push(v); }
   public addRange(v: VerseAddress[]): void { v.forEach(a1 => this.verses.push(a1)); }
 
   /** 產生 太 4:1-6 */
   public toStringChineseShort(): string {
-    return new VersesToString(this.verses, BookNameLang.太).main();
+    return new VersesToString(this.verses, BookNameLang.太, this.bibleVersionQ).main();
   }
   /** 產生 Mt 4:1-6 */
   public toStringEnglishShort(): string {
-    return new VersesToString(this.verses, BookNameLang.Mt).main();
+    return new VersesToString(this.verses, BookNameLang.Mt, this.bibleVersionQ).main();
   }
 
   public toString(): string {
@@ -48,9 +54,11 @@ export class VerseRange {
 class VersesToString {
   private verses: VerseAddress[];
   private lang: BookNameLang;
-  constructor(verses: VerseAddress[], lang: BookNameLang = BookNameLang.Mt) {
+  private bibleVersionQ: IBibleVersionQueryService;
+  constructor(verses: VerseAddress[], lang: BookNameLang = BookNameLang.Mt, bibleVersionQ: IBibleVersionQueryService = null) {
     this.verses = verses;
     this.lang = lang;
+    this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
   }
   main() {
     try {
@@ -80,8 +88,7 @@ class VersesToString {
     });
 
     if (ver !== '-1') {
-      let na = '';
-      new BibleVersionQueryService().queryBibleVersionsAsync().subscribe(a1 => na = a1[parseInt(ver, 10)].naChinese);
+      const na = this.bibleVersionQ.queryBibleVersions()[parseInt(ver, 10)].naChinese;
       return r2.join(';') + `(${na})`;
     } else {
       return r2.join(';');
@@ -410,10 +417,11 @@ interface IGetAddressesType {
 }
 /** 一卷書 1:1-3,6-7,21,25,2:3-5 分解 */
 class GetAddresses {
-  /** // 只4種類似 // 1:32-2:31 // 1:2-32 // 4-7 // 23 (23節 或 23章) */
+  /** // 只5種類似 // 1:32-2:31 // 1:2-32 // 4-7 // 1:23 // 23 (23節 或 23章) */
   private static regA1 = new RegExp('(\\d+):(\\d+)-(\\d+):(\\d+)'); // ["11:32-2:31","11","32","2","31"
   private static regA2 = new RegExp('(\\d+):(\\d+)-(\\d+)'); // ["11:32-2:31","11","32","2",
   private static regA4 = new RegExp('(\\d+)-(\\d+)'); // 後來發現的 bug, 雖然它應該是a3，但卻是編號4的原因,因為一開始沒考慮到
+  private static regA5 = new RegExp('(\\d+):(\\d+)'); // 後來發現的 bug, 雖然它應該是a4，但卻是編號5的原因,因為一開始沒考慮到
   private static regA3 = new RegExp('(\\d+)'); // ["11:32-2:31","11"
   private idBook: number;
   private addresses = new Array<VerseAddress>();
@@ -434,6 +442,8 @@ class GetAddresses {
           this.generateFromType2(a1).forEach(a2 => this.addresses.push(a2));
         } else if (a1.tp === 3) {
           this.generateFromType3(a1).forEach(a2 => this.addresses.push(a2));
+        } else if (a1.tp === 4) {
+          this.generateFromType4(a1).forEach(a2 => this.addresses.push(a2));
         }
       });
       return this.addresses;
@@ -476,6 +486,18 @@ class GetAddresses {
         vr1,
         ch2: -1,
         vr2,
+      };
+    }
+    const r5 = des.match(GetAddresses.regA5); // 1:23
+    if (r5 !== null) {
+      const ch1 = parseInt(r5[1], 10);
+      const vr1 = parseInt(r5[2], 10);
+      return {
+        tp: 4,
+        ch1,
+        vr1,
+        ch2: -1,
+        vr2: -1,
       };
     }
     const r3 = des.match(GetAddresses.regA3);
@@ -550,5 +572,8 @@ class GetAddresses {
     const ch = last !== undefined ? last.chap : 1;
     return range(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => new VerseAddress(this.idBook, ch, a1));
   }
-
+  private generateFromType4(add: IGetAddressesType): VerseAddress[] {
+    // 1:23
+    return [new VerseAddress(this.idBook, add.ch1, add.vr1)];
+  }
 }

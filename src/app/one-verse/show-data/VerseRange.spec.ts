@@ -1,7 +1,9 @@
 import { VerseRange } from './VerseRange';
 import { VerseAddress } from './VerseAddress';
-import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { BibleVersionQueryService, IBibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { initialTestBedAndAppInstance } from 'src/app/fhl-api/initialTestBedAndAppInstance';
+import { of } from 'rxjs';
+import { OneBibleVersion } from 'src/app/fhl-api/OneBibleVersion';
 
 describe('VerseRange', () => {
   beforeEach(() => {
@@ -18,13 +20,23 @@ describe('VerseRange', () => {
   });
 
   it('02-指定版本', (done) => {
-    const r1 = new VerseRange();
+    const bibleVersionQ: IBibleVersionQueryService = {
+      queryBibleVersions() {
+        const r3 = new OneBibleVersion();
+        r3.naChinese = '新譯本';
+        r3.na = 'ncv';
+        return [new OneBibleVersion(), new OneBibleVersion(), r3];
+      },
+      queryBibleVersionsAsync() { return of(this.queryBibleVersions()); },
+    };
+
+    const r1 = new VerseRange(bibleVersionQ);
     r1.add(new VerseAddress(40, 1, 1, 2));
     r1.add(new VerseAddress(40, 1, 2, 2));
 
-    const r2 = new BibleVersionQueryService().queryBibleVersions();
 
-    expect(r1.toStringChineseShort()).toBe(`太 1:1-2(${r2[2].naChinese})`);
+
+    expect(r1.toStringChineseShort()).toBe(`太 1:1-2(新譯本)`);
     done();
   });
   it('03-合併-跨3章', () => {
@@ -139,6 +151,8 @@ describe('VerseRange', () => {
     // console.log(JSON.stringify('11:2-31'.match(r7)) ); // ["11:2-31","11","2","31"]
   });
   it('07-parsing', () => {
+    expect(VerseRange.fromReferenceDescription('太 1:23', 40).toStringEnglishShort())
+      .toBe('Mt 1:23', '基本');
     expect(VerseRange.fromReferenceDescription('太 1:23-24', 40).toStringEnglishShort())
       .toBe('Mt 1:23-24', '基本');
     expect(VerseRange.fromReferenceDescription('瑪 1:2-3;太 1:23-24', 40).toStringEnglishShort())

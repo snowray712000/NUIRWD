@@ -13,7 +13,7 @@ describe('OneVerseComponent', () => {
   let component: OneVerseComponent;
   let fixture: ComponentFixture<OneVerseComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [OneVerseComponent, OneVerseViewDirective, ShowPureTextComponent],
       providers: [ComponentFactoryResolver]
@@ -32,7 +32,7 @@ describe('OneVerseComponent', () => {
     };
     component.initialor = test01;
     fixture.detectChanges();
-  }));
+  });
 
   it('01-純文字', () => {
     // tslint:disable-next-line: max-line-length

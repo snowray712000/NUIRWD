@@ -2,6 +2,7 @@ import { BibleVersionQueryService } from './bible-version-query.service';
 import { of } from 'rxjs';
 import { AbvService, IAbvResult, AbvResult } from './abv.service';
 import { map } from 'rxjs/operators';
+import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
 function test01() {
   const re = [
     {
@@ -15,7 +16,7 @@ function test01() {
       version: '2020/02/06 05:50:01',
     },
     {
-      book: 'cnv',
+      book: 'ncv',
       cname: '新譯本',
       proc: 0,
       strong: 0,
@@ -47,10 +48,9 @@ describe('BibleVersionQueryService', () => {
 
   it('Bible Version Query Service', (done) => {
     const abv = new AbvService();
-    spyOn(abv, 'queryAbvPhpOrCache').and.returnValue((test01()));
-    const service = new BibleVersionQueryService();
+    spyOn(abv, 'queryAbvPhpOrCache').and.returnValue(test01());
+    const service = new BibleVersionQueryService(abv);
     service.queryBibleVersionsAsync().toPromise().then(a1 => {
-      expect(a1).toBeTruthy();
       expect(a1[0].na).toBe('unv');
       expect(a1[1].na).toBe('ncv');
       done();
