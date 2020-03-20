@@ -1,19 +1,17 @@
 import { Observable } from 'rxjs';
 import { OneBibleVersion } from './OneBibleVersion';
 import { AbvService, IAbvResult, IAbvService } from './abv.service';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { sleep } from '../AsFunction/sleep';
+import { IBibleVersionQueryService } from './IBibleVersionQueryService';
 
-export interface IBibleVersionQueryService {
-  queryBibleVersionsAsync(): Observable<OneBibleVersion[]>;
-  queryBibleVersions(): OneBibleVersion[];
-}
 export class BibleVersionQueryService implements IBibleVersionQueryService {
   private abvAPI: IAbvService;
   constructor(abvAPI: IAbvService = null) {
     this.abvAPI = abvAPI;
   }
   private getDefaultAPI() {
-    if (this.abvAPI !== undefined) {
+    if (this.abvAPI !== null) {
       return this.abvAPI;
     }
     return new AbvService();
@@ -26,10 +24,25 @@ export class BibleVersionQueryService implements IBibleVersionQueryService {
       // tap(a1 => this.cache = a1), // abv本來就有 cache 機製
     );
   }
+
   queryBibleVersions(): OneBibleVersion[] {
     let re: OneBibleVersion[];
-    this.queryBibleVersionsAsync().subscribe(a1 => re = a1);
-    return re;
+    let obj = { re: undefined };
+    const timer1 = setTimeout((pthis, outObj) => {
+      pthis.queryBibleVersionsAsync().subscribe(a2 => {
+        outObj.re = a2;
+        console.log(outObj.re);
+
+      });
+    }, 0, this, obj);
+    let cnt = 1;
+    while (obj.re === undefined && cnt++ < 3) {
+      console.log(obj.re);
+      sleep(500);
+    }
+
+
+    return obj.re;
   }
 
   private convert(a1: IAbvResult): OneBibleVersion[] {

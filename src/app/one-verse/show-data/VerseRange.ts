@@ -1,10 +1,12 @@
 import { VerseAddress } from './VerseAddress';
 import { BibleBookNames } from '../../const/BibleBookNames';
-import { BibleVersionQueryService, IBibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/ts-tools/obj';
 import { BookNameLang } from '../../const/BookNameLang';
 import { range } from 'src/app/linq-like/Range';
+import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 
 export class VerseRange {
   private bibleVersionQ: IBibleVersionQueryService;
@@ -12,7 +14,8 @@ export class VerseRange {
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
     try {
       const re = new VerseRange();
-      const r1 = describe.split(';').map(a1 => new BookNameTryGetBookId().main(a1));
+      const r1 = describe.split(';').map(a1 => new BookNameTryGetBookId().main(a1.trim()));
+
       r1.forEach(a1 => {
         if (a1.idbook === undefined) {
           a1.idbook = book1BasedDefault;
@@ -169,7 +172,7 @@ class VersesToString {
     }
 
     const naBook = this.getBookName(book);
-    return naBook + ' ' + strOnebook;
+    return naBook + '' + strOnebook;
   }
   private isEntireChap(data, book: number) {
     if (Object.keys(data).length !== 1) {
@@ -369,11 +372,10 @@ class BookNameTryGetBookId {
     }
 
     const r1 = description.match(BookNameTryGetBookId.reg);
+
     if (r1 === null) {
       throw new Error('BookNameTryGetBookId ex input:' + description);
     }
-
-
     return {
       idbook: this.getIdFromMatchResult(r1[1]),
       descript: r1[3]
@@ -390,20 +392,39 @@ class BookNameTryGetBookId {
     return BookNameTryGetBookId.maps.get(r1);
   }
   private generateRegAndMaps(): RegExp {
-    const r1 = [...BibleBookNames.getBookNames(BookNameLang.馬太福音)
-      , ...BibleBookNames.getBookNames(BookNameLang.Matthew)
-      , ...BibleBookNames.getBookNames(BookNameLang.Matt)
-      , ...BibleBookNames.getBookNames(BookNameLang.太)
-      , ...BibleBookNames.getBookNames(BookNameLang.Mt)];
-    const r2 = new Map<string, number>();
-    for (let idx = 0; idx < r1.length; idx++) {
-      const element = r1[idx];
-      r2.set(element.toLowerCase(), (idx % 66) + 1);
-    }
+    const rr1 = new Map<number, Array<string>>(); // Reg 1=['創世記','Matthew','Matt','太','Mt'] 2= ...
+    range(1, 66).forEach(a1 => rr1.set(a1, []));
+
+    const r2 = new Map<string, number>(); // 同時產生 創世記=1, matthew=1
+    [BibleBookNames.getBookNames(BookNameLang.馬太福音),
+    BibleBookNames.getBookNames(BookNameLang.Matthew),
+    BibleBookNames.getBookNames(BookNameLang.Matt),
+    BibleBookNames.getBookNames(BookNameLang.太),
+    BibleBookNames.getBookNames(BookNameLang.Mt)].forEach(a2 => a2.forEach((a1, i) => {
+      rr1.get(i + 1).push(a1);
+      r2.set(a1.toLowerCase(), i + 1);
+    }));
+
+    // 特殊中文字 / 別名
+    const sp1 = [
+      { id: 62, na: ['約壹', '約翰壹書'] },
+      { id: 63, na: ['約貳', '約翰貳書'] },
+      { id: 64, na: ['約參', '約翰參書'] },
+    ];
+    sp1.forEach(a1 => {
+      a1.na.forEach(a2 => {
+        rr1.get(a1.id).push(a2);
+        r2.set(a2.toLowerCase(), a1.id);
+      });
+    });
+
+    // 結果1
     BookNameTryGetBookId.maps = r2;
 
-    // (瑪|太){0,1}(\\s*)([0-9:\\-,]+)
-    return new RegExp(`(${r1.join('|')}){0,1}(\\s*)([0-9:\\-,]+)`, 'i');
+    // 結果2
+    const names = Array.from(r2.keys()).sort((a1, a2) => a2.length - a1.length); // mt 若剛好有個也是 mt 開頭會被誤會,所以長的在前面
+    // (瑪|太){0,1}(\\s*)([0-9:\\-,]+) // 把最後的 + 改為 *, 因為 '約二' 的 case
+    return new RegExp(`(${names.join('|')}){0,1}(\\s*)([0-9:\\-,]*)`, 'i');
     throw new Error('not implement');
   }
 }
@@ -430,6 +451,16 @@ class GetAddresses {
   }
   public main(oneBookResult: IBookNameTryGetBookIdResult): VerseAddress[] {
     try {
+      // 約二 case
+      if (oneBookResult.descript.length === 0) {
+        if (getChapCountEqual1BookIds().includes(this.idBook)) {
+          return this.generateOneChap(1);
+        } else {
+          console.warn('GetAddresses 不加章節只允許「一章」的書卷,例如約一');
+          return [];
+        }
+      }
+
       const r1 = oneBookResult.descript.split(',');
       const r2 = r1.map(a1 => this.classifyType(a1));
 

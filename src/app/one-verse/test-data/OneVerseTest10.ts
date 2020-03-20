@@ -10,11 +10,9 @@ export class OneVerseTest10 implements IOneVerseInitialor {
     const contents: Array<ShowBase> = [
       new ShowTitleA([
         new ShowPureText('施洗約翰'),
-        new ShowReference([
-          new VerseRange(new VerseAddress(41, 1, 3), new VerseAddress(41, 1, 8)),
-          new VerseRange(new VerseAddress(42, 2, 17), new VerseAddress(42, 2, 17)),
-          new VerseRange(new VerseAddress(43, 1, 19), new VerseAddress(43, 2, 28)),
-        ]),
+        new ShowReference(
+          VerseRange.fromReferenceDescription('可1:3-8;路2:17;約1:19-2:28', 40)
+        ),
       ]),
       new ShowPureText('以下是耶和華藉瑪拉基對以色列宣判的話。'),
     ];

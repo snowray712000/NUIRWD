@@ -1,12 +1,10 @@
 import { Observable } from 'rxjs';
 import { appInstance } from '../app.module';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpUrlEncodingCodec } from '@angular/common/http';
 import { retry, map, tap } from 'rxjs/operators';
 import { URL } from 'url';
+import { IApiQsb } from './IApiQsb';
 
-export interface IApiQsb {
-  queryQsbAsync(args: QsbArgs): Observable<QsbResult>;
-}
 export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
     const http = appInstance.injector.get<HttpClient>(HttpClient);
@@ -37,7 +35,9 @@ export class ApiQsb implements IApiQsb {
     const gb = `gb=${(args.isSimpleChinese === false ? '0' : '1')}`;
     const ver = `version=${args.bibleVersion}`;
     const strong = `strong=${args.isExistStrong ? '1' : '0'}`;
-    return encodeURI(`?qstr=${args.qstr}&${strong}&${gb}&${ver}`);
+
+    const qstr = encodeURIComponent(args.qstr);
+    return `?qstr=${qstr}&${strong}&${gb}&${ver}`;
   }
 }
 

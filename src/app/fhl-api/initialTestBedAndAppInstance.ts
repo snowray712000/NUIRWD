@@ -13,8 +13,9 @@ export interface ITestingToolHttpClient {
 /**
  * TestBed 當用在 HttpClient 相關的測試時，可以用這個初始化，回傳HttpClient可供 spyOn 去過載 get 之類的
  */
+
 // tslint:disable-next-line: max-line-length
-export function initialTestBedAndAppInstance(httpClientGetOverload: Observable<HttpResponse<string>> = undefined, isOverLoadGet = true): ITestingToolHttpClient {
+export function initialTestBedAndAppInstance(httpClientGetOverload: Observable<HttpResponse<string>> = null, isOverLoadGet = true): ITestingToolHttpClient {
   TestBed.configureTestingModule({
     imports: [BrowserModule, HttpClientModule],
     providers: [Injector, HttpClient]
@@ -25,10 +26,21 @@ export function initialTestBedAndAppInstance(httpClientGetOverload: Observable<H
   }
   const http = TestBed.get(HttpClient);
   if (isOverLoadGet) {
-    spyOn(http, 'get').and.returnValue(httpClientGetOverload);
+    http.get = new MySpyOn(httpClientGetOverload).get;
+    // spyOn(http, 'get').and.returnValue(httpClientGetOverload);
   }
   return {
     testBed: TestBed,
     httpClient: http
   };
+}
+/** 非 spec.ts 無法使用 spyOn, 只好自己寫 */
+class MySpyOn {
+  private value: any;
+  constructor(value: any) {
+    this.value = value;
+  }
+  get() {
+    return this.value;
+  }
 }

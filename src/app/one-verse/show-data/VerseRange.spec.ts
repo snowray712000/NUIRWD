@@ -1,6 +1,7 @@
 import { VerseRange } from './VerseRange';
 import { VerseAddress } from './VerseAddress';
-import { BibleVersionQueryService, IBibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { initialTestBedAndAppInstance } from 'src/app/fhl-api/initialTestBedAndAppInstance';
 import { of } from 'rxjs';
 import { OneBibleVersion } from 'src/app/fhl-api/OneBibleVersion';

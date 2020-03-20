@@ -6,3 +6,15 @@ export function getChapCount(book1based: number): number {
   }
   throw new Error('Error Book id, must 1~66');
 }
+let bookIdsOnlyOneChap: Array<number>;
+export function getChapCountEqual1BookIds() {
+  if (bookIdsOnlyOneChap === undefined) {
+    bookIdsOnlyOneChap = cnum.map((a1, i) => {
+      return {
+        id: i + 1,
+        cnt: a1
+      };
+    }).filter(a1 => a1.cnt === 1).map(a1 => a1.id);
+  }
+  return bookIdsOnlyOneChap;
+}

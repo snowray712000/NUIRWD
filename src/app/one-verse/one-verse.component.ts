@@ -41,6 +41,11 @@ export class OneVerseComponent implements OnChanges, OnInit {
   private reGenerateInnerComponents() {
     this.content = this.initialor.content();
     this.address = this.initialor.address();
+    if (this.content === undefined || this.address === undefined) {
+      return;
+    }
+
+
     this.view.viewRef.clear();
 
     if (this.showComponentFactoryGetter === undefined) {

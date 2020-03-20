@@ -12,6 +12,7 @@ import { VersionParellelComponent } from './version-parellel/version-parellel.co
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
 import { AbvService } from './fhl-api/abv.service';
 import { BibleVersionQueryService } from './fhl-api/bible-version-query.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @NgModule({
@@ -24,7 +25,9 @@ import { BibleVersionQueryService } from './fhl-api/bible-version-query.service'
     OneChapComponent,
   ]).concat(OneVerseViewDepedentComponents.getDependentComponents())
   ,
-  entryComponents: new Array([]).concat(OneVerseViewDepedentComponents.getDependentComponents()),
+  entryComponents: new Array([
+    OneChapComponent
+  ]).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   imports: [
     BrowserModule,
     FlexLayoutModule,
