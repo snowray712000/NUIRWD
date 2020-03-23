@@ -12,6 +12,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
+測試時，用下面這個
+ng build --base-href=http://bkbible.fhl.net/NUI/200320a_rwd/
+
+正式發佈時，加上 --prod
+ng build --prod --base-href=http://bkbible.fhl.net/NUI/
+
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests
