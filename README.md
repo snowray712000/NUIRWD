@@ -18,6 +18,10 @@ ng build --base-href=http://bkbible.fhl.net/NUI/200320a_rwd/
 正式發佈時，加上 --prod
 ng build --prod --base-href=http://bkbible.fhl.net/NUI/
 
+--prod 失敗原因, 還沒有解決方法
+https://matthung0807.blogspot.com/2019/07/angular-7-can-not-determine-module.html
+
+
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests

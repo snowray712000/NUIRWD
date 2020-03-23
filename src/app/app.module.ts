@@ -8,26 +8,27 @@ import { OneVerseComponent } from './one-verse/one-verse.component';
 import { OneVerseViewDirective } from './one-verse/one-verse-view.directive';
 import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-dependent-components';
 import { OneChapComponent } from './one-chap/one-chap.component';
+
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
-import { AbvService } from './fhl-api/abv.service';
-import { BibleVersionQueryService } from './fhl-api/bible-version-query.service';
-import { ActivatedRoute } from '@angular/router';
 
+const declarations = new Array<any>(
+  AppComponent,
+  OneVerseViewDirective,
+  OneVerseComponent,
+  VersionParellelComponent,
+  VersionInterlaceComponent,
+  OneChapComponent,
+  OneVerseViewDirective,
+).concat(OneVerseViewDepedentComponents.getDependentComponents());
+
+const entryComponents = new Array(
+  OneChapComponent
+).concat(OneVerseViewDepedentComponents.getDependentComponents());
 
 @NgModule({
-  declarations: new Array<any>([
-    AppComponent,
-    OneVerseComponent,
-    OneVerseViewDirective,
-    VersionParellelComponent,
-    VersionInterlaceComponent,
-    OneChapComponent,
-  ]).concat(OneVerseViewDepedentComponents.getDependentComponents())
-  ,
-  entryComponents: new Array([
-    OneChapComponent
-  ]).concat(OneVerseViewDepedentComponents.getDependentComponents()),
+  declarations,
+  entryComponents,
   imports: [
     BrowserModule,
     FlexLayoutModule,
