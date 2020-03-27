@@ -1,0 +1,4 @@
+<div >
+  <div class="versionName">{{this.versionNameAsync()|async}}</div>
+  <app-one-verse *ngFor="let a1 of this.verseInitialors" [initialor]="a1"></app-one-verse>
+</div>

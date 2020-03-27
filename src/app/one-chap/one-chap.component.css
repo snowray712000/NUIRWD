@@ -1,0 +1,31 @@
+.versionName {
+  display: inline-block;
+  margin: 5px 0px 0px 10px;
+  border-radius: 5px;
+  background-color: #F5F5F5;
+  width: 80%;
+  text-align: center;
+  overflow: hidden;
+  height: 21px;
+}
+.versionName:hover{
+  background-color: #F06060;
+}
+.versionName:hover:before{
+  content: "X ";
+  font-size: 13pt;
+}
+span .verseNumber {
+  position: relative;
+  top: -8px;
+  margin-left: 1px;
+  margin-right: 1px;
+  font-size: 6pt;
+}
+span .verseNumber {
+  position: relative;
+  top: -8px;
+  margin-left: 1px;
+  margin-right: 1px;
+  font-size: 6pt;
+}

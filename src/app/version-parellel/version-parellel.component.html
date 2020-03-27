@@ -1,0 +1,6 @@
+<div (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
+     [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
+      <app-one-chap fxFlex="100%" *ngFor="let item of chaps"
+                    [chapQueryor]="item">
+      </app-one-chap>
+</div>

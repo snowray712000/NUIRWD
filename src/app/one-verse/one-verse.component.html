@@ -1,0 +1,8 @@
+<!-- <div fxLayout="row" fxLayout.xs="column">
+  <span fxFlex="50%">新譯本</span>
+  <span fxFlex="50%">CNET</span>
+</div> -->
+<div [attr.ver]="ver" [attr.bk]="book" [attr.cp]="chap" [attr.sc]="sec">
+  <span class="verseNumber">{{sec}}</span>
+  <span class="verseContent"><ng-template appOneVerseView></ng-template></span>
+</div>
