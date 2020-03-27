@@ -1,31 +1,24 @@
-<p>version-parellel works!</p>
-<div (window:resize)="onResize($event)" [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
-  <app-one-chap fxFlex="100%" *ngFor="let item of chaps" [chapQueryor]="item"></app-one-chap>
-</div>
-<!-- <div (window:resize)="onResize($event)" [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
-    <div fxFlex="100%">
-      unv
-      <div>
-        1親愛的弟兄啊，我們既有這等應許，就當潔淨自己，除去身體、靈魂一切的污穢，敬畏　神，得以成聖。
-      </div>
-      <div>
-        2你們要心地寬大收納我們。我們未曾虧負誰，未曾敗壞誰，未曾佔誰的便宜。
-      </div>
-      <div>
-        3我說這話，不是要定你們的罪。我已經說過，你們常在我們心裡，情願與你們同生同死。
-      </div>
+<mat-toolbar color="primary" class="example-toolbar">
+  <button mat-icon-button (click)="snav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1 class="example-app-name">Responsive App</h1>
+</mat-toolbar>
+
+<mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+  <!-- <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56"> -->
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+    fixedTopGap="56">
+    left
+    </mat-sidenav>
+  <mat-sidenav #snav [mode]="'push'" position='end' [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+    right
+  </mat-sidenav>
+
+
+  <mat-sidenav-content>
+    <div (window:resize)="onResize($event)" [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
+      <app-one-chap fxFlex="100%" *ngFor="let item of chaps" [chapQueryor]="item"></app-one-chap>
     </div>
-    <div fxFlex="100%">
-      cnv
-      <div>
-        1所以，親愛的，我們有了這些應許，就應該潔淨自己，除去身體和心靈上的一切污穢，存著敬畏　神的心，達到成聖的地步。
-      </div>
-      <div>
-        2哥林多人悔改，保羅得喜樂
-  你們的心要容得下我們。我們沒有虧負過誰，沒有損害過誰，也沒有佔過誰的便宜。
-      </div>
-      <div>
-        3我這樣說，不是要定你們的罪，因為我從前說過，你們常在我們心裡，甚至可以同生共死。
-      </div>
-    </div>
-</div> -->
+  </mat-sidenav-content>
+</mat-sidenav-container>

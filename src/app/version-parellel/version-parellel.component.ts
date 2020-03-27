@@ -13,7 +13,7 @@ import { VerseAddress } from '../one-verse/show-data/VerseAddress';
 import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
 import { OneChapComponent } from '../one-chap/one-chap.component';
-
+import { MediaMatcher } from '@angular/cdk/layout';
 @Component({
   selector: 'app-version-parellel',
   templateUrl: './version-parellel.component.html',
@@ -21,6 +21,7 @@ import { OneChapComponent } from '../one-chap/one-chap.component';
 })
 export class VersionParellelComponent implements OnInit, AfterViewInit {
 
+  mobileQuery: MediaQueryList;
   private isEnoughWidthParellel = true; //
   private widthLimitSet = 250;
   private bibleLink: string;
@@ -29,9 +30,14 @@ export class VersionParellelComponent implements OnInit, AfterViewInit {
   @Input() width: number;
   @ViewChild('baseDiv', { read: ViewContainerRef, static: false }) baseDiv: ViewContainerRef;
 
-  constructor(private route: ActivatedRoute, private cr: ComponentFactoryResolver, private detectChange: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute,
+              private cr: ComponentFactoryResolver,
+              private detectChange: ChangeDetectorRef,
+              private media: MediaMatcher) {
 
-    this.route.params.subscribe(async res => {
+      this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
+
+      this.route.params.subscribe(async res => {
       // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'
       this.bibleLink = res.description.replace(new RegExp('\\.', 'g'), ';');
 

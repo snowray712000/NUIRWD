@@ -11,33 +11,48 @@ import { OneChapComponent } from './one-chap/one-chap.component';
 
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
-
-const declarations = new Array<any>(
-  AppComponent,
-  OneVerseViewDirective,
-  OneVerseComponent,
-  VersionParellelComponent,
-  VersionInterlaceComponent,
-  OneChapComponent,
-  OneVerseViewDirective,
-).concat(OneVerseViewDepedentComponents.getDependentComponents());
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatCommonModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { RwdFramesetComponent } from './rwd-frameset/rwd-frameset.component';
+import { MatButtonModule } from '@angular/material/button';
 const entryComponents = new Array(
   OneChapComponent
 ).concat(OneVerseViewDepedentComponents.getDependentComponents());
 
 @NgModule({
-  declarations,
+  declarations: new Array<any>(
+    AppComponent,
+    OneVerseViewDirective,
+    OneVerseComponent,
+    VersionParellelComponent,
+    VersionInterlaceComponent,
+    OneChapComponent,
+    OneVerseViewDirective,
+    RwdFramesetComponent,
+  ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [
     BrowserModule,
     FlexLayoutModule,
     // import http after browser
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatCommonModule,
+    MatButtonModule,
   ],
   providers: [HttpClient],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 // https://stackoverflow.com/questions/49310134/how-to-create-angular-5-httpclient-instance-in-typescript-class
 

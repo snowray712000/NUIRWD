@@ -1,0 +1,33 @@
+<div class="example-container" [class.example-is-mobile]="isMobile()">
+  <mat-toolbar color="primary" class="example-toolbar">
+    <button mat-icon-button  (click)="snavLeft.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    top
+
+    <span class="example-fill-remaining-space"></span>
+
+    <button mat-icon-button (click)="snavRight.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="example-sidenav-container"
+                         [style.marginTop.px]="isMobile() ? 56 : 0">
+    <mat-sidenav #snavLeft [mode]="isMobile() ? 'push' : 'side'"
+                 [fixedInViewport]="isMobile()" fixedTopGap="56"
+                 [style.min-width]="'170px'">
+      left
+    </mat-sidenav>
+    <mat-sidenav #snavRight position="end"
+                 [mode]="isMobile() ? 'push' : 'side'"
+                 [fixedInViewport]="isMobile()" fixedTopGap="56"
+                 [style.min-width]="'300px'">
+      right
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      content
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
