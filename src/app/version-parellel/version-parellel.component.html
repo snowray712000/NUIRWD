@@ -1,24 +1,6 @@
-<mat-toolbar color="primary" class="example-toolbar">
-  <button mat-icon-button (click)="snav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <h1 class="example-app-name">Responsive App</h1>
-</mat-toolbar>
-
-<mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-  <!-- <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56"> -->
-    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-    fixedTopGap="56">
-    left
-    </mat-sidenav>
-  <mat-sidenav #snav [mode]="'push'" position='end' [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-    right
-  </mat-sidenav>
-
-
-  <mat-sidenav-content>
-    <div (window:resize)="onResize($event)" [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
-      <app-one-chap fxFlex="100%" *ngFor="let item of chaps" [chapQueryor]="item"></app-one-chap>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<div (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
+     [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
+      <app-one-chap fxFlex="100%" *ngFor="let item of chaps"
+                    [chapQueryor]="item">
+      </app-one-chap>
+</div>

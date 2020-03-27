@@ -21,7 +21,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
 })
 export class VersionParellelComponent implements OnInit, AfterViewInit {
 
-  mobileQuery: MediaQueryList;
   private isEnoughWidthParellel = true; //
   private widthLimitSet = 250;
   private bibleLink: string;
@@ -32,10 +31,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit {
 
   constructor(private route: ActivatedRoute,
               private cr: ComponentFactoryResolver,
-              private detectChange: ChangeDetectorRef,
-              private media: MediaMatcher) {
-
-      this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
+              private detectChange: ChangeDetectorRef) {
 
       this.route.params.subscribe(async res => {
       // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'

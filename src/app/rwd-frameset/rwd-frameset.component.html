@@ -1,6 +1,10 @@
-<div class="example-container" [class.example-is-mobile]="isMobile()">
+<div class="example-container" #baseFrame
+     (window:resize)="onResize($event)"
+     (window:orientationchange)="onResize()"
+     [class.example-is-mobile]="isMobile()">
+
   <mat-toolbar color="primary" class="example-toolbar">
-    <button mat-icon-button  (click)="snavLeft.toggle()">
+    <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     top
@@ -12,22 +16,21 @@
     </button>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container"
-                         [style.marginTop.px]="isMobile() ? 56 : 0">
-    <mat-sidenav #snavLeft [mode]="isMobile() ? 'push' : 'side'"
-                 [fixedInViewport]="isMobile()" fixedTopGap="56"
-                 [style.min-width]="'170px'">
+  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0">
+    <mat-sidenav #snavLeft [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56"
+      [style.min-width.px]="170">
       left
     </mat-sidenav>
-    <mat-sidenav #snavRight position="end"
-                 [mode]="isMobile() ? 'push' : 'side'"
-                 [fixedInViewport]="isMobile()" fixedTopGap="56"
-                 [style.min-width]="'300px'">
+    <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()"
+                 fixedTopGap="56"
+                 [style.width.px]="getSideRightWidth().width"
+                 [style.min-width.px]="getSideRightWidth().minWidth"
+                 [style.max-width.px]="getSideRightWidth().maxWidth">
       right
     </mat-sidenav>
 
     <mat-sidenav-content>
-      content
+      <app-version-parellel [versions]="[0,2]"></app-version-parellel>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
