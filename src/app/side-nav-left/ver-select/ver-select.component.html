@@ -1,5 +1,5 @@
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngFor="let a1 of verClass; let i1=index">
+  <mat-expansion-panel *ngFor="let a1 of verClass|async; let i1=index">
     <mat-expansion-panel-header [collapsedHeight]="'2em'"
                                 [expandedHeight]="'2.5em'">
     {{a1.na}}
