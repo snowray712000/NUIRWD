@@ -20,6 +20,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RwdFramesetComponent } from './rwd-frameset/rwd-frameset.component';
 import { MatButtonModule } from '@angular/material/button';
+import { SideNavLeftComponent } from './side-nav-left/side-nav-left.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { VerSelectComponent } from './side-nav-left/ver-select/ver-select.component';
 const entryComponents = new Array(
   OneChapComponent
 ).concat(OneVerseViewDepedentComponents.getDependentComponents());
@@ -34,6 +38,8 @@ const entryComponents = new Array(
     OneChapComponent,
     OneVerseViewDirective,
     RwdFramesetComponent,
+    SideNavLeftComponent,
+    VerSelectComponent,
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [
@@ -50,6 +56,8 @@ const entryComponents = new Array(
     MatListModule,
     MatCommonModule,
     MatButtonModule,
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],
