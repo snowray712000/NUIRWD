@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { BibleVersionQueryService } from '../../fhl-api/bible-version-query.service';
-import { of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { of, Observable, interval as rxjsInterval } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { tap, map, catchError, shareReplay } from 'rxjs/operators';
 import { IBibleVersionQueryService } from 'src/app/fhl-api/IBibleVersionQueryService';
-@Component({
-  selector: 'app-ver-select',
-  templateUrl: './ver-select.component.html',
-  styleUrls: ['./ver-select.component.css']
-})
-export class VerSelectComponent implements OnInit {
-  private versionQ: IVersionsQuery;
-  @ViewChildren('verC', { read: false }) vers: QueryList<any>;
-  verClass = of([
+import { DateAdapter } from '@angular/material/core';
+import { IConvertBibleVersionId2Eng, IConvertBibleVersionEng2Id } from '../../fhl-api/i-convert-bible-version';
+import { ConvertBibleVersionTool } from '../../fhl-api/convert-bible-version';
+
+// IConvertBibleVersionEng2Id 會用到, (通用的) - checkbox 轉回 id 時會用
+function testData() {
+  return of([
     {
       na: '中文',
       vers: [
@@ -27,22 +26,51 @@ export class VerSelectComponent implements OnInit {
       ],
     },
   ]);
+}
+
+@Component({
+  selector: 'app-ver-select',
+  templateUrl: './ver-select.component.html',
+  styleUrls: ['./ver-select.component.css']
+})
+export class VerSelectComponent implements OnInit {
+  private versionQ: IVersionsQuery;
+  private eng2id: IConvertBibleVersionEng2Id;
+  @ViewChildren('verC', { read: false }) vers: QueryList<any>;
+  /** emit([0,2,3]) bible version ids */
+  @Output() notify = new EventEmitter<Array<number>>();
+  verClass = testData();
   constructor() {
     this.versionQ = new VersionsQuery(undefined);
+    const cvtVer = new ConvertBibleVersionTool();
+    this.eng2id = cvtVer;
   }
 
   ngOnInit() {
     if (this.versionQ !== undefined) {
       this.verClass = this.versionQ.queryBibleVersionAsync();
     }
+  }
+  /** 在 html 中, checkbox select changed 時會自動觸發這個 */
+  private onSelectChanged() {
+    const vers = this.getVersionsFromVerCControls();
+    const pthis = this;
+    this.cvtEngVers2IdVers(vers).then(a1 => {
+      pthis.notify.emit(a1);
+    });
+  }
+  private async cvtEngVers2IdVers(engs) {
+    const re = [];
+    for (const it of engs) {
+      const r1 = await this.eng2id.convertEng2IdAsync(it);
+      if (r1 !== undefined) {
+        re.push(r1);
+      }
+    }
+    return re;
+  }
 
-    let aa = new BibleVersionQueryService();
-    aa.queryBibleVersionsAsync().toPromise().then(a1 => console.log(a1));
-  }
-  onSelectChanged() {
-    console.log(this.getVersionsFromVerCControls());
-  }
-  private getVersionsFromVerCControls() {
+  private getVersionsFromVerCControls(): Array<string> {
     const vers = [];
     this.vers.forEach(a1 => {
       a1.selectedOptions.selected.forEach(a2 => {
@@ -51,7 +79,11 @@ export class VerSelectComponent implements OnInit {
     });
     return vers;
   }
-  onClickButton(set1or0: number, idxOpt: number) {
+  /** 供 html 中按下全選,全不選 時用
+   *  用程式全選/全不選,不會主動觸發 onSelectChange
+   *  這個函式會呼叫 onSelectChange
+   */
+  private onClickButton(set1or0: number, idxOpt: number) {
     // 其實 ver 是 MatSelectionList class , 但設定的話 _element 會被 compiler 會 private 的
     this.vers.forEach(a1 => {
       if (a1._element.nativeElement.id === 'opt' + idxOpt) {
@@ -74,8 +106,8 @@ interface IVersionsQuery {
 class VersionsQuery implements IVersionsQuery {
   private static subClass = [
     { na: '中文', engs: 'unv,ncv,tcv95,recover,lcc,wlunv,ddv,csb,cnet,cccbst,nt1864,mor1823' },
-    { na: '原文', engs: 'cbol,bhs,fhlwh,lxx,esv' },
-    { na: '英文', engs: 'kjv,bbe,web,asv,darby,erv' },
+    { na: '原文', engs: 'cbol,bhs,fhlwh,lxx' },
+    { na: '英文', engs: 'kjv,bbe,web,asv,darby,erv,esv' },
     { na: '民族方言', engs: 'apskcl,tte,apskhl,bklcl,bklhl,prebklcl,prebklhl,thv2e,hakka,sgebklcl,sgebklhl,rukai,tsou,ams,ttnt94' },
     { na: '尚未分類', engs: '' }
   ];
@@ -85,10 +117,12 @@ class VersionsQuery implements IVersionsQuery {
     if (this.bibleQ === undefined) {
       this.bibleQ = new BibleVersionQueryService();
     }
+
+
   }
   queryBibleVersionAsync() {
     return this.bibleQ.queryBibleVersionsAsync().pipe(
-      //tap(a1 => console.log(a1),
+      // tap(a1 => console.log(a1),
       map(a1 => {
         const r1 = {};
         VersionsQuery.subClass.forEach(a2 => r1[a2.na] = []);
@@ -112,6 +146,7 @@ class VersionsQuery implements IVersionsQuery {
             }
           }
           if (isFinded === false) {
+            // tslint:disable-next-line: no-string-literal
             r1['尚未分類'].push({ na: a2.naChinese, eng: a2.na });
           }
         });
@@ -124,7 +159,7 @@ class VersionsQuery implements IVersionsQuery {
             re.push({ na: key, vers: element });
           }
         }
-        console.log(re);
+        // console.log(re);
 
         return re;
       }),

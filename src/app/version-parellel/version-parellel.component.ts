@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges } from '@angular/core';
 import { asHTMLElement } from '../AsFunction/asHTMLElement';
 import { ActivatedRoute } from '@angular/router';
 import { VerseRange } from '../one-verse/show-data/VerseRange';
@@ -14,36 +14,57 @@ import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
 import { OneChapComponent } from '../one-chap/one-chap.component';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { isArrayEqualLength, isArrayEqual } from "../AsFunction/arrayEqual";
+
 @Component({
   selector: 'app-version-parellel',
   templateUrl: './version-parellel.component.html',
   styleUrls: ['./version-parellel.component.css']
 })
-export class VersionParellelComponent implements OnInit, AfterViewInit {
-
+export class VersionParellelComponent implements OnInit, AfterViewInit, OnChanges {
   private isEnoughWidthParellel = true; //
   private widthLimitSet = 250;
   private bibleLink: string;
+  // html in use
   private chaps: Array<IOneChapInitialor> = new Array<IOneChapInitialor>();
-  @Input() versions: Array<number> = [0, 2];
+  private qstr: string;
+  private isGb = false;
+  private isSn = false;
+  @Input() versions: Array<number> = [];
   @Input() width: number;
   @ViewChild('baseDiv', { read: ViewContainerRef, static: false }) baseDiv: ViewContainerRef;
 
   constructor(private route: ActivatedRoute,
-              private cr: ComponentFactoryResolver,
-              private detectChange: ChangeDetectorRef) {
+    private cr: ComponentFactoryResolver,
+    private detectChange: ChangeDetectorRef) {
 
-      this.route.params.subscribe(async res => {
+    this.route.params.subscribe(async res => {
       // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'
       this.bibleLink = res.description.replace(new RegExp('\\.', 'g'), ';');
 
       const qstr = VerseRange.fromReferenceDescription(this.bibleLink, 40).toStringEnglishShort();
+      this.qstr = qstr;
 
-      const isGb = false;
-      const isSn = false;
-      const results = await new QueryContents().mainAsync(this.versions, qstr, isGb, isSn);
+      const results = await this.triggerContentsQueryAsync();
       this.chaps = results;
     });
+  }
+
+  private async triggerContentsQueryAsync() {
+    return await new QueryContents().mainAsync(this.versions, this.qstr, this.isGb, this.isSn);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!isArrayEqual(changes.versions.previousValue, changes.versions.currentValue)) {
+      // 取得聖經版本, 對應的內容, 設給 this.chaps
+      this.triggerContentsQueryAsync().then(a1 => {
+        this.chaps = a1;
+
+        // 聖經版本數量有變的話，要改 layout (RWD) 的可能
+        if (isArrayEqualLength(changes.versions.previousValue, changes.versions.currentValue)) {
+          this.checkOneVersionPixelAndRerenderIfNeed();
+        }
+      });
+    }
   }
 
 
@@ -87,7 +108,10 @@ export class VersionParellelComponent implements OnInit, AfterViewInit {
   }
 }
 
-class QueryContents {
+interface IQueryContents {
+  mainAsync(iVers: number[], qstr: string, isGb: boolean, isSN: boolean);
+}
+class QueryContents implements IQueryContents {
   private verQ: IBibleVersionQueryService;
   private qsbQ: IApiQsb;
   private iVers: number[];

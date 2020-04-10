@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query, Output, EventEmitter } from '@angular/core';
 import { MatSelectionListChange, MatSelectionList } from '@angular/material/list';
 import { longStackSupport } from 'q';
 
@@ -10,7 +10,10 @@ import { longStackSupport } from 'q';
 export class SideNavLeftComponent implements OnInit {
 
   constructor() { }
-
+  @Output() notifyChangedBibleVersionIds = new EventEmitter<Array<number>>();
   ngOnInit() {
+  }
+  private onChangedBibleVersionIds(ids) {
+    this.notifyChangedBibleVersionIds.emit(ids);
   }
 }

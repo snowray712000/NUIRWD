@@ -7,11 +7,11 @@ import { IBibleVersionQueryService } from './IBibleVersionQueryService';
 
 export class BibleVersionQueryService implements IBibleVersionQueryService {
   private abvAPI: IAbvService;
-  constructor(abvAPI: IAbvService = null) {
+  constructor(abvAPI?: IAbvService) {
     this.abvAPI = abvAPI;
   }
   private getDefaultAPI() {
-    if (this.abvAPI !== null) {
+    if (this.abvAPI !== undefined) {
       return this.abvAPI;
     }
     return new AbvService();

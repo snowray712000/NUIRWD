@@ -18,8 +18,8 @@
 
   <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0">
     <mat-sidenav #snavLeft [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56"
-      [style.min-width.px]="170">
-      <app-side-nav-left></app-side-nav-left>
+      [style.min-width.px]="170" (closed)="onClosedLeftSide()">
+      <app-side-nav-left (notifyChangedBibleVersionIds)="onChangedBibleVersionIds($event)"></app-side-nav-left>
     </mat-sidenav>
     <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()"
                  fixedTopGap="56"
@@ -30,7 +30,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <app-version-parellel [versions]="[0,2]"></app-version-parellel>
+      <app-version-parellel [versions]="this.bibleVersions"></app-version-parellel>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
