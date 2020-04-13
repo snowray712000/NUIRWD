@@ -5,13 +5,8 @@ import { asHTMLElement } from '../AsFunction/asHTMLElement';
 import { Observable, Subscriber } from 'rxjs';
 import { appInstance } from '../app.module';
 import { isArrayEqual } from '../AsFunction/arrayEqual';
-
-interface IOnChangedBibleVersionIds {
-  onChangedBibleVersionIds$: Observable<Array<number>>;
-}
-interface IUpdateBibleVersionIds {
-  updateBibleVersionIds(ids: Array<number>);
-}
+import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
+import { VerIdsManager } from './VerIdsManager';
 
 @Component({
   selector: 'app-rwd-frameset',
@@ -36,7 +31,8 @@ export class RwdFramesetComponent implements AfterViewInit {
 
   /** 建構子呼叫 */
   private initAboutVerChangeOrUpdate() {
-    const r1 = new TestVerIdsManager();
+    const isTest = false;
+    const r1 = !isTest ? new VerIdsManager() : new TestVerIdsManager();
     this.onVerIdsChanged = r1;
     this.iUpdateVerIds = r1;
     this.bindOnChangedBibleVersions();
@@ -129,3 +125,6 @@ class TestVerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVersio
     }
   }
 }
+
+
+
