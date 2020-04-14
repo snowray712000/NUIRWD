@@ -60,7 +60,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
         this.chaps = a1;
 
         // 聖經版本數量有變的話，要改 layout (RWD) 的可能
-        if (isArrayEqualLength(changes.versions.previousValue, changes.versions.currentValue)) {
+        if (!isArrayEqualLength(changes.versions.previousValue, changes.versions.currentValue)) {
           this.checkOneVersionPixelAndRerenderIfNeed();
         }
       });
