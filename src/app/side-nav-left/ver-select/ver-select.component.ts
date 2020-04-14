@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { BibleVersionQueryService } from '../../fhl-api/bible-version-query.service';
 import { of, Observable, interval as rxjsInterval } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { tap, map, catchError, shareReplay } from 'rxjs/operators';
 import { IBibleVersionQueryService } from 'src/app/fhl-api/IBibleVersionQueryService';
-import { DateAdapter } from '@angular/material/core';
+import { DateAdapter, MatOptgroup, MatOption } from '@angular/material/core';
 import { IConvertBibleVersionId2Eng, IConvertBibleVersionEng2Id } from '../../fhl-api/i-convert-bible-version';
 import { ConvertBibleVersionTool } from '../../fhl-api/convert-bible-version';
+import { MatListOption } from '@angular/material/list';
+import { setTimeoutTrySleepTry } from 'src/app/AsFunction/setTimeoutTrySleepTry';
 
 // IConvertBibleVersionEng2Id 會用到, (通用的) - checkbox 轉回 id 時會用
 function testData() {
@@ -33,20 +35,42 @@ function testData() {
   templateUrl: './ver-select.component.html',
   styleUrls: ['./ver-select.component.css']
 })
-export class VerSelectComponent implements OnInit {
+export class VerSelectComponent implements OnInit, AfterViewInit {
   private versionQ: IVersionsQuery;
   private eng2id: IConvertBibleVersionEng2Id;
+  private id2eng: IConvertBibleVersionId2Eng;
   @ViewChildren('verC', { read: false }) vers: QueryList<any>;
+  @ViewChildren('optVer', { read: false }) verOpts: QueryList<any>;
   /** emit([0,2,3]) bible version ids */
   @Output() notify = new EventEmitter<Array<number>>();
+  @Input() verIdsOfInit: number[] = [];
   verClass = testData();
   constructor() {
     this.versionQ = new VersionsQuery(undefined);
     const cvtVer = new ConvertBibleVersionTool();
     this.eng2id = cvtVer;
+    this.id2eng = cvtVer;
+  }
+  ngAfterViewInit(): void {
+    let opts: QueryList<any>;
+    setTimeoutTrySleepTry(() => {
+      opts = this.verOpts;
+      return opts.length === 0 || this.verClass === undefined ;
+    }, () => {
+      this.id2eng.convertIds2EngsAsync(this.verIdsOfInit).then(engs => {
+        opts.forEach(a1 => {
+          const r2 = a1 as MatListOption;
+          if (engs.includes(r2.value)) {
+            r2.selected = true;
+          }
+        });
+      });
+    });
   }
 
+
   ngOnInit() {
+
     if (this.versionQ !== undefined) {
       this.verClass = this.versionQ.queryBibleVersionAsync();
     }
@@ -55,19 +79,9 @@ export class VerSelectComponent implements OnInit {
   private onSelectChanged() {
     const vers = this.getVersionsFromVerCControls();
     const pthis = this;
-    this.cvtEngVers2IdVers(vers).then(a1 => {
+    this.eng2id.convertEngs2IdsAsync(vers).then(a1 => {
       pthis.notify.emit(a1);
     });
-  }
-  private async cvtEngVers2IdVers(engs) {
-    const re = [];
-    for (const it of engs) {
-      const r1 = await this.eng2id.convertEng2IdAsync(it);
-      if (r1 !== undefined) {
-        re.push(r1);
-      }
-    }
-    return re;
   }
 
   private getVersionsFromVerCControls(): Array<string> {
@@ -79,6 +93,7 @@ export class VerSelectComponent implements OnInit {
     });
     return vers;
   }
+
   /** 供 html 中按下全選,全不選 時用
    *  用程式全選/全不選,不會主動觸發 onSelectChange
    *  這個函式會呼叫 onSelectChange
@@ -170,3 +185,5 @@ class VersionsQuery implements IVersionsQuery {
     return '^(' + engs.split(',').join(')|(') + ')$';
   }
 }
+
+

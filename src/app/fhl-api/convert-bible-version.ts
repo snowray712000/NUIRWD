@@ -34,6 +34,32 @@ export class ConvertBibleVersionTool implements IConvertBibleVersionEng2Id, ICon
     }
     return this.id2eng.get(id);
   }
+  async convertEngs2IdsAsync(eng: string[]): Promise<number[]> {
+    if (eng === undefined) {
+      return undefined;
+    }
+    const re = [];
+    for (const it of eng) {
+      const r1 = await this.convertEng2IdAsync(it);
+      if (r1 !== undefined) {
+        re.push(r1);
+      }
+    }
+    return re;
+  }
+  async convertIds2EngsAsync(id: number[]): Promise<string[]> {
+    if (id === undefined) {
+      return undefined;
+    }
+    const re = [];
+    for (const it of id) {
+      const r1 = await this.convertId2EngAsync(it);
+      if (r1 !== undefined) {
+        re.push(r1);
+      }
+    }
+    return re;
+  }
   private isInitNotYet() {
     if (this.id2eng === undefined) {
       return true;

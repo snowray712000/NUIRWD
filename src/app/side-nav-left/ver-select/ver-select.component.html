@@ -8,7 +8,7 @@
       <button (click)="this.onClickButton(0,i1);$event.stopPropagation()">消</button>
     </mat-expansion-panel-header>
     <mat-selection-list #verC [attr.id]="'opt'+i1" (selectionChange)="this.onSelectChanged()">
-      <mat-list-option *ngFor="let a2 of a1.vers" [value]="a2.eng">
+      <mat-list-option *ngFor="let a2 of a1.vers" [value]="a2.eng" #optVer>
         {{a2.na}}
       </mat-list-option>
     </mat-selection-list>

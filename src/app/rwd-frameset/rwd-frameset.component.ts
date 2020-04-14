@@ -27,6 +27,8 @@ export class RwdFramesetComponent implements AfterViewInit {
   private widthBaseFrame: number;
   // html in use
   private bibleVersions: Array<number> = [];
+  // html in use
+  private verIdsOfInit: number[];
   @ViewChild('baseFrame', { read: ViewContainerRef, static: false }) baseFrame: ViewContainerRef;
 
   /** 建構子呼叫 */
@@ -42,6 +44,9 @@ export class RwdFramesetComponent implements AfterViewInit {
     const pthis = this;
     this.onVerIdsChanged.onChangedBibleVersionIds$.subscribe({
       next: (val: Array<number>) => {
+        if (pthis.verIdsOfInit === undefined) {
+          pthis.verIdsOfInit = val;
+        }
         pthis.bibleVersions = val;
         pthis.detectChange.markForCheck();
       },

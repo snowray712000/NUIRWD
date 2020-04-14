@@ -10,7 +10,7 @@
       聖經版本
     </mat-expansion-panel-header>
 
-    <app-ver-select (notify)="onChangedBibleVersionIds($event)"></app-ver-select>
+    <app-ver-select [verIdsOfInit]="verIdsOfInit" (notify)="onChangedBibleVersionIds($event)"></app-ver-select>
 
   </mat-expansion-panel>
   <mat-expansion-panel>

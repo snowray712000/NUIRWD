@@ -56,30 +56,15 @@ export class VerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVer
     });
     this.onChangedVerEngs.onChangedBibleVersionEngs$.subscribe({
       next(engs: string[]) {
-        pthis.cvtEngsToIds(engs).then(ids => pthis.ob.next(ids));
+        pthis.iCvtEng2id.convertEngs2IdsAsync(engs).then(ids => pthis.ob.next(ids));
       }
     });
   }
 
   updateBibleVersionIds(ids: number[]) {
-    this.cvtIdsToEngs(ids).then(engs =>
+    this.iCvtId2Eng.convertIds2EngsAsync(ids).then(engs =>
       this.iUpdateVerEngs.updateBibleVersionEngs(engs)
     );
-  }
-
-  async cvtIdsToEngs(ids: number[]): Promise<string[]> {
-    const re: string[] = [];
-    for (const it of ids) {
-      re.push(await this.iCvtId2Eng.convertId2EngAsync(it));
-    }
-    return re;
-  }
-  async cvtEngsToIds(engs: string[]): Promise<number[]> {
-    const re: number[] = [];
-    for (const it of engs) {
-      re.push(await this.iCvtEng2id.convertEng2IdAsync(it));
-    }
-    return re;
   }
 }
 
