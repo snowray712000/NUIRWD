@@ -7,7 +7,8 @@ import { appInstance } from '../app.module';
 import { isArrayEqual } from '../AsFunction/arrayEqual';
 import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
 import { VerIdsManager } from './VerIdsManager';
-
+import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-sheet";
+import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -17,8 +18,11 @@ export class RwdFramesetComponent implements AfterViewInit {
   private onVerIdsChanged: IOnChangedBibleVersionIds;
   /** U: Update Ver: Bible Version */
   private iUpdateVerIds: IUpdateBibleVersionIds;
+  // tslint:disable-next-line: variable-name
+  private _bottomSheet: MatBottomSheet;
   constructor(private detectChange: ChangeDetectorRef) {
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
+    this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
     this.initAboutVerChangeOrUpdate();
   }
 
@@ -40,6 +44,13 @@ export class RwdFramesetComponent implements AfterViewInit {
     this.bindOnChangedBibleVersions();
   }
 
+  private onClickBibleSelect() {
+    this._bottomSheet.open(BibleSelectionsComponent, {
+      data: {
+        beSelectedBookId: 39
+      }
+    });
+  }
   private bindOnChangedBibleVersions() {
     const pthis = this;
     this.onVerIdsChanged.onChangedBibleVersionIds$.subscribe({

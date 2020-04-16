@@ -1,0 +1,25 @@
+.naShort {
+  font-size: 1.4em;
+}
+.naLong {
+}
+.oneBlock {
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+.textBlock {
+  text-align: center;
+  overflow: hidden;
+  word-break: keep-all;
+}
+.naClass {
+  color: blue;
+  font-size: large;
+}
+.beSelectedBook {
+  background-color: yellowgreen;
+}
+.book {
+  height: 100%;
+  width: 100%;
+}

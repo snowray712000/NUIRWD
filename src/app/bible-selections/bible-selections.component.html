@@ -1,0 +1,17 @@
+<mat-button-toggle-group name="bkch" aria-label="Font Style">
+  <mat-button-toggle value="bk" checked="true">卷</mat-button-toggle>
+  <mat-button-toggle value="ch">章</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div *ngFor="let it of getList()">
+  <span class='naClass'>{{it.naClass}}</span>
+  <mat-grid-list cols="5" rowHeight="1:1">
+    <mat-grid-tile *ngFor="let it2 of it.bks" class='oneBlock' [class.beSelectedBook]="beSelectedBookId===it2.bk">
+      <div class='textBlock'>
+        <span class='naShort'>{{it2.naShort}}</span>
+        <br/>
+        <span class='naLong'>{{it2.naLong}}</span>
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

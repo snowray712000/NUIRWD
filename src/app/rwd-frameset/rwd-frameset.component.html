@@ -7,8 +7,10 @@
     <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    top
-
+    <button mat-icon-button (click)="onClickBibleSelect()">
+      <mat-icon>view_comfy</mat-icon>
+      <span *ngIf="!isMobile()">聖經目錄</span>
+    </button>
     <span class="example-fill-remaining-space"></span>
 
     <button mat-icon-button (click)="snavRight.toggle()">
