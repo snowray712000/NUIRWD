@@ -9,7 +9,7 @@ import { getChapCount } from "../const/count-of-chap";
 import { BookNameLang } from '../const/BookNameLang';
 import { inject } from '@angular/core/testing';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { ActivatedRoute } from '@angular/router';
+import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 
 @Component({
   selector: 'app-bible-selections',
@@ -19,11 +19,13 @@ import { ActivatedRoute } from '@angular/router';
 export class BibleSelectionsComponent implements OnInit {
   verQ: BibleVersionQueryService = new BibleVersionQueryService();
   @Input() beSelectedBookId = 40;
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) private data: any,
-    private route: ActivatedRoute,
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) private data: any
   ) {
-
-    // this.beSelectedBookId = data.beSelectedBookId ;
+    const routeFrame = new RouteStartedWhenFrame();
+    routeFrame.routeTools.verseRange$.subscribe(a1 => {
+      const bk = (a1 !== undefined && a1.verses.length !== 0) ? a1.verses[0].book : 40;
+      this.beSelectedBookId = bk;
+    });
   }
 
   ngOnInit() {
@@ -39,14 +41,14 @@ export class BibleSelectionsComponent implements OnInit {
   }
 
   private cvtBks(bks: number[]) {
-  return bks.map(a1 => {
-    return {
-      naShort: BibleBookNames.getBookName(a1, BookNameLang.太),
-      naLong: BibleBookNames.getBookName(a1, BookNameLang.馬太福音),
-      bk: a1,
-    };
-  });
-}
+    return bks.map(a1 => {
+      return {
+        naShort: BibleBookNames.getBookName(a1, BookNameLang.太),
+        naLong: BibleBookNames.getBookName(a1, BookNameLang.馬太福音),
+        bk: a1,
+      };
+    });
+  }
 }
 const type1 = [
   { na: '舊約', bks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] },

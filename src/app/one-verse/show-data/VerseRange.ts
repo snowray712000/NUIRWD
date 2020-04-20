@@ -10,7 +10,7 @@ import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 
 export class VerseRange {
   private bibleVersionQ: IBibleVersionQueryService;
-  private verses: Array<VerseAddress> = new Array<VerseAddress>();
+  public verses: Array<VerseAddress> = new Array<VerseAddress>();
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
     try {
       const re = new VerseRange();

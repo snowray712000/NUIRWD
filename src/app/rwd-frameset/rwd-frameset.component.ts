@@ -9,6 +9,8 @@ import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-framese
 import { VerIdsManager } from './VerIdsManager';
 import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
+import { ActivatedRoute } from '@angular/router';
+import { RouteStartedWhenFrame } from './RouteStartedWhenFrame';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -20,7 +22,11 @@ export class RwdFramesetComponent implements AfterViewInit {
   private iUpdateVerIds: IUpdateBibleVersionIds;
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
-  constructor(private detectChange: ChangeDetectorRef) {
+  constructor(private detectChange: ChangeDetectorRef,
+    private route: ActivatedRoute,
+  ) {
+    new RouteStartedWhenFrame(route); // 傳值 static 進去
+
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
     this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
     this.initAboutVerChangeOrUpdate();
@@ -141,6 +147,5 @@ class TestVerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVersio
     }
   }
 }
-
 
 

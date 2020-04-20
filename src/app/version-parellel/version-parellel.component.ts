@@ -15,6 +15,7 @@ import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
 import { OneChapComponent } from '../one-chap/one-chap.component';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { isArrayEqualLength, isArrayEqual } from "../AsFunction/arrayEqual";
+import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 
 @Component({
   selector: 'app-version-parellel',
@@ -34,19 +35,16 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   @Input() width: number;
   @ViewChild('baseDiv', { read: ViewContainerRef, static: false }) baseDiv: ViewContainerRef;
 
-  constructor(private route: ActivatedRoute,
-    private cr: ComponentFactoryResolver,
+  constructor(private cr: ComponentFactoryResolver,
     private detectChange: ChangeDetectorRef) {
 
-    this.route.params.subscribe(async res => {
-      // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'
-      this.bibleLink = res.description.replace(new RegExp('\\.', 'g'), ';');
-
-      const qstr = VerseRange.fromReferenceDescription(this.bibleLink, 40).toStringEnglishShort();
-      this.qstr = qstr;
-
-      const results = await this.triggerContentsQueryAsync();
-      this.chaps = results;
+    const routeFrame = new RouteStartedWhenFrame();
+    routeFrame.routeTools.verseRange$.subscribe(a1 => {
+      this.bibleLink = routeFrame.routeTools.descriptionLast;
+      this.qstr = a1.toStringEnglishShort();
+      this.triggerContentsQueryAsync().then(a2 => {
+        this.chaps = a2;
+      });
     });
   }
 
