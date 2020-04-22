@@ -1,17 +1,26 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { VerseRange } from '../one-verse/show-data/VerseRange';
 import { Observable } from 'rxjs';
 export class RouteStartedWhenFrame {
-  private static routeStastic: ActivatedRoute;
+  private static routeStatic: ActivatedRoute;
+  private static routerStatic: Router;
   private static routeTools: DRouteTools = {
     descriptionLast: undefined,
     verseRangeLast: undefined,
     verseRange$: undefined,
   };
-  constructor(route: ActivatedRoute = null) {
+  /**
+   *
+   * @param route 用來 subscribe 的
+   * @param router 用來 navigate 的
+   */
+  constructor(route: ActivatedRoute = null, router: Router = null) {
+    if (router != null) {
+      RouteStartedWhenFrame.routerStatic = router;
+    }
     if (route != null) {
-      RouteStartedWhenFrame.routeStastic = route;
+      RouteStartedWhenFrame.routeStatic = route;
       this.descriptLastAndVerseLast(route);
     }
   }
@@ -44,7 +53,8 @@ export class RouteStartedWhenFrame {
     return a1 === undefined || a1.verses.length === 0;
   }
 
-  get route() { return RouteStartedWhenFrame.routeStastic; }
+  get route() { return RouteStartedWhenFrame.routeStatic; }
+  get router() { return RouteStartedWhenFrame.routerStatic; }
   get routeTools() { return RouteStartedWhenFrame.routeTools; }
 }
 

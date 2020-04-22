@@ -1,17 +1,33 @@
-<mat-button-toggle-group name="bkch" aria-label="Font Style">
+<mat-button-toggle-group #bkch="matButtonToggleGroup" (change)="onMatButtonToggleChange($event)" name="bkch"
+  aria-label="Font Style">
   <mat-button-toggle value="bk" checked="true">卷</mat-button-toggle>
   <mat-button-toggle value="ch">章</mat-button-toggle>
 </mat-button-toggle-group>
 
-<div *ngFor="let it of getList()">
-  <span class='naClass'>{{it.naClass}}</span>
+<div *ngIf="bkch.value === 'bk'">
+  <div *ngFor="let it of getList()">
+    <span class='naClass'>{{it.naClass}}</span>
+    <mat-grid-list cols="5" rowHeight="1:1">
+      <mat-grid-tile *ngFor="let it2 of it.bks" class='oneBlock' [class.beSelectedBook]="beSelectedBookId===it2.bk"
+        (click)="onClickBook($event,it2)">
+        <div class='textBlock'>
+          <span class='naShort'>{{it2.naShort}}</span>
+          <br />
+          <span class='naLong'>{{it2.naLong}}</span>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>
+<div *ngIf="bkch.value !== 'bk'">
   <mat-grid-list cols="5" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let it2 of it.bks" class='oneBlock' [class.beSelectedBook]="beSelectedBookId===it2.bk">
-      <div class='textBlock'>
-        <span class='naShort'>{{it2.naShort}}</span>
-        <br/>
-        <span class='naLong'>{{it2.naLong}}</span>
-      </div>
-    </mat-grid-tile>
+    <a *ngFor="let it of getCountChapArray()"
+    [routerLink]="getLink(it)">
+      <mat-grid-tile [class.beSelectedBook]="beSelectedChap===it" (click)="onClickChap($event,it)" class='oneBlock'>
+        <div class='textBlock'>
+          {{it}}
+        </div>
+      </mat-grid-tile>
+    </a>
   </mat-grid-list>
 </div>

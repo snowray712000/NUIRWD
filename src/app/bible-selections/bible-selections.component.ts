@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
 import { of, Observable, ConnectableObservable, Subject, interval } from 'rxjs';
@@ -10,6 +10,9 @@ import { BookNameLang } from '../const/BookNameLang';
 import { inject } from '@angular/core/testing';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
+import { range } from '../linq-like/Range';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bible-selections',
@@ -18,17 +21,47 @@ import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 })
 export class BibleSelectionsComponent implements OnInit {
   verQ: BibleVersionQueryService = new BibleVersionQueryService();
+  @ViewChild('bkch', null) btnToggleBkCh: MatButtonToggleGroup;
   @Input() beSelectedBookId = 40;
+  @Input() beSelectedChap = 3;
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) private data: any
   ) {
     const routeFrame = new RouteStartedWhenFrame();
     routeFrame.routeTools.verseRange$.subscribe(a1 => {
-      const bk = (a1 !== undefined && a1.verses.length !== 0) ? a1.verses[0].book : 40;
-      this.beSelectedBookId = bk;
+      const r1 = (a1 !== undefined && a1.verses.length !== 0) ? a1.verses[0] : undefined;
+      this.beSelectedBookId = r1 !== undefined ? r1.book : 40;
+      this.beSelectedChap = r1 !== undefined ? r1.chap : 1;
     });
   }
 
   ngOnInit() {
+  }
+  onMatButtonToggleChange(a1) {
+    // console.log(a1);
+  }
+  onClickBook(event, book) {
+    this.beSelectedChap = 1;
+    this.beSelectedBookId = book.bk;
+    this.btnToggleBkCh.value = 'ch';
+
+    this.autoNavigateIfCountChapEqaul1();
+  }
+  private autoNavigateIfCountChapEqaul1() {
+    const cnt = getChapCount(this.beSelectedBookId);
+    if (cnt === 1) {
+      new RouteStartedWhenFrame().router.navigateByUrl(this.getLink(1));
+    }
+  }
+
+  onClickChap(event, chap) {
+    this.beSelectedChap = chap;
+  }
+  private getLink(ch) {
+    const eng = BibleBookNames.getBookName(this.beSelectedBookId, BookNameLang.Mt);
+    return `/bible/${eng}${ch}`; // /bible/Mt1
+  }
+  private getCountChapArray() {
+    return range(1, getChapCount(this.beSelectedBookId));
   }
   private getList(): DListShow[] {
     const r1 = type1.map(a1 => {
