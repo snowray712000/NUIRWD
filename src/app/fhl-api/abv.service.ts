@@ -1,7 +1,9 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { map, tap, retry } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
+import { map, tap, retry, } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { appInstance } from '../app.module';
+import { ajax } from 'rxjs/ajax';
+import { ajaxGetJSON } from 'rxjs/internal/observable/dom/AjaxObservable';
 
 export interface IAbvService {
   queryAbvPhpOrCache(): Observable<IAbvResult>;
@@ -13,32 +15,13 @@ export class AbvService implements IAbvService {
     if (AbvService.cache !== undefined) {
       return of(AbvService.cache);
     }
-
-    const http = appInstance.injector.get<HttpClient>(HttpClient);
     const url = 'http://bkbible.fhl.net/json/abv.php';
-    const options = {
-      observe: 'response' as 'response',
-      responseType: 'text' as 'text',
-    };
-
-    return http.get(url, options)
-      .pipe(
-        retry(3),
-        // tap(a1 => console.log(a1)),
-        map(a1 => this.parsingToVersions(a1)),
-        tap(a1 => AbvService.cache = a1),
-        // tap(a1 => console.log(a1)),
-      );
-  }
-
-  private parsingToVersions(a1: HttpResponse<string>): IAbvResult {
-    const r1 = JSON.parse(a1.body);
-    const re: IAbvResult = new AbvResult();
-    re.comment = r1.comment;
-    re.parsing = r1.parsing;
-    re.record_count = r1.record_count;
-    re.record = r1.record;
-    return re;
+    return ajax.getJSON<IAbvResult>(url).pipe(
+      retry(3),
+      // tap(a1 => console.log(a1)),
+      tap(a1 => AbvService.cache = a1),
+      // tap(a1 => console.log(a1)),
+    );
   }
 }
 

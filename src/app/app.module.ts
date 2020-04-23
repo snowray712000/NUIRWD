@@ -26,8 +26,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VerSelectComponent } from './side-nav-left/ver-select/ver-select.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BibleSelectionsComponent } from './bible-selections/bible-selections.component';
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatButtonToggleModule  } from "@angular/material/button-toggle";
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonToggleModule  } from '@angular/material/button-toggle';
+import { SideNavRightComponent } from './side-nav-right/side-nav-right.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
@@ -45,6 +48,8 @@ const entryComponents = new Array<any>(
     RwdFramesetComponent,
     SideNavLeftComponent,
     VerSelectComponent,
+    SideNavRightComponent,
+    CbolParsingComponent,
     BibleSelectionsComponent,
 
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
@@ -68,6 +73,7 @@ const entryComponents = new Array<any>(
     MatBottomSheetModule,
     MatGridListModule,
     MatButtonToggleModule,
+    MatTabsModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

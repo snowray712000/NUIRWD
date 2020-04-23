@@ -3,10 +3,6 @@ import { ApiQsb, QsbArgs } from './qsb';
 import { VerseRange } from '../one-verse/show-data/VerseRange';
 
 describe('API-qsb.php', () => {
-  beforeEach(() => {
-    const testing = initialTestBedAndAppInstance(null, false);
-  });
-
   it('qsb.php 值', (done) => {
     const args = new QsbArgs();
     args.qstr = 'Mt1:1-2;John1:1-2';

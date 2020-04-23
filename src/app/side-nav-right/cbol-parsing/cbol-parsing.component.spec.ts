@@ -1,20 +1,20 @@
 // import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { VerSelectComponent } from './ver-select.component';
+// import { CbolParsingComponent } from './cbol-parsing.component';
 
-// describe('VerSelectComponent', () => {
-//   let component: VerSelectComponent;
-//   let fixture: ComponentFixture<VerSelectComponent>;
+// describe('CbolParsingComponent', () => {
+//   let component: CbolParsingComponent;
+//   let fixture: ComponentFixture<CbolParsingComponent>;
 
 //   beforeEach(async(() => {
 //     TestBed.configureTestingModule({
-//       declarations: [ VerSelectComponent ]
+//       declarations: [ CbolParsingComponent ]
 //     })
 //     .compileComponents();
 //   }));
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(VerSelectComponent);
+//     fixture = TestBed.createComponent(CbolParsingComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

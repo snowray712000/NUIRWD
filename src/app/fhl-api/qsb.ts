@@ -4,32 +4,15 @@ import { HttpClient, HttpResponse, HttpUrlEncodingCodec } from '@angular/common/
 import { retry, map, tap } from 'rxjs/operators';
 import { URL } from 'url';
 import { IApiQsb } from './IApiQsb';
-
+import { ajax } from 'rxjs/ajax';
+/** 取得經文 */
 export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
-    const http = appInstance.injector.get<HttpClient>(HttpClient);
     const url = 'http://bkbible.fhl.net/json/qsb.php';
-    const options = {
-      observe: 'response' as 'response',
-      responseType: 'text' as 'text',
-    };
-
-    return http.get(url + this.generateQueryString(args), options)
-      .pipe(
-        retry(3),
+    return ajax.getJSON<QsbResult>(url + this.generateQueryString(args)).pipe(
+      retry(3),
         // tap(a1 => console.log(a1)),
-        map(a1 => this.parsingTo(a1)),
-        // tap(a1 => console.log(a1)),
-      );
-    throw new Error('not implement.');
-  }
-  private parsingTo(a1: HttpResponse<string>): QsbResult {
-    const r1 = JSON.parse(a1.body);
-    return {
-      status: r1.status,
-      proc: r1.proc,
-      record: r1.record,
-    };
+    );
   }
   private generateQueryString(args: QsbArgs) {
     const gb = `gb=${(args.isSimpleChinese === false ? '0' : '1')}`;
