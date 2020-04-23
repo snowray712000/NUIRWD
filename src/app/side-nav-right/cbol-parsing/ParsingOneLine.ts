@@ -1,12 +1,12 @@
 export class ParsingOneLine {
   re: { w: string, sn?: number }[] = [];
-  constructor(private strWord: string,
+  constructor(
+    private strWord: string,
     private records: {
       word: string;
       sn: string;
     }[],
-    private iRecordStart1Based: number) {
-  }
+    private iRecordStart1Based: number) { }
 
   parsing() {
     this.re = [];
