@@ -38,7 +38,7 @@
           <span class='item-title'>分析</span>
           <span class="example-fill-remaining-space"></span>
           <span>{{a1.pro}}</span>
-          <span>{{a1.wform}}</span>
+          <span [innerHTML]="createDomFromString(a1.wform)"></span>
         </div>
         <mat-divider></mat-divider>
         <div [style.display]="'flex'" [style.background-color]="'whitesmoke'">
@@ -56,7 +56,7 @@
         <div *ngIf="a1.remark!==undefined" [style.display]="'flex'" [style.background-color]="'whitesmoke'">
           <span class='item-title'>備註</span>
           <span class="example-fill-remaining-space"></span>
-          <span>{{a1.remark}}</span>
+          <span [innerHTML]="createDomFromString(a1.remark)"></span>
         </div>
       </div>
     </mat-expansion-panel>

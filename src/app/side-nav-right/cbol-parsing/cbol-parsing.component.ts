@@ -10,6 +10,9 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { IBookNameToId } from 'src/app/const/book-name/i-book-name-to-id';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
+import { IEventVerseChanged } from './cbol-parsing-interfaces';
+import { EventVerseChanged } from './EventVerseChanged';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-cbol-parsing',
@@ -28,17 +31,30 @@ export class CbolParsingComponent implements OnInit {
   @ViewChild('origList', null) accordion: MatAccordion;
 
   name2id: IBookNameToId = new BookNameToId();
+  eventVerseChanged: IEventVerseChanged;
   constructor(
-    private detectChange: ChangeDetectorRef) {
+    private detectChange: ChangeDetectorRef,
+    private sanitizer: DomSanitizer) {
+    this.eventVerseChanged = new EventVerseChanged();
   }
   ngOnInit() {
-    const bk = this.cur.book;
-    const ch = this.cur.chap;
-    const vr = this.cur.verse;
-    this.queryQbAndRefreshAsync(bk, ch, vr);
+    if (this.eventVerseChanged !== undefined) {
+      this.eventVerseChanged.changed$.subscribe(data => {
+        this.queryQbAndRefreshAsync(data.book, data.chap, data.verse);
+      });
+    }
+  }
+  private createDomFromString(str) {
+    return this.sanitizer.bypassSecurityTrustHtml(str);
+    // return this.sanitizer.bypassSecurityTrustHtml(
+    //  "<p>W3商品資訊欄位<br><span style="color:red;">商品資訊介紹</span></p>"
+    // );
   }
   private queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
     new ApiQb().queryQbAsync(bk, ch, vr).toPromise().then(qbResult => {
+      console.log(qbResult);
+
+      // <div style="display: inline-block;white-space: nowrap;">בְּ</div>
       const id1 = this.name2id.cvtName2Id(qbResult.prev.engs);
       const id2 = this.name2id.cvtName2Id(qbResult.next.engs);
       this.prev = { book: id1, chap: qbResult.prev.chap, verse: qbResult.prev.sec };
