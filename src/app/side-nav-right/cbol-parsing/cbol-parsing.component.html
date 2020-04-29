@@ -1,9 +1,65 @@
-<div *ngFor="let it1 of lines">
+<div class='toppanel'>
   <div>
-    <span *ngFor="let it2 of it1.words">{{it2.w}}</span>
+    <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
+    <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
+    <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
   </div>
-  <div>
-    <span *ngFor="let it2 of it1.exps">{{it2.w}}</span>
+  <div *ngFor="let it1 of lines">
+    <div class='origline'>
+      <span *ngFor="let it2 of it1.words">
+        <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span>
+        <span [class.orig]="it2.sn==null||it2.sn!==0">{{it2.w}}</span>
+      </span>
+      <!-- <span *ngFor="let it2 of it1.words" [class.orig]="it2.sn==null||it2.sn!==0">{{it2.w}}</span> -->
+    </div>
+    <div>
+      <span *ngFor="let it2 of it1.exps">{{it2.w}}</span>
+    </div>
   </div>
+</div>
+
+<br />
+<mat-divider></mat-divider>
+<div class='bottompanel'>
+  <!-- mat-chip 要加 selected=true 才會變色 -->
+  <mat-chip-list>
+    <mat-chip color="accent" selected="true" (click)="origList.openAll()" class='btnChip'>展開所有</mat-chip>
+    <mat-chip color="accent" selected="true" (click)="origList.closeAll()" class='btnChip'>閉合所有</mat-chip>
+  </mat-chip-list>
+  <mat-accordion multi="true" #origList="matAccordion">
+    <mat-expansion-panel *ngFor="let a1 of words; let i1=index">
+      <mat-expansion-panel-header [collapsedHeight]="'2em'" [expandedHeight]="'2.5em'">
+        <span class='wid'>{{a1.wid}}</span><span class='orig'>{{a1.word}}</span>
+        <span class="example-fill-remaining-space"></span>
+        {{a1.sn}}
+      </mat-expansion-panel-header>
+      <div>
+        <div [style.display]="'flex'">
+          <span class='item-title'>分析</span>
+          <span class="example-fill-remaining-space"></span>
+          <span>{{a1.pro}}</span>
+          <span>{{a1.wform}}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div [style.display]="'flex'" [style.background-color]="'whitesmoke'">
+          <span class='item-title'>原型</span>
+          <span class="example-fill-remaining-space"></span>
+          <span class='orig'>{{a1.orig}}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div [style.display]="'flex'">
+          <span class='item-title'>簡義</span>
+          <span class="example-fill-remaining-space"></span>
+          <span>{{a1.exp}}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div *ngIf="a1.remark!==undefined" [style.display]="'flex'" [style.background-color]="'whitesmoke'">
+          <span class='item-title'>備註</span>
+          <span class="example-fill-remaining-space"></span>
+          <span>{{a1.remark}}</span>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
 <p>cbol-parsing works!</p>

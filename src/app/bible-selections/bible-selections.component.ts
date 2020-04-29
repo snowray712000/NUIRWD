@@ -4,9 +4,9 @@ import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
 import { of, Observable, ConnectableObservable, Subject, interval } from 'rxjs';
 import { map, multicast, tap, share } from 'rxjs/operators';
 
-import { BibleBookNames } from "../const/BibleBookNames";
+import { BibleBookNames } from "../const/book-name/BibleBookNames";
 import { getChapCount } from "../const/count-of-chap";
-import { BookNameLang } from '../const/BookNameLang';
+import { BookNameLang } from '../const/book-name/BookNameLang';
 import { inject } from '@angular/core/testing';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';

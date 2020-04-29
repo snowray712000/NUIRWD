@@ -1,5 +1,5 @@
 import { BookNameLang } from './BookNameLang';
-import { range } from '../linq-like/Range';
+import { range } from '../../linq-like/Range';
 
 export class BibleBookNames {
   // [0]=["Gen", "Genesis", "創", "創世記", "Ge"]

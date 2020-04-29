@@ -1,0 +1,66 @@
+import { IBookNameToId } from './i-book-name-to-id';
+import { range } from '../../linq-like/Range';
+import { BibleBookNames } from './BibleBookNames';
+import { BookNameLang } from './BookNameLang';
+
+export class BookNameToId implements IBookNameToId {
+  private static mapNa2Id: Map<string, number>;
+  private static regNa: RegExp;
+  cvtName2Id(na: string): number {
+    if (BookNameToId.mapNa2Id === undefined) {
+      const { map, reg } = this.generateMapAndRegex();
+      BookNameToId.mapNa2Id = map;
+      BookNameToId.regNa = reg;
+    }
+
+    const r1 = na.match(BookNameToId.regNa);
+    // console.log(r5);
+    // ["太", "太", index: 0, input: "太", groups: undefined]
+    if (r1 === undefined) {
+      return undefined;
+    }
+    return BookNameToId.mapNa2Id.get(r1[1].toLocaleLowerCase());
+  }
+
+  private generateMapAndRegex(): {
+    map: Map<string, number>;
+    reg: RegExp;
+  } {
+    const rr1 = new Map<number, Array<string>>(); // Reg 1=['創世記','Matthew','Matt','太','Mt'] 2= ...
+    range(1, 66).forEach(a1 => rr1.set(a1, []));
+    const map = new Map<string, number>(); // 同時產生 創世記=1, matthew=1
+    [BibleBookNames.getBookNames(BookNameLang.馬太福音),
+    BibleBookNames.getBookNames(BookNameLang.Matthew),
+    BibleBookNames.getBookNames(BookNameLang.Matt),
+    BibleBookNames.getBookNames(BookNameLang.太),
+    BibleBookNames.getBookNames(BookNameLang.Mt)].forEach(a2 => a2.forEach((a1, i) => {
+      rr1.get(i + 1).push(a1);
+      map.set(a1.toLowerCase(), i + 1);
+    }));
+    // 特殊中文字 / 別名
+    const sp1 = [
+      { id: 62, na: ['約壹', '約翰壹書'] },
+      { id: 63, na: ['約貳', '約翰貳書'] },
+      { id: 64, na: ['約參', '約翰參書'] },
+    ];
+    sp1.forEach(a1 => {
+      a1.na.forEach(a2 => {
+        rr1.get(a1.id).push(a2);
+        map.set(a2.toLowerCase(), a1.id);
+      });
+    });
+    // console.log(r2);
+    // 結果2
+    const names = Array.from(map.keys()).sort((a1, a2) => a2.length - a1.length); // mt 若剛好有個也是 mt 開頭會被誤會,所以長的在前面
+    // console.log(JSON.stringify(names));
+    // tslint:disable-next-line: max-line-length
+    // ["second thessalonians","first thessalonians","second corinthians","second chronicles","first corinthians","first chronicles","song of solomon","second timothy","second samuel","first timothy","first samuel","second kings","ecclesiastes","lamentations","second peter","deuteronomy","first kings","philippians","first peter","second john","colossians","first john","third john","revelation","leviticus","zephaniah","zechariah","galatians","ephesians","nehemiah","proverbs","jeremiah","habakkuk","philemon","帖撒羅尼迦前書","帖撒羅尼迦後書","genesis","numbers","ezekiel","obadiah","malachi","matthew","hebrews","1 thess","2 thess","exodus","joshua","judges","esther","psalms","isaiah","daniel","haggai","romans","philem","1 john","2 john","3 john","撒母耳記上","撒母耳記下","耶利米哀歌","俄巴底亞書","撒迦利亞書","哥林多前書","哥林多後書","提摩太前書","提摩太後書","hosea","jonah","micah","nahum","titus","james","1 sam","2 sam","1 kin","2 kin","1 chr","2 chr","1 cor","2 cor","1 tim","2 tim","1 pet","2 pet","出埃及記","約書亞記","列王紀上","列王紀下","歷代志上","歷代志下","以斯拉記","尼希米記","以斯帖記","以賽亞書","耶利米書","以西結書","但以理書","何西阿書","阿摩司書","哈巴谷書","西番雅書","瑪拉基書","馬太福音","馬可福音","路加福音","約翰福音","使徒行傳","加拉太書","以弗所書","腓立比書","歌羅西書","腓利門書","希伯來書","彼得前書","彼得後書","約翰一書","約翰二書","約翰三書","ruth","ezra","joel","amos","mark","luke","john","acts","jude","deut","josh","judg","esth","prov","eccl","song","ezek","obad","zeph","zech","matt","phil","約翰壹書","約翰貳書","約翰參書","創世記","利未記","民數記","申命記","士師記","路得記","約伯記","傳道書","約珥書","約拿書","彌迦書","那鴻書","哈該書","羅馬書","提多書","雅各書","猶大書","啟示錄","job","gen","lev","num","neh","jer","lam","dan","hos","jon","mic","nah","hab","hag","mal","rom","gal","eph","col","heb","rev","jos","jud","1sa","2sa","1ki","2ki","1ch","2ch","ezr","isa","eze","joe","zep","zec","joh","1co","2co","php","1th","2th","1ti","2ti","tit","phm","jas","1pe","2pe","1jo","2jo","3jo","詩篇","箴言","雅歌","ex","ps","is","撒上","撒下","王上","王下","代上","代下","林前","林後","帖前","帖後","提前","提後","彼前","彼後","約一","約二","約三","ge","le","nu","de","ru","ne","es","pr","ec","so","la","da","ho","am","ob","na","mt","mr","lu","ac","ro","ga","re","約壹","約貳","約參","創","出","利","民","申","書","士","得","拉","尼","斯","伯","詩","箴","傳","歌","賽","耶","哀","結","但","何","珥","摩","俄","拿","彌","鴻","哈","番","該","亞","瑪","太","可","路","約","徒","羅","加","弗","腓","西","多","門","來","雅","猶","啟"]
+    // (瑪|太){0,1}(\\s*)([0-9:\\-,]+) // 把最後的 + 改為 *, 因為 '約二' 的 case
+    const r3 = '(' + names.join('|') + ')';
+    // console.log(r3);
+    // tslint:disable-next-line: max-line-length
+    // (second thessalonians|first thessalonians|second corinthians|second chronicles|first corinthians|first chronicles|song of solomon|second timothy|second samuel|first timothy|first samuel|second kings|ecclesiastes|lamentations|second peter|deuteronomy|first kings|philippians|first peter|second john|colossians|first john|third john|revelation|leviticus|zephaniah|zechariah|galatians|ephesians|nehemiah|proverbs|jeremiah|habakkuk|philemon|帖撒羅尼迦前書|帖撒羅尼迦後書|genesis|numbers|ezekiel|obadiah|malachi|matthew|hebrews|1 thess|2 thess|exodus|joshua|judges|esther|psalms|isaiah|daniel|haggai|romans|philem|1 john|2 john|3 john|撒母耳記上|撒母耳記下|耶利米哀歌|俄巴底亞書|撒迦利亞書|哥林多前書|哥林多後書|提摩太前書|提摩太後書|hosea|jonah|micah|nahum|titus|james|1 sam|2 sam|1 kin|2 kin|1 chr|2 chr|1 cor|2 cor|1 tim|2 tim|1 pet|2 pet|出埃及記|約書亞記|列王紀上|列王紀下|歷代志上|歷代志下|以斯拉記|尼希米記|以斯帖記|以賽亞書|耶利米書|以西結書|但以理書|何西阿書|阿摩司書|哈巴谷書|西番雅書|瑪拉基書|馬太福音|馬可福音|路加福音|約翰福音|使徒行傳|加拉太書|以弗所書|腓立比書|歌羅西書|腓利門書|希伯來書|彼得前書|彼得後書|約翰一書|約翰二書|約翰三書|ruth|ezra|joel|amos|mark|luke|john|acts|jude|deut|josh|judg|esth|prov|eccl|song|ezek|obad|zeph|zech|matt|phil|約翰壹書|約翰貳書|約翰參書|創世記|利未記|民數記|申命記|士師記|路得記|約伯記|傳道書|約珥書|約拿書|彌迦書|那鴻書|哈該書|羅馬書|提多書|雅各書|猶大書|啟示錄|job|gen|lev|num|neh|jer|lam|dan|hos|jon|mic|nah|hab|hag|mal|rom|gal|eph|col|heb|rev|jos|jud|1sa|2sa|1ki|2ki|1ch|2ch|ezr|isa|eze|joe|zep|zec|joh|1co|2co|php|1th|2th|1ti|2ti|tit|phm|jas|1pe|2pe|1jo|2jo|3jo|詩篇|箴言|雅歌|ex|ps|is|撒上|撒下|王上|王下|代上|代下|林前|林後|帖前|帖後|提前|提後|彼前|彼後|約一|約二|約三|ge|le|nu|de|ru|ne|es|pr|ec|so|la|da|ho|am|ob|na|mt|mr|lu|ac|ro|ga|re|約壹|約貳|約參|創|出|利|民|申|書|士|得|拉|尼|斯|伯|詩|箴|傳|歌|賽|耶|哀|結|但|何|珥|摩|俄|拿|彌|鴻|哈|番|該|亞|瑪|太|可|路|約|徒|羅|加|弗|腓|西|多|門|來|雅|猶|啟)
+    const reg = new RegExp(r3, 'i');
+    return { map, reg };
+  }
+}

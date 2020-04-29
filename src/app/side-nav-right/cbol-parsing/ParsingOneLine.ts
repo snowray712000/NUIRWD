@@ -1,10 +1,11 @@
 export class ParsingOneLine {
-  re: { w: string, sn?: number }[] = [];
+  re: { w: string, sn?: number, wid?: number }[] = [];
   constructor(
     private strWord: string,
     private records: {
       word: string;
       sn: string;
+      wid: number;
     }[],
     private iRecordStart1Based: number) { }
 
@@ -30,9 +31,12 @@ export class ParsingOneLine {
     while (true) {
       // 接著是原文
       {
+        const sn = parseInt(m0.sn, 10);
+        const wid = sn !== 0 ? m0.wid : undefined;
         this.re.push({
           w: m0.word,
-          sn: parseInt(m0.sn, 10),
+          sn,
+          wid,
         });
         k0 += m0.word.length;
         k1 = k0 + 1;

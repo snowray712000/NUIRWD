@@ -1,8 +1,8 @@
 import { flush } from '@angular/core/testing';
 import { ajax } from 'rxjs/ajax';
 import { tap } from 'rxjs/operators';
-import { BibleBookNames } from '../const/BibleBookNames';
-import { BookNameLang } from '../const/BookNameLang';
+import { BibleBookNames } from '../const/book-name/BibleBookNames';
+import { BookNameLang } from '../const/book-name/BookNameLang';
 import { Observable } from 'rxjs';
 /** 原文 parsing 工具用 */
 export class ApiQb {

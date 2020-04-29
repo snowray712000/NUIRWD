@@ -1,0 +1,34 @@
+.origline {
+  white-space: nowrap;
+}
+.orig {
+  font-size: 1.5em;
+}
+.example-fill-remaining-space {
+  /* This fills the remaining space, by using flexbox.
+     Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
+}
+.item-title {
+  color: blue;
+  white-space: nowrap;
+  padding-right: 0.5em;
+}
+.wid {
+  color: blue;
+  vertical-align: super;
+  font-size: 0.5em;
+}
+.toppanel {
+  overflow-x: auto;
+  width: 100%;
+}
+.bottompanel {
+  width: calc(100% - 0.5em);
+}
+
+.btnChip {
+  cursor: pointer;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+}

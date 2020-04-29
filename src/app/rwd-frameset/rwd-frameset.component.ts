@@ -113,14 +113,14 @@ export class RwdFramesetComponent implements AfterViewInit {
       return {
         minWidth: null,
         maxWidth: null,
-        width: this.widthBaseFrame * 0.8,
+        width: this.widthBaseFrame,
       };
     } else {
       const cx = this.widthBaseFrame * 0.8;
       return {
         minWidth: cx < 300 ? cx : 300,
         maxWidth: cx,
-        width: null,
+        width: this.widthBaseFrame * 0.5,
       };
     }
   }

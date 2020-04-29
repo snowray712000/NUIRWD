@@ -30,6 +30,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule  } from '@angular/material/button-toggle';
 import { SideNavRightComponent } from './side-nav-right/side-nav-right.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 const entryComponents = new Array<any>(
   OneChapComponent,
@@ -73,7 +75,9 @@ const entryComponents = new Array<any>(
     MatBottomSheetModule,
     MatGridListModule,
     MatButtonToggleModule,
+    MatChipsModule,
     MatTabsModule,
+    MatSlideToggleModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

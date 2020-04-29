@@ -1,10 +1,10 @@
 import { VerseAddress } from './VerseAddress';
-import { BibleBookNames } from '../../const/BibleBookNames';
+import { BibleBookNames } from '../../const/book-name/BibleBookNames';
 import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/ts-tools/obj';
-import { BookNameLang } from '../../const/BookNameLang';
+import { BookNameLang } from '../../const/book-name/BookNameLang';
 import { range } from 'src/app/linq-like/Range';
 import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 
