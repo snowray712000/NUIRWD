@@ -1,7 +1,7 @@
 import { DQbResult } from 'src/app/fhl-api/qb';
 export class GetExpsFromQbResult {
   main(arg: DQbResult): { w: string }[][] {
-    const r1 = arg.record[0].exp;
+    const r1 = arg.record[0].exp.replace('\r', ''); // 換行一致用 \n 就好,
     const r2 = r1.split('\n');
     // console.log(JSON.stringify(r2));
     // ["施洗者約翰出現在曠野裡，","宣講悔改的洗禮，","為了罪惡的赦免。"]

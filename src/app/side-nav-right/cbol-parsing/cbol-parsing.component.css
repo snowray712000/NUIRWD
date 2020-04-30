@@ -23,6 +23,10 @@
   overflow-x: auto;
   width: 100%;
 }
+.topbuttons{
+  text-align: center;
+  direction: ltr;
+}
 .bottompanel {
   width: calc(100% - 0.5em);
 }

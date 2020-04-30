@@ -3,6 +3,7 @@ import { ParsingOneLine } from './ParsingOneLine';
 export class GetWordsFromQbResult {
   private indexRefEachLine: number[];
   private wordEachLine: string[];
+  constructor(private arg: { isOldTestment?: boolean } = {}) { }
   main(arg: DQbResult): { w: string }[][] {
     this.calc_wordEachLine(arg);
     // console.log(this.wordEachLine);
@@ -24,9 +25,13 @@ export class GetWordsFromQbResult {
   }
 
   private calc_wordEachLine(arg: DQbResult) {
-    const r1 = arg.record[0].word;
+    const r1 = arg.record[0].word.replace('\r', ''); // 舊約用\n會剩\r, 所以拿掉\r, 新約不會有\r
     const r2 = r1.split('\n');
-    this.wordEachLine = r2;
+    if (this.arg.isOldTestment === true) {
+      this.wordEachLine = r2.reverse();
+    } else {
+      this.wordEachLine = r2;
+    }
     // console.log(JSON.stringify(r2));
     // ["ἐγένετο Ἰωάννης + ὁ + (ὁ) + βαπτίζων ἐν τῇ ἐρήμῳ ","+ + καὶ + κηρύσσων βάπτισμα μετανοίας ","εἰς ἄφεσιν ἁμαρτιῶν."]
   }

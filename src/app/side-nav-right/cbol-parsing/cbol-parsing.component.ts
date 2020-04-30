@@ -25,8 +25,10 @@ export class CbolParsingComponent implements OnInit {
   words: DOneRowTable[] = [];
   next: DOneVerse;
   prev: DOneVerse;
+  isOldTestment = false;
   @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
+
 
   @ViewChild('origList', null) accordion: MatAccordion;
 
@@ -46,13 +48,21 @@ export class CbolParsingComponent implements OnInit {
   }
   private createDomFromString(str) {
     return this.sanitizer.bypassSecurityTrustHtml(str);
-    // return this.sanitizer.bypassSecurityTrustHtml(
-    //  "<p>W3商品資訊欄位<br><span style="color:red;">商品資訊介紹</span></p>"
-    // );
   }
   private queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
     new ApiQb().queryQbAsync(bk, ch, vr).toPromise().then(qbResult => {
       console.log(qbResult);
+      // qbResult.N === 1 舊約
+      this.isOldTestment = qbResult.N === 1;
+      if (qbResult.N === 0) {
+        this.getWordsFromQbApiResultNewTestment(qbResult);
+        this.getLinesFromQbApiResult(qbResult);
+      } else {
+        this.getWordsFromQbApiResultNewTestment(qbResult); // 看似一樣
+        this.getLinesFromQbApiResultOfOldTestment(qbResult);
+        // this.getWordsFromQbApiResultOldTestment(qbResult);
+      }
+      this.detectChange.markForCheck();
 
       // <div style="display: inline-block;white-space: nowrap;">בְּ</div>
       const id1 = this.name2id.cvtName2Id(qbResult.prev.engs);
@@ -61,9 +71,6 @@ export class CbolParsingComponent implements OnInit {
       this.next = { book: id2, chap: qbResult.next.chap, verse: qbResult.next.sec };
       this.cur = { book: bk, chap: ch, verse: vr };
 
-      this.getWordsFromQbApiResult(qbResult);
-      this.getLinesFromQbApiResult(qbResult);
-      this.detectChange.markForCheck();
     });
   }
 
@@ -77,8 +84,7 @@ export class CbolParsingComponent implements OnInit {
     this.queryQbAndRefreshAsync(this.next.book, this.next.chap, this.next.verse);
   }
 
-
-  private getWordsFromQbApiResult(qbResult: DQbResult) {
+  private getWordsFromQbApiResultNewTestment(qbResult: DQbResult) {
     const re2 = [];
     for (let i = 1; i < qbResult.record.length; i++) {
       const it = qbResult.record[i];
@@ -100,6 +106,24 @@ export class CbolParsingComponent implements OnInit {
     }
     // console.log(re2);
     this.words = re2;
+  }
+  private getLinesFromQbApiResultOfOldTestment(qbResult: DQbResult) {
+    const words = new GetWordsFromQbResult({ isOldTestment: true }).main(qbResult);
+    // console.log(JSON.stringify(words));
+    // tslint:disable-next-line: max-line-length
+    // [[{"w":"בְּרֵאשִׁית","sn":7225,"wid":1}],[{"w":"בָּרָא","sn":1254,"wid":2},{"w":" "},{"w":"אֱלֹהִים","sn":430,"wid":3},{"w":" "},{"w":"אֵת","sn":853,"wid":4},{"w":" "},{"w":"הַשָּׁמַיִם","sn":8064,"wid":5},{"w":" "},{"w":"וְאֵת","sn":853,"wid":6},{"w":" "},{"w":"הָאָרֶץ","sn":776,"wid":7},{"w":"׃"}]]
+
+    const exps = new GetExpsFromQbResult().main(qbResult);
+    // console.log(JSON.stringify(exps));
+    // [[{"w":"起初，"}],[{"w":"上帝創造天和地。"}]]
+
+    assert(() => words.length === exps.length, '行數要一 樣');
+    const re = zip(words, exps, (a1, a2) => {
+      return { words: a1, exps: a2 };
+    });
+    console.log(re);
+
+    this.lines = re as DLineOnePair[];
   }
   private getLinesFromQbApiResult(qbResult: DQbResult) {
     const words = new GetWordsFromQbResult().main(qbResult);
