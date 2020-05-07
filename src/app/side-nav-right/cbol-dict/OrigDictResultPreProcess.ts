@@ -16,7 +16,7 @@ export class OrigDictResultPreProcess {
     str = str.replace(/#([^\|]+)\|/g, (a1, a2, a3) => {
       // 重點1, #不是跳脫字元, |是.
       // 重點2, 與H98 G98不一樣, #不一定前面有空白
-      return ` <span class="sn-or-ref" desc=${a2} isOld="0">${a1}</span> `;
+      return ` <span class="sn-or-ref" desc="${a2}" isOld="0">${a1}</span> `;
     });
     return str;
   }

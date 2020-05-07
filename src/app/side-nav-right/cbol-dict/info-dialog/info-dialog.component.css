@@ -20,3 +20,10 @@
 ::ng-deep .separatorParent {
   display: flex;
 }
+::ng-deep .exp {
+  font-weight: bolder;
+}
+::ng-deep .sn-or-ref {
+  cursor: pointer;
+  color: blue;
+}

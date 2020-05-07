@@ -1,27 +1,55 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef, AfterViewChecked, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ApiQsb, QsbArgs } from 'src/app/fhl-api/qsb';
 import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { OrigDictQueryor } from '../OrigDictQueryor';
 import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';
+import { DInfoDialogData } from './DInfoDialogData';
+import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });
 }
-
 @Component({
   selector: 'app-info-dialog',
   templateUrl: './info-dialog.component.html',
   styleUrls: ['./info-dialog.component.css']
 })
-export class InfoDialogComponent implements OnInit {
+export class InfoDialogComponent implements OnInit, AfterViewChecked {
   isRef: boolean;
   innerHtmlContent: SafeHtml;
   innerHtmlTitle: SafeHtml;
+  domsSn: any[] = [];
   // tslint:disable-next-line: max-line-length
-  constructor(private sanitizer: DomSanitizer, private detectChange: ChangeDetectorRef, public dialog: MatDialog, public dialogRef: MatDialogRef<InfoDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: { desc?: string, sn?: number, isOld?: boolean }) {
+  constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer, private detectChange: ChangeDetectorRef, public dialog: MatDialog, public dialogRef: MatDialogRef<InfoDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DInfoDialogData) {
     this.isRef = this.dataByParent.desc !== undefined;
+  }
+  ngAfterViewChecked(): void {
+    const r1 = this.elementRef.nativeElement.querySelectorAll('.sn-or-ref');
+    for (const a1 of r1) {
+      if (this.domsSn.some(a2 => a1 === a2)) {
+        continue;
+      }
+      this.domsSn.push(a1);
+      a1.addEventListener('click', this.onClick.bind(this, a1));
+    }
+  }
+  onClick(a1) {
+    // console.log(a1);
+    const sn = a1.getAttribute('sn');
+    if (sn !== null) {
+      const isOld = a1.getAttribute('isOld') === '1';
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        data: { sn: parseInt(sn, 10), isOld, checkStates: this.dataByParent.checkStates }
+      });
+    }
+    const desc = a1.getAttribute('desc');
+    if (desc != null) {
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        data: { desc, checkStates: this.dataByParent.checkStates }
+      });
+    }
   }
 
   ngOnInit() {
@@ -34,19 +62,52 @@ export class InfoDialogComponent implements OnInit {
       await this.queryDictAndRefreshAsync();
     }
   }
+  /** ['中文','英文','浸宣'] or ['中文'] */
+  private getVers(): string[] {
+    // 設定檔, 與查詢參數不一定相同
+    // 舊約內容, 不會有浸宣,
+    // 這時, 傳給下個 info dialog 仍然傳3個
+    // 但查詢時卻不會有浸宣字典 ;
+    const isOld = this.dataByParent.isOld;
+    const sts = this.dataByParent.checkStates;
+    const vers: string[] = [];
+    if (sts.isChinese) {
+      vers.push('中文');
+    }
+    // 按 cbol 順序, 中文->浸宣->英文
+    if (sts.isSbdag && !isOld) {
+      vers.push('浸宣');
+    }
+    if (sts.isEng) {
+      vers.push('英文');
+    }
+    if (vers.length === 0) {
+      vers.push('中文');
+    }
+    return vers;
+  }
   private async queryDictAndRefreshAsync() {
     const sn = this.dataByParent.sn;
     const isOldTestment = this.dataByParent.isOld;
-    const r1 = await new OrigDictQueryor().queryDictAsync({
+
+    const vers = this.getVers();
+    const tasks = vers.map(a1 => new OrigDictQueryor().queryDictAsync({
       sn,
       isOldTestment,
-    }).toPromise();
-    // console.log(r1);
-    const domStr = `<span>${this.formTextDivAndDealBr(r1.text)}</span>`;
+      ver: a1
+    }).toPromise());
+    const r1s = await Promise.all(tasks);
+    // console.log(r1s);
+
+    const domStr = r1s.map(a1 => {
+      return `<span>${this.formTextDivAndDealBr(a1.text)}</span>`;
+    }).join('<hr />');
     this.innerHtmlContent = this.sanitizer.bypassSecurityTrustHtml(domStr);
+
     const GorH = isOldTestment ? 'H' : 'G';
+    const orig = firstOrDefault(r1s.map(a1 => a1.orig), a1 => a1 !== undefined); // 浸宣版, 不會有 orig
     // tslint:disable-next-line: max-line-length
-    this.innerHtmlTitle = `<span class="separatorParent"><span>${GorH}${r1.sn}</span><span class="separator"></span><span>${r1.orig}</span></span>`;
+    this.innerHtmlTitle = `<span class="separatorParent"><span>${GorH}${sn}</span><span class="separator"></span><span>${orig}</span></span>`;
     this.detectChange.markForCheck();
   }
 
@@ -69,17 +130,6 @@ export class InfoDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  onClick() {
-    const dialogRef = this.dialog.open(InfoDialogComponent, {
-      // width: '250px',
-      // data: { name: this.name, animal: this.animal }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // this.animal = result;
-    });
   }
   private formTextDivAndDealBr(str: string) {
     return new OrigDictResultPreProcess().preProcessToInnerHtml(str);

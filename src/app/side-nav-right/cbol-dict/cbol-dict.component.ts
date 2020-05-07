@@ -19,6 +19,9 @@ export class CbolDictComponent implements OnInit, AfterViewChecked {
   doms: SafeHtml[] = [];
   domsSn: any[] = [];
   origDictQ: IOrigDictQuery;
+  checkedChinese = true;
+  checkedEng = false;
+  checkedSbdag = false;
   // tslint:disable-next-line: max-line-length
   constructor(private sanitizer: DomSanitizer, private elementRef: ElementRef, public dialog: MatDialog, private detectChange: ChangeDetectorRef) {
     this.origDictQ = new OrigDictQueryor();
@@ -38,18 +41,24 @@ export class CbolDictComponent implements OnInit, AfterViewChecked {
     return this.sanitizer.bypassSecurityTrustHtml(str);
   }
   onClick(a1) {
+    const checkStates = {
+      isChinese: this.checkedChinese,
+      isEng: this.checkedEng,
+      isSbdag: this.checkedSbdag,
+    };
+
     // console.log(a1);
     const sn = a1.getAttribute('sn');
     if (sn !== null) {
       const isOld = a1.getAttribute('isOld') === '1';
       const dialogRef = this.dialog.open(InfoDialogComponent, {
-        data: { sn: parseInt(sn, 10), isOld }
+        data: { sn: parseInt(sn, 10), isOld, checkStates }
       });
     }
     const desc = a1.getAttribute('desc');
     if (desc != null) {
       const dialogRef = this.dialog.open(InfoDialogComponent, {
-        data: { desc }
+        data: { desc, checkStates }
       });
     }
   }
