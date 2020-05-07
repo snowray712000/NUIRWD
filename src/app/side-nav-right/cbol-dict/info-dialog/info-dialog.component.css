@@ -1,0 +1,13 @@
+.title {
+  color: blue;
+  font-size: smaller;
+  text-align: center;
+}
+::ng-deep .bible-address {
+  color: blue;
+}
+::ng-deep .bible-text {
+}
+::ng-deep .one-verse {
+  display: block;
+}

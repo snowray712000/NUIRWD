@@ -1,5 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injector } from '@angular/core';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import { NgModule, Injector, Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,16 +27,22 @@ import { VerSelectComponent } from './side-nav-left/ver-select/ver-select.compon
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BibleSelectionsComponent } from './bible-selections/bible-selections.component';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatButtonToggleModule  } from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SideNavRightComponent } from './side-nav-right/side-nav-right.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
+import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.component';
+import { InfoDialogComponent } from './side-nav-right/cbol-dict/info-dialog/info-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
+  InfoDialogComponent,
+  CbolDictComponent,
 ).concat(OneVerseViewDepedentComponents.getDependentComponents());
+
 
 @NgModule({
   declarations: new Array<any>(
@@ -52,8 +58,9 @@ const entryComponents = new Array<any>(
     VerSelectComponent,
     SideNavRightComponent,
     CbolParsingComponent,
+    CbolDictComponent,
     BibleSelectionsComponent,
-
+    InfoDialogComponent,
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [
@@ -78,6 +85,7 @@ const entryComponents = new Array<any>(
     MatChipsModule,
     MatTabsModule,
     MatSlideToggleModule,
+    MatDialogModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent],

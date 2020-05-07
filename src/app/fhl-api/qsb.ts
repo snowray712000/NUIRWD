@@ -11,7 +11,7 @@ export class ApiQsb implements IApiQsb {
     const url = 'http://bkbible.fhl.net/json/qsb.php';
     return ajax.getJSON<QsbResult>(url + this.generateQueryString(args)).pipe(
       retry(3),
-        // tap(a1 => console.log(a1)),
+      // tap(a1 => console.log(a1)),
     );
   }
   private generateQueryString(args: QsbArgs) {
@@ -31,6 +31,7 @@ export class QsbArgs {
   isSimpleChinese = false;
 }
 export interface OneQsbRecord {
+  chineses?: string;
   engs: string;
   chap: number;
   sec: number;

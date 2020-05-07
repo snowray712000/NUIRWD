@@ -1,0 +1,9 @@
+<!-- <div mat-dialog-title>Hi {{title}}</div> -->
+<div class='title'>{{title}}</div>
+<mat-divider></mat-divider>
+<mat-dialog-content *ngIf="isRef">
+  <div [innerHTML]="innerHtmlContent"></div>
+  <!-- <div *ngFor="let it of textsContent; let i=index">
+    {{it}}
+  </div> -->
+</mat-dialog-content>
