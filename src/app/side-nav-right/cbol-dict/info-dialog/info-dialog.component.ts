@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dial
 import { ApiQsb, QsbArgs } from 'src/app/fhl-api/qsb';
 import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
+import { OrigDictQueryor } from '../OrigDictQueryor';
+import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });
@@ -15,13 +17,11 @@ export interface IRefContentQ {
 })
 export class InfoDialogComponent implements OnInit {
   isRef: boolean;
-  title: string;
   innerHtmlContent: SafeHtml;
+  innerHtmlTitle: SafeHtml;
   // tslint:disable-next-line: max-line-length
   constructor(private sanitizer: DomSanitizer, private detectChange: ChangeDetectorRef, public dialog: MatDialog, public dialogRef: MatDialogRef<InfoDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: { desc?: string, sn?: number, isOld?: boolean }) {
-    console.log(this.dataByParent);
     this.isRef = this.dataByParent.desc !== undefined;
-
   }
 
   ngOnInit() {
@@ -31,15 +31,34 @@ export class InfoDialogComponent implements OnInit {
     if (this.isRef) {
       await this.queryReferenceAndRefreshAsync();
     } else {
-
+      await this.queryDictAndRefreshAsync();
     }
   }
+  private async queryDictAndRefreshAsync() {
+    const sn = this.dataByParent.sn;
+    const isOldTestment = this.dataByParent.isOld;
+    const r1 = await new OrigDictQueryor().queryDictAsync({
+      sn,
+      isOldTestment,
+    }).toPromise();
+    // console.log(r1);
+    const domStr = `<span>${this.formTextDivAndDealBr(r1.text)}</span>`;
+    this.innerHtmlContent = this.sanitizer.bypassSecurityTrustHtml(domStr);
+    const GorH = isOldTestment ? 'H' : 'G';
+    // tslint:disable-next-line: max-line-length
+    this.innerHtmlTitle = `<span class="separatorParent"><span>${GorH}${r1.sn}</span><span class="separator"></span><span>${r1.orig}</span></span>`;
+    this.detectChange.markForCheck();
+  }
+
   private async queryReferenceAndRefreshAsync() {
     const r1 = await new ReferenceQuery().queryContentsAsync({
       description: this.dataByParent.desc
     }).toPromise();
-    this.title = this.dataByParent.desc;
     // console.log(r1);
+
+    const title = this.dataByParent.desc;
+    this.innerHtmlTitle = `<span>#${title}|</span>`;
+
     const domStr = r1.record.map(a1 => {
       // tslint:disable-next-line: max-line-length
       return `<span class='one-verse'><span class='bible-address'>${a1.chineses} ${a1.chap}:${a1.sec}</span>&nbsp;<span class='bible-text'>${a1.bible_text}</></span>`;
@@ -61,6 +80,9 @@ export class InfoDialogComponent implements OnInit {
       console.log('The dialog was closed');
       // this.animal = result;
     });
+  }
+  private formTextDivAndDealBr(str: string) {
+    return new OrigDictResultPreProcess().preProcessToInnerHtml(str);
   }
 }
 class ReferenceQuery implements IRefContentQ {
