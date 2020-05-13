@@ -1,5 +1,5 @@
 import { ajax } from 'rxjs/ajax';
-import { assert } from 'src/app/AsFunction/assert';
+import { assert } from 'src/app/tools/assert';
 import { Observable } from 'rxjs';
 import { DApiSdResult } from "./DApiSdResult";
 export class ApiSdOrSbdagCore {
