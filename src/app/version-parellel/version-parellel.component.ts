@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { ActivatedRoute } from '@angular/router';
-import { VerseRange } from '../one-verse/show-data/VerseRange';
+import { VerseRange } from '../bible-address/VerseRange';
 import { ApiQsb, QsbArgs, QsbResult, OneQsbRecord } from '../fhl-api/qsb';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { tap, map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { IBibleVersionQueryService } from '../fhl-api/IBibleVersionQueryService'
 import { IApiQsb } from '../fhl-api/IApiQsb';
 import { IOneChapInitialor } from '../one-chap/IOneChapInitialor';
 import { ShowBase, ShowPureText } from '../one-verse/show-data/ShowBase';
-import { VerseAddress } from '../one-verse/show-data/VerseAddress';
+import { VerseAddress } from '../bible-address/VerseAddress';
 import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
 import { OneChapComponent } from '../one-chap/one-chap.component';

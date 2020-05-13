@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
-import { VerseRange } from '../one-verse/show-data/VerseRange';
+import { VerseRange } from '../bible-address/VerseRange';
 import { Observable } from 'rxjs';
 export class RouteStartedWhenFrame {
   private static routeStatic: ActivatedRoute;

@@ -13,14 +13,16 @@ import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { IEventVerseChanged } from './cbol-parsing-interfaces';
 import { EventVerseChanged } from './EventVerseChanged';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
-import { VerseAddress } from 'src/app/one-verse/show-data/VerseAddress';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
+import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { ApiQsb } from 'src/app/fhl-api/qsb';
 import { TextWithSnConvertor, DTextWithSnConvertorResult } from './TextWithSnConvertor';
 import { TextWithSnDirective } from './text-with-sn.directive';
-import { matchGlobalWithCapture } from 'src/app/tools/matchGlobalWithCapture';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
+import { VerseRangeToString } from '../../bible-address/VerseRangeToString';
+import { ParsingReferenceDescription } from '../../bible-address/ParsingReferenceDescription';
+
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -52,7 +54,12 @@ export class CbolParsingComponent implements OnInit {
     this.eventVerseChanged = new EventVerseChanged();
   }
 
+
   ngOnInit() {
+    const str = '太9:33;可7:37;約二;路1:20-22,25,31-33,50;1:63-2:3;2:5-8;11:14;約二1:2-5;可2;4';
+    console.log(str);
+
+    const reVerse = new ParsingReferenceDescription().main(str);
 
     if (this.eventVerseChanged !== undefined) {
       this.eventVerseChanged.changed$.subscribe(data => {
@@ -248,3 +255,5 @@ class StasticQbGreek {
     return new ApiQb().queryQbAsync(bk, ch, vs).toPromise();
   }
 }
+
+

@@ -1,5 +1,5 @@
 import { ShowBase } from '../show-data/ShowBase';
-import { VerseAddress } from '../show-data/VerseAddress';
+import { VerseAddress } from '../../bible-address/VerseAddress';
 
 export interface IOneVerseInitialor {
   content(): Array<ShowBase>;

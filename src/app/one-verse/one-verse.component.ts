@@ -3,7 +3,7 @@ import { OneVerseViewDirective } from './one-verse-view.directive';
 import { IShowComponentFactoryGet } from './IShowComponentFactoryGet';
 import { ShowComponentFactoryGetter } from './ShowComponentFactoryGetter';
 import { ShowBase } from './show-data/ShowBase';
-import { VerseAddress } from './show-data/VerseAddress';
+import { VerseAddress } from '../bible-address/VerseAddress';
 import { EventEmitter } from 'events';
 import { IOneVerseInitialor } from './test-data/IOneVerseInitialor';
 

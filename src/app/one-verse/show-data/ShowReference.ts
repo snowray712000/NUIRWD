@@ -1,5 +1,5 @@
 import { ShowBase } from './ShowBase';
-import { VerseRange } from './VerseRange';
+import { VerseRange } from '../../bible-address/VerseRange';
 
 export class ShowReference extends ShowBase {
   public verseRanges: VerseRange;

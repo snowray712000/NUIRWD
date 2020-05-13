@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { ShowBase } from '../one-verse/show-data/ShowBase';
-import { VerseAddress } from '../one-verse/show-data/VerseAddress';
+import { VerseAddress } from '../bible-address/VerseAddress';
 import { OneVerseInitialor } from './OneVerseInitialor';
 import { IOneChapInitialor } from './IOneChapInitialor';
 import { TestOneChap01 } from './TestOneChap01';

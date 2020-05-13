@@ -1,10 +1,10 @@
 import { ShowBase, ShowPureText, ShowMarker } from '../show-data/ShowBase';
-import { VerseAddress } from '../show-data/VerseAddress';
 import { IOneVerseInitialor } from './IOneVerseInitialor';
 import { ShowNotBibleText } from '../show-data/ShowNotBibleText';
 import { ShowName } from '../show-data/ShowName';
 import { ShowTitleA } from '../show-data/ShowTitleA';
 import { ShowMap } from '../show-data/ShowMap';
+import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 
 export class OneVerseTest09 implements IOneVerseInitialor {
   content(): ShowBase[] {

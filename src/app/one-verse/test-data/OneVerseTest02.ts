@@ -1,5 +1,5 @@
 import { ShowBase, ShowPureText, ShowMarker } from '../show-data/ShowBase';
-import { VerseAddress } from '../show-data/VerseAddress';
+import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { IOneVerseInitialor } from './IOneVerseInitialor';
 
 export class OneVerseTest02 implements IOneVerseInitialor {

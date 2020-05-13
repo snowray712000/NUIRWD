@@ -7,8 +7,8 @@ import { DOrigDict, IOrigDictQuery } from './cbol-dict.component-interfaces';
 import { OrigDictQueryor } from './OrigDictQueryor';
 import { OrigDictResultPreProcess } from './OrigDictResultPreProcess';
 import { Observable, of } from 'rxjs';
-import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
-import { VerseAddress } from 'src/app/one-verse/show-data/VerseAddress';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
+import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { BibleTextWithSnResultPreProcess } from './BibleTextWithSnResultPreProcess';
 
 

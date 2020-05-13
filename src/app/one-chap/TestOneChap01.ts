@@ -1,5 +1,5 @@
 import { ShowBase, ShowPureText } from '../one-verse/show-data/ShowBase';
-import { VerseAddress } from '../one-verse/show-data/VerseAddress';
+import { VerseAddress } from '../bible-address/VerseAddress';
 import { IOneChapInitialor } from './IOneChapInitialor';
 import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 export class TestOneChap01 implements IOneChapInitialor {

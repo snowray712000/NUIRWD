@@ -1,6 +1,6 @@
 import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
 import { ApiQsb, QsbArgs } from './qsb';
-import { VerseRange } from '../one-verse/show-data/VerseRange';
+import { VerseRange } from '../bible-address/VerseRange';
 
 describe('API-qsb.php', () => {
   it('qsb.php 值', (done) => {

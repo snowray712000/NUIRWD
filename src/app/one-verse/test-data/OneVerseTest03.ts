@@ -1,5 +1,5 @@
 import { ShowBase, ShowPureText, ShowMarker } from '../show-data/ShowBase';
-import { VerseAddress } from '../show-data/VerseAddress';
+import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { IOneVerseInitialor } from './IOneVerseInitialor';
 import { ShowStrongNumberComponent } from '../show-components/show-strong-number/show-strong-number.component';
 import { ShowStrongNumber } from '../show-data/ShowStrongNumber';

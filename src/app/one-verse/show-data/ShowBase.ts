@@ -1,4 +1,4 @@
-import { VerseAddress } from './VerseAddress';
+import { VerseAddress } from '../../bible-address/VerseAddress';
 
 export abstract class ShowBase {
   abstract toString(): string;

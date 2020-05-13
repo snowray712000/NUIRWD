@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ChangeDetectorRef, AfterViewChecked, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ApiQsb, QsbArgs } from 'src/app/fhl-api/qsb';
-import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { OrigDictQueryor } from '../OrigDictQueryor';
 import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';

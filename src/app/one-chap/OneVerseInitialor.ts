@@ -1,6 +1,6 @@
 import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 import { ShowBase } from '../one-verse/show-data/ShowBase';
-import { VerseAddress } from '../one-verse/show-data/VerseAddress';
+import { VerseAddress } from '../bible-address/VerseAddress';
 export class OneVerseInitialor implements IOneVerseInitialor {
   private contents: Array<ShowBase>;
   private addressSet: VerseAddress;
