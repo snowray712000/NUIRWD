@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges } from '@angular/core';
-import { asHTMLElement } from '../AsFunction/asHTMLElement';
+import { asHTMLElement } from '../tools/asHTMLElement';
 import { ActivatedRoute } from '@angular/router';
 import { VerseRange } from '../one-verse/show-data/VerseRange';
 import { ApiQsb, QsbArgs, QsbResult, OneQsbRecord } from '../fhl-api/qsb';
@@ -14,7 +14,7 @@ import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
 import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
 import { OneChapComponent } from '../one-chap/one-chap.component';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { isArrayEqualLength, isArrayEqual } from "../AsFunction/arrayEqual";
+import { isArrayEqualLength, isArrayEqual } from "../tools/arrayEqual";
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 
 @Component({
@@ -124,11 +124,12 @@ class QueryContents implements IQueryContents {
 
     // [0,2] -> [unv,bbc] -> [QsbResult,QsbResult] -> [ionechapinit,ionechapinit]
     const initors = this.iVers.map(async (iVer, i) => {
-      const arg = new QsbArgs();
-      arg.bibleVersion = this.verEngs[i];
-      arg.qstr = qstr;
-      arg.isExistStrong = isSN;
-      arg.isSimpleChinese = isGb;
+      const arg: QsbArgs = {
+        qstr,
+        isExistStrong: isSN,
+        isSimpleChinese: isGb,
+        bibleVersion: this.verEngs[i],
+      };
       return await (this.qsbQ.queryQsbAsync(arg).pipe(
         // tap(a2 => console.log(a2)),
         map(a2 => this.cvtQsbResultTo(a2, iVer, arg.bibleVersion)),

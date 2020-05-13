@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { OneBibleVersion } from './OneBibleVersion';
 import { AbvService, IAbvResult, IAbvService } from './abv.service';
 import { map, tap } from 'rxjs/operators';
-import { sleep } from '../AsFunction/sleep';
+import { sleep } from '../tools/sleep';
 import { IBibleVersionQueryService } from './IBibleVersionQueryService';
 
 export class BibleVersionQueryService implements IBibleVersionQueryService {

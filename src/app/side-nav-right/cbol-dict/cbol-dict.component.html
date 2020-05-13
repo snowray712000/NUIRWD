@@ -1,31 +1,40 @@
-<div>
+<div [style.overflow-y]="'hidden'" [style.padding]="'0.5em'">
   <div>
-    <mat-chip color="accent" selected="true" class='btnChip'>前一節</mat-chip>
-    <mat-chip color="accent" selected="true" class='btnChip'>後一節</mat-chip>
-    <section class="example-section" [style.display]="'inline-block'">
-      <mat-checkbox class="example-margin" [checked]="checkedChinese" (change)="checkedChinese=!checkedChinese">中文</mat-checkbox>
-      <mat-checkbox class="example-margin" [checked]="checkedEng" (change)="checkedEng=!checkedEng">英文</mat-checkbox>
-      <mat-checkbox class="example-margin" [checked]="checkedSbdag" (change)="checkedSbdag=!checkedSbdag">浸宣(新約)</mat-checkbox>
-    </section>
+    <div [style.display]="'inline-block'">
+      <mat-chip color="accent" selected="true" class='btnChip' (click)="onClickPrevVerse()">前一節</mat-chip>
+      <span> {{thisVerseDescription}} </span>
+      <mat-chip color="accent" selected="true" class='btnChip' (click)="onClickNextVerse()">後一節</mat-chip>
+    </div>
+    <div [style.display]="'inline-block'">
+      <section class="example-section" [style.display]="'inline-block'">
+        <mat-checkbox class="example-margin" [checked]="checkedChinese" (change)="checkedChinese=!checkedChinese">中文
+        </mat-checkbox>
+        <mat-checkbox class="example-margin" [checked]="checkedEng" (change)="checkedEng=!checkedEng">英文</mat-checkbox>
+        <mat-checkbox class="example-margin" [checked]="checkedSbdag" (change)="checkedSbdag=!checkedSbdag">浸宣(新約)
+        </mat-checkbox>
+      </section>
+    </div>
   </div>
 
-  <div>
-    亞伯拉罕 11 的後裔 5207 ,
-  </div>
   <mat-divider></mat-divider>
-
   <div>
-    <div *ngIf="data.length>0">
-      <div><span>{{data[0].sn}}</span><span>{{data[0].orig}}</span></div>
-    </div>
-    <hr/>
-    <div *ngFor="let a1 of data; let i=index">
-      <div [innerHTML]="doms[i]">
-
-      </div>
-      <mat-divider></mat-divider>
-    </div>
+    <span [innerHTML]="domThisVerse"></span>
   </div>
-  <br />
+
   <mat-chip-list> </mat-chip-list>
+  <br/>
 </div>
+<!-- <mat-divider></mat-divider>
+<div>
+  <div *ngIf="doms.length>0">
+    <div><span>{{data[0].sn}}</span><span>{{data[0].orig}}</span></div>
+  </div>
+  <hr />
+  <div *ngFor="let a1 of doms">
+    <div [innerHTML]="a1">
+
+    </div>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+<br /> -->

@@ -25,9 +25,27 @@
     </div>
     <!-- next ... line -->
   </div>
-</div>
-<br />
 
+  <br />
+</div>
+
+<mat-divider></mat-divider>
+<div>
+  unv
+  <div>
+    <span *ngFor="let it1 of textsWithSnUnv">
+      <span appTextWithSn [data]="it1">{{it1.w}}</span>
+    </span>
+    <!-- <span *ngFor="let it1 of textsWithSnUnv" appTextWithSn data="'it1'">{{it1.w}}</span> -->
+  </div>
+  kjv
+  <div>
+    <span *ngFor="let it1 of textsWithSnKjv">
+      <span appTextWithSn [data]="it1">{{it1.w}}</span>
+    </span>
+  </div>
+  <br />
+</div>
 <mat-divider></mat-divider>
 <div class='bottompanel'>
   <!-- mat-chip 要加 selected=true 才會變色 -->

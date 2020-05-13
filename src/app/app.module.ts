@@ -36,6 +36,7 @@ import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing
 import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.component';
 import { InfoDialogComponent } from './side-nav-right/cbol-dict/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
@@ -61,6 +62,7 @@ const entryComponents = new Array<any>(
     CbolDictComponent,
     BibleSelectionsComponent,
     InfoDialogComponent,
+    TextWithSnDirective,
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [

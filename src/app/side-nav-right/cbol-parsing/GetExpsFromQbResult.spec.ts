@@ -1,5 +1,5 @@
 import { GetExpsFromQbResult } from "./GetExpsFromQbResult";
-import { assert } from 'src/app/AsFunction/assert';
+import { assert } from 'src/app/tools/assert';
 
 describe(
   'GetExpsFromQbResult', () => {

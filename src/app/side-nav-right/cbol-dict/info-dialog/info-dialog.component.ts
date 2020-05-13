@@ -7,6 +7,7 @@ import { OrigDictQueryor } from '../OrigDictQueryor';
 import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';
 import { DInfoDialogData } from './DInfoDialogData';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { DictSourceVersionsTools } from '../DictSourceVersionsTools';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });
@@ -70,22 +71,10 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     // 但查詢時卻不會有浸宣字典 ;
     const isOld = this.dataByParent.isOld;
     const sts = this.dataByParent.checkStates;
-    const vers: string[] = [];
-    if (sts.isChinese) {
-      vers.push('中文');
-    }
-    // 按 cbol 順序, 中文->浸宣->英文
-    if (sts.isSbdag && !isOld) {
-      vers.push('浸宣');
-    }
-    if (sts.isEng) {
-      vers.push('英文');
-    }
-    if (vers.length === 0) {
-      vers.push('中文');
-    }
-    return vers;
+    return new DictSourceVersionsTools().getDictSourceVersions(this.dataByParent.checkStates, isOld)
   }
+
+
   private async queryDictAndRefreshAsync() {
     const sn = this.dataByParent.sn;
     const isOldTestment = this.dataByParent.isOld;
@@ -121,8 +110,10 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     this.innerHtmlTitle = `<span>#${title}|</span>`;
 
     const domStr = r1.record.map(a1 => {
-      // tslint:disable-next-line: max-line-length
-      return `<span class='one-verse'><span class='bible-address'>${a1.chineses} ${a1.chap}:${a1.sec}</span>&nbsp;<span class='bible-text'>${a1.bible_text}</></span>`;
+      const domAddress = `<span class='bible-address'>${a1.chineses} ${a1.chap}:${a1.sec}</span>`;
+      const dombibleText = `<span class='bible-text'>${a1.bible_text}</span>`;
+      // return `<span class='one-verse'>${domAddress}&nbsp;${dombibleText}</span>`;
+      return `<span class='one-verse'>${dombibleText}(${domAddress})</span>`;
     }).join('');
     this.innerHtmlContent = this.sanitizer.bypassSecurityTrustHtml(domStr);
     this.detectChange.markForCheck();
@@ -141,9 +132,10 @@ class ReferenceQuery implements IRefContentQ {
     // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'
     const r1 = arg.description.replace(new RegExp('\\.', 'g'), ';');
     const r2 = VerseRange.fromReferenceDescription(r1, 40);
-    const r3 = r2.toStringEnglishShort();
-    const r4 = new QsbArgs();
-    r4.qstr = r3;
-    return new ApiQsb().queryQsbAsync(r4);
+    // const r3 = r2.toStringEnglishShort();
+    const r3 = r2.toStringChineseShort();
+    return new ApiQsb().queryQsbAsync({ qstr: r3 });
   }
 }
+
+

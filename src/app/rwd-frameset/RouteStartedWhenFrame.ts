@@ -24,6 +24,9 @@ export class RouteStartedWhenFrame {
       this.descriptLastAndVerseLast(route);
     }
   }
+  static isAlreadyExistRouteAndRouter() {
+    return RouteStartedWhenFrame.routerStatic !== undefined && RouteStartedWhenFrame.routeStatic !== undefined;
+  }
   private descriptLastAndVerseLast(route: ActivatedRoute) {
     const r2 = route.params.pipe(
       map(a1 => this.mapToVerseRange(a1)),

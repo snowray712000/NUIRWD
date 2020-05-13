@@ -5,15 +5,22 @@ import { getVerseCount } from 'src/app/const/count-of-verse';
 import { GetWordsFromQbResult } from './GetWordsFromQbResult';
 import { GetExpsFromQbResult } from './GetExpsFromQbResult';
 import { zip } from 'src/app/linq-like/zip';
-import { assert } from 'src/app/AsFunction/assert';
+import { assert } from 'src/app/tools/assert';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { IBookNameToId } from 'src/app/const/book-name/i-book-name-to-id';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { IEventVerseChanged } from './cbol-parsing-interfaces';
 import { EventVerseChanged } from './EventVerseChanged';
-import { DomSanitizer } from '@angular/platform-browser';
-
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { VerseRange } from 'src/app/one-verse/show-data/VerseRange';
+import { VerseAddress } from 'src/app/one-verse/show-data/VerseAddress';
+import { ApiQsb } from 'src/app/fhl-api/qsb';
+import { TextWithSnConvertor, DTextWithSnConvertorResult } from './TextWithSnConvertor';
+import { TextWithSnDirective } from './text-with-sn.directive';
+import { matchGlobalWithCapture } from 'src/app/tools/matchGlobalWithCapture';
+import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
+import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -26,6 +33,10 @@ export class CbolParsingComponent implements OnInit {
   next: DOneVerse;
   prev: DOneVerse;
   isOldTestment = false;
+  // domContentWithSn: SafeHtml;
+  textsWithSnUnv: DTextWithSnConvertorResult[];
+  textsWithSnKjv: DTextWithSnConvertorResult[];
+
   @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
@@ -37,51 +48,72 @@ export class CbolParsingComponent implements OnInit {
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer) {
+
     this.eventVerseChanged = new EventVerseChanged();
   }
+
   ngOnInit() {
+
     if (this.eventVerseChanged !== undefined) {
       this.eventVerseChanged.changed$.subscribe(data => {
-        this.queryQbAndRefreshAsync(data.book, data.chap, data.verse);
+        this.onVerseChanged(data.book, data.chap, data.verse);
       });
     }
   }
   private createDomFromString(str) {
     return this.sanitizer.bypassSecurityTrustHtml(str);
   }
-  private queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
-    new ApiQb().queryQbAsync(bk, ch, vr).toPromise().then(qbResult => {
-      console.log(qbResult);
-      // qbResult.N === 1 舊約
-      this.isOldTestment = qbResult.N === 1;
-      if (qbResult.N === 0) {
-        this.getWordsFromQbApiResultNewTestment(qbResult);
-        this.getLinesFromQbApiResult(qbResult);
-      } else {
-        this.getWordsFromQbApiResultNewTestment(qbResult); // 看似一樣
-        this.getLinesFromQbApiResultOfOldTestment(qbResult);
-        // this.getWordsFromQbApiResultOldTestment(qbResult);
-      }
+  private async onVerseChanged(bk: number, ch: number, vr: number) {
+    const r1 = this.queryQbAndRefreshAsync(bk, ch, vr);
+    const r2 = this.queryContentWithSnAsync(bk, ch, vr);
+    Promise.all([r1, r2]).then(a1 => {
       this.detectChange.markForCheck();
-
-      // <div style="display: inline-block;white-space: nowrap;">בְּ</div>
-      const id1 = this.name2id.cvtName2Id(qbResult.prev.engs);
-      const id2 = this.name2id.cvtName2Id(qbResult.next.engs);
-      this.prev = { book: id1, chap: qbResult.prev.chap, verse: qbResult.prev.sec };
-      this.next = { book: id2, chap: qbResult.next.chap, verse: qbResult.next.sec };
-      this.cur = { book: bk, chap: ch, verse: vr };
-
     });
+  }
+  private async queryContentWithSnAsync(bk: number, ch: number, vr: number) {
+    const r1 = new VerseRange();
+    r1.add(new VerseAddress(bk, ch, vr));
+    // this.thisVerseDescription = r1.toStringChineseShort();
+    const qstr = r1.toStringEnglishShort();
+
+    const r3 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
+    // console.log(r3.record[0].bible_text);
+    const rr4 = new TextWithSnConvertor().processTextWithSn(r3.record[0].bible_text);
+    console.log(rr4);
+    this.textsWithSnUnv = rr4;
+    const r33 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
+    this.textsWithSnKjv = new TextWithSnConvertor().processTextWithSn(r33.record[0].bible_text);
+  }
+  private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
+    const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();
+    console.log(qbResult);
+    // qbResult.N === 1 舊約
+    this.isOldTestment = qbResult.N === 1;
+    if (qbResult.N === 0) {
+      this.getWordsFromQbApiResultNewTestment(qbResult);
+      this.getLinesFromQbApiResult(qbResult);
+    } else {
+      this.getWordsFromQbApiResultNewTestment(qbResult); // 看似一樣
+      this.getLinesFromQbApiResultOfOldTestment(qbResult);
+      // this.getWordsFromQbApiResultOldTestment(qbResult);
+    }
+
+    // <div style="display: inline-block;white-space: nowrap;">בְּ</div>
+    const id1 = this.name2id.cvtName2Id(qbResult.prev.engs);
+    const id2 = this.name2id.cvtName2Id(qbResult.next.engs);
+    this.prev = { book: id1, chap: qbResult.prev.chap, verse: qbResult.prev.sec };
+    this.next = { book: id2, chap: qbResult.next.chap, verse: qbResult.next.sec };
+    this.cur = { book: bk, chap: ch, verse: vr };
   }
 
   onChangeSlideToggleIndex(e1: MatSlideToggleChange) {
     this.isShowIndex = e1.checked;
   }
   onClickPrev() {
-    this.queryQbAndRefreshAsync(this.prev.book, this.prev.chap, this.prev.verse);
+    this.onVerseChanged(this.prev.book, this.prev.chap, this.prev.verse);
   }
   onClickNext() {
-    this.queryQbAndRefreshAsync(this.next.book, this.next.chap, this.next.verse);
+    this.onVerseChanged(this.next.book, this.next.chap, this.next.verse);
   }
 
   private getWordsFromQbApiResultNewTestment(qbResult: DQbResult) {
@@ -216,4 +248,3 @@ class StasticQbGreek {
     return new ApiQb().queryQbAsync(bk, ch, vs).toPromise();
   }
 }
-

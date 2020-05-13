@@ -1,7 +1,7 @@
 import { IOnChangedBibleVersionEngs, IUpdateBibleVersionEngs } from '../VerIdsManager-interfaces';
 import { DGlobalSetting } from './DGlobalSetting';
 import { Observable, interval, Subscriber } from 'rxjs';
-import { isArrayEqual } from 'src/app/AsFunction/arrayEqual';
+import { isArrayEqual } from 'src/app/tools/arrayEqual';
 
 interface DGlobalSettingBibleVersion {
   bibleVersions: string[];

@@ -8,7 +8,7 @@ import { DateAdapter, MatOptgroup, MatOption } from '@angular/material/core';
 import { IConvertBibleVersionId2Eng, IConvertBibleVersionEng2Id } from '../../fhl-api/i-convert-bible-version';
 import { ConvertBibleVersionTool } from '../../fhl-api/convert-bible-version';
 import { MatListOption } from '@angular/material/list';
-import { setTimeoutTrySleepTry } from 'src/app/AsFunction/setTimeoutTrySleepTry';
+import { setTimeoutTrySleepTry } from 'src/app/tools/setTimeoutTrySleepTry';
 
 // IConvertBibleVersionEng2Id 會用到, (通用的) - checkbox 轉回 id 時會用
 function testData() {

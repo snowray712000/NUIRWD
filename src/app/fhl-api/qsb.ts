@@ -8,11 +8,17 @@ import { ajax } from 'rxjs/ajax';
 /** 取得經文 */
 export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
+    this.defaultValue(args);
     const url = 'http://bkbible.fhl.net/json/qsb.php';
     return ajax.getJSON<QsbResult>(url + this.generateQueryString(args)).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),
     );
+  }
+  private defaultValue(r1: QsbArgs) {
+    r1.bibleVersion = r1.bibleVersion !== undefined ? r1.bibleVersion : 'unv';
+    r1.isExistStrong = r1.isExistStrong !== undefined ? r1.isExistStrong : false;
+    r1.isSimpleChinese = r1.isSimpleChinese !== undefined ? r1.isSimpleChinese : false;
   }
   private generateQueryString(args: QsbArgs) {
     const gb = `gb=${(args.isSimpleChinese === false ? '0' : '1')}`;
@@ -24,11 +30,14 @@ export class ApiQsb implements IApiQsb {
   }
 }
 
-export class QsbArgs {
+export interface QsbArgs {
   qstr: string;
-  bibleVersion = 'unv';
-  isExistStrong = false;
-  isSimpleChinese = false;
+  /** unv */
+  bibleVersion?: string;
+  /** false */
+  isExistStrong?: boolean;
+  /** false */
+  isSimpleChinese?: boolean;
 }
 export interface OneQsbRecord {
   chineses?: string;

@@ -1,10 +1,10 @@
 // tslint:disable-next-line: max-line-length
 import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { asHTMLElement } from '../AsFunction/asHTMLElement';
+import { asHTMLElement } from '../tools/asHTMLElement';
 import { Observable, Subscriber } from 'rxjs';
 import { appInstance } from '../app.module';
-import { isArrayEqual } from '../AsFunction/arrayEqual';
+import { isArrayEqual } from '../tools/arrayEqual';
 import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
 import { VerIdsManager } from './VerIdsManager';
 import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-sheet";
