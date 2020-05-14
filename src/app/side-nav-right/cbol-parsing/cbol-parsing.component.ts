@@ -22,6 +22,7 @@ import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
+import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -130,10 +131,10 @@ export class CbolParsingComponent implements OnInit {
     // qbResult.N === 1 舊約
     this.isOldTestment = qbResult.N === 1;
     if (qbResult.N === 0) {
-      this.getWordsFromQbApiResultNewTestment(qbResult);
+      this.getWordsFromQbApiResult(qbResult);
       this.getLinesFromQbApiResult(qbResult);
     } else {
-      this.getWordsFromQbApiResultNewTestment(qbResult); // 看似一樣
+      this.getWordsFromQbApiResult(qbResult); // 看似一樣
       this.getLinesFromQbApiResultOfOldTestment(qbResult);
       // this.getWordsFromQbApiResultOldTestment(qbResult);
     }
@@ -156,7 +157,8 @@ export class CbolParsingComponent implements OnInit {
     this.onVerseChanged(this.next.book, this.next.chap, this.next.verse);
   }
 
-  private getWordsFromQbApiResultNewTestment(qbResult: DQbResult) {
+  /** words 就是下面的 table, 不是上面的整串文字, 整串文字請看 lines */
+  private getWordsFromQbApiResult(qbResult: DQbResult) {
     const re2 = [];
     for (let i = 1; i < qbResult.record.length; i++) {
       const it = qbResult.record[i];
@@ -180,7 +182,8 @@ export class CbolParsingComponent implements OnInit {
     this.words = re2;
   }
   private getLinesFromQbApiResultOfOldTestment(qbResult: DQbResult) {
-    const words = new GetWordsFromQbResult({ isOldTestment: true }).main(qbResult);
+    const words = new GetLinesFromQbResultOldTestment().main(qbResult);
+    // const words = new GetWordsFromQbResult({ isOldTestment: true }).main(qbResult);
     // console.log(JSON.stringify(words));
     // tslint:disable-next-line: max-line-length
     // [[{"w":"בְּרֵאשִׁית","sn":7225,"wid":1}],[{"w":"בָּרָא","sn":1254,"wid":2},{"w":" "},{"w":"אֱלֹהִים","sn":430,"wid":3},{"w":" "},{"w":"אֵת","sn":853,"wid":4},{"w":" "},{"w":"הַשָּׁמַיִם","sn":8064,"wid":5},{"w":" "},{"w":"וְאֵת","sn":853,"wid":6},{"w":" "},{"w":"הָאָרֶץ","sn":776,"wid":7},{"w":"׃"}]]
