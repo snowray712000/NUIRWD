@@ -1,8 +1,8 @@
 import { DOrigDict } from '../cbol-dict/cbol-dict.component-interfaces';
+import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
 export class TextWithSnConvertor {
-  private static reg1 = /[^\<>]+/gi;
-  private static reg2 = /^(WTG|WG)(\d+)$/;
-  private static reg3 = /^(WAH|WTH|WH)(\d+)$/;
+  private static reg4 = /<W[^>]+>/ig;
+  private static reg5 = /(W(T?)A?(G|H))(\d+)/i; // 後面註解保留, 可讀性高 (WTG|WG|WAH|WTH|WH)(\d+)/i;
   /** // let r44: string = r3.record[0].bible_text; */
   public processTextWithSn(str?: string): DTextWithSnConvertorResult[] {
     // 測過 約17:1 創1:1 (unv, kjv)
@@ -12,31 +12,32 @@ export class TextWithSnConvertor {
     // console.log(str);
 
     // [{w:"耶穌"},{w:"WG2424",sn:2424,tp:"G|H",tp2:"WG|WTG"},]'
-    str = str.replace(TextWithSnConvertor.reg1, (a1, a2, a3, a4) => {
-      let rea1 = a1.match(TextWithSnConvertor.reg2);
-      if (rea1) {
-        const sn = parseInt(rea1[2], 10);
-        const rr1 = (rea1[1] === 'WTG') ? `(G${sn})` : `<G${sn}>`;
-        return `{"w":"${rr1}","sn":${sn},"tp":"G","tp2":"${rea1[1]}"}`;
-      } else {
-        rea1 = a1.match(TextWithSnConvertor.reg3);
-        if (rea1) {
-          const sn = parseInt(rea1[2], 10);
-          const rr1 = (rea1[1] === 'WTH') ? `(H${sn})` : `<H${sn}>`;
-          return `{"w":"${rr1}","sn":${sn},"tp":"H","tp2":"${rea1[1]}"}`;
-        }
-        return `{"w":"${a1}"}`;
-      }
-      // [{w:"耶穌"},{w:"WG2424",sn:2424,tp:"G|H",tp2:"WG|WTG"},]
-    });
-    // console.log(r44);
-    str = str.replace(/\}(?:\<|\>\<|\>)\{/g, '},{');
-    const r55 = JSON.parse(`[${str}]`);
-    // console.log(r55);
-    return r55;
+    const re1 = new SplitStringByRegex().main(str, TextWithSnConvertor.reg4);
+    // console.log(re1);
+
+    return re1.data.map(a1 => this.cvtOneWord(a1));
+  }
+
+  private cvtOneWord(arg: string): DTextWithSnConvertorResult {
+    let re2: DTextWithSnConvertorResult;
+    const reg5 = TextWithSnConvertor.reg5;
+    // /(W(T?)A?(G|H))(\d+)/i; ///(WTG|WG|WAH|WTH|WH)(\d+)/i;
+    const r1 = reg5.exec(arg);
+    // console.log(r1); WTH8799 WTH T H 8799
+    if (r1 !== null) {
+      const sn = parseInt(r1[4], 10);
+      const tp = r1[3] as ('H' | 'G');
+      const tp2 = r1[1] as ('WG' | 'WTG' | 'WAG' | 'WTH' | 'WH');
+      const w = r1[2] === 'T' ? `(${tp}${sn})` : `<${tp}${sn}>`;
+      re2 = { w, sn, tp, tp2 };
+    }
+    else {
+      re2 = { w: arg };
+    }
+    return re2;
   }
 }
-
+/** w,sn,tp,tp2 */
 export interface DTextWithSnConvertorResult {
   w: string;
   sn?: number;

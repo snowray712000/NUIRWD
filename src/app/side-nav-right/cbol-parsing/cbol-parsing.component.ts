@@ -123,6 +123,8 @@ export class CbolParsingComponent implements OnInit {
     // console.log(rr4);
     this.textsWithSnUnv = rr4;
     const r33 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
+    // console.log(r33);
+
     this.textsWithSnKjv = new TextWithSnConvertor().processTextWithSn(r33.record[0].bible_text);
   }
   private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
