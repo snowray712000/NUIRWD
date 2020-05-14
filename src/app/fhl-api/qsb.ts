@@ -25,7 +25,8 @@ export class ApiQsb implements IApiQsb {
     const ver = `version=${args.bibleVersion}`;
     const strong = `strong=${args.isExistStrong ? '1' : '0'}`;
 
-    const qstr = encodeURIComponent(args.qstr);
+    // const qstr = encodeURIComponent(args.qstr);
+    const qstr = args.qstr;
     return `?qstr=${qstr}&${strong}&${gb}&${ver}`;
   }
 }

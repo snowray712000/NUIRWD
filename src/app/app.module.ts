@@ -37,6 +37,7 @@ import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.componen
 import { InfoDialogComponent } from './side-nav-right/cbol-dict/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
+import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
@@ -88,8 +89,9 @@ const entryComponents = new Array<any>(
     MatTabsModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
-  providers: [HttpClient],
+  providers: [HttpClient,MatSnackBar],
   bootstrap: [AppComponent],
 })
 // https://stackoverflow.com/questions/49310134/how-to-create-angular-5-httpclient-instance-in-typescript-class

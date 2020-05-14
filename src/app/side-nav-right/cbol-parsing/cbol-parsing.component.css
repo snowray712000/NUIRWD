@@ -3,6 +3,7 @@
 }
 .orig {
   font-size: 1.5em;
+  cursor: pointer;
 }
 .example-fill-remaining-space {
   /* This fills the remaining space, by using flexbox.

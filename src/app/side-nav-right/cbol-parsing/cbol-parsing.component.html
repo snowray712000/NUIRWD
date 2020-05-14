@@ -9,7 +9,7 @@
       <span *ngIf="isOldTestment===false">
         <span *ngFor="let it2 of it1.words">
           <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span> <!-- index(前,新約) -->
-          <span [class.orig]="it2.sn==null||it2.sn!==0">{{it2.w}}</span> <!-- 原文字 -->
+          <span [attr.sn]="it2.sn" [attr.tp]="cur.book<40?'H':'G'" [attr.wid]="it2.wid" [class.orig]="it2.sn==null||it2.sn!==0" [style.color]="it2.sn===snActived?'blue':'black'" (click)="onClickOrig($event,it2)" (mouseenter)="onMouseEnterSn($event,it2)" (mouseenter)="onMouseEnterForSnackBar($event,it2)">{{it2.w}}</span> <!-- 原文字 -->
         </span>
       </span>
       <span *ngIf="isOldTestment">
@@ -31,17 +31,15 @@
 
 <mat-divider></mat-divider>
 <div>
-  unv
-  <div>
-    <span *ngFor="let it1 of textsWithSnUnv">
-      <span appTextWithSn [data]="it1">{{it1.w}}</span>
-    </span>
-    <!-- <span *ngFor="let it1 of textsWithSnUnv" appTextWithSn data="'it1'">{{it1.w}}</span> -->
-  </div>
-  kjv
-  <div>
-    <span *ngFor="let it1 of textsWithSnKjv">
-      <span appTextWithSn [data]="it1">{{it1.w}}</span>
+  <div *ngFor="let it2 of [textsWithSnUnv,textsWithSnKjv]; let i2=index">
+    <span>{{i2===0?'unv':'kjv'}}</span><br/>
+    <span *ngFor="let it1 of it2">
+      <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
+        <span appTextWithSn [data]="it1" [snActived]="snActived" (mouseenter)="onMouseEnterSn($event,it1)">{{it1.w}}</span>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <span>{{it1.w}}</span>
+      </ng-template>
     </span>
   </div>
   <br />
@@ -56,10 +54,11 @@
   </div>
   <mat-accordion multi="true" #origList="matAccordion">
     <mat-expansion-panel *ngFor="let a1 of words; let i1=index">
-      <mat-expansion-panel-header [collapsedHeight]="'2em'" [expandedHeight]="'2.5em'">
+      <mat-expansion-panel-header [collapsedHeight]="'2em'" [expandedHeight]="'2.5em'" (mouseenter)="onMouseEnterSn($event,a1)">
         <span class='wid'>{{a1.wid}}</span><span class='orig'>{{a1.word}}</span>
         <span class="example-fill-remaining-space"></span>
-        {{a1.sn}}
+        <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'">{{a1.sn}}</span>
+
       </mat-expansion-panel-header>
       <div>
         <div [style.display]="'flex'">

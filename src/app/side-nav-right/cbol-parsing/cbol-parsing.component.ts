@@ -17,12 +17,10 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { ApiQsb } from 'src/app/fhl-api/qsb';
 import { TextWithSnConvertor, DTextWithSnConvertorResult } from './TextWithSnConvertor';
-import { TextWithSnDirective } from './text-with-sn.directive';
-import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
-import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
-import { VerseRangeToString } from '../../bible-address/VerseRangeToString';
-import { ParsingReferenceDescription } from '../../bible-address/ParsingReferenceDescription';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSnDictOpenor } from './DialogSnDictOpenor';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -38,7 +36,7 @@ export class CbolParsingComponent implements OnInit {
   // domContentWithSn: SafeHtml;
   textsWithSnUnv: DTextWithSnConvertorResult[];
   textsWithSnKjv: DTextWithSnConvertorResult[];
-
+  snActived: number = 0;
   @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
@@ -49,18 +47,45 @@ export class CbolParsingComponent implements OnInit {
   eventVerseChanged: IEventVerseChanged;
   constructor(
     private detectChange: ChangeDetectorRef,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
 
     this.eventVerseChanged = new EventVerseChanged();
   }
 
+  onClickOrig(en, a1) {
+    const type = this.cur.book < 40 ? 'H' : 'G';
+    new DialogSnDictOpenor(this.dialog).showDialog(a1.sn, type);
+  }
+  onMouseEnterForSnackBar(en, arg) {
+    // console.log(arg);
+    // 可能 {w: "οὐρανὸν", sn: 3772, wid: 11}
+    // 可能 {w: " "}
+    if (arg.wid === undefined) {
+      return;
+    }
 
+    // console.log(this.words); // [{wid,word,sn,exp,orig,pro,wform} ]
+    const r1 = firstOrDefault(this.words, a1 => a1.wid === arg.wid);
+
+    const fn1 = (a2: string) => a2 !== undefined ? a2 : '';
+    const pro = fn1(r1.pro);
+    const wform = fn1(r1.wform);
+    const prowform = pro + ' ' + wform;
+
+    const exp = fn1(r1.exp);
+    const remark = fn1(r1.remark);
+    const expremark = exp + ' ' + remark;
+
+    this.snackBar.open(`${prowform} | ${r1.orig} | ${expremark}`, undefined, {
+      duration: 3000
+    });
+
+    // this.snackBar.open()
+  }
+  onMouseEnterSn(en, a1) {
+    this.snActived = a1.sn;
+  }
   ngOnInit() {
-    const str = '太9:33;可7:37;約二;路1:20-22,25,31-33,50;1:63-2:3;2:5-8;11:14;約二1:2-5;可2;4';
-    console.log(str);
-
-    const reVerse = new ParsingReferenceDescription().main(str);
-
     if (this.eventVerseChanged !== undefined) {
       this.eventVerseChanged.changed$.subscribe(data => {
         this.onVerseChanged(data.book, data.chap, data.verse);
