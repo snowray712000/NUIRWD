@@ -14,9 +14,9 @@ const routes: Routes = [
   { path: '', redirectTo: urlDefault, pathMatch: 'full' },
   { path: 'bible/:book/:ichap/:isec', component: OneVerseComponent },
   { path: 'bible/:book/:ichap', component: OneVerseComponent },
-  // { path: 'bible/:description', component: RwdFramesetComponent },
+  { path: 'bible/:description', component: RwdFramesetComponent },
   // { path: 'bible/:description', component: CbolDictComponent },
-  { path: 'bible/:description', component: CbolParsingComponent},
+  // { path: 'bible/:description', component: CbolParsingComponent},
   { path: 'bible', component: OneVerseComponent },
   { path: '**', redirectTo: urlDefault },
 ];

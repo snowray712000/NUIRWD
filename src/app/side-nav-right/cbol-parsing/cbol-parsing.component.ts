@@ -21,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -69,11 +70,18 @@ export class CbolParsingComponent implements OnInit {
 
     const fn1 = (a2: string) => a2 !== undefined ? a2 : '';
     const pro = fn1(r1.pro);
-    const wform = fn1(r1.wform);
+    let wform = fn1(r1.wform);
+
+    wform = wform.replace(RegexHtmlTag.regHtml, (a1, a2, a3, a4) => {
+      return ` ${a4} `;
+    });
     const prowform = pro + ' ' + wform;
 
     const exp = fn1(r1.exp);
-    const remark = fn1(r1.remark);
+    let remark = fn1(r1.remark);
+    remark = remark.replace(RegexHtmlTag.regHtml, (a1, a2, a3, a4) => {
+      return ` ${a4} `;
+    });
     const expremark = exp + ' ' + remark;
 
     this.snackBar.open(`${prowform} | ${r1.orig} | ${expremark}`, undefined, {
@@ -111,14 +119,14 @@ export class CbolParsingComponent implements OnInit {
     const r3 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
     // console.log(r3.record[0].bible_text);
     const rr4 = new TextWithSnConvertor().processTextWithSn(r3.record[0].bible_text);
-    console.log(rr4);
+    // console.log(rr4);
     this.textsWithSnUnv = rr4;
     const r33 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
     this.textsWithSnKjv = new TextWithSnConvertor().processTextWithSn(r33.record[0].bible_text);
   }
   private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
     const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();
-    console.log(qbResult);
+    // console.log(qbResult);
     // qbResult.N === 1 舊約
     this.isOldTestment = qbResult.N === 1;
     if (qbResult.N === 0) {
@@ -185,7 +193,7 @@ export class CbolParsingComponent implements OnInit {
     const re = zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
-    console.log(re);
+    // console.log(re);
 
     this.lines = re as DLineOnePair[];
   }

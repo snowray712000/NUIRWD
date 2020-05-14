@@ -1,93 +1,106 @@
-<div class='toppanel' [style.white-space]="'nowrap'" [style.direction]="isOldTestment?'rtl':'ltr'">
-  <div class='topbuttons'>
-    <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
-    <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
-    <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
-  </div>
-  <div *ngFor="let it1 of lines">
-    <div class='origline'>
-      <span *ngIf="isOldTestment===false">
-        <span *ngFor="let it2 of it1.words">
-          <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span> <!-- index(前,新約) -->
-          <span [attr.sn]="it2.sn" [attr.tp]="cur.book<40?'H':'G'" [attr.wid]="it2.wid" [class.orig]="it2.sn==null||it2.sn!==0" [style.color]="it2.sn===snActived?'blue':'black'" (click)="onClickOrig($event,it2)" (mouseenter)="onMouseEnterSn($event,it2)" (mouseenter)="onMouseEnterForSnackBar($event,it2)">{{it2.w}}</span> <!-- 原文字 -->
-        </span>
-      </span>
-      <span *ngIf="isOldTestment">
-        <span *ngFor="let it2 of it1.words">
-          <span [class.orig]="it2.sn==null||it2.sn!==0">{{it2.w}}</span> <!-- 原文字 -->
-          <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span>
-        </span>
-      </span>
+<div [style.overflow-y]="'hidden'">
+  <div class='toppanel' [style.white-space]="'nowrap'" [style.direction]="isOldTestment?'rtl':'ltr'">
+    <div class='topbuttons'>
+      <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
+      <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
+      <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
     </div>
-    <!-- 中文 -->
-    <div>
-      <span *ngFor="let it2 of it1.exps">{{it2.w}}</span>
-    </div>
-    <!-- next ... line -->
-  </div>
-
-  <br />
-</div>
-
-<mat-divider></mat-divider>
-<div>
-  <div *ngFor="let it2 of [textsWithSnUnv,textsWithSnKjv]; let i2=index">
-    <span>{{i2===0?'unv':'kjv'}}</span><br/>
-    <span *ngFor="let it1 of it2">
-      <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
-        <span appTextWithSn [data]="it1" [snActived]="snActived" (mouseenter)="onMouseEnterSn($event,it1)">{{it1.w}}</span>
-      </ng-container>
-      <ng-template #elseTemplate>
-        <span>{{it1.w}}</span>
-      </ng-template>
-    </span>
-  </div>
-  <br />
-</div>
-<mat-divider></mat-divider>
-<div class='bottompanel'>
-  <!-- mat-chip 要加 selected=true 才會變色 -->
-  <div class='topbuttons'>
-    <mat-chip color="accent" selected="true" (click)="origList.openAll()" class='btnChip'>開所有</mat-chip>
-    <mat-chip color="accent" selected="true" (click)="origList.closeAll()" class='btnChip'>閉所有</mat-chip>
-
-  </div>
-  <mat-accordion multi="true" #origList="matAccordion">
-    <mat-expansion-panel *ngFor="let a1 of words; let i1=index">
-      <mat-expansion-panel-header [collapsedHeight]="'2em'" [expandedHeight]="'2.5em'" (mouseenter)="onMouseEnterSn($event,a1)">
-        <span class='wid'>{{a1.wid}}</span><span class='orig'>{{a1.word}}</span>
-        <span class="example-fill-remaining-space"></span>
-        <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'">{{a1.sn}}</span>
-
-      </mat-expansion-panel-header>
-      <div>
-        <div [style.display]="'flex'">
-          <span class='item-title'>分析</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>{{a1.pro}}</span>
-          <span [innerHTML]="createDomFromString(a1.wform)"></span>
-        </div>
-        <mat-divider></mat-divider>
-        <div [style.display]="'flex'" [style.background-color]="'whitesmoke'">
-          <span class='item-title'>原型</span>
-          <span class="example-fill-remaining-space"></span>
-          <span class='orig'>{{a1.orig}}</span>
-        </div>
-        <mat-divider></mat-divider>
-        <div [style.display]="'flex'">
-          <span class='item-title'>簡義</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>{{a1.exp}}</span>
-        </div>
-        <mat-divider></mat-divider>
-        <div *ngIf="a1.remark!==undefined" [style.display]="'flex'" [style.background-color]="'whitesmoke'">
-          <span class='item-title'>備註</span>
-          <span class="example-fill-remaining-space"></span>
-          <span [innerHTML]="createDomFromString(a1.remark)"></span>
-        </div>
+    <div *ngFor="let it1 of lines">
+      <div class='origline'>
+        <!-- 新約 -->
+        <span *ngIf="isOldTestment===false">
+          <span *ngFor="let it2 of it1.words">
+            <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span> <!-- index(前,新約) -->
+            <span [attr.sn]="it2.sn" [attr.tp]="'G'" [attr.wid]="it2.wid" [class.orig]="it2.sn==null||it2.sn!==0"
+              [style.color]="it2.sn===snActived?'blue':'black'" (click)="onClickOrig($event,it2)"
+              (mouseenter)="onMouseEnterSn($event,it2)"
+              (mouseenter)="onMouseEnterForSnackBar($event,it2)">{{it2.w}}</span> <!-- 原文字 -->
+          </span>
+        </span>
+        <!-- 舊約 -->
+        <span *ngIf="isOldTestment">
+          <span *ngFor="let it2 of it1.words">
+            <span [attr.sn]="it2.sn" [attr.tp]="'H'" [attr.wid]="it2.wid" [class.orig]="it2.sn==null||it2.sn!==0"
+              [style.color]="it2.sn===snActived?'blue':'black'" (click)="onClickOrig($event,it2)"
+              (mouseenter)="onMouseEnterSn($event,it2)"
+              (mouseenter)="onMouseEnterForSnackBar($event,it2)">{{it2.w}}</span> <!-- 原文字 -->
+            <span *ngIf="isShowIndex && it2.wid!==undefined" class='wid'>{{it2.wid}}</span>
+          </span>
+        </span>
       </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+      <!-- 中文 -->
+      <div>
+        <span *ngFor="let it2 of it1.exps">{{it2.w}}</span>
+      </div>
+      <!-- next ... line -->
+    </div>
+
+    <br />
+  </div>
+
+  <mat-divider></mat-divider>
+  <div>
+    <div *ngFor="let it2 of [textsWithSnUnv,textsWithSnKjv]; let i2=index">
+      <span>{{i2===0?'unv':'kjv'}}</span><br />
+      <span *ngFor="let it1 of it2">
+        <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
+          <span appTextWithSn [data]="it1" [snActived]="snActived"
+            (mouseenter)="onMouseEnterSn($event,it1)">{{it1.w}}</span>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <span>{{it1.w}}</span>
+        </ng-template>
+      </span>
+    </div>
+    <br />
+  </div>
+  <mat-divider></mat-divider>
+  <div class='bottompanel'>
+    <!-- mat-chip 要加 selected=true 才會變色 -->
+    <div class='topbuttons'>
+      <mat-chip color="accent" selected="true" (click)="origList.openAll()" class='btnChip'>開所有</mat-chip>
+      <mat-chip color="accent" selected="true" (click)="origList.closeAll()" class='btnChip'>閉所有</mat-chip>
+
+    </div>
+    <mat-accordion multi="true" #origList="matAccordion">
+      <mat-expansion-panel *ngFor="let a1 of words; let i1=index">
+        <mat-expansion-panel-header [collapsedHeight]="'2em'" [expandedHeight]="'2.5em'"
+          (mouseenter)="onMouseEnterSn($event,a1)">
+          <span class='wid'>{{a1.wid}}</span><span class='orig'>{{a1.word}}</span>
+          <span class="example-fill-remaining-space"></span>
+          <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'">{{a1.sn}}</span>
+
+        </mat-expansion-panel-header>
+        <div>
+          <div [style.display]="'flex'">
+            <span class='item-title'>分析</span>
+            <span class="example-fill-remaining-space"></span>
+            <span>{{a1.pro}}</span>
+            <span [innerHTML]="createDomFromString(a1.wform)"></span>
+          </div>
+          <mat-divider></mat-divider>
+          <div [style.display]="'flex'" [style.background-color]="'whitesmoke'">
+            <span class='item-title'>原型</span>
+            <span class="example-fill-remaining-space"></span>
+            <span class='orig'>{{a1.orig}}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div [style.display]="'flex'">
+            <span class='item-title'>簡義</span>
+            <span class="example-fill-remaining-space"></span>
+            <span>{{a1.exp}}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div *ngIf="a1.remark!==undefined" [style.display]="'flex'" [style.background-color]="'whitesmoke'">
+            <span class='item-title'>備註</span>
+            <span class="example-fill-remaining-space"></span>
+            <span [innerHTML]="createDomFromString(a1.remark)"></span>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <!-- 若一個html裡沒這個 list, 會使 mat-chip 不會是藥丸型這麼漂亮 -->
+  <mat-chip-list> </mat-chip-list>
+  <br />
 </div>
-<!-- 若一個html裡沒這個 list, 會使 mat-chip 不會是藥丸型這麼漂亮 -->
-<mat-chip-list> </mat-chip-list>

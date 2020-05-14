@@ -53,7 +53,7 @@ export class ParsingReferenceDescription {
     const re = new SplitStringByRegex().main(strDescription, reg1);
     let cur = defAddress.book;
     for (const it of re.data) {
-      const id2 = new BookNameAndId().getIdOrUndefined(it);
+      const id2 = new BookNameAndId().getIdOrUndefined(it.toLowerCase());
       if (id2 === undefined) {
         re2.push({ id: cur, des: it });
       } else {
