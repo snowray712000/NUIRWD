@@ -2,6 +2,7 @@
   <div class='toppanel' [style.white-space]="'nowrap'" [style.direction]="isOldTestment?'rtl':'ltr'">
     <div class='topbuttons'>
       <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
+      <span>{{verseAddress}}</span>
       <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
       <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
     </div>

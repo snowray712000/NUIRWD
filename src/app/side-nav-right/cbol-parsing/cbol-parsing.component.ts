@@ -39,6 +39,7 @@ export class CbolParsingComponent implements OnInit {
   textsWithSnUnv: DTextWithSnConvertorResult[];
   textsWithSnKjv: DTextWithSnConvertorResult[];
   snActived: number = 0;
+  verseAddress: string;
   @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
@@ -108,6 +109,7 @@ export class CbolParsingComponent implements OnInit {
     const r1 = this.queryQbAndRefreshAsync(bk, ch, vr);
     const r2 = this.queryContentWithSnAsync(bk, ch, vr);
     Promise.all([r1, r2]).then(a1 => {
+      this.verseAddress = `${ch}:${vr}`;
       this.detectChange.markForCheck();
     });
   }
