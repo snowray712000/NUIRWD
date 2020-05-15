@@ -1,0 +1,13 @@
+<p>chain-tool works!</p>
+<div>
+  <div *ngFor="let it1 of data">
+    <span *ngFor="let it2 of it1">
+      <ng-container *ngIf="it2.des===undefined; else elseTemplate">
+        <span>{{it2.w}}</span>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <span [attr.des]="it2.des" class='reference' (click)="onClickRef(it2)">{{it2.w}}</span>
+      </ng-template>
+    </span>
+  </div>
+</div>

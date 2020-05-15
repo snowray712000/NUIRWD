@@ -24,6 +24,7 @@ export class ParsingReferenceDescription {
 
   private getAddressesOneBook(it: { id: number; des: string; }): VerseAddress[] {
     const r1 = it.des.replace(/\s/g, '');
+
     const r2 = r1.split(';').filter(a1 => a1.length !== 0);
     if (r2.length !== 0) {
       const vrs: VerseAddress[] = [];

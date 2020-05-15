@@ -8,6 +8,7 @@ import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';
 import { DInfoDialogData } from './DInfoDialogData';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { DictSourceVersionsTools } from '../DictSourceVersionsTools';
+import { DialogRefOpenor } from './DialogRefOpenor';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });
@@ -47,9 +48,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     }
     const desc = a1.getAttribute('desc');
     if (desc != null) {
-      const dialogRef = this.dialog.open(InfoDialogComponent, {
-        data: { desc, checkStates: this.dataByParent.checkStates }
-      });
+      new DialogRefOpenor(this.dialog).showDialog(desc);
     }
   }
 
