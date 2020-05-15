@@ -4,8 +4,14 @@ import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
 import { IChainToolDataGetter } from './chain-tool-interfaces';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { ApiSc } from '../../fhl-api/ApiSc';
+import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 export class ChainToolDataGetter implements IChainToolDataGetter {
-  constructor() { }
+  private static reg4: RegExp;
+  constructor() {
+    if (ChainToolDataGetter.reg4 === undefined) {
+      this.gStaticRegex();
+    }
+  }
   async mainAsync(address: DAddress): Promise<{
     w: string;
     des?: string;
@@ -43,8 +49,7 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
     const na = BibleBookNames.getBookName(address.book, BookNameLang.太);
     for (const it2 of re3) {
       for (const it1 of it2.filter(a1 => a1.des !== undefined)) {
-        const reg4 = /^[^\d]/;
-        if (reg4.exec(it1.des) === null) {
+        if (this.isNeedAddBookNameOrChap(it1.des)) {
           // 可能 2:1,15 ... 變為 太 2:1,15
           // 可能 19,27 ... 變為 太 chap:19,27
           if (/^\d+:\d+/.exec(it1.des) !== null) {
@@ -52,11 +57,22 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
           } else if (/^\d+/.exec(it1.des) !== null) {
             it1.des = `${na}${address.chap}:${it1.des}`;
           }
-          // 可能 *marg: 或 *Gr: 要拿掉
-          it1.des = it1.des.replace(/\s*\*[^\:]+\:/g, '');
         }
+
+        // 可能 *marg: 或 *Gr: 要拿掉 (獨立,不用在if裡)
+        it1.des = it1.des.replace(/\s*\*[^\:]+\:/g, '');
       }
     }
+  }
+  private isNeedAddBookNameOrChap(des: string): boolean {
+    // const reg4 = /^(?:1Pe|2Pe)/i;
+    return ChainToolDataGetter.reg4.exec(des) === null;
+  }
+  private gStaticRegex() {
+    // const reg4 = /^(?:1Pe|2Pe)/i;
+    const r1 = new BookNameAndId().getNamesOrderByNameLength().join('|');
+    const reg4 = new RegExp(`^(?:${r1})`, 'i');
+    ChainToolDataGetter.reg4 = reg4;
   }
   private async getChainDataFromApi(address: DAddress) {
     const r1 = await new ApiSc().queryScAsync({ id: 4, book: address.book, chap: address.chap, sec: address.verse }).toPromise();
