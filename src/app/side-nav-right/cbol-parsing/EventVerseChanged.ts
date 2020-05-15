@@ -1,11 +1,8 @@
 import { IEventVerseChanged } from './cbol-parsing-interfaces';
 import { Observable, Subscriber } from 'rxjs';
 import { RouteStartedWhenFrame } from 'src/app/rwd-frameset/RouteStartedWhenFrame';
-interface DAddress {
-  book: number;
-  chap: number;
-  verse: number;
-}
+import { DAddress } from 'src/app/bible-address/DAddress';
+
 export class EventVerseChanged implements IEventVerseChanged {
   changed$: Observable<DAddress>;
   router: RouteStartedWhenFrame;

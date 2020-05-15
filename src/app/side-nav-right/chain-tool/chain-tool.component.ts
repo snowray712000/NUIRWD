@@ -6,6 +6,8 @@ import { DialogRefOpenor } from '../cbol-dict/info-dialog/DialogRefOpenor';
 import { matchGlobalWithCapture } from 'src/app/tools/matchGlobalWithCapture';
 import { ChainToolDataGetter } from './ChainToolDataGetter';
 import { DAddress } from 'src/app/bible-address/DAddress';
+import { IEventVerseChanged } from '../cbol-dict/cbol-dict.component';
+import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 
 
 @Component({
@@ -15,16 +17,22 @@ import { DAddress } from 'src/app/bible-address/DAddress';
 })
 export class ChainToolComponent implements OnInit {
   data: { w: string, des?: string }[][];
-  address: DAddress = { book: 1, chap: 3, sec: 6 };
-  constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) { }
+  address: DAddress = { book: 1, chap: 3, verse: 6 };
+  eventVerseChanged: IEventVerseChanged;
+  constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) {
+    this.eventVerseChanged = new EventVerseChanged();
+  }
 
   onClickRef(arg) {
     new DialogRefOpenor(this.dialog).showDialog(arg.des);
   }
   ngOnInit() {
-    this.getData();
+    this.eventVerseChanged.changed$.subscribe(async arg => {
+     await this.onVerseChanged(arg);
+    });
   }
-  async getData() {
+  private async onVerseChanged(arg: DAddress) {
+    this.address = arg;
     this.data = await new ChainToolDataGetter().mainAsync(this.address);
     this.detectChange.markForCheck();
   }

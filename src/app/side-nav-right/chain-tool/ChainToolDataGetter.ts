@@ -59,7 +59,7 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
     }
   }
   private async getChainDataFromApi(address: DAddress) {
-    const r1 = await new ApiSc().queryScAsync({ id: 4, book: address.book, chap: address.chap, sec: address.sec }).toPromise();
+    const r1 = await new ApiSc().queryScAsync({ id: 4, book: address.book, chap: address.chap, sec: address.verse }).toPromise();
     const re1 = r1.record[0].com_text;
     return re1;
   }
