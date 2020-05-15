@@ -10,6 +10,11 @@
 }
 ::ng-deep .one-verse {
   display: block;
+  border-radius: 0.5em;
+  padding: 0.2em;
+}
+::ng-deep .odd {
+  background-color: whitesmoke;
 }
 
 ::ng-deep .separator {

@@ -108,11 +108,14 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     const title = this.dataByParent.desc;
     this.innerHtmlTitle = `<span>#${title}|</span>`;
 
+    let i1 = 0;
     const domStr = r1.record.map(a1 => {
+      i1++;
+      const oddclass = i1 % 2 === 0 ? '' : 'odd';
       const domAddress = `<span class='bible-address'>${a1.chineses} ${a1.chap}:${a1.sec}</span>`;
       const dombibleText = `<span class='bible-text'>${a1.bible_text}</span>`;
       // return `<span class='one-verse'>${domAddress}&nbsp;${dombibleText}</span>`;
-      return `<span class='one-verse'>${dombibleText}(${domAddress})</span>`;
+      return `<span class='one-verse ${oddclass}'>${dombibleText}(${domAddress})</span>`;
     }).join('');
     this.innerHtmlContent = this.sanitizer.bypassSecurityTrustHtml(domStr);
     this.detectChange.markForCheck();
