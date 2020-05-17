@@ -1,6 +1,6 @@
 import { BibleBookNames } from './BibleBookNames';
 import { BookNameLang } from './BookNameLang';
-import { range } from 'src/app/linq-like/Range';
+import { range_linq } from 'src/app/linq-like/Range_linq';
 /** if簡體 還沒處理 */
 export class BookNameAndId {
   /** matt:40, mt:40, 太:40, lower case, 1-based */
@@ -22,7 +22,7 @@ export class BookNameAndId {
   }
   private generate() {
     const rr1 = new Map<number, Array<string>>(); // Reg 1=['創世記','Matthew','Matt','太','Mt'] 2= ...
-    range(1, 66).forEach(a1 => rr1.set(a1, []));
+    range_linq(1, 66).forEach(a1 => rr1.set(a1, []));
     const r2 = new Map<string, number>(); // 同時產生 創世記=1, matthew=1
     [BibleBookNames.getBookNames(BookNameLang.馬太福音),
     BibleBookNames.getBookNames(BookNameLang.Matthew),

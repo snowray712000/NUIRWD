@@ -1,5 +1,5 @@
 import { IBookNameToId } from './i-book-name-to-id';
-import { range } from '../../linq-like/Range';
+import { range_linq } from '../../linq-like/Range_linq';
 import { BibleBookNames } from './BibleBookNames';
 import { BookNameLang } from './BookNameLang';
 import { BookNameAndId } from './BookNameAndId';

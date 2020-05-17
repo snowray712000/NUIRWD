@@ -9,6 +9,7 @@ import { DInfoDialogData } from './DInfoDialogData';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { DictSourceVersionsTools } from '../DictSourceVersionsTools';
 import { DialogRefOpenor } from './DialogRefOpenor';
+import { DialogOrigDictOpenor } from './DialogOrigDictOpenor';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });
@@ -42,9 +43,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     const sn = a1.getAttribute('sn');
     if (sn !== null) {
       const isOld = a1.getAttribute('isOld') === '1';
-      const dialogRef = this.dialog.open(InfoDialogComponent, {
-        data: { sn: parseInt(sn, 10), isOld, checkStates: this.dataByParent.checkStates }
-      });
+      new DialogOrigDictOpenor(this.dialog).showDialog({ sn, isOld });
     }
     const desc = a1.getAttribute('desc');
     if (desc != null) {

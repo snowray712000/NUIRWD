@@ -1,6 +1,6 @@
 import { VerseAddress } from './VerseAddress';
 import { getVerseCount } from 'src/app/const/count-of-verse';
-import { range } from 'src/app/linq-like/Range';
+import { range_linq } from 'src/app/linq-like/Range_linq';
 import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 import { IBookNameTryGetBookIdResult, IGetAddressesType } from './VerseRange';
 /** 一卷書 1:1-3,6-7,21,25,2:3-5 分解 */
@@ -126,24 +126,24 @@ export class GetAddresses {
     }
     // 1:2 - 1:結束
     const verse1End = getVerseCount(this.idBook, add.ch1);
-    const re = range(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+    const re = range_linq(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
     // 中間章節, 例如  1:2-3:24, 第2章 從 2 開始, 有 1 章 (3-1-1)
     if (add.ch1 + 1 < add.ch2) {
-      const r2 = range(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
+      const r2 = range_linq(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
       r2.forEach(a1 => a1.forEach(a2 => re.push(a2)));
     }
     // 最後章節, 例 -3:31
-    range(1, add.vr2).map(a1 => new VerseAddress(this.idBook, add.ch2, a1)).forEach(a1 => re.push(a1));
+    range_linq(1, add.vr2).map(a1 => new VerseAddress(this.idBook, add.ch2, a1)).forEach(a1 => re.push(a1));
     return re;
   }
   private generateFromType1(add: IGetAddressesType): VerseAddress[] {
     // 1:12-43
-    return range(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+    return range_linq(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
   }
   /** 2:1-End */
   private generateOneChap(ch: number): VerseAddress[] {
     const verseEnd = getVerseCount(this.idBook, ch);
-    return range(1, verseEnd).map(a2 => new VerseAddress(this.idBook, ch, a2));
+    return range_linq(1, verseEnd).map(a2 => new VerseAddress(this.idBook, ch, a2));
   }
   private getLastVerseAddress(): VerseAddress {
     if (this.addresses.length === 0) {
@@ -166,7 +166,7 @@ export class GetAddresses {
     // 7-9
     const last = this.getLastVerseAddress();
     const ch = last !== undefined ? last.chap : 1;
-    return range(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => new VerseAddress(this.idBook, ch, a1));
+    return range_linq(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => new VerseAddress(this.idBook, ch, a1));
   }
   private generateFromType4(add: IGetAddressesType): VerseAddress[] {
     // 1:23

@@ -39,6 +39,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
 import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
+import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
+import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
@@ -66,6 +68,8 @@ const entryComponents = new Array<any>(
     InfoDialogComponent,
     TextWithSnDirective,
     ChainToolComponent,
+    CommentToolComponent,
+    ComTextComponent,
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [

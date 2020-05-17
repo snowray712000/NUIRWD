@@ -1,0 +1,22 @@
+<div class='com-base'>
+  <span *ngFor="let it1 of data">
+    <ng-container *ngIf="it1.iReg===undefined; else elseTemplate">
+      <div>{{it1.w}}</div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <app-com-text [data]="it1" [address]="address"></app-com-text>
+      <!-- <mat-list>
+        <span>{{it1.w}}</span>
+        <mat-list-item *ngFor="let it2 of it1.children">
+          <mat-list>
+            <span>{{it2.w}}</span>
+            <mat-list-item *ngFor="let it3 of it2.children">
+              <span>{{it3.w}}</span>
+            </mat-list-item>
+          </mat-list>
+        </mat-list-item>
+      </mat-list> -->
+    </ng-template>
+
+  </span>
+</div>

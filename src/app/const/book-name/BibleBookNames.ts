@@ -1,5 +1,5 @@
 import { BookNameLang } from './BookNameLang';
-import { range } from '../../linq-like/Range';
+import { range_linq } from '../../linq-like/Range_linq';
 
 export class BibleBookNames {
   // [0]=["Gen", "Genesis", "創", "創世記", "Ge"]
@@ -13,7 +13,7 @@ export class BibleBookNames {
   public static getBookNames(lang: BookNameLang) {
     this.makeSureBibleBookNamesExist();
     const r1 = BookNameLang[BookNameLang[lang]];
-    return range(1, 66).map(a1 => this.constNames.get(a1)[r1]);
+    return range_linq(1, 66).map(a1 => this.constNames.get(a1)[r1]);
   }
 
   private static makeSureBibleBookNamesExist(): void {
