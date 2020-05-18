@@ -21,7 +21,7 @@ export class ReferenceFinder {
     const reg1 = ReferenceFinder.reg1;
     const re1 = new SplitStringByRegex().main(str, reg1);
     const re2 = this.generateReferenceIfNeed(re1);
-    console.log(re2);
+    // console.log(re2);
     return re2;
   }
   private generateReferenceIfNeed(re1: {

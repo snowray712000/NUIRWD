@@ -1,10 +1,16 @@
 import { DAddress } from 'src/app/bible-address/DAddress';
 
 export interface ICommentToolDataGetter {
-  mainAsync(address: DAddress): Promise<DCommentDataQueryResult[]>;
+  mainAsync(address: DAddress): Promise<DCommentQueryResult>;
 }
 
-export interface DCommentDataQueryResult {
+export interface DCommentQueryResult {
+  next?: DAddress;
+  prev?: DAddress;
+  title?: string;
+  data: DCommentOneData[];
+}
+export interface DCommentOneData {
   /** 原始文字 */
   w: string;
   /** level,在樣式上可應用 */
@@ -13,6 +19,6 @@ export interface DCommentDataQueryResult {
   idx: number;
   cnt0?: number;
   iReg?: number;
-  parent?: DCommentDataQueryResult;
-  children?: DCommentDataQueryResult[];
+  parent?: DCommentOneData;
+  children?: DCommentOneData[];
 }

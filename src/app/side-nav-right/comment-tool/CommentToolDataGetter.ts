@@ -1,34 +1,57 @@
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { ApiSc } from 'src/app/fhl-api/ApiSc';
+import { ApiSc, DApiScResult } from 'src/app/fhl-api/ApiSc';
 import { range_linq } from 'src/app/linq-like/Range_linq';
 import { NumberStringGet, NumberType } from './NumberStringGet';
-import { deepStrictEqual } from 'assert';
-import { ICommentToolDataGetter, DCommentDataQueryResult } from './comment-tool-interfaces';
+import { ICommentToolDataGetter, DCommentOneData, DCommentQueryResult } from './comment-tool-interfaces';
+import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 
 
 export class CommentToolDataGetter implements ICommentToolDataGetter {
-  async mainAsync(address: DAddress): Promise<DCommentDataQueryResult[]> {
+
+  async mainAsync(address: DAddress): Promise<DCommentQueryResult> {
     const re1 = await this.getDataFromApi(address);
-    // console.log(JSON.stringify(re1));
+    // console.log(re1);
+    const { reNext, rePrev } = this.getNextAndPrev(re1);
+    const reTitle =  re1.record[0].title;
+    const reData = this.getData(re1);
 
-    const str = re1.record[0].com_text;
-
-    const r1 = str.replace(/\r/g, '').split('\n');
-
-    const re2 = this.tryClassifyEachLine(r1);
-    console.log(re2);
-
-    const re3 = this.mergeNormalText(re2);
-    console.log(re3);
-
-    const re4 = this.createTree(re3);
-    console.log(re4);
-
-    return re4;
+    return {
+      title: reTitle,
+      next: reNext,
+      prev: rePrev,
+      data: reData
+    };
   }
+  private getData(re1: DApiScResult) {
+    const str = re1.record[0].com_text;
+    const r1 = str.replace(/\r/g, '').split('\n');
+    const re2 = this.tryClassifyEachLine(r1);
+    // console.log(re2);
+    const re3 = this.mergeNormalText(re2);
+    // console.log(re3);
+    const reData = this.createTree(re3);
+    // console.log(reData);
+    return reData;
+  }
+
+  private getNextAndPrev(re1: DApiScResult) {
+    const fnCvt = a1 => {
+      const r1 = new BookNameToId().cvtName2Id(a1.engs);
+      const r2: DAddress = {
+        book: r1,
+        chap: a1.chap,
+        verse: a1.sec,
+      };
+      return r2;
+    };
+    const reNext = re1.next !== undefined ? fnCvt(re1.next) : undefined;
+    const rePrev = re1.prev !== undefined ? fnCvt(re1.prev) : undefined;
+    return { reNext, rePrev };
+  }
+
   private createTree(re3) {
-    const re4: DCommentDataQueryResult[] = [];
-    let preLast: DCommentDataQueryResult;
+    const re4: DCommentOneData[] = [];
+    let preLast: DCommentOneData;
     for (let i1 = 0; i1 < re3.length; i1++) {
       const it1 = re3[i1];
       if (it1.idxReg === undefined) {
@@ -54,7 +77,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
 
       if (preLast.iReg !== it1.idxReg && fnIsSpecialEqual() === false) {
         if (preLast.cnt0 < it1.cntZero) {
-          const r1: DCommentDataQueryResult = {
+          const r1: DCommentOneData = {
             w: it1.w, idx: i1, cnt0: it1.cntZero, iReg: it1.idxReg, children: [],
             parent: preLast, level: preLast.level + 1
           };
@@ -73,7 +96,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
             continue;  // case 5 (回去向上找，但找到根了)
           }
 
-          const r1: DCommentDataQueryResult = {
+          const r1: DCommentOneData = {
             w: it1.w,
             idx: i1, cnt0: it1.cntZero, iReg: it1.idxReg, children: [],
             parent: itFind.parent, level: itFind.level
@@ -83,7 +106,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
           continue; // case 4  (回去向上找)
         }
       } else {
-        const r1: DCommentDataQueryResult = {
+        const r1: DCommentOneData = {
           w: it1.w,
           idx: i1, cnt0: it1.cntZero, iReg: it1.idxReg, children: [],
           parent: preLast.parent, level: preLast.level

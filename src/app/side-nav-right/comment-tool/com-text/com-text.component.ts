@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { DCommentDataQueryResult } from '../comment-tool-interfaces';
+import { DCommentOneData } from '../comment-tool-interfaces';
 import { DialogRefOpenor } from '../../cbol-dict/info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { DAddress } from 'src/app/bible-address/DAddress';
@@ -14,7 +14,7 @@ import { DialogOrigDictOpenor } from '../../cbol-dict/info-dialog/DialogOrigDict
   styleUrls: ['./com-text.component.css']
 })
 export class ComTextComponent implements OnInit, OnChanges {
-  @Input() data: DCommentDataQueryResult;
+  @Input() data: DCommentOneData;
   @Input() address: DAddress;
   data2: DDataShow[];
   constructor(private dialog: MatDialog) { }

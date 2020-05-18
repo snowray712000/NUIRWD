@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
-import { ICommentToolDataGetter } from './comment-tool-interfaces';
+import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
 
 @Component({
   selector: 'app-comment-tool',
@@ -9,9 +9,12 @@ import { ICommentToolDataGetter } from './comment-tool-interfaces';
   styleUrls: ['./comment-tool.component.css']
 })
 export class CommentToolComponent implements OnInit {
-  address: DAddress = { book: 1, chap: 1, verse: 2};
-  data: any;
+  address: DAddress = { book: 1, chap: 1, verse: 2 };
+  data: DCommentOneData[];
   dataQ: ICommentToolDataGetter;
+  title: string;
+  next: DAddress;
+  prev: DAddress;
   constructor(private detector: ChangeDetectorRef) {
     this.dataQ = new CommentToolDataGetter();
   }
@@ -19,8 +22,30 @@ export class CommentToolComponent implements OnInit {
   ngOnInit() {
     this.getData();
   }
+  onClickPrev() {
+    if (this.prev !== undefined) {
+      this.address = this.prev;
+      this.getData();
+    }
+  }
+  onClickNext() {
+    if (this.next !== undefined) {
+      this.address = this.next;
+      this.getData();
+    }
+  }
   async getData() {
-    this.data = await this.dataQ.mainAsync(this.address);
+    const r1 = await this.dataQ.mainAsync(this.address);
+    if (this.address.chap === 0) {
+      this.title = '書卷背景';
+    } else {
+      this.title = r1.title;
+    }
+    // console.log(r1);
+
+    this.next = r1.next;
+    this.prev = r1.prev;
+    this.data = r1.data;
     this.detector.markForCheck();
   }
 }
