@@ -10,7 +10,8 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
 
   async mainAsync(address: DAddress): Promise<DCommentQueryResult> {
     const re1 = await this.getDataFromApi(address);
-    // console.log(re1);
+    console.log(re1);
+
     const { reNext, rePrev } = this.getNextAndPrev(re1);
     const reTitle =  re1.record[0].title;
     const reData = this.getData(re1);
@@ -66,10 +67,10 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
       }
       const fnIsSpecialEqual = () => {
         const iRegLimit = 10 - 4; // idx can 6,7,8,9
-        if (preLast.iReg < iRegLimit || it1.idxReg < iRegLimit) {
+        if (it1.idxReg < iRegLimit) {
           return false;
         }
-        if (Math.abs(preLast.cnt0 - it1.cntZero) <= 2) {
+        if (Math.abs(preLast.cnt0 - it1.cntZero) === 0 ) {
           return true;
         }
         return false;
@@ -111,7 +112,11 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
           idx: i1, cnt0: it1.cntZero, iReg: it1.idxReg, children: [],
           parent: preLast.parent, level: preLast.level
         };
-        preLast.parent.children.push(r1);
+        if ( preLast.parent === undefined ){
+          re4.push(r1);
+        } else {
+          preLast.parent.children.push(r1);
+        }
         preLast = r1;
         continue; // case 3 (旁邊一樣的)
       }

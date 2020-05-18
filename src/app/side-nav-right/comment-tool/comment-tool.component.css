@@ -5,14 +5,14 @@
   text-align: justify;
 }
 .tools {
-  position: fixed;
+  /* position: fixed; */
   height: 36px;
   top: 0px;
   z-index: 3;
 }
 
 .content {
-  position: absolute;
+  /* position: absolute; */
   top: 40px;
   margin-right: 0.5em;
 }

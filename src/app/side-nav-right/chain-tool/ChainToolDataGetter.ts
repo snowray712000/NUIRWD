@@ -21,7 +21,7 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
   }
   private parseOneLineAndGenerateRefenceDescription(a1: string) {
     const r1 = new SplitStringByRegex().main(a1, /#[^\|]+\|/g);
-    console.log(r1); // data: (3) [" ", "# Joh 1:18; Col 1:15; 1Ti 1:17; 6:16; Heb 11:27|", ""]
+    // console.log(r1); // data: (3) [" ", "# Joh 1:18; Col 1:15; 1Ti 1:17; 6:16; Heb 11:27|", ""]
     const re3 = r1.data.filter(aa1 => aa1.length !== 0).map(aa1 => {
       const r2 = /#([^\|]+)\|/.exec(aa1);
       if (r2 === null) {

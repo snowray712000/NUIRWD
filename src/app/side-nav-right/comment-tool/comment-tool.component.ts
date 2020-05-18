@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
+import { IEventVerseChanged } from '../cbol-dict/cbol-dict.component';
+import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 
 @Component({
   selector: 'app-comment-tool',
@@ -15,12 +17,22 @@ export class CommentToolComponent implements OnInit {
   title: string;
   next: DAddress;
   prev: DAddress;
+  eventVerseChanged: IEventVerseChanged;
   constructor(private detector: ChangeDetectorRef) {
     this.dataQ = new CommentToolDataGetter();
+    this.eventVerseChanged = new EventVerseChanged();
   }
 
   ngOnInit() {
-    this.getData();
+    this.eventVerseChanged.changed$.subscribe(async arg => {
+      console.log(arg);
+      await this.onVerseChanged(arg);
+    });
+  }
+  private async onVerseChanged(arg: DAddress) {
+    this.address = arg;
+    await this.getData();
+    this.detector.markForCheck();
   }
   onClickPrev() {
     if (this.prev !== undefined) {
@@ -46,6 +58,6 @@ export class CommentToolComponent implements OnInit {
     this.next = r1.next;
     this.prev = r1.prev;
     this.data = r1.data;
-    this.detector.markForCheck();
+
   }
 }

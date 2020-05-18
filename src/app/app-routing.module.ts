@@ -14,9 +14,9 @@ const urlDefault = 'bible/Ro1:1-5.太3:1';
 // const urlDefault = 'bible/Ro1:1-2,3-5,2:1-3:1.太3:1', pathMatch: 'full'; // qsb-api 還沒修好
 const routes: Routes = [
   { path: '', redirectTo: urlDefault, pathMatch: 'full' },
-  { path: 'bible/:book/:ichap/:isec', component: OneVerseComponent },
+  // { path: 'bible/:book/:ichap/:isec', component: OneVerseComponent },
   { path: 'bible/:book/:ichap', component: OneVerseComponent },
-  // { path: 'bible/:description', component: RwdFramesetComponent },
+  { path: 'bible/:description', component: RwdFramesetComponent },
   // { path: 'bible/:description', component: CbolDictComponent },
   // { path: 'bible/:description', component: CbolParsingComponent},
   // { path: 'bible/:description', component: ChainToolComponent},

@@ -19,7 +19,7 @@ export class EventVerseChanged implements IEventVerseChanged {
           this.ob.next({ book: r1.book, chap: r1.chap, verse: r1.sec });
         });
       } else {
-        this.ob.next({ book: 7, chap: 2, verse: 1 });
+        this.ob.next({ book: 45, chap: 1, verse: 1 });
       }
     });
   }
