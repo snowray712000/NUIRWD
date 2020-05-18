@@ -15,7 +15,7 @@ export class AbvService implements IAbvService {
     if (AbvService.cache !== undefined) {
       return of(AbvService.cache);
     }
-    const url = 'http://bkbible.fhl.net/json/abv.php';
+    const url = 'http://bible.fhl.net/json/abv.php';
     return ajax.getJSON<IAbvResult>(url).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),

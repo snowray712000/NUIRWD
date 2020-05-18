@@ -9,7 +9,7 @@ import { ajax } from 'rxjs/ajax';
 export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
     this.defaultValue(args);
-    const url = 'http://bkbible.fhl.net/json/qsb.php';
+    const url = 'http://bible.fhl.net/json/qsb.php';
     return ajax.getJSON<QsbResult>(url + this.generateQueryString(args)).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),

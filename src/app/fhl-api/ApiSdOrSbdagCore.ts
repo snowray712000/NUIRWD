@@ -15,7 +15,7 @@ export class ApiSdOrSbdagCore {
     const N = arg.isOldTestment !== undefined ? (arg.isOldTestment ? 1 : 0) : 0;
     const param = `k=${arg.sn}&gb=${gb}&N=${N}`;
     // const param = `k=${arg.sn}`;
-    const url = `http://bkbible.fhl.net/json/${this.sdOrSbdag}.php?${param}`;
+    const url = `http://bible.fhl.net/json/${this.sdOrSbdag}.php?${param}`;
     const ob$ = ajax.getJSON<DApiSdResult>(url);
     return ob$;
   }

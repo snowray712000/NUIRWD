@@ -16,7 +16,7 @@ export class ApiSc {
     // const param = `book=${arg.bookId}&engs=${engs}&chap=${arg.address.chap}&sec=${arg.address.verse}&gb=${gb}`;
     const param = `book=${arg.bookId}&engs=${engs}&chap=${arg.address.chap}&sec=${arg.address.verse}&gb=${gb}`;
     // const param = `k=${arg.sn}`;
-    const url = `http://bkbible.fhl.net/json/sc.php?${param}`;
+    const url = `http://bible.fhl.net/json/sc.php?${param}`;
     console.log(url);
     const ob$ = ajax.getJSON<DApiScResult>(url);
     return ob$;

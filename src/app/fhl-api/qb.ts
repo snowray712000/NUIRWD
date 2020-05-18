@@ -13,7 +13,7 @@ export class ApiQb {
     const eng = BibleBookNames.getBookName(bookId, BookNameLang.Matt);
     // `engs=Rom&chap=1&sec=1`;
     const param = `engs=${eng}&chap=${chapId}&sec=${verseId}`;
-    const ob$ = ajax.getJSON<DQbResult>(`https://bkbible.fhl.net/json/qp.php?${param}`);
+    const ob$ = ajax.getJSON<DQbResult>(`https://bible.fhl.net/json/qp.php?${param}`);
     return ob$;
   }
 }

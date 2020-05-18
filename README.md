@@ -13,10 +13,10 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 
 測試時，用下面這個
-ng build --base-href=http://bkbible.fhl.net/NUI/200320a_rwd/
+ng build --base-href=http://bible.fhl.net/NUI/200320a_rwd/
 
 正式發佈時，加上 --prod
-ng build --prod --base-href=http://bkbible.fhl.net/NUI/
+ng build --prod --base-href=http://bible.fhl.net/NUI/
 
 --prod 失敗原因, 還沒有解決方法
 https://matthung0807.blogspot.com/2019/07/angular-7-can-not-determine-module.html
