@@ -1,4 +1,4 @@
-import { DQbResult } from 'src/app/fhl-api/qb';
+import { DQbResult } from 'src/app/fhl-api/ApiQb';
 import { ParsingOneLine } from './ParsingOneLine';
 export class GetWordsFromQbResult {
   private indexRefEachLine: number[];

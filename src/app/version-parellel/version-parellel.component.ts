@@ -2,7 +2,7 @@ import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, 
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { ActivatedRoute } from '@angular/router';
 import { VerseRange } from '../bible-address/VerseRange';
-import { ApiQsb, QsbArgs, QsbResult, OneQsbRecord } from '../fhl-api/qsb';
+import { ApiQsb, QsbArgs, QsbResult, OneQsbRecord } from '../fhl-api/ApiQsb';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { tap, map } from 'rxjs/operators';
 import { IBibleVersionQueryService } from '../fhl-api/IBibleVersionQueryService';
@@ -41,7 +41,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     const routeFrame = new RouteStartedWhenFrame();
     routeFrame.routeTools.verseRange$.subscribe(a1 => {
       this.bibleLink = routeFrame.routeTools.descriptionLast;
-      this.qstr = a1.toStringEnglishShort();
+      this.qstr = a1.toStringChineseShort();
       this.triggerContentsQueryAsync().then(a2 => {
         this.chaps = a2;
       });

@@ -1,5 +1,5 @@
 import { Component, OnInit, PipeTransform, Pipe, ElementRef, AfterViewChecked, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
-import { ApiQsb } from 'src/app/fhl-api/qsb';
+import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';

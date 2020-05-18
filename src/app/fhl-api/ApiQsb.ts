@@ -5,11 +5,13 @@ import { retry, map, tap } from 'rxjs/operators';
 import { URL } from 'url';
 import { IApiQsb } from './IApiQsb';
 import { ajax } from 'rxjs/ajax';
+import { FhlUrl } from './FhlUrl';
 /** 取得經文 */
 export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
     this.defaultValue(args);
-    const url = 'http://bible.fhl.net/json/qsb.php';
+    // const url = 'http://bkbible.fhl.net/json/qsb.php';
+    const url = `${new FhlUrl().getJsonUrl()}qsb.php`;
     return ajax.getJSON<QsbResult>(url + this.generateQueryString(args)).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),

@@ -4,7 +4,8 @@ import { HttpClientModule, HttpClient, HttpResponse } from '@angular/common/http
 import { Injector } from '@angular/core';
 import { appInstance } from '../app.module';
 import { Observable } from 'rxjs';
-import { gTestingAbvResult } from './abv.service';
+import { gTestingAbvResult } from './ApiAbv';
+
 
 export interface ITestingToolHttpClient {
   testBed: TestBedStatic;

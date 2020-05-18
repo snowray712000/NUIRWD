@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input } from '@angular/core';
-import { ApiQb, DQbResult } from 'src/app/fhl-api/qb';
+import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { GetWordsFromQbResult } from './GetWordsFromQbResult';
@@ -15,7 +15,7 @@ import { EventVerseChanged } from './EventVerseChanged';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { VerseAddress } from 'src/app/bible-address/VerseAddress';
-import { ApiQsb } from 'src/app/fhl-api/qsb';
+import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
 import { TextWithSnConvertor, DTextWithSnConvertorResult } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';

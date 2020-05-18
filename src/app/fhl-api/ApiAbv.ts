@@ -4,34 +4,35 @@ import { Observable, of } from 'rxjs';
 import { appInstance } from '../app.module';
 import { ajax } from 'rxjs/ajax';
 import { ajaxGetJSON } from 'rxjs/internal/observable/dom/AjaxObservable';
+import { FhlUrl } from './FhlUrl';
 
-export interface IAbvService {
-  queryAbvPhpOrCache(): Observable<IAbvResult>;
+export interface IApiAbv {
+  queryAbvPhpOrCache(): Observable<DAbvResult>;
 }
-export class AbvService implements IAbvService {
-  private static cache: IAbvResult;
+export class ApiAbv implements IApiAbv {
+  private static cache: DAbvResult;
   constructor() { }
-  public queryAbvPhpOrCache(): Observable<IAbvResult> {
-    if (AbvService.cache !== undefined) {
-      return of(AbvService.cache);
+  public queryAbvPhpOrCache(): Observable<DAbvResult> {
+    if (ApiAbv.cache !== undefined) {
+      return of(ApiAbv.cache);
     }
-    const url = 'http://bible.fhl.net/json/abv.php';
-    return ajax.getJSON<IAbvResult>(url).pipe(
+    // const url = 'http://bkbible.fhl.net/json/abv.php';
+    const url = `${new FhlUrl().getJsonUrl()}abv.php`;
+    return ajax.getJSON<DAbvResult>(url).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),
-      tap(a1 => AbvService.cache = a1),
+      tap(a1 => ApiAbv.cache = a1),
       // tap(a1 => console.log(a1)),
     );
   }
 }
-
-export interface IAbvResult {
+export interface DAbvResult {
   parsing: Date;
   comment: Date;
   record_count: number;
   record: Array<any>;
 }
-export class AbvResult implements IAbvResult {
+export class AbvResult implements DAbvResult {
   parsing: Date;
   comment: Date;
   // tslint:disable-next-line: variable-name

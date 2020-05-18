@@ -1,4 +1,4 @@
-import { AbvService } from './abv.service';
+import { ApiAbv } from './ApiAbv';
 import {  HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
@@ -9,7 +9,7 @@ describe('AbvService', () => {
   });
 
   it('abv.php 值', (done) => {
-    const service = new AbvService();
+    const service = new ApiAbv();
     service.queryAbvPhpOrCache().toPromise().then(a1 => {
 
       expect(a1.record[0].book).toBe('unv');

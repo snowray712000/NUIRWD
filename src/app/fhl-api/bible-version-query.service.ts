@@ -1,20 +1,20 @@
 import { Observable } from 'rxjs';
 import { OneBibleVersion } from './OneBibleVersion';
-import { AbvService, IAbvResult, IAbvService } from './abv.service';
+import { ApiAbv, DAbvResult, IApiAbv } from './ApiAbv';
 import { map, tap } from 'rxjs/operators';
 import { sleep } from '../tools/sleep';
 import { IBibleVersionQueryService } from './IBibleVersionQueryService';
 
 export class BibleVersionQueryService implements IBibleVersionQueryService {
-  private abvAPI: IAbvService;
-  constructor(abvAPI?: IAbvService) {
+  private abvAPI: IApiAbv;
+  constructor(abvAPI?: IApiAbv) {
     this.abvAPI = abvAPI;
   }
   private getDefaultAPI() {
     if (this.abvAPI !== undefined) {
       return this.abvAPI;
     }
-    return new AbvService();
+    return new ApiAbv();
   }
   queryBibleVersionsAsync(): Observable<OneBibleVersion[]> {
     return this.getDefaultAPI().queryAbvPhpOrCache().pipe(
@@ -45,7 +45,7 @@ export class BibleVersionQueryService implements IBibleVersionQueryService {
     return obj.re;
   }
 
-  private convert(a1: IAbvResult): OneBibleVersion[] {
+  private convert(a1: DAbvResult): OneBibleVersion[] {
     let id = 0;
     return a1.record.map(b1 => {
       const r1 = new OneBibleVersion();

@@ -1,4 +1,4 @@
-import { DQbResult } from 'src/app/fhl-api/qb';
+import { DQbResult } from 'src/app/fhl-api/ApiQb';
 import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
 /** 從QbResult的record[0]處理 */
 export class GetLinesFromQbResultOldTestment {

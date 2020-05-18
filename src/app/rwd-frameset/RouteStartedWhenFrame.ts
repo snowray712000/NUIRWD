@@ -45,6 +45,8 @@ export class RouteStartedWhenFrame {
     // 因為 ; 在 angular 的 route 是特殊用途, 所以改 '.'
     const r1 = a1.description.replace(new RegExp('\\.', 'g'), ';');
     this.routeTools.descriptionLast = r1;
+    // console.log(r1);
+
     if (this.isNullOrEmptyVerses(this.routeTools.verseRangeLast)) {
       return VerseRange.fromReferenceDescription(r1, 40);
     } else {

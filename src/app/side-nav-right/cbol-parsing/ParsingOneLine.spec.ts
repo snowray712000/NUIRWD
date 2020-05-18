@@ -1,5 +1,5 @@
 import { ParsingOneLine } from './ParsingOneLine';
-import { ApiQb } from 'src/app/fhl-api/qb';
+import { ApiQb } from 'src/app/fhl-api/ApiQb';
 
 describe('ParsingOneLine', () => {
   it('第1行', () => {

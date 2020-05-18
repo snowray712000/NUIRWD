@@ -2,6 +2,7 @@ import { ajax } from 'rxjs/ajax';
 import { assert } from 'src/app/tools/assert';
 import { Observable } from 'rxjs';
 import { DApiSdResult } from "./DApiSdResult";
+import { FhlUrl } from './FhlUrl';
 export class ApiSdOrSbdagCore {
   constructor(private sdOrSbdag = 'sd') { }
   queryQsbAsync(arg: {
@@ -15,7 +16,8 @@ export class ApiSdOrSbdagCore {
     const N = arg.isOldTestment !== undefined ? (arg.isOldTestment ? 1 : 0) : 0;
     const param = `k=${arg.sn}&gb=${gb}&N=${N}`;
     // const param = `k=${arg.sn}`;
-    const url = `http://bible.fhl.net/json/${this.sdOrSbdag}.php?${param}`;
+    // const url = `http://bkbible.fhl.net/json/${this.sdOrSbdag}.php?${param}`;
+    const url = `${new FhlUrl().getJsonUrl()}${this.sdOrSbdag}.php?${param}`;
     const ob$ = ajax.getJSON<DApiSdResult>(url);
     return ob$;
   }

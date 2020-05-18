@@ -10,7 +10,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
 
   async mainAsync(address: DAddress): Promise<DCommentQueryResult> {
     const re1 = await this.getDataFromApi(address);
-    console.log(re1);
+    // console.log(re1);
 
     const { reNext, rePrev } = this.getNextAndPrev(re1);
     const reTitle =  re1.record[0].title;

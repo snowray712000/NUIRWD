@@ -1,4 +1,4 @@
-import { DQbResult } from 'src/app/fhl-api/qb';
+import { DQbResult } from 'src/app/fhl-api/ApiQb';
 export class GetExpsFromQbResult {
   main(arg: DQbResult): { w: string }[][] {
     const r1 = arg.record[0].exp.replace('\r', ''); // 換行一致用 \n 就好,

@@ -22,7 +22,7 @@ export class ShowMapComponent implements OnInit {
   // get getPhotoLink(): string {
   //   const r1Gb = this.data.isGB ? 'gb=1' : 'gb=0';
   //   const r2Limit = `LIMIT=${this.data.idMap}`;
-  //   return `http://bible.fhl.net/object/sd.php?${r1Gb}&${r2Limit}`;
-  //   // return 'http://bible.fhl.net/object/sd.php?gb=0&LIMIT=1360';
+  //   return `http://bkbible.fhl.net/object/sd.php?${r1Gb}&${r2Limit}`;
+  //   // return 'http://bkbible.fhl.net/object/sd.php?gb=0&LIMIT=1360';
   // }
 }

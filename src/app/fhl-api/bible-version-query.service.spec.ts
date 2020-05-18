@@ -1,6 +1,6 @@
 import { BibleVersionQueryService } from './bible-version-query.service';
 import { of } from 'rxjs';
-import { AbvService, IAbvResult, AbvResult } from './abv.service';
+import { ApiAbv, DAbvResult, AbvResult } from './ApiAbv';
 import { map } from 'rxjs/operators';
 import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
 function test01() {
@@ -38,7 +38,7 @@ function test01() {
     r1.parsing = new Date(a1.parsing);
     r1.record = a1.record;
     r1.record_count = r1.record.length;
-    return r1 as IAbvResult;
+    return r1 as DAbvResult;
   }));
 }
 
@@ -47,7 +47,7 @@ describe('BibleVersionQueryService', () => {
   });
 
   it('Bible Version Query Service', (done) => {
-    const abv = new AbvService();
+    const abv = new ApiAbv();
     spyOn(abv, 'queryAbvPhpOrCache').and.returnValue(test01());
     const service = new BibleVersionQueryService(abv);
     service.queryBibleVersionsAsync().toPromise().then(a1 => {

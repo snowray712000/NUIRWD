@@ -3,6 +3,7 @@ import { ajax } from 'rxjs/ajax';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { DAddress } from '../bible-address/DAddress';
+import { FhlUrl } from './FhlUrl';
 export interface DApiScArg {
   bookId: number;
   address: DAddress;
@@ -16,8 +17,9 @@ export class ApiSc {
     // const param = `book=${arg.bookId}&engs=${engs}&chap=${arg.address.chap}&sec=${arg.address.verse}&gb=${gb}`;
     const param = `book=${arg.bookId}&engs=${engs}&chap=${arg.address.chap}&sec=${arg.address.verse}&gb=${gb}`;
     // const param = `k=${arg.sn}`;
-    const url = `http://bible.fhl.net/json/sc.php?${param}`;
-    console.log(url);
+
+    // const url = `http://bkbible.fhl.net/json/sc.php?${param}`;
+    const url = `${new FhlUrl().getJsonUrl()}sc.php?${param}`;
     const ob$ = ajax.getJSON<DApiScResult>(url);
     return ob$;
   }

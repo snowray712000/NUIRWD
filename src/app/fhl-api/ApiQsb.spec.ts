@@ -1,5 +1,5 @@
 import { initialTestBedAndAppInstance } from './initialTestBedAndAppInstance';
-import { ApiQsb, QsbArgs } from './qsb';
+import { ApiQsb, QsbArgs } from './ApiQsb';
 import { VerseRange } from '../bible-address/VerseRange';
 
 describe('API-qsb.php', () => {
