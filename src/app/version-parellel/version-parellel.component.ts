@@ -40,11 +40,13 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
     const routeFrame = new RouteStartedWhenFrame();
     routeFrame.routeTools.verseRange$.subscribe(a1 => {
-      this.bibleLink = routeFrame.routeTools.descriptionLast;
-      this.qstr = a1.toStringChineseShort();
-      this.triggerContentsQueryAsync().then(a2 => {
-        this.chaps = a2;
-      });
+      console.log(this.versions);
+
+      // this.bibleLink = routeFrame.routeTools.descriptionLast;
+      // this.qstr = a1.toStringChineseShort();
+      // this.triggerContentsQueryAsync().then(a2 => {
+      //   this.chaps = a2;
+      // });
     });
   }
 

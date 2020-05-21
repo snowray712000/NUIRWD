@@ -16,10 +16,10 @@ export class RouteStartedWhenFrame {
    * @param router 用來 navigate 的
    */
   constructor(route: ActivatedRoute = null, router: Router = null) {
-    if (router != null) {
+    if (router != null && RouteStartedWhenFrame.routerStatic === undefined) {
       RouteStartedWhenFrame.routerStatic = router;
     }
-    if (route != null) {
+    if (route != null && RouteStartedWhenFrame.routeStatic === undefined) {
       RouteStartedWhenFrame.routeStatic = route;
       this.descriptLastAndVerseLast(route);
     }

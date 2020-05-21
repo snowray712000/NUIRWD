@@ -41,6 +41,7 @@ import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/m
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
 import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
+import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 const entryComponents = new Array<any>(
   OneChapComponent,
   BibleSelectionsComponent,
@@ -70,6 +71,7 @@ const entryComponents = new Array<any>(
     ChainToolComponent,
     CommentToolComponent,
     ComTextComponent,
+    OneVerComponent,
   ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
   entryComponents,
   imports: [

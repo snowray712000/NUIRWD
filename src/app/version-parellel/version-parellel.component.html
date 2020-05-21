@@ -1,7 +1,10 @@
 <div (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
      [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
      <span *ngIf="versions.length === 0">請選擇聖經版本</span>
-      <app-one-chap fxFlex="100%" *ngFor="let item of chaps"
+
+     <app-one-ver fxFlex="100%" *ngFor="let item of versions">
+     </app-one-ver>
+      <!-- <app-one-chap fxFlex="100%" *ngFor="let item of chaps"
                     [chapQueryor]="item">
-      </app-one-chap>
+      </app-one-chap> -->
 </div>

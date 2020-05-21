@@ -1,0 +1,11 @@
+<p>one-ver works!</p>
+<div>
+  <div *ngFor="let it1 of data">
+    <span class='address'>
+      {{getAddressShow(it1.address)}}
+    </span>
+    <span *ngFor="let it2 of it1.children" [class.orig]="it2.sn!==undefined">
+      {{it2.w}}
+    </span>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+.orig{
+  cursor: pointer;
+  color: darkturquoise;
+}
+.address{
+  color: gray;
+  font-size: small;
+}
