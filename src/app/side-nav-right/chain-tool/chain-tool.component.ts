@@ -19,6 +19,9 @@ export class ChainToolComponent implements OnInit {
   data: { w: string, des?: string }[][];
   address: DAddress = { book: 1, chap: 3, verse: 6 };
   eventVerseChanged: IEventVerseChanged;
+  next: DAddress;
+  prev: DAddress;
+  title: string;
   constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) {
     this.eventVerseChanged = new EventVerseChanged();
   }
@@ -31,9 +34,25 @@ export class ChainToolComponent implements OnInit {
      await this.onVerseChanged(arg);
     });
   }
+  onClickPrev() {
+    if (this.prev !== undefined) {
+      this.onVerseChanged(this.prev);
+    }
+  }
+  onClickNext() {
+    if (this.next !== undefined) {
+      this.address = this.next;
+      this.onVerseChanged(this.next);
+    }
+  }
+
   private async onVerseChanged(arg: DAddress) {
     this.address = arg;
-    this.data = await new ChainToolDataGetter().mainAsync(this.address);
+    const re = await new ChainToolDataGetter().mainAsync(this.address);
+    this.prev = re.prev;
+    this.next = re.next;
+    this.title = re.title;
+    this.data = re.data;
     this.detectChange.markForCheck();
   }
 }

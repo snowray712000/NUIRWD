@@ -3,7 +3,7 @@ import { ApiSc, DApiScResult } from 'src/app/fhl-api/ApiSc';
 import { range_linq } from 'src/app/linq-like/Range_linq';
 import { NumberStringGet, NumberType } from './NumberStringGet';
 import { ICommentToolDataGetter, DCommentOneData, DCommentQueryResult } from './comment-tool-interfaces';
-import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
+import { ScApiNextPrevGetter } from '../../fhl-api/ScApiNextPrevGetter';
 
 
 export class CommentToolDataGetter implements ICommentToolDataGetter {
@@ -12,7 +12,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
     const re1 = await this.getDataFromApi(address);
     // console.log(re1);
 
-    const { reNext, rePrev } = this.getNextAndPrev(re1);
+    const { reNext, rePrev } = new ScApiNextPrevGetter().getNextAndPrev(re1);
     const reTitle =  re1.record[0].title;
     const reData = this.getData(re1);
 
@@ -27,28 +27,15 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
     const str = re1.record[0].com_text;
     const r1 = str.replace(/\r/g, '').split('\n');
     const re2 = this.tryClassifyEachLine(r1);
-    // console.log(re2);
+    console.log(re2);
     const re3 = this.mergeNormalText(re2);
-    // console.log(re3);
+    console.log(re3);
     const reData = this.createTree(re3);
     // console.log(reData);
     return reData;
   }
 
-  private getNextAndPrev(re1: DApiScResult) {
-    const fnCvt = a1 => {
-      const r1 = new BookNameToId().cvtName2Id(a1.engs);
-      const r2: DAddress = {
-        book: r1,
-        chap: a1.chap,
-        verse: a1.sec,
-      };
-      return r2;
-    };
-    const reNext = re1.next !== undefined ? fnCvt(re1.next) : undefined;
-    const rePrev = re1.prev !== undefined ? fnCvt(re1.prev) : undefined;
-    return { reNext, rePrev };
-  }
+
 
   private createTree(re3) {
     const re4: DCommentOneData[] = [];

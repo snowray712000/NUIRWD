@@ -2,3 +2,15 @@
   cursor: pointer;
   color: blue;
 }
+.btn{
+  cursor: pointer;
+  /* background-color: crimson; */
+  color: red;
+  background-color: lightpink;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  border-width: 1px;
+}
+.title{
+  color: green;
+}

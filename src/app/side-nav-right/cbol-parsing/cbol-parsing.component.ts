@@ -117,7 +117,7 @@ export class CbolParsingComponent implements OnInit {
     const r1 = new VerseRange();
     r1.add(new VerseAddress(bk, ch, vr));
     // this.thisVerseDescription = r1.toStringChineseShort();
-    const qstr = r1.toStringEnglishShort();
+    const qstr = r1.toStringChineseShort();
 
     const r3 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
     // console.log(r3.record[0].bible_text);

@@ -3,10 +3,10 @@ import { DCommentOneData } from '../comment-tool-interfaces';
 import { DialogRefOpenor } from '../../cbol-dict/info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { ReferenceFinder, DReferenceFinderOneResult } from './ReferenceFinder';
-import { FixDesDefaultBookChap } from './FixDesDefaultBookChap';
-import { OrigSNHorSNGFinder } from './OrigSNHorSNGFinder';
+import { DReferenceFinderOneResult } from './ReferenceFinder';
 import { DialogOrigDictOpenor } from '../../cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { ReferenceAndOrigFinderUsingAtCommentTool } from './ReferenceAndOrigFinderUsingAtCommentTool';
+import { DCommonetDataShow } from "./DCommonetDataShow";
 
 @Component({
   selector: 'app-com-text',
@@ -16,27 +16,14 @@ import { DialogOrigDictOpenor } from '../../cbol-dict/info-dialog/DialogOrigDict
 export class ComTextComponent implements OnInit, OnChanges {
   @Input() data: DCommentOneData;
   @Input() address: DAddress;
-  data2: DDataShow[];
+  data2: DCommonetDataShow[];
   constructor(private dialog: MatDialog) { }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     this.dataToData2();
   }
   private dataToData2() {
-    const fixer = new FixDesDefaultBookChap(this.address);
-    const re = new ReferenceFinder({ fixDescriptor: fixer }).main(this.data.w);
-
-    const re2: DDataShow[] = [];
-    for (const it1 of re) {
-      if (it1.des !== undefined) {
-        re2.push(it1);
-      } else {
-        const r2 = new OrigSNHorSNGFinder().main(it1.w);
-        for (const it2 of r2) {
-          re2.push(it2);
-        }
-      }
-    }
-    this.data2 = re2;
+    this.data2 = new ReferenceAndOrigFinderUsingAtCommentTool()
+    .main(this.data.w, this.address);
   }
 
   ngOnInit() {
@@ -57,11 +44,5 @@ export class ComTextComponent implements OnInit, OnChanges {
   }
 }
 
-interface DDataShow {
-  w: string;
-  des?: string;
-  sn?: number;
-  isOld?: boolean;
-}
 
 

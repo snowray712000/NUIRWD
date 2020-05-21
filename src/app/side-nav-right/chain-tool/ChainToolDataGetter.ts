@@ -1,23 +1,29 @@
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
-import { IChainToolDataGetter } from './chain-tool-interfaces';
+import { IChainToolDataGetter, DChainToolDataResult } from './chain-tool-interfaces';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { ApiSc } from '../../fhl-api/ApiSc';
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { FixDesDefaultBookChap } from '../comment-tool/com-text/FixDesDefaultBookChap';
+import { ScApiNextPrevGetter } from 'src/app/fhl-api/ScApiNextPrevGetter';
 export class ChainToolDataGetter implements IChainToolDataGetter {
+  reNext: DAddress;
+  rePrev: DAddress;
+  title: string;
   constructor() {
   }
-  async mainAsync(address: DAddress): Promise<{
-    w: string;
-    des?: string;
-  }[][]> {
+  async mainAsync(address: DAddress): Promise<DChainToolDataResult> {
     const re1 = await this.getChainDataFromApi(address);
     const re2 = re1.replace(/\r/g, '').split('\n');
     const re3 = re2.map(a1 => this.parseOneLineAndGenerateRefenceDescription(a1));
     this.fixReferenceNoBookNameOrChapOrErrorFormat(address, re3);
-    return re3;
+    return {
+      next: this.reNext,
+      prev: this.rePrev,
+      title: this.title,
+      data: re3
+    }
   }
   private parseOneLineAndGenerateRefenceDescription(a1: string) {
     const r1 = new SplitStringByRegex().main(a1, /#[^\|]+\|/g);
@@ -60,6 +66,12 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
   }
   private async getChainDataFromApi(address: DAddress) {
     const r1 = await new ApiSc().queryScAsync({ bookId: 4, address }).toPromise();
+    console.log(r1);
+    const { reNext, rePrev } = new ScApiNextPrevGetter().getNextAndPrev(r1);
+    this.reNext = reNext;
+    this.rePrev = rePrev;
+    this.title = r1.record[0].title;
+
     const re1 = r1.record[0].com_text;
     return re1;
   }

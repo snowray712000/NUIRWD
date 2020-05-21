@@ -17,7 +17,7 @@ export class ApiAbv implements IApiAbv {
       return of(ApiAbv.cache);
     }
     // const url = 'http://bkbible.fhl.net/json/abv.php';
-    const url = `${new FhlUrl().getJsonUrl()}abv.php`;
+    const url = `${new FhlUrl().getJsonUrl()}uiabv.php`;
     return ajax.getJSON<DAbvResult>(url).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),
