@@ -26,10 +26,10 @@ export class VerseRangeToString {
         const r2 = a1.map(a2 => {
           const vr1 = a2[0];
           if (a2.length === 1) {
-            return `${vr1.sec}`;
+            return `${vr1.verse}`;
           } else {
             const vr2 = a2[a2.length - 1];
-            return `${vr1.sec}-${vr2.sec}`;
+            return `${vr1.verse}-${vr2.verse}`;
           }
         }).join(',');
         return `${chap}:${r2}`; // case 1
@@ -40,18 +40,18 @@ export class VerseRangeToString {
         if (a2.length > 1) {
           const vr2 = a2[a2.length - 1];
           if (vr1.chap !== vr2.chap) {
-            return `${chap}:${vr1.sec}-${vr2.chap}:${vr2.sec}`; // case 3
+            return `${chap}:${vr1.verse}-${vr2.chap}:${vr2.verse}`; // case 3
           } else {
-            if (vr1.sec === 1 && vr2.sec === getVerseCount(id, chap)) {
+            if (vr1.verse === 1 && vr2.verse === getVerseCount(id, chap)) {
               if (getChapCount(id) === 1) {
                 return ''; // 此書若只有一章, 連1都不用
               }
               return `${chap}`; // case 2 special, 約二整章
             }
-            return `${chap}:${vr1.sec}-${vr2.sec}`; // case 2
+            return `${chap}:${vr1.verse}-${vr2.verse}`; // case 2
           }
         } else {
-          return `${chap}:${vr1.sec}`; // case 4
+          return `${chap}:${vr1.verse}`; // case 4
         }
       }
     }).join(';');
@@ -130,14 +130,14 @@ export class VerseRangeToString {
   }
   private isContinueVerse(vr1: VerseAddress, vr2: VerseAddress) {
     if (vr1.chap === vr2.chap) {
-      if (vr1.sec + 1 === vr2.sec) {
+      if (vr1.verse + 1 === vr2.verse) {
         return true;
       } else {
         return false;
       }
     } else {
-      if (vr1.chap + 1 === vr2.chap && vr2.sec === 1) {
-        if (getVerseCount(vr1.book, vr1.chap) === vr1.sec) {
+      if (vr1.chap + 1 === vr2.chap && vr2.verse === 1) {
+        if (getVerseCount(vr1.book, vr1.chap) === vr1.verse) {
           return true;
         } else {
           return false;

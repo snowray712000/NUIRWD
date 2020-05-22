@@ -40,7 +40,7 @@ export class CbolDictComponent implements OnInit, AfterViewChecked {
 
     this.thisVerseAddress = new VerseAddress(40, 1, 1);
     this.verseChanged$ = {
-      changed$: of({ book: this.thisVerseAddress.book, chap: this.thisVerseAddress.chap, verse: this.thisVerseAddress.sec })
+      changed$: of({ book: this.thisVerseAddress.book, chap: this.thisVerseAddress.chap, verse: this.thisVerseAddress.verse })
     };
   }
   ngOnInit() {

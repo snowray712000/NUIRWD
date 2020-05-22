@@ -27,7 +27,7 @@ export class OneVerseComponent implements OnChanges, OnInit {
   private get ver(): number { return this.address === undefined ? 0 : this.address.ver; }
   private get book(): number { return this.address === undefined ? 0 : this.address.book; }
   private get chap(): number { return this.address === undefined ? 0 : this.address.chap; }
-  private get sec(): number { return this.address === undefined ? 0 : this.address.sec; }
+  private get sec(): number { return this.address === undefined ? 0 : this.address.verse; }
 
   private get text(): string {
     return this.content.map(a1 => a1.toString()).join();

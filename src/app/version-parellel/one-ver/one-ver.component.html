@@ -4,7 +4,7 @@
     <span class='address'>
       {{getAddressShow(it1.address)}}
     </span>
-    <span *ngFor="let it2 of it1.children" [class.orig]="it2.sn!==undefined">
+    <span *ngFor="let it2 of it1.children" [class.orig]="it2.sn!==undefined" [class.is-map]="it2.isMap" [class.is-photo]="it2.isPhoto">
       {{it2.w}}
     </span>
   </div>

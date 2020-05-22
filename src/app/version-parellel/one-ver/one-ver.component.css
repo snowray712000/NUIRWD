@@ -1,8 +1,40 @@
-.orig{
+.orig {
   cursor: pointer;
   color: darkturquoise;
 }
-.address{
+.address {
   color: gray;
   font-size: small;
+}
+.is-map {
+  /* text-decoration: underline; */
+}
+.is-photo {
+  /* text-decoration: underline; */
+}
+.is-map::after {
+  /* 一定要有 content */
+  content: "";
+  /* 一定要有 inline-block, 否則height width都無效 */
+  display: inline-block;
+  background-image: url(/assets/site.png);
+  height: 1em;
+  width: 1em;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.is-photo::after {
+  /* 一定要有 content */
+  content: "";
+  /* 一定要有 inline-block, 否則height width都無效 */
+  display: inline-block;
+  background-image: url(/assets/camera.png);
+  height: 1em;
+  width: 1em;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }

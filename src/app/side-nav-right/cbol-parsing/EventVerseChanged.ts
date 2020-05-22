@@ -16,7 +16,7 @@ export class EventVerseChanged implements IEventVerseChanged {
       if (RouteStartedWhenFrame.isAlreadyExistRouteAndRouter()) {
         this.router.routeTools.verseRange$.subscribe(a1 => {
           const r1 = a1.verses[0];
-          this.ob.next({ book: r1.book, chap: r1.chap, verse: r1.sec });
+          this.ob.next({ book: r1.book, chap: r1.chap, verse: r1.verse });
         });
       } else {
         this.ob.next({ book: 45, chap: 1, verse: 1 });
