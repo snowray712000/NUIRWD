@@ -14,6 +14,7 @@ export class BookChapDistinctTool {
   get cntChap(): number {
     return this.addressesOfBookChap.length;
   }
+  /** 傳入一堆 address, 判斷這群有幾卷幾章  */
   constructor(verses: VerseRange) {
     const address: DAddress[] = [];
     for (const it of verses.verses) {

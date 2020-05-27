@@ -3,7 +3,7 @@
   color: darkturquoise;
 }
 .address {
-  color: gray;
+  /* color: gray; */
   font-size: small;
 }
 .is-map {
@@ -37,4 +37,13 @@
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
+}
+.no-break-line {
+  display: inline;
+}
+.text-base {
+  text-align: justify;
+}
+.odd {
+  background-color: whitesmoke;
 }

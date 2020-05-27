@@ -58,6 +58,8 @@ export interface DApiSobOneRecord {
   id: string;
   /** 是不是地點，不是就=0，不是，就是照片 */
   is_site: string;
+  /** 是不是具有地圖 */
+  has_collect: string;
   objpath: string;
   /** 物件座標型態0 點 1 polyline 2 polygon */
   otype: number;
