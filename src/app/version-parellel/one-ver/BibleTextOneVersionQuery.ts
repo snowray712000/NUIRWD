@@ -13,9 +13,9 @@ export class BibleTextOneVersionQuery {
       ver = 'unv';
     }
     const re1 = await this.getTextFromApi(verses, ver);
-    console.log(re1);
+    // console.log(re1);
     const re2 = re1.record.map(a1 => this.findSn(a1));
-    console.log(re2);
+    // console.log(re2);
     const re3 = await this.getPhotoMapFromApi(verses);
     // console.log(re3);
     const map1 = new Map<number, DApiSobOneRecord>();
@@ -50,12 +50,12 @@ export class BibleTextOneVersionQuery {
         map2.set(reg, ky);
       }
     }
-    console.log(map2);
+    // console.log(map2);
     naAll = distinct_linq(naAll).filter(a1 => a1 !== undefined && a1.length !== 0).sort(a1 => -a1.length);
     if (naAll.length > 0) {
       // console.log(naAll);
       regAll = new RegExp(`(?:${naAll.join('|')})`, 'ig');
-      console.log(regAll);
+      // console.log(regAll);
     }
     const re4EachLine = [];
     const keys2 = Array.from(map2.keys());
@@ -98,7 +98,7 @@ export class BibleTextOneVersionQuery {
         children: reThisLine
       });
     }
-    console.log(re4EachLine);
+    // console.log(re4EachLine);
     return re4EachLine;
   }
   private async getPhotoMapFromApi(verses: VerseRange) {

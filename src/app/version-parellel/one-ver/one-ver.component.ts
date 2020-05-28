@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { RouteStartedWhenFrame } from 'src/app/rwd-frameset/RouteStartedWhenFrame';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IsLocalHostDevelopment } from 'src/app/fhl-api/IsLocalHostDevelopment';
 import { SettingShowBibleText } from './SettingShowBibleText';
 import { BibleTextOneVersionQuery } from './BibleTextOneVersionQuery';
+import { DialogOrigDictOpenor } from 'src/app/side-nav-right/cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { MatDialog } from '@angular/material/dialog';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
 
 
 @Component({
@@ -11,18 +14,39 @@ import { BibleTextOneVersionQuery } from './BibleTextOneVersionQuery';
   templateUrl: './one-ver.component.html',
   styleUrls: ['./one-ver.component.css']
 })
-export class OneVerComponent implements OnInit {
-  ver: string = 'unv';
+export class OneVerComponent implements OnInit, OnChanges {
+  @Input() ver: string; // = 'unv';
   data;
-  isShowSn = false;
-  isBreakLineEachVerse = true;
-  settingAddressShow: SettingShowBibleText = new SettingShowBibleText();
-  constructor(private route: ActivatedRoute, private router: Router) {
+  @Input() isShowSn = true;
+  @Input() isBreakLineEachVerse = true;
+  @Input() settingAddressShow: SettingShowBibleText = new SettingShowBibleText();
+  @Input() isShowMapPhoto = true;
+  private verseRange: VerseRange;
+
+  constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
     const routeFrame = new RouteStartedWhenFrame(this.route, this.router);
 
     routeFrame.routeTools.verseRange$.subscribe(async verseRange => {
-      this.data = await new BibleTextOneVersionQuery().mainAsync(verseRange, this.ver);
+      this.verseRange = verseRange;
+      if (this.ver !== undefined) {
+        await this.getDataAsync();
+        this.changeDetector.markForCheck();
+      }
     });
+  }
+  private async getDataAsync() {
+    this.data = await new BibleTextOneVersionQuery().mainAsync(this.verseRange, this.ver);
+  }
+
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    if (this.ver !== undefined) {
+      this.getDataAsync().then(a1 => {
+        this.changeDetector.markForCheck();
+      });
+    }
+  }
+  onClickOrig(it2) {
+    new DialogOrigDictOpenor(this.dialog).showDialog({ sn: it2.sn, isOld: it2.isOld });
   }
   getMapLink(it) {
     let base = '/';

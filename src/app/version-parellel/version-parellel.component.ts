@@ -1,21 +1,14 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
-import { ActivatedRoute } from '@angular/router';
-import { VerseRange } from '../bible-address/VerseRange';
-import { ApiQsb, QsbArgs, QsbResult, OneQsbRecord } from '../fhl-api/ApiQsb';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
-import { tap, map } from 'rxjs/operators';
-import { IBibleVersionQueryService } from '../fhl-api/IBibleVersionQueryService';
-import { IApiQsb } from '../fhl-api/IApiQsb';
 import { IOneChapInitialor } from '../one-chap/IOneChapInitialor';
-import { ShowBase, ShowPureText } from '../one-verse/show-data/ShowBase';
-import { VerseAddress } from '../bible-address/VerseAddress';
-import { IOneVerseInitialor } from '../one-verse/test-data/IOneVerseInitialor';
-import { OneVerseInitialor } from '../one-chap/OneVerseInitialor';
-import { OneChapComponent } from '../one-chap/one-chap.component';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { isArrayEqualLength, isArrayEqual } from "../tools/arrayEqual";
+import { isArrayEqualLength, isArrayEqual } from '../tools/arrayEqual';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
+import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
+import { IOnChangedSettingIsSn } from './version-parellel-interfaces';
+import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
+import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
+
 
 @Component({
   selector: 'app-version-parellel',
@@ -31,10 +24,12 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   private qstr: string;
   private isGb = false;
   private isSn = false;
+  private isMapPhoto = false;
   @Input() versions: Array<number> = [];
   @Input() width: number;
   @ViewChild('baseDiv', { read: ViewContainerRef, static: false }) baseDiv: ViewContainerRef;
-
+  private versAll: OneBibleVersion[];
+  private onChangedSettingIsSn: IOnChangedSettingIsSn;
   constructor(private cr: ComponentFactoryResolver,
     private detectChange: ChangeDetectorRef) {
 
@@ -48,10 +43,36 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
       //   this.chaps = a2;
       // });
     });
+
+    this.bindIsSnOnChangedEvent();
+  }
+  private bindIsSnOnChangedEvent() {
+    this.isSn = IsSnManager.s.getFromLocalStorage();
+    IsSnManager.s.onChangedIsSn$.subscribe(re => {
+      if (this.isSn !== re) {
+        this.isSn = re;
+        this.detectChange.markForCheck();
+      }
+    });
+    this.isMapPhoto = IsMapPhotoManager.s.getFromLocalStorage();
+    IsMapPhotoManager.s.onChangedIsSn$.subscribe(re => {
+      if (this.isMapPhoto !== re) {
+        this.isMapPhoto = re;
+        this.detectChange.markForCheck();
+      }
+    });
   }
 
-  private async triggerContentsQueryAsync() {
-    return await new QueryContents().mainAsync(this.versions, this.qstr, this.isGb, this.isSn);
+  getIsShowSn() {
+    return this.isSn;
+  }
+  getIsBreakLineEachVerse() {
+    return true;
+  }
+  getIsShowMapPhoto() {
+    return this.isMapPhoto;
+  }
+  private async triggerContentsQueryAsync(): Promise<any> {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (!isArrayEqual(changes.versions.previousValue, changes.versions.currentValue)) {
@@ -69,7 +90,10 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
 
   ngOnInit() {
-
+    this.initVersAllAsync();
+  }
+  async initVersAllAsync() {
+    this.versAll = await new BibleVersionQueryService().queryBibleVersionsAsync().toPromise();
   }
 
   calcEachVersionWidths(): number {
@@ -94,6 +118,15 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   onResize(event) {
     this.checkOneVersionPixelAndRerenderIfNeed();
   }
+  getVersInEngs() {
+    if (this.versions === undefined) {
+      return [];
+    }
+    if (this.versAll === undefined) {
+      return this.versions.map(a1 => undefined);
+    }
+    return this.versions.map(a1 => this.versAll[a1].na);
+  }
   ngAfterViewInit(): void {
     this.checkOneVersionPixelAndRerenderIfNeed();
 
@@ -107,74 +140,3 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     return 'column';
   }
 }
-
-interface IQueryContents {
-  mainAsync(iVers: number[], qstr: string, isGb: boolean, isSN: boolean);
-}
-class QueryContents implements IQueryContents {
-  private verQ: IBibleVersionQueryService;
-  private qsbQ: IApiQsb;
-  private iVers: number[];
-  private verEngs: string[]; // out
-  constructor() {
-    this.verQ = new BibleVersionQueryService();
-    this.qsbQ = new ApiQsb();
-  }
-  async mainAsync(iVers: number[], qstr: string, isGb: boolean, isSN: boolean) {
-    this.iVers = iVers;
-    await this.queryVerEngs();
-
-    // [0,2] -> [unv,bbc] -> [QsbResult,QsbResult] -> [ionechapinit,ionechapinit]
-    const initors = this.iVers.map(async (iVer, i) => {
-      const arg: QsbArgs = {
-        qstr,
-        isExistStrong: isSN,
-        isSimpleChinese: isGb,
-        bibleVersion: this.verEngs[i],
-      };
-      return await (this.qsbQ.queryQsbAsync(arg).pipe(
-        // tap(a2 => console.log(a2)),
-        map(a2 => this.cvtQsbResultTo(a2, iVer, arg.bibleVersion)),
-        // tap(a2 => console.log(a2.queryOneChap()[0].content())),
-      ).toPromise());
-    });
-
-    return await Promise.all(initors);
-  }
-  private cvtQsbResultTo(qsb: QsbResult, iVer: number, verEng: string): IOneChapInitialor {
-    // record 轉到 showBase[], 不同的版本, 會差很多, 所以多加一個 verEng
-    return this.getIConvertViaVer(iVer, verEng).main(qsb);
-  }
-  private getIConvertViaVer(iVer: number, verEng: string): IQsbResultToOneChapInitialor {
-    return new ParsingPureText(iVer, verEng);
-  }
-
-
-  private async queryVerEngs() {
-    const r1 = await this.verQ.queryBibleVersionsAsync().toPromise();
-    this.verEngs = this.iVers.map(a1 => r1[a1].na);
-  }
-}
-
-interface IQsbResultToOneChapInitialor {
-  main(qsb: QsbResult): IOneChapInitialor;
-}
-class ParsingPureText implements IQsbResultToOneChapInitialor {
-  private iVer: number;
-  private verEng: string;
-  private book: number;
-  constructor(iver, vereng) {
-    this.iVer = iver;
-    this.verEng = vereng;
-  }
-  main(qsb: QsbResult): IOneChapInitialor {
-    return { queryOneChap: () => qsb.record.map(a1 => this.oneVerse(a1)) };
-  }
-  private oneVerse(obj: OneQsbRecord): IOneVerseInitialor {
-    const r1 = new Array<ShowBase>();
-    r1.push(new ShowPureText(obj.bible_text));
-    const vr = new VerseAddress(this.book, obj.chap, obj.sec, this.iVer);
-    return new OneVerseInitialor(r1, vr);
-  }
-}
-

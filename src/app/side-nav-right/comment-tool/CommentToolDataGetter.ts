@@ -27,9 +27,9 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
     const str = re1.record[0].com_text;
     const r1 = str.replace(/\r/g, '').split('\n');
     const re2 = this.tryClassifyEachLine(r1);
-    console.log(re2);
+    // console.log(re2);
     const re3 = this.mergeNormalText(re2);
-    console.log(re3);
+    // console.log(re3);
     const reData = this.createTree(re3);
     // console.log(reData);
     return reData;

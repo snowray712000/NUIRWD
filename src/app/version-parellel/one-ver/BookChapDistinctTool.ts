@@ -23,9 +23,9 @@ export class BookChapDistinctTool {
         address.push(it);
       }
     }
-    console.log(address);
+    // console.log(address);
     const re2 = distinct_linq(address.map(a1 => a1.book));
-    console.log(re2);
+    // console.log(re2);
     this.addressesOfBookChap = address;
     this.booksDistinct = re2;
   }

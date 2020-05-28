@@ -23,8 +23,8 @@ export class RwdFramesetComponent implements AfterViewInit {
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
   constructor(private detectChange: ChangeDetectorRef,
-              private route: ActivatedRoute,
-              private router: Router,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     // tslint:disable-next-line: no-unused-expression
     new RouteStartedWhenFrame(route, router); // 傳值 static 進去
@@ -41,6 +41,7 @@ export class RwdFramesetComponent implements AfterViewInit {
   private bibleVersions: Array<number> = [];
   // html in use
   private verIdsOfInit: number[];
+  private isSnOfInit = false;
   @ViewChild('baseFrame', { read: ViewContainerRef, static: false }) baseFrame: ViewContainerRef;
 
   /** 建構子呼叫 */
@@ -80,6 +81,9 @@ export class RwdFramesetComponent implements AfterViewInit {
     if (this.isMobile()) {
     }
     this.checkWidthAndReRenderIfNeed();
+  }
+  onNotifyChangedIsSn(isChecked) {
+
   }
   ngAfterViewInit(): void {
     this.checkWidthAndReRenderIfNeed();

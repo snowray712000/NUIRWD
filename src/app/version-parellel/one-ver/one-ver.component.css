@@ -17,7 +17,7 @@
   content: "";
   /* 一定要有 inline-block, 否則height width都無效 */
   display: inline-block;
-  background-image: url(/assets/site.png);
+  background-image: url(/NUI/assets/site.png);
   height: 1em;
   width: 1em;
   background-size: contain;
@@ -30,7 +30,7 @@
   content: "";
   /* 一定要有 inline-block, 否則height width都無效 */
   display: inline-block;
-  background-image: url(/assets/camera.png);
+  background-image: url(/NUI/assets/camera.png);
   height: 1em;
   width: 1em;
   background-size: contain;

@@ -66,7 +66,7 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
   }
   private async getChainDataFromApi(address: DAddress) {
     const r1 = await new ApiSc().queryScAsync({ bookId: 4, address }).toPromise();
-    console.log(r1);
+    // console.log(r1);
     const { reNext, rePrev } = new ScApiNextPrevGetter().getNextAndPrev(r1);
     this.reNext = reNext;
     this.rePrev = rePrev;

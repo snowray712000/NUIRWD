@@ -1,4 +1,3 @@
-<p>one-ver works!</p>
 <div class='text-base'>
   <div *ngFor="let it1 of data;let i1=index" [class.odd]="i1%2===1 && isBreakLineEachVerse" [class.no-break-line]="false===isBreakLineEachVerse">
     <span class='address' [style.color]="settingAddressShow.getColor()"
@@ -7,9 +6,9 @@
     </span>
     <span>
       <span *ngFor="let it2 of it1.children">
-        <span *ngIf="isShowSn && it2.sn!==undefined" class='orig'>{{it2.w}}</span>
-        <a *ngIf="it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap"></a>
-        <a *ngIf="it2.isPhoto" [href]="getPhotoLink(it2)" target="_blank" [class.is-photo]="it2.isPhoto"></a>
+        <span *ngIf="isShowSn && it2.sn!==undefined" class='orig' (click)="onClickOrig(it2)">{{it2.w}}</span>
+        <a *ngIf="isShowMapPhoto && it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap"></a>
+        <a *ngIf="isShowMapPhoto && it2.isPhoto" [href]="getPhotoLink(it2)" target="_blank" [class.is-photo]="it2.isPhoto"></a>
         <span *ngIf="it2.sn===undefined && !it2.isMap && !it2.isPhoto">{{it2.w}}</span>
       </span>
     </span>
