@@ -3,8 +3,8 @@
   color: darkturquoise;
 }
 .address {
-  /* color: gray; */
   font-size: small;
+  cursor: pointer;
 }
 .is-map {
   /* text-decoration: underline; */

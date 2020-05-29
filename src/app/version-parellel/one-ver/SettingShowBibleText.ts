@@ -29,10 +29,10 @@ export class SettingShowBibleText {
     return '';
   }
   isAddressBefore() {
-    return false;
+    return true;
   }
   isAddressAfter() {
-    return true;
+    return false;
   }
   getColor() {
     return '#00f';

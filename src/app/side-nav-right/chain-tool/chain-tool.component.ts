@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { DialogSnDictOpenor } from '../cbol-parsing/DialogSnDictOpenor';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,15 +15,25 @@ import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
   templateUrl: './chain-tool.component.html',
   styleUrls: ['./chain-tool.component.css']
 })
-export class ChainToolComponent implements OnInit {
+export class ChainToolComponent implements OnInit, OnChanges {
   data: { w: string, des?: string }[][];
   address: DAddress = { book: 1, chap: 3, verse: 6 };
   eventVerseChanged: IEventVerseChanged;
   next: DAddress;
   prev: DAddress;
   title: string;
+  @Input() addressActived;
   constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) {
     this.eventVerseChanged = new EventVerseChanged();
+  }
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    if (changes.addressActived !== undefined) {
+      if (changes.addressActived.previousValue !== changes.addressActived.currentValue) {
+        this.onVerseChanged(this.addressActived);
+        this.address = this.addressActived;
+      }
+    }
+    // throw new Error("Method not implemented.");
   }
 
   onClickRef(arg) {
@@ -31,18 +41,20 @@ export class ChainToolComponent implements OnInit {
   }
   ngOnInit() {
     this.eventVerseChanged.changed$.subscribe(async arg => {
-     await this.onVerseChanged(arg);
+      await this.onVerseChanged(arg);
     });
   }
+
   onClickPrev() {
     if (this.prev !== undefined) {
       this.onVerseChanged(this.prev);
+      this.address = this.prev;
     }
   }
   onClickNext() {
     if (this.next !== undefined) {
-      this.address = this.next;
       this.onVerseChanged(this.next);
+      this.address = this.next;
     }
   }
 

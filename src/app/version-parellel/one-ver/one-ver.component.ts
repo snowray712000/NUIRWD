@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { RouteStartedWhenFrame } from 'src/app/rwd-frameset/RouteStartedWhenFrame';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IsLocalHostDevelopment } from 'src/app/fhl-api/IsLocalHostDevelopment';
@@ -7,6 +7,7 @@ import { BibleTextOneVersionQuery } from './BibleTextOneVersionQuery';
 import { DialogOrigDictOpenor } from 'src/app/side-nav-right/cbol-dict/info-dialog/DialogOrigDictOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
+import { DAddress } from 'src/app/bible-address/DAddress';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class OneVerComponent implements OnInit, OnChanges {
   @Input() isBreakLineEachVerse = true;
   @Input() settingAddressShow: SettingShowBibleText = new SettingShowBibleText();
   @Input() isShowMapPhoto = true;
+  @Output() clickVerse = new EventEmitter<DAddress>();
   private verseRange: VerseRange;
 
   constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
@@ -36,6 +38,12 @@ export class OneVerComponent implements OnInit, OnChanges {
   }
   private async getDataAsync() {
     this.data = await new BibleTextOneVersionQuery().mainAsync(this.verseRange, this.ver);
+  }
+  onClickVerse(it1, it2) {
+    this.clickVerse.emit(it1.address);
+  }
+  onClickAddress(it1) {
+
   }
 
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
@@ -23,13 +23,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
+import { DAddress } from 'src/app/bible-address/DAddress';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
   styleUrls: ['./cbol-parsing.component.css']
 })
 
-export class CbolParsingComponent implements OnInit {
+export class CbolParsingComponent implements OnInit, OnChanges {
   lines: DLineOnePair[] = [];
   words: DOneRowTable[] = [];
   next: DOneVerse;
@@ -48,11 +49,19 @@ export class CbolParsingComponent implements OnInit {
 
   name2id: IBookNameToId = new BookNameToId();
   eventVerseChanged: IEventVerseChanged;
+  @Input() addressActived: DAddress;
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
 
     this.eventVerseChanged = new EventVerseChanged();
+  }
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    if (changes.addressActived !== undefined) {
+      if (changes.addressActived.currentValue !== changes.addressActived.previousValue) {
+        this.onVerseChanged(this.addressActived.book, this.addressActived.chap, this.addressActived.verse);
+      }
+    }
   }
 
   onClickOrig(en, a1) {

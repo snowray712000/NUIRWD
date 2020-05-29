@@ -11,6 +11,7 @@ import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-shee
 import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteStartedWhenFrame } from './RouteStartedWhenFrame';
+import { DAddress } from '../bible-address/DAddress';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -22,6 +23,7 @@ export class RwdFramesetComponent implements AfterViewInit {
   private iUpdateVerIds: IUpdateBibleVersionIds;
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
+  addressActived: DAddress;
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -32,6 +34,10 @@ export class RwdFramesetComponent implements AfterViewInit {
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
     this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
     this.initAboutVerChangeOrUpdate();
+  }
+  onClickVerse(info: { address: DAddress, ver: string }) {
+    this.addressActived = info.address;
+    this.detectChange.markForCheck();
   }
 
   private media: MediaMatcher;

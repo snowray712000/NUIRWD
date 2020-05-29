@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
@@ -10,13 +10,15 @@ import { DCommonetDataShow } from './com-text/DCommonetDataShow';
 import { DialogRefOpenor } from '../cbol-dict/info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogOrigDictOpenor } from '../cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
+import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
 
 @Component({
   selector: 'app-comment-tool',
   templateUrl: './comment-tool.component.html',
   styleUrls: ['./comment-tool.component.css']
 })
-export class CommentToolComponent implements OnInit {
+export class CommentToolComponent implements OnInit, OnChanges {
   address: DAddress = { book: 1, chap: 1, verse: 2 };
   data: DCommentOneData[];
   dataQ: ICommentToolDataGetter;
@@ -24,9 +26,18 @@ export class CommentToolComponent implements OnInit {
   next: DAddress;
   prev: DAddress;
   eventVerseChanged: IEventVerseChanged;
+  @Input() addressActived: DAddress;
+  private addresses = new VerseRange();
   constructor(private detector: ChangeDetectorRef, private dialog: MatDialog) {
     this.dataQ = new CommentToolDataGetter();
     this.eventVerseChanged = new EventVerseChanged();
+  }
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    if (changes.addressActived !== undefined) {
+      if (changes.addressActived.currentValue !== changes.addressActived.previousValue) {
+        this.onVerseChanged(this.addressActived);
+      }
+    }
   }
 
   ngOnInit() {
@@ -36,9 +47,11 @@ export class CommentToolComponent implements OnInit {
     });
   }
   private async onVerseChanged(arg: DAddress) {
-    this.address = arg;
-    await this.getData();
-    this.detector.markForCheck();
+    if (this.addresses.isIn(arg) === false) {
+      this.address = arg;
+      await this.getData();
+      this.detector.markForCheck();
+    }
   }
   onClickPrev() {
     if (this.prev !== undefined) {
@@ -66,7 +79,6 @@ export class CommentToolComponent implements OnInit {
     } else {
       this.title = r1.title;
     }
-    // console.log(r1);
 
     this.next = r1.next;
     this.prev = r1.prev;
@@ -76,5 +88,8 @@ export class CommentToolComponent implements OnInit {
       const re1 = new ReferenceAndOrigFinderUsingAtCommentTool().main(a1.w, this.address);
       a1.child2 = re1;
     });
+
+
+    this.addresses = new GetAddressRangeFromPrevNext(r1.next, r1.prev).verseRange;
   }
 }

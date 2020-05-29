@@ -1,7 +1,7 @@
 <div class="example-container" #baseFrame (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
   [class.example-is-mobile]="isMobile()">
 
-  <mat-toolbar color="primary" class="example-toolbar">
+  <mat-toolbar color="primary" class='example-toolbar'>
     <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -16,22 +16,20 @@
     </button>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0">
-    <mat-sidenav #snavLeft [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56"
-      [style.min-width.px]="170" (closed)="onClosedLeftSide()">
-      <app-side-nav-left [verIdsOfInit]="verIdsOfInit"
-        (notifyChangedBibleVersionIds)="onChangedBibleVersionIds($event)"
-        (notifyChangedIsSn)="onNotifyChangedIsSn($event)"
-        ></app-side-nav-left>
+  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 64 : 0">
+    <mat-sidenav #snavLeft [mode]="'push'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.min-width.px]="170"
+      (closed)="onClosedLeftSide()">
+      <app-side-nav-left [verIdsOfInit]="verIdsOfInit" (notifyChangedBibleVersionIds)="onChangedBibleVersionIds($event)"
+        (notifyChangedIsSn)="onNotifyChangedIsSn($event)"></app-side-nav-left>
     </mat-sidenav>
     <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()"
-      fixedTopGap="56" [style.width.px]="getSideRightWidth().width" [style.min-width.px]="getSideRightWidth().minWidth"
+      fixedTopGap="64" [style.width.px]="getSideRightWidth().width" [style.min-width.px]="getSideRightWidth().minWidth"
       [style.max-width.px]="getSideRightWidth().maxWidth">
-      <app-side-nav-right></app-side-nav-right>
+      <app-side-nav-right [addressActived]="addressActived"></app-side-nav-right>
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <app-version-parellel [versions]="this.bibleVersions"></app-version-parellel>
+      <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

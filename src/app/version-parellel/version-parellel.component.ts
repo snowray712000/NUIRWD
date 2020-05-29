@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { IOneChapInitialor } from '../one-chap/IOneChapInitialor';
@@ -8,6 +8,7 @@ import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
 import { IOnChangedSettingIsSn } from './version-parellel-interfaces';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
+import { DAddress } from '../bible-address/DAddress';
 
 
 @Component({
@@ -30,12 +31,13 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   @ViewChild('baseDiv', { read: ViewContainerRef, static: false }) baseDiv: ViewContainerRef;
   private versAll: OneBibleVersion[];
   private onChangedSettingIsSn: IOnChangedSettingIsSn;
+  @Output() clickVerse = new EventEmitter<{ address: DAddress, ver: string }>();
   constructor(private cr: ComponentFactoryResolver,
     private detectChange: ChangeDetectorRef) {
 
     const routeFrame = new RouteStartedWhenFrame();
     routeFrame.routeTools.verseRange$.subscribe(a1 => {
-      console.log(this.versions);
+      // console.log(this.versions);
 
       // this.bibleLink = routeFrame.routeTools.descriptionLast;
       // this.qstr = a1.toStringChineseShort();
@@ -132,7 +134,11 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
     const dom = asHTMLElement(this.baseDiv.element.nativeElement);
   }
-
+  onClickVerse(address: DAddress, verEng: string) {
+    // console.log(address);
+    // console.log(verEng);
+    this.clickVerse.emit({ address, ver: verEng });
+  }
   get layoutSet() {
     if (this.isEnoughWidthParellel) {
       return 'row';

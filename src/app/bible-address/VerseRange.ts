@@ -4,11 +4,12 @@ import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQuerySer
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/ts-tools/obj';
 import { BookNameAndId } from '../const/book-name/BookNameAndId';
-import { GetAddresses } from './GetAddresses';
 // import { VersesToString } from './VersesToString';
 import { VerseRangeToString } from 'src/app/bible-address/VerseRangeToString';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { ParsingReferenceDescription } from './ParsingReferenceDescription';
+import { firstOrDefault } from '../linq-like/FirstOrDefault';
+import { DAddress } from './DAddress';
 
 export class VerseRange {
   private bibleVersionQ: IBibleVersionQueryService;
@@ -29,6 +30,14 @@ export class VerseRange {
   // tslint:disable-next-line: no-unnecessary-initializer
   constructor(bibleVersionQ: IBibleVersionQueryService = null) {
     this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
+  }
+  /** 判斷是否在此範圍內, 開發 註釋 時需要 */
+  public isIn(d: DAddress) {
+    if (this.verses.length === 0 || d === undefined) {
+      return false;
+    }
+    const r1 = firstOrDefault(this.verses, a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
+    return r1 !== undefined;
   }
   public add(v: VerseAddress): void { this.verses.push(v); }
   public addRange(v: VerseAddress[]): void { v.forEach(a1 => this.verses.push(a1)); }
