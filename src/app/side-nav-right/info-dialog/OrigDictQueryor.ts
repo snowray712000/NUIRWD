@@ -1,10 +1,10 @@
-import { DOrigDict, IOrigDictQuery } from './cbol-dict.component-interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiSbdag } from '../../fhl-api/ApiSbdag';
 import { ApiSd } from '../../fhl-api/ApiSd';
 import { DApiSdResult } from '../../fhl-api/DApiSdResult';
-export class OrigDictQueryor implements IOrigDictQuery {
+
+export class OrigDictQueryor {
   queryDictAsync(arg: {
     sn: string;
     isOldTestment?: boolean;
@@ -42,4 +42,10 @@ export class OrigDictQueryor implements IOrigDictQuery {
       ver: '浸宣',
     };
   }
+}
+export interface DOrigDict {
+  sn?: string;
+  orig?: string;
+  text?: string;
+  ver?: string;
 }

@@ -1,5 +1,4 @@
-import { DOrigDict } from '../cbol-dict/cbol-dict.component-interfaces';
-import { SplitStringByRegex, SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
+import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 export class TextWithSnConvertor {
   // [0] {<WG1519a>} 或 <WG1519a>
   // [1],[5] WTG or WG

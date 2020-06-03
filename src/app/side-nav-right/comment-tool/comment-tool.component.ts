@@ -2,14 +2,12 @@ import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
-import { IEventVerseChanged } from '../cbol-dict/cbol-dict.component';
-import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
-import { ReferenceFinder } from './com-text/ReferenceFinder';
+import { EventVerseChanged, IEventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 import { ReferenceAndOrigFinderUsingAtCommentTool } from './com-text/ReferenceAndOrigFinderUsingAtCommentTool';
 import { DCommonetDataShow } from './com-text/DCommonetDataShow';
-import { DialogRefOpenor } from '../cbol-dict/info-dialog/DialogRefOpenor';
+import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogOrigDictOpenor } from '../cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { DialogOrigDictOpenor } from '../info-dialog/DialogOrigDictOpenor';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
 

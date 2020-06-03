@@ -1,13 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
-import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
-import { DialogSnDictOpenor } from '../cbol-parsing/DialogSnDictOpenor';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogRefOpenor } from '../cbol-dict/info-dialog/DialogRefOpenor';
-import { matchGlobalWithCapture } from 'src/app/tools/matchGlobalWithCapture';
+import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
 import { ChainToolDataGetter } from './ChainToolDataGetter';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { IEventVerseChanged } from '../cbol-dict/cbol-dict.component';
-import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
+import { EventVerseChanged, IEventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 
 
 @Component({

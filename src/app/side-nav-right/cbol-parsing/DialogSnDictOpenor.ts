@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { InfoDialogComponent } from 'src/app/side-nav-right/cbol-dict/info-dialog/info-dialog.component';
+import { InfoDialogComponent } from 'src/app/side-nav-right/info-dialog/info-dialog.component';
 export class DialogSnDictOpenor {
   /** dialog 在 component 的 建構子傳入, 是個 service */
   constructor(private dialog: MatDialog) {

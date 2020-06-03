@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { DCommentOneData } from '../comment-tool-interfaces';
-import { DialogRefOpenor } from '../../cbol-dict/info-dialog/DialogRefOpenor';
+import { DialogRefOpenor } from '../../info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DReferenceFinderOneResult } from './ReferenceFinder';
-import { DialogOrigDictOpenor } from '../../cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { DialogOrigDictOpenor } from '../../info-dialog/DialogOrigDictOpenor';
 import { ReferenceAndOrigFinderUsingAtCommentTool } from './ReferenceAndOrigFinderUsingAtCommentTool';
 import { DCommonetDataShow } from "./DCommonetDataShow";
 

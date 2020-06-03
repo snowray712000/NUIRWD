@@ -1,4 +1,6 @@
 import { Observable } from 'rxjs';
-export interface IEventVerseChanged {
-  changed$: Observable<{ book: number, chap: number, verse: number }>;
-}
+import { DAddress } from 'src/app/bible-address/DAddress';
+/** 統一在 EventVerseChanged 了 */
+// export interface IEventVerseChanged {
+//   changed$: Observable<DAddress>;
+// }

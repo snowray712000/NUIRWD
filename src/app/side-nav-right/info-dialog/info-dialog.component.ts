@@ -3,13 +3,13 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dial
 import { ApiQsb, QsbArgs } from 'src/app/fhl-api/ApiQsb';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
-import { OrigDictQueryor } from '../OrigDictQueryor';
-import { OrigDictResultPreProcess } from '../OrigDictResultPreProcess';
+import { OrigDictQueryor } from './OrigDictQueryor';
+import { OrigDictResultPreProcess } from './OrigDictResultPreProcess';
 import { DInfoDialogData } from './DInfoDialogData';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
-import { DictSourceVersionsTools } from '../DictSourceVersionsTools';
 import { DialogRefOpenor } from './DialogRefOpenor';
 import { DialogOrigDictOpenor } from './DialogOrigDictOpenor';
+import { DictSourceVersionsTools } from './DictSourceVersionsTools';
 
 export interface IRefContentQ {
   queryContentsAsync(arg: { description: string, engs?: string[] });

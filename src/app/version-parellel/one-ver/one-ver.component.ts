@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IsLocalHostDevelopment } from 'src/app/fhl-api/IsLocalHostDevelopment';
 import { SettingShowBibleText } from './SettingShowBibleText';
 import { BibleTextOneVersionQuery } from './BibleTextOneVersionQuery';
-import { DialogOrigDictOpenor } from 'src/app/side-nav-right/cbol-dict/info-dialog/DialogOrigDictOpenor';
+import { DialogOrigDictOpenor } from 'src/app/side-nav-right/info-dialog/DialogOrigDictOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';

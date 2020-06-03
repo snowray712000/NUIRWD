@@ -29,8 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
-import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.component';
-import { InfoDialogComponent } from './side-nav-right/cbol-dict/info-dialog/info-dialog.component';
+import { InfoDialogComponent } from './side-nav-right/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
 import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
@@ -41,7 +40,6 @@ import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   InfoDialogComponent,
-  CbolDictComponent,
 );
 
 
@@ -55,7 +53,6 @@ const entryComponents = new Array<any>(
     VerSelectComponent,
     SideNavRightComponent,
     CbolParsingComponent,
-    CbolDictComponent,
     BibleSelectionsComponent,
     InfoDialogComponent,
     TextWithSnDirective,

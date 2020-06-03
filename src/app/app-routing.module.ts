@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, RouterState } from '@angular/router';
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { RwdFramesetComponent } from './rwd-frameset/rwd-frameset.component';
-import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.component';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
