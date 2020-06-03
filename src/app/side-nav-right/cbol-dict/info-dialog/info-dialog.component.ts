@@ -84,7 +84,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
       ver: a1
     }).toPromise());
     const r1s = await Promise.all(tasks);
-    // console.log(r1s);
+    console.log(r1s);
 
     const domStr = r1s.map(a1 => {
       return `<span>${this.formTextDivAndDealBr(a1.text)}</span>`;

@@ -7,4 +7,12 @@ export class IsLocalHostDevelopment {
     }
     return IsLocalHostDevelopment._isLocalHost;
   }
+  // tslint:disable-next-line: variable-name
+  private static _isbkbibleHost: boolean;
+  static get isbkbibleHost(): boolean {
+    if (IsLocalHostDevelopment._isbkbibleHost === undefined) {
+      IsLocalHostDevelopment._isbkbibleHost = location.hostname === 'bkbible.fhl.net';
+    }
+    return IsLocalHostDevelopment._isbkbibleHost;
+  }
 }

@@ -3,6 +3,7 @@ import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { GetAddresses } from 'src/app/bible-address/GetAddresses';
 import { SplitStringByRegex } from '../tools/SplitStringByRegex';
 import { VerseAddress } from './VerseAddress';
+import { SmartDescriptEndParsing } from './SmartDescriptEndParsing';
 
 export class ParsingReferenceDescription {
   private static regBookNames: RegExp;
@@ -16,6 +17,12 @@ export class ParsingReferenceDescription {
 
     const reVerse = new VerseRange();
     for (const it of re2) {
+      // 1:2-e
+      const re3 = new SmartDescriptEndParsing().main(it.id, it.des);
+      if (re3 !== undefined) {
+        it.des = re3;
+      }
+
       reVerse.addRange(this.getAddressesOneBook(it));
     }
 
@@ -82,3 +89,5 @@ export class ParsingReferenceDescription {
     }
   }
 }
+
+

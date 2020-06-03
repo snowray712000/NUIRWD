@@ -54,6 +54,8 @@ export class OneVerComponent implements OnInit, OnChanges {
     }
   }
   onClickOrig(it2) {
+    console.log(it2);
+
     new DialogOrigDictOpenor(this.dialog).showDialog({ sn: it2.sn, isOld: it2.isOld });
   }
   getMapLink(it) {

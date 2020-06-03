@@ -30,12 +30,12 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
 
-    <style>
-      .na{
-        color: red;
-        font-weight: bolder;
-      }
-    </style>
+  <style>
+    .na {
+      color: red;
+      font-weight: bolder;
+    }
+  </style>
   <!-- 開始內容 -->
   <p>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
@@ -52,6 +52,18 @@
 </body>
 <script>
   function gHtml(it) {
+    function isNullOrEmpty(str) {
+      return str === undefined || str.length === 0;
+    }
+    function gArrayList_UlLi(array) {
+      if (Array.isArray(array)) {
+
+        var r4a = it.na2.map(function (a1) { return '<li>' + a1 + '</li>'; }).join('');
+        return re = '<span><ul>' + r4a + '</ul></span>';
+      } else {
+        return undefined;
+      }
+    }
     // <div>
     // <span>200529a_點擊節_工具隨著變</span>
     // youtube、示意圖、
@@ -59,10 +71,15 @@
     // </div>
     var na = it.na;
     var r1 = '<span class="na">' + na + '</span><br/>';
-    var r2 = it.yt !== undefined ? ('<a href="' + it.yt + '" target="_blank">youtube、</a>') : '';
-    var r3 = it.img !== undefined ? ('<a href="' + it.img + '" target="_blank">示意圖、</a>') : '';
-    var r23 = r2 + r3; if (r23.length !== 0) r23 += '<br/>';
-    var r4 = it.na2 !== undefined ? ('<span class="na2">' + it.na2 + '</span>') : '';
+    var r2 = !isNullOrEmpty(it.yt) ? ('<a href="' + it.yt + '" target="_blank">youtube、</a>') : '';
+    var r3 = !isNullOrEmpty(it.img) ? ('<a href="' + it.img + '" target="_blank">示意圖、</a>') : '';
+    var r23 = r2 + r3; if (!isNullOrEmpty(r23)) r23 += '<br/>';
+
+    var r4 = !isNullOrEmpty(it.na2) ? ('<span class="na2">' + it.na2 + '</span>') : '';
+    if (Array.isArray(it.na2))
+      r4 = gArrayList_UlLi(it.na2);
+    console.log(r4);
+
     return '<div>' + r1 + r23 + r4 + '</div>';
   }
   $(function () {
@@ -76,10 +93,44 @@
 <script>
   var data105MathB = [
     {
-      na: '200529a_點擊節_工具隨著變',
+      na: '進行中',
       // yt: 'https://youtu.be/ztdRrmyGcBE',
-      na2: '點擊經文時,串珠,原文解析,註釋會跳至點擊的節<br/>如示意圖所示<br/>新增版本清單列表',
+      na2: [
+        '',
+      ],
+      img: '',
+    },
+    {
+      na: '200530a_章節描述end或e',
+      na2: [
+        '經文連結,可輸入 1:5-end 或 1:5-e 或 1:1-2:end 或 1:1-2:e',
+        '(RD)承上, 關鍵 class SmartDescriptEndParsing',
+        '(RD)若是bkbible, api 會到 bible 而非相對路徑',
+        '(RD)承上,因為開發上傳後測試,需一段時間才能用bible.fhl.net測試',
+      ],
+      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipNyMUcNaHzcjVKg378J2nLMLSo2ypZZXHKrEVIl',
+    },
+    {
+      na: '200529a_點擊節_工具隨著變',
+      na2: ['點擊經文時,串珠,原文解析,註釋會跳至點擊的節', '如示意圖所示', '新增版本清單列表'],
       img: 'https://photos.google.com/share/AF1QipMUkD8PbUam8ix8qOYptdODtcFJjxU9l2J6YVX-aSrk9pIjCTJP7vXb2PYfbUPFnA/photo/AF1QipOLyoWfJqwFsP3F4nBthHis1EnglEsjis6YougY?key=RGdBMUoyRzc0T2Flb2JUOW5YRm03WmZKRHFaOGlR',
+    },
+    {
+      na: '200528a_Sn_地理_相片開關',
+      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipMTRckQ-oKExJrilBGMe-G44O4C60eEewy_FWxs',
+    },
+    {
+      na: '200527a_顯示不換行_交錯_前後',
+      na2: ['整段顯示方式', '交錯顏色', '經文位置顯示在前或在後(但還沒開放設定)'],
+      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipPtNcrKa8WpxUzG13CY8rHvSB5yKOkdM6aDXTI6',
+    },
+    {
+      na: '200522a_地圖相片marker',
+      na2: ['地圖/相片的marker', '(RD)使用 background image 好處: 複製經文時不會複製到圖唷!!!'],
+    },
+    {
+      na: '200521c_一版本經文顯示',
+      na2: ['可顯示SN', '(RD)取得 qsb api 結果, parsing 經文與SN.', '(RD)one-ver-component']
     },
   ];
 </script>
