@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
-import { IOneChapInitialor } from '../one-chap/IOneChapInitialor';
 import { isArrayEqualLength, isArrayEqual } from '../tools/arrayEqual';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
@@ -20,8 +19,6 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   private isEnoughWidthParellel = true; //
   private widthLimitSet = 250;
   private bibleLink: string;
-  // html in use
-  private chaps: Array<IOneChapInitialor> = new Array<IOneChapInitialor>();
   private qstr: string;
   private isGb = false;
   private isSn = false;
@@ -80,7 +77,6 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     if (!isArrayEqual(changes.versions.previousValue, changes.versions.currentValue)) {
       // 取得聖經版本, 對應的內容, 設給 this.chaps
       this.triggerContentsQueryAsync().then(a1 => {
-        this.chaps = a1;
 
         // 聖經版本數量有變的話，要改 layout (RWD) 的可能
         if (!isArrayEqualLength(changes.versions.previousValue, changes.versions.currentValue)) {

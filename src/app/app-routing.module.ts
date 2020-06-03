@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, RouterState } from '@angular/router';
-import { OneVerseComponent } from './one-verse/one-verse.component';
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { RwdFramesetComponent } from './rwd-frameset/rwd-frameset.component';
 import { CbolDictComponent } from './side-nav-right/cbol-dict/cbol-dict.component';
@@ -17,7 +16,6 @@ const urlDefault = 'bible/Ro1:1-5.太3:1';
 const routes: Routes = [
   { path: '', redirectTo: urlDefault, pathMatch: 'full' },
   // { path: 'bible/:book/:ichap/:isec', component: OneVerseComponent },
-  { path: 'bible/:book/:ichap', component: OneVerseComponent },
   { path: 'bible/:description', component: RwdFramesetComponent },
   // { path: 'bible/:description', component: SideNavLeftComponent },
   // { path: 'bible/:description', component: CbolDictComponent },
@@ -25,7 +23,6 @@ const routes: Routes = [
   // { path: 'bible/:description', component: ChainToolComponent},
   // { path: 'bible/:description', component: CommentToolComponent},
   //  { path: 'bible/:description', component: OneVerComponent},
-  { path: 'bible', component: OneVerseComponent },
   { path: '**', redirectTo: urlDefault },
 ];
 // CbolDictComponent

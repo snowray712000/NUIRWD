@@ -1,12 +1,12 @@
 import { Directive, Input, ElementRef, HostListener, Output, OnChanges } from '@angular/core';
-import { DTextWithSnConvertorResult } from './TextWithSnConvertor';
+import { DText } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 @Directive({
   selector: '[appTextWithSn]'
 })
 export class TextWithSnDirective implements OnChanges {
-  @Input() data: DTextWithSnConvertorResult;
+  @Input() data: DText;
   @Input() snActived: string;
   constructor(private el: ElementRef, public dialog: MatDialog) {
     // this.el.nativeElement.style.color = 'darkturquoise';

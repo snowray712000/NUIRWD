@@ -3,7 +3,7 @@
     [class.no-break-line]="false===isBreakLineEachVerse">
     <span class='address' [style.color]="settingAddressShow.getColor()" *ngIf="settingAddressShow.isAddressBefore()"
       (click)="onClickAddress(it1)">
-      {{settingAddressShow.getAddressShow(it1.address)}}
+      {{settingAddressShow.getAddressesShow(it1.addresses)}}
     </span>
     <span>
       <span *ngFor="let it2 of it1.children">
@@ -17,7 +17,7 @@
 
     <span class='address' [style.color]="settingAddressShow.getColor()" *ngIf="settingAddressShow.isAddressAfter()"
       (click)="onClickAddress(it1)">
-      {{settingAddressShow.getAddressShow(it1.address)}}
+      {{settingAddressShow.getAddressesShow(it1.addresses)}}
     </span>
   </div>
 </div>

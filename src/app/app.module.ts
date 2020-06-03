@@ -4,10 +4,6 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { OneVerseComponent } from './one-verse/one-verse.component';
-import { OneVerseViewDirective } from './one-verse/one-verse-view.directive';
-import { OneVerseViewDepedentComponents } from './one-verse/one-verse-view-dependent-components';
-import { OneChapComponent } from './one-chap/one-chap.component';
 
 import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
@@ -43,22 +39,17 @@ import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool
 import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 const entryComponents = new Array<any>(
-  OneChapComponent,
   BibleSelectionsComponent,
   InfoDialogComponent,
   CbolDictComponent,
-).concat(OneVerseViewDepedentComponents.getDependentComponents());
+);
 
 
 @NgModule({
   declarations: new Array<any>(
     AppComponent,
-    OneVerseViewDirective,
-    OneVerseComponent,
     VersionParellelComponent,
     VersionInterlaceComponent,
-    OneChapComponent,
-    OneVerseViewDirective,
     RwdFramesetComponent,
     SideNavLeftComponent,
     VerSelectComponent,
@@ -72,7 +63,7 @@ const entryComponents = new Array<any>(
     CommentToolComponent,
     ComTextComponent,
     OneVerComponent,
-  ).concat(OneVerseViewDepedentComponents.getDependentComponents()),
+  ),
   entryComponents,
   imports: [
     BrowserModule,
@@ -99,7 +90,7 @@ const entryComponents = new Array<any>(
     MatDialogModule,
     MatSnackBarModule,
   ],
-  providers: [HttpClient,MatSnackBar],
+  providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],
 })
 // https://stackoverflow.com/questions/49310134/how-to-create-angular-5-httpclient-instance-in-typescript-class

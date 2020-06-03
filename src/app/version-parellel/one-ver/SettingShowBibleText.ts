@@ -4,6 +4,9 @@ import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { BookChapDistinctTool } from './BookChapDistinctTool';
 export class SettingShowBibleText {
+  getAddressesShow(addresses: VerseRange){
+    return addresses.toStringChineseShort();
+  }
   getAddressShow(address: DAddress) {
     let flag = 2;
     if (flag === 0) {

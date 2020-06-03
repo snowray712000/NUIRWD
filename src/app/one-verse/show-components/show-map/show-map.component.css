@@ -1,9 +1,0 @@
-img {
-  background-image: url("/assets/site.png");
-  min-width: 1.0em;
-  min-height: 1.0em;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  cursor: pointer;
-}

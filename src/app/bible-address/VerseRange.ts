@@ -1,8 +1,7 @@
-import { VerseAddress } from './VerseAddress';
 import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { getVerseCount } from 'src/app/const/count-of-verse';
-import { ObjTools } from 'src/app/ts-tools/obj';
+import { ObjTools } from 'src/app/tools/obj';
 import { BookNameAndId } from '../const/book-name/BookNameAndId';
 // import { VersesToString } from './VersesToString';
 import { VerseRangeToString } from 'src/app/bible-address/VerseRangeToString';
@@ -13,7 +12,7 @@ import { DAddress } from './DAddress';
 
 export class VerseRange {
   private bibleVersionQ: IBibleVersionQueryService;
-  public verses: Array<VerseAddress> = new Array<VerseAddress>();
+  public verses: DAddress[] = [];
   /** 內容換了 由 ParsingReferenceDescription 完成 */
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
     try {
@@ -39,8 +38,8 @@ export class VerseRange {
     const r1 = firstOrDefault(this.verses, a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
     return r1 !== undefined;
   }
-  public add(v: VerseAddress): void { this.verses.push(v); }
-  public addRange(v: VerseAddress[]): void { v.forEach(a1 => this.verses.push(a1)); }
+  public add(v: DAddress): void { this.verses.push(v); }
+  public addRange(v: DAddress[]): void { v.forEach(a1 => this.verses.push(a1)); }
 
   /** 產生 太 4:1-6, 使用 VerseRangeToString class 取代這個 */
   public toStringChineseShort(): string {

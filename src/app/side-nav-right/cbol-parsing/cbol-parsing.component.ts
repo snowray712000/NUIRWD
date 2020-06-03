@@ -14,9 +14,9 @@ import { IEventVerseChanged } from './cbol-parsing-interfaces';
 import { EventVerseChanged } from './EventVerseChanged';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { VerseAddress } from 'src/app/bible-address/VerseAddress';
+// import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
-import { TextWithSnConvertor, DTextWithSnConvertorResult } from './TextWithSnConvertor';
+import { TextWithSnConvertor, DText } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -37,8 +37,8 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   prev: DOneVerse;
   isOldTestment = false;
   // domContentWithSn: SafeHtml;
-  textsWithSnUnv: DTextWithSnConvertorResult[];
-  textsWithSnKjv: DTextWithSnConvertorResult[];
+  textsWithSnUnv: DText[];
+  textsWithSnKjv: DText[];
   snActived: number = 0;
   verseAddress: string;
   @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
@@ -124,7 +124,7 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   }
   private async queryContentWithSnAsync(bk: number, ch: number, vr: number) {
     const r1 = new VerseRange();
-    r1.add(new VerseAddress(bk, ch, vr));
+    r1.add({ book: bk, chap: ch, verse: vr });
     // this.thisVerseDescription = r1.toStringChineseShort();
     const qstr = r1.toStringChineseShort();
 

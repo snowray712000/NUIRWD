@@ -8,7 +8,7 @@ export class TextWithSnConvertor {
   // [4],[8] "1519a"
   private static reg5 = /{<(W(T?)A?(G|H))(\d+[a-z]?)>}|<(W(T?)A?(G|H))(\d+[a-z]?)>/ig; // 後面註解保留, 可讀性高 (WTG|WG|WAH|WTH|WH)(\d+)/i;
   /** // let r44: string = r3.record[0].bible_text; */
-  public processTextWithSn(str?: string): DTextWithSnConvertorResult[] {
+  public processTextWithSn(str?: string): DText[] {
     // 測過 約17:1 創1:1 (unv, kjv)
     if (str === undefined) {
       return [];
@@ -22,8 +22,8 @@ export class TextWithSnConvertor {
     return re1.map(a1 => this.cvtOneWord(a1));
   }
 
-  private cvtOneWord(arg: { w: string; exec?: RegExpExecArray; }): DTextWithSnConvertorResult {
-    let re2: DTextWithSnConvertorResult;
+  private cvtOneWord(arg: { w: string; exec?: RegExpExecArray; }): DText {
+    let re2: DText;
     if (arg.exec === undefined) {
       re2 = { w: arg.w };
     } else {
@@ -41,7 +41,7 @@ export class TextWithSnConvertor {
   }
 }
 /** w,sn,tp,tp2 */
-export interface DTextWithSnConvertorResult {
+export interface DText {
   w: string;
   sn?: string;
   /** H, Hebrew G, Greek */

@@ -2,8 +2,8 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { GetAddresses } from 'src/app/bible-address/GetAddresses';
 import { SplitStringByRegex } from '../tools/SplitStringByRegex';
-import { VerseAddress } from './VerseAddress';
 import { SmartDescriptEndParsing } from './SmartDescriptEndParsing';
+import { DAddress } from './DAddress';
 
 export class ParsingReferenceDescription {
   private static regBookNames: RegExp;
@@ -29,12 +29,12 @@ export class ParsingReferenceDescription {
     return reVerse;
   }
 
-  private getAddressesOneBook(it: { id: number; des: string; }): VerseAddress[] {
+  private getAddressesOneBook(it: { id: number; des: string; }): DAddress[] {
     const r1 = it.des.replace(/\s/g, '');
 
     const r2 = r1.split(';').filter(a1 => a1.length !== 0);
     if (r2.length !== 0) {
-      const vrs: VerseAddress[] = [];
+      const vrs: DAddress[] = [];
       for (const it2 of r2) {
         const arg = { idbook: it.id, descript: it2 };
         for (const it3 of new GetAddresses(it.id).main(arg)) {

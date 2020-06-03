@@ -1,17 +1,17 @@
 import { getVerseCount } from 'src/app/const/count-of-verse';
-import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { getChapCount } from 'src/app/const/count-of-chap';
+import { DAddress } from './DAddress';
 export class VerseRangeToString {
-  main(verses: VerseAddress[], lang: BookNameLang = BookNameLang.太) {
+  main(verses: DAddress[], lang: BookNameLang = BookNameLang.太) {
     const re = this.splitBookId(verses);
     const re2 = re.map(a1 => this.splitContinueVerse(a1));
     const re3 = re2.map(a1 => this.splitTheSameChap(a1));
     const re4 = re3.map(a1 => this.getDescriptionEachBook(a1, lang)).join(';');
     return re4;
   }
-  private getDescriptionEachBook(arg: VerseAddress[][][], lang: BookNameLang) {
+  private getDescriptionEachBook(arg: DAddress[][][], lang: BookNameLang) {
     const id = arg[0][0][0].book;
     const na = BibleBookNames.getBookName(id, lang);
     const des = arg.map(a1 => {
@@ -59,7 +59,7 @@ export class VerseRangeToString {
     return re4;
   }
 
-  private splitTheSameChap(vrsOneBook: VerseAddress[][]): VerseAddress[][][] {
+  private splitTheSameChap(vrsOneBook: DAddress[][]): DAddress[][][] {
     const re3 = [];
     let sameChap = [];
     let chap = -1;
@@ -109,7 +109,7 @@ export class VerseRangeToString {
     }
     return re3;
   }
-  private splitContinueVerse(vrsOneBook: VerseAddress[]): VerseAddress[][] {
+  private splitContinueVerse(vrsOneBook: DAddress[]): DAddress[][] {
     const re2 = [];
     let re1 = [];
     for (let i = 0; i < vrsOneBook.length; i++) {
@@ -128,7 +128,7 @@ export class VerseRangeToString {
     }
     return re2;
   }
-  private isContinueVerse(vr1: VerseAddress, vr2: VerseAddress) {
+  private isContinueVerse(vr1: DAddress, vr2: DAddress) {
     if (vr1.chap === vr2.chap) {
       if (vr1.verse + 1 === vr2.verse) {
         return true;
@@ -147,10 +147,10 @@ export class VerseRangeToString {
       }
     }
   }
-  private splitBookId(verses: VerseAddress[]): VerseAddress[][] {
-    const re: VerseAddress[][] = [];
+  private splitBookId(verses: DAddress[]): DAddress[][] {
+    const re: DAddress[][] = [];
     let id: number;
-    let r1: VerseAddress[];
+    let r1: DAddress[];
     for (const it1 of verses) {
       if (id === it1.book) {
         r1.push(it1);

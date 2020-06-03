@@ -1,8 +1,8 @@
-import { VerseAddress } from './VerseAddress';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { range_linq } from 'src/app/linq-like/Range_linq';
 import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 import { IBookNameTryGetBookIdResult, IGetAddressesType } from './VerseRange';
+import { DAddress } from './DAddress';
 /** 一卷書 1:1-3,6-7,21,25,2:3-5 分解 */
 export class GetAddresses {
   /** // 只5種類似 // 1:32-2:31 // 1:2-32 // 4-7 // 1:23 // 23 (23節 或 23章) */
@@ -12,18 +12,17 @@ export class GetAddresses {
   private static regA5 = new RegExp('(\\d+):(\\d+)'); // 後來發現的 bug, 雖然它應該是a4，但卻是編號5的原因,因為一開始沒考慮到
   private static regA3 = new RegExp('(\\d+)'); // ["11:32-2:31","11"
   private idBook: number;
-  private addresses = new Array<VerseAddress>();
+  private addresses = new Array<DAddress>();
   constructor(idBook: number) {
     this.idBook = idBook;
   }
-  public main(oneBookResult: IBookNameTryGetBookIdResult): VerseAddress[] {
+  public main(oneBookResult: IBookNameTryGetBookIdResult): DAddress[] {
     try {
       // 約二 case
       if (oneBookResult.descript.length === 0) {
         if (getChapCountEqual1BookIds().includes(this.idBook)) {
           return this.generateOneChap(1);
-        }
-        else {
+        } else {
           console.log(oneBookResult.descript);
 
           console.warn('GetAddresses 不加章節只允許「一章」的書卷,例如約一');
@@ -35,23 +34,18 @@ export class GetAddresses {
       r2.forEach(a1 => {
         if (a1.tp === 0) {
           this.generateFromType0(a1).forEach(a2 => this.addresses.push(a2));
-        }
-        else if (a1.tp === 1) {
+        } else if (a1.tp === 1) {
           this.generateFromType1(a1).forEach(a2 => this.addresses.push(a2));
-        }
-        else if (a1.tp === 2) {
+        } else if (a1.tp === 2) {
           this.generateFromType2(a1).forEach(a2 => this.addresses.push(a2));
-        }
-        else if (a1.tp === 3) {
+        } else if (a1.tp === 3) {
           this.generateFromType3(a1).forEach(a2 => this.addresses.push(a2));
-        }
-        else if (a1.tp === 4) {
+        } else if (a1.tp === 4) {
           this.generateFromType4(a1).forEach(a2 => this.addresses.push(a2));
         }
       });
       return this.addresses;
-    }
-    catch (error) {
+    } catch (error) {
       console.error('GetAddresses');
       throw error;
     }
@@ -126,26 +120,29 @@ export class GetAddresses {
     }
     // 1:2 - 1:結束
     const verse1End = getVerseCount(this.idBook, add.ch1);
-    const re = range_linq(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+    const re = range_linq(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
     // 中間章節, 例如  1:2-3:24, 第2章 從 2 開始, 有 1 章 (3-1-1)
     if (add.ch1 + 1 < add.ch2) {
       const r2 = range_linq(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
       r2.forEach(a1 => a1.forEach(a2 => re.push(a2)));
     }
     // 最後章節, 例 -3:31
-    range_linq(1, add.vr2).map(a1 => new VerseAddress(this.idBook, add.ch2, a1)).forEach(a1 => re.push(a1));
+    range_linq(1, add.vr2).map(a1 => {
+      return { book: this.idBook, chap: add.ch2, verse: a1 };
+    }).forEach(a1 => re.push(a1));
     return re;
   }
-  private generateFromType1(add: IGetAddressesType): VerseAddress[] {
+  private generateFromType1(add: IGetAddressesType): DAddress[] {
     // 1:12-43
-    return range_linq(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => new VerseAddress(this.idBook, add.ch1, a1));
+    return range_linq(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
   }
   /** 2:1-End */
-  private generateOneChap(ch: number): VerseAddress[] {
+  private generateOneChap(ch: number): DAddress[] {
     const verseEnd = getVerseCount(this.idBook, ch);
-    return range_linq(1, verseEnd).map(a2 => new VerseAddress(this.idBook, ch, a2));
+    return range_linq(1, verseEnd).map(a2 => this.new_DAddress(this.idBook, ch, a2));
   }
-  private getLastVerseAddress(): VerseAddress {
+  private new_DAddress(book, chap, verse) { return { book, chap, verse }; }
+  private getLastVerseAddress(): DAddress {
     if (this.addresses.length === 0) {
       return undefined;
     }
@@ -154,22 +151,25 @@ export class GetAddresses {
   /**
    * 整章，或是一節 (當目前 this.addresses 沒有東西時)
    */
-  private generateFromType2(add: IGetAddressesType): VerseAddress[] {
+  private generateFromType2(add: IGetAddressesType): DAddress[] {
     // 整章 or 一節
     const last = this.getLastVerseAddress();
     if (last === undefined) {
       return this.generateOneChap(add.ch1);
     }
-    return [new VerseAddress(this.idBook, last.chap, add.vr1)];
+    return [{ book: this.idBook, chap: last.chap, verse: add.vr1 }];
   }
-  private generateFromType3(add: IGetAddressesType): VerseAddress[] {
+
+  private generateFromType3(add: IGetAddressesType): DAddress[] {
     // 7-9
     const last = this.getLastVerseAddress();
     const ch = last !== undefined ? last.chap : 1;
-    return range_linq(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => new VerseAddress(this.idBook, ch, a1));
+    return range_linq(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => {
+      return { book: this.idBook, chap: ch, verse: a1 };
+    });
   }
-  private generateFromType4(add: IGetAddressesType): VerseAddress[] {
+  private generateFromType4(add: IGetAddressesType): DAddress[] {
     // 1:23
-    return [new VerseAddress(this.idBook, add.ch1, add.vr1)];
+    return [{ book: this.idBook, chap: add.ch1, verse: add.vr1 }];
   }
 }

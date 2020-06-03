@@ -8,8 +8,9 @@ import { OrigDictQueryor } from './OrigDictQueryor';
 import { OrigDictResultPreProcess } from './OrigDictResultPreProcess';
 import { Observable, of } from 'rxjs';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { VerseAddress } from 'src/app/bible-address/VerseAddress';
+// import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { BibleTextWithSnResultPreProcess } from './BibleTextWithSnResultPreProcess';
+import { DAddress } from 'src/app/bible-address/DAddress';
 
 
 export interface IEventVerseChanged {
@@ -32,13 +33,13 @@ export class CbolDictComponent implements OnInit, AfterViewChecked {
   checkedEng = false;
   checkedSbdag = false;
   verseChanged$: IEventVerseChanged;
-  thisVerseAddress: VerseAddress;
+  thisVerseAddress: DAddress;
   thisVerseDescription: string;
   // tslint:disable-next-line: max-line-length
   constructor(private sanitizer: DomSanitizer, private elementRef: ElementRef, public dialog: MatDialog, private detectChange: ChangeDetectorRef) {
     this.origDictQ = new OrigDictQueryor();
 
-    this.thisVerseAddress = new VerseAddress(40, 1, 1);
+    this.thisVerseAddress = { book: 40, chap: 1, verse: 1 };
     this.verseChanged$ = {
       changed$: of({ book: this.thisVerseAddress.book, chap: this.thisVerseAddress.chap, verse: this.thisVerseAddress.verse })
     };
@@ -49,7 +50,7 @@ export class CbolDictComponent implements OnInit, AfterViewChecked {
   private bindVerseChangeEvent() {
     this.verseChanged$.changed$.subscribe(async (re) => {
       const r1 = new VerseRange();
-      r1.add(new VerseAddress(re.book, re.chap, re.verse));
+      r1.add({ book: re.book, chap: re.chap, verse: re.verse });
       this.thisVerseDescription = r1.toStringChineseShort();
       const qstr = r1.toStringEnglishShort();
 

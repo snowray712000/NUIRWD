@@ -4,10 +4,10 @@ import { ApiSobj, DApiSobOneRecord } from 'src/app/fhl-api/ApiSobj';
 import { distinct_linq } from 'src/app/linq-like/distinct';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DBibleTextQueryResult } from './BibleTextOneVersionQuery';
+import { DOneLine } from './BibleTextOneVersionQuery';
 export class AddMapPhotoInfo {
   /** 若這經文範例 verses 中沒有任何 sobj 資料, 回傳 undefined */
-  async mainAsync(re2: DBibleTextQueryResult[], verses: VerseRange): Promise<DBibleTextQueryResult[]> {
+  async mainAsync(re2: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
     const re3 = await this.getPhotoMapFromApi(verses);
     // console.log(re3);
     if (re3[0].record.length === 0) {
@@ -51,7 +51,7 @@ export class AddMapPhotoInfo {
       regAll = new RegExp(`(?:${naAll.join('|')})`, 'ig');
       // console.log(regAll);
     }
-    const re4EachLine: DBibleTextQueryResult[] = [];
+    const re4EachLine: DOneLine[] = [];
     const keys2 = Array.from(map2.keys());
     for (const it of re2) {
       const reThisLine = [];
@@ -88,7 +88,7 @@ export class AddMapPhotoInfo {
         }
       }
       re4EachLine.push({
-        address: it.address,
+        addresses: it.addresses,
         children: reThisLine
       });
     }

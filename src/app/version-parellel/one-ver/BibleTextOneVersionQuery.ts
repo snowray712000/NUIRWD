@@ -1,11 +1,11 @@
 import { ApiQsb, QsbArgs, OneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
-import { TextWithSnConvertor, DTextWithSnConvertorResult } from 'src/app/side-nav-right/cbol-parsing/TextWithSnConvertor';
+import { TextWithSnConvertor, DText } from 'src/app/side-nav-right/cbol-parsing/TextWithSnConvertor';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 export class BibleTextOneVersionQuery {
-  async mainAsync(verses: VerseRange, ver?: string): Promise<DBibleTextQueryResult[]> {
+  async mainAsync(verses: VerseRange, ver?: string): Promise<DOneLine[]> {
     if (ver === undefined) {
       ver = 'unv';
     }
@@ -17,18 +17,20 @@ export class BibleTextOneVersionQuery {
     return re3;
   }
 
-  private async tryAddMapPhotoInfoAsync(re2: DBibleTextQueryResult[], verses: VerseRange) {
+  private async tryAddMapPhotoInfoAsync(re2: DOneLine[], verses: VerseRange) {
     const r1 = await new AddMapPhotoInfo().mainAsync(re2, verses);
     const re3 = r1 !== undefined ? r1 : re2;
     return re3;
   }
 
-  private findSn(a1: OneQsbRecord): DBibleTextQueryResult {
+  private findSn(a1: OneQsbRecord): DOneLine {
     const book = new BookNameToId().cvtName2Id(a1.engs);
     const address = { book, chap: a1.chap, verse: a1.sec };
     const r1 = new TextWithSnConvertor().processTextWithSn(a1.bible_text);
+    const addresses = new VerseRange();
+    addresses.add(address);
     return {
-      address,
+      addresses,
       children: r1,
     };
   }
@@ -44,9 +46,7 @@ export class BibleTextOneVersionQuery {
     return re1;
   }
 }
-export interface DBibleTextQueryResult {
-  address?: DAddress;
-  children?: DTextWithSnConvertorResult[];
+export interface DOneLine {
+  addresses?: VerseRange;
+  children?: DText[];
 }
-
-
