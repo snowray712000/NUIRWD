@@ -2,6 +2,6 @@
 export interface DCommonetDataShow {
   w: string;
   des?: string;
-  sn?: number;
+  sn?: string;
   isOld?: boolean;
 }

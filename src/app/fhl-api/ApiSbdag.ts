@@ -3,7 +3,7 @@ import { ApiSbdagPersudo } from "./ApiSbdagPersudo";
 import { IsLocalHostDevelopment } from './IsLocalHostDevelopment';
 export class ApiSbdag {
   queryQsbAsync(arg: {
-    sn: number;
+    sn: string;
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
   }) {

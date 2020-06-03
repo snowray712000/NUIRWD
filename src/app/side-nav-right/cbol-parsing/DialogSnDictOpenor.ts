@@ -5,7 +5,7 @@ export class DialogSnDictOpenor {
   constructor(private dialog: MatDialog) {
   }
   /** tp 是 */
-  showDialog(sn: number, type?: 'H' | 'G') {
+  showDialog(sn: string, type?: 'H' | 'G') {
     if (sn !== undefined) {
       const checkStates = {
         isChinese: true,

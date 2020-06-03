@@ -93,13 +93,22 @@
 <script>
   var data105MathB = [
     {
+      na: '200603b_Bug_Sn非純數字時',
+      na2: [
+        'SN若是 5608a 會錯, 因為原本假設是純數字. #羅5;6|會正常',
+        '承上, 例子為 #Mt6:8.6:18.14:1.Ro9:27|',
+      ],
+      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipM1qQ5ktZonwZ-s-USlKwfwmSsJMbL8QLMS2LoH'
+    },
+    {
       na: '200603a_Bug_Ro5無法顯示',
       na2: [
-        '#看羅5|,會沒畫面,#羅5;6|會正常',
+        '看#羅5|,會沒畫面,#羅5;6|會正常',
         '(RD) 因為sobj.php 沒資料時, 沒作保護.',
         '(RD) 重構新增 AddMapPhotoInfo class',
         '(RD) 之前為測試,bkbible較慢,把其引到bible domain,但 sbdag 會有 cross-origin 問題, 因此此api維持在 bkbible(若是在 bkbible測試時, 當然,若在bible就還是bible domain) ',
       ],
+
     },
     {
       na: '200530a_章節描述end或e',

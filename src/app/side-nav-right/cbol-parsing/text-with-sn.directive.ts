@@ -7,7 +7,7 @@ import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 })
 export class TextWithSnDirective implements OnChanges {
   @Input() data: DTextWithSnConvertorResult;
-  @Input() snActived: number;
+  @Input() snActived: string;
   constructor(private el: ElementRef, public dialog: MatDialog) {
     // this.el.nativeElement.style.color = 'darkturquoise';
     this.el.nativeElement.style.cursor = 'pointer';

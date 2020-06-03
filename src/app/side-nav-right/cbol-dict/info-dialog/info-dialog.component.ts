@@ -83,7 +83,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
       isOldTestment,
       ver: a1
     }).toPromise());
-    const r1s = await Promise.all(tasks);
+    const r1s = (await Promise.all(tasks)).filter(a1 => a1 !== null && a1.text !== null);
     console.log(r1s);
 
     const domStr = r1s.map(a1 => {

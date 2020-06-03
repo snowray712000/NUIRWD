@@ -1,7 +1,7 @@
 import { ApiSdOrSbdagCore } from './ApiSdOrSbdagCore';
 export class ApiSd {
   queryQsbAsync(arg: {
-    sn: number;
+    sn: string;
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
   }) {

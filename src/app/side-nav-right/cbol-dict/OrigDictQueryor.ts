@@ -6,7 +6,7 @@ import { ApiSd } from '../../fhl-api/ApiSd';
 import { DApiSdResult } from '../../fhl-api/DApiSdResult';
 export class OrigDictQueryor implements IOrigDictQuery {
   queryDictAsync(arg: {
-    sn: number;
+    sn: string;
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
     ver?: string;
@@ -27,7 +27,7 @@ export class OrigDictQueryor implements IOrigDictQuery {
     const r1 = a1.record[0];
     const text = ver !== '中文' ? r1.edic_text : r1.dic_text;
     return {
-      sn: parseInt(r1.sn, 10),
+      sn: r1.sn,
       orig: r1.orig,
       text,
       ver,
@@ -36,7 +36,7 @@ export class OrigDictQueryor implements IOrigDictQuery {
   private cvtFromSbdagApi(a1: DApiSdResult) {
     const r1 = a1.record[0];
     return {
-      sn: parseInt(r1.sn, 10),
+      sn: r1.sn,
       orig: r1.orig,
       text: r1.dic_text,
       ver: '浸宣',

@@ -3,7 +3,7 @@ import { InfoDialogComponent } from './info-dialog.component';
 export class DialogOrigDictOpenor {
   constructor(private dialog: MatDialog) { }
   showDialog(arg: {
-    sn: number;
+    sn: string;
     isOld: boolean;
   }): MatDialogRef<InfoDialogComponent, any> {
     const checkStates = {
@@ -11,6 +11,7 @@ export class DialogOrigDictOpenor {
       isEng: true,
       isSbdag: true,
     };
+
     const dialogRef = this.dialog.open(InfoDialogComponent, {
       data: { sn: arg.sn, isOld: arg.isOld, checkStates }
     });

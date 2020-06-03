@@ -6,7 +6,7 @@ import { FhlUrl } from './FhlUrl';
 export class ApiSdOrSbdagCore {
   constructor(private sdOrSbdag = 'sd') { }
   queryQsbAsync(arg: {
-    sn: number;
+    sn: string;
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
   }): Observable<DApiSdResult> {

@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { DApiSdResult } from "./DApiSdResult";
 export class ApiSbdagPersudo {
   queryQsbAsync(arg: {
-    sn: number;
+    sn: string;
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
   }): Observable<DApiSdResult> {
