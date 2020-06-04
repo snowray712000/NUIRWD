@@ -15,6 +15,8 @@ export interface DText {
   tp2?: 'WG' | 'WTG' | 'WAG' | 'WTH' | 'WH';
   /** 花括號 */
   isCurly?: 1 | 0;
+  /** 此節是 'a', 且無法與上節合併時, 會顯示 '併入上節' 並且加上 isMerge=1, 若已與上節合併, 會修正上節的 verses, 並將此節 remove 掉 */
+  isMerge?: 1;
 }
 
 export interface DOneLine {
