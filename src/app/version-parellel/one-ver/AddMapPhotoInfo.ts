@@ -4,7 +4,8 @@ import { ApiSobj, DApiSobOneRecord } from 'src/app/fhl-api/ApiSobj';
 import { distinct_linq } from 'src/app/linq-like/distinct';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DOneLine } from './AddBase';
+import { DOneLine, DText } from './AddBase';
+import { deepCopy } from 'src/app/tools/deepCopy';
 export class AddMapPhotoInfo {
   /** 若這經文範例 verses 中沒有任何 sobj 資料, 回傳 re2 */
   async mainAsync(re2: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
@@ -51,11 +52,13 @@ export class AddMapPhotoInfo {
       regAll = new RegExp(`(?:${naAll.join('|')})`, 'ig');
       // console.log(regAll);
     }
+
+    let isExistChange = false;
     const re4EachLine: DOneLine[] = [];
     const keys2 = Array.from(map2.keys());
-    for (const it of re2) {
-      const reThisLine = [];
-      for (const it2 of it.children) {
+    for (const it1 of re2) {
+      const reThisLine: DText[] = [];
+      for (const it2 of it1.children) {
         if (it2.sn !== undefined) {
           reThisLine.push(it2);
           continue;
@@ -72,23 +75,34 @@ export class AddMapPhotoInfo {
         const obj = map1.get(idObj);
         for (const it3 of r4) {
           if (it3.exec === undefined) {
-            reThisLine.push(it3);
+            const r5 = deepCopy(it2);
+            r5.w = it3.w;
+            reThisLine.push(r5);
             continue;
-          }
-          const isSite = obj.is_site === '1';
-          const isPhoto = obj.has_collect === '1';
-          // 型成 3個 (或2個)
-          reThisLine.push({ w: it3.w, sobj: obj });
-          if (isSite) {
-            reThisLine.push({ w: '', sobj: obj, isMap: true });
-          }
-          if (isPhoto) {
-            reThisLine.push({ w: '', sobj: obj, isPhoto: true });
+          } else {
+            const r5 = deepCopy(it2);
+            r5.w = it3.w; r5.sobj = obj;
+            reThisLine.push(r5);
+
+            const isSite = obj.is_site === '1';
+            const isPhoto = obj.has_collect === '1';
+            // 型成 3個 (或2個)
+            if (isSite) {
+              const r6 = deepCopy(r5);
+              r6.w = ''; r6.isMap = true;
+              reThisLine.push(r6);
+            }
+            if (isPhoto) {
+              const r6 = deepCopy(r5);
+              r6.w = ''; r6.isPhoto = true;
+              reThisLine.push(r6);
+            }
+            continue;
           }
         }
       }
       re4EachLine.push({
-        addresses: it.addresses,
+        addresses: it1.addresses,
         children: reThisLine
       });
     }

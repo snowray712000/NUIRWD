@@ -7,11 +7,11 @@
     </span>
     <span>
       <span *ngFor="let it2 of it1.children">
-        <span *ngIf="isShowSn && it2.sn!==undefined" class='orig' (click)="onClickOrig(it2)">{{it2.w}}</span>
-        <a *ngIf="isShowMapPhoto && it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap"></a>
+        <span *ngIf="isShowSn && it2.sn!==undefined" class='orig' (click)="onClickOrig(it2)" [class.isParentheses]="it2.isParentheses!==undefined">{{it2.w}}</span>
+        <a *ngIf="isShowMapPhoto && it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap" [class.isParentheses]="it2.isParentheses!==undefined"></a>
         <a *ngIf="isShowMapPhoto && it2.isPhoto" [href]="getPhotoLink(it2)" target="_blank"
-          [class.is-photo]="it2.isPhoto"></a>
-        <span *ngIf="it2.sn===undefined && !it2.isMap && !it2.isPhoto" (click)="onClickVerse(it1,it2)">{{it2.w}}</span>
+          [class.is-photo]="it2.isPhoto" [class.isParentheses]="it2.isParentheses!==undefined"></a>
+        <span *ngIf="it2.sn===undefined && !it2.isMap && !it2.isPhoto" (click)="onClickVerse(it1,it2)" [class.isParentheses]="it2.isParentheses!==undefined">{{it2.w}}</span>
       </span>
     </span>
 

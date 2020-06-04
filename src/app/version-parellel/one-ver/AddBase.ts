@@ -17,7 +17,14 @@ export interface DText {
   isCurly?: 1 | 0;
   /** 此節是 'a', 且無法與上節合併時, 會顯示 '併入上節' 並且加上 isMerge=1, 若已與上節合併, 會修正上節的 verses, 並將此節 remove 掉 */
   isMerge?: 1;
+  /** 和合本 小括號(全型), 用在注解(或譯....), 或是標題時(大衛的詩) */
+  isParentheses?: 1;
+  /** sobj 的資料, 地圖與相片 */
+  sobj?: any;
+  isMap?: boolean;
+  isPhoto?: boolean;
 }
+
 
 export interface DOneLine {
   addresses?: VerseRange;
