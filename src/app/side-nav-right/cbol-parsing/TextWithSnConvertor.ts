@@ -1,4 +1,5 @@
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
+import { DText } from 'src/app/version-parellel/one-ver/AddBase';
 export class TextWithSnConvertor {
   // [0] {<WG1519a>} 或 <WG1519a>
   // [1],[5] WTG or WG
@@ -7,7 +8,7 @@ export class TextWithSnConvertor {
   // [4],[8] "1519a"
   private static reg5 = /{<(W(T?)A?(G|H))(\d+[a-z]?)>}|<(W(T?)A?(G|H))(\d+[a-z]?)>/ig; // 後面註解保留, 可讀性高 (WTG|WG|WAH|WTH|WH)(\d+)/i;
   /** // let r44: string = r3.record[0].bible_text; */
-  public processTextWithSn(str?: string): DText[] {
+  public main(str?: string): DText[] {
     // 測過 約17:1 創1:1 (unv, kjv)
     if (str === undefined) {
       return [];
@@ -39,15 +40,3 @@ export class TextWithSnConvertor {
     return re2;
   }
 }
-/** w,sn,tp,tp2 */
-export interface DText {
-  w: string;
-  sn?: string;
-  /** H, Hebrew G, Greek */
-  tp?: 'H' | 'G';
-  /** T, time */
-  tp2?: 'WG' | 'WTG' | 'WAG' | 'WTH' | 'WH';
-  /** 花括號 */
-  isCurly?: 1 | 0;
-}
-

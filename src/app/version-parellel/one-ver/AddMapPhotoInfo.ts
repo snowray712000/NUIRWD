@@ -4,14 +4,14 @@ import { ApiSobj, DApiSobOneRecord } from 'src/app/fhl-api/ApiSobj';
 import { distinct_linq } from 'src/app/linq-like/distinct';
 import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DOneLine } from './BibleTextOneVersionQuery';
+import { DOneLine } from './AddBase';
 export class AddMapPhotoInfo {
-  /** 若這經文範例 verses 中沒有任何 sobj 資料, 回傳 undefined */
+  /** 若這經文範例 verses 中沒有任何 sobj 資料, 回傳 re2 */
   async mainAsync(re2: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
     const re3 = await this.getPhotoMapFromApi(verses);
     // console.log(re3);
     if (re3[0].record.length === 0) {
-      return undefined;
+      return re2;
     }
     const map1 = new Map<number, DApiSobOneRecord>();
     for (const it1 of re3) {

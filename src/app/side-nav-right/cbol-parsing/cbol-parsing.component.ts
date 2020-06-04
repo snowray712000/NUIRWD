@@ -15,7 +15,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 // import { VerseAddress } from 'src/app/bible-address/VerseAddress';
 import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
-import { TextWithSnConvertor, DText } from './TextWithSnConvertor';
+import { TextWithSnConvertor } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -23,6 +23,7 @@ import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
+import { DText } from 'src/app/version-parellel/one-ver/AddBase';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -129,13 +130,13 @@ export class CbolParsingComponent implements OnInit, OnChanges {
 
     const r3 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
     // console.log(r3.record[0].bible_text);
-    const rr4 = new TextWithSnConvertor().processTextWithSn(r3.record[0].bible_text);
+    const rr4 = new TextWithSnConvertor().main(r3.record[0].bible_text);
     // console.log(rr4);
     this.textsWithSnUnv = rr4;
     const r33 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
     // console.log(r33);
 
-    this.textsWithSnKjv = new TextWithSnConvertor().processTextWithSn(r33.record[0].bible_text);
+    this.textsWithSnKjv = new TextWithSnConvertor().main(r33.record[0].bible_text);
   }
   private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
     const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();

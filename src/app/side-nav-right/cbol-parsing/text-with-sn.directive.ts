@@ -1,7 +1,7 @@
 import { Directive, Input, ElementRef, HostListener, Output, OnChanges } from '@angular/core';
-import { DText } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
+import { DText } from 'src/app/version-parellel/one-ver/AddBase';
 @Directive({
   selector: '[appTextWithSn]'
 })
