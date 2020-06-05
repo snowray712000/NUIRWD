@@ -7,5 +7,6 @@ export function matchGlobalWithCapture(reg: RegExp, str: string): RegExpExecArra
   while ((r1 = reg.exec(str)) !== null) {
     re.push(r1);
   }
+  reg.lastIndex = -1 ; // 用完, 還原最初狀態
   return re;
 }

@@ -8,6 +8,8 @@ import { DialogOrigDictOpenor } from 'src/app/side-nav-right/info-dialog/DialogO
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
+import { DText } from './AddBase';
+import { DialogRefOpenor } from 'src/app/side-nav-right/info-dialog/DialogRefOpenor';
 
 
 @Component({
@@ -44,6 +46,9 @@ export class OneVerComponent implements OnInit, OnChanges {
   }
   onClickAddress(it1) {
 
+  }
+  onClickRef(it1: DText) {
+    new DialogRefOpenor(this.dialog).showDialog(it1.refDescription);
   }
 
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {

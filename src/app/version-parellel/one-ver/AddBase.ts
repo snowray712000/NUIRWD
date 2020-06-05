@@ -19,10 +19,20 @@ export interface DText {
   isMerge?: 1;
   /** 和合本 小括號(全型), 用在注解(或譯....), 或是標題時(大衛的詩) */
   isParentheses?: 1;
+  /** 和合本 小括號(全型), 連續2層括號, 內層 新譯本 詩3:1 */
+  isParentheses2?: 1;
   /** sobj 的資料, 地圖與相片 */
   sobj?: any;
   isMap?: boolean;
   isPhoto?: boolean;
+  /** 新譯本是 h3 */
+  isTitle1?: 1;
+  /** 交互參照 */
+  isRef?: 1;
+  /** 交互參照內容 */
+  refDescription?: string;
+  /** 換行, 新譯本 h3 與 非h3 交接觸 */
+  isBr?: 1;
 }
 
 

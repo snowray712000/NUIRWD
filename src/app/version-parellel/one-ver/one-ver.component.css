@@ -6,10 +6,28 @@
   font-size: small;
   cursor: pointer;
 }
-.isParentheses{
+.isTitle1 {
   /* font-size: 1.2em; */
   font-weight: 800;
-  color: green;
+  color: darkmagenta;
+}
+
+.isTitle1::after {
+  /* white-space: pre; */
+  /* content:"\000A"; */
+}
+.isParentheses {
+  /* font-size: 1.2em; */
+  /* font-weight: 800; */
+  color: darkviolet;
+}
+.isParentheses2 {
+  /* font-size: 1.2em; */
+  color: magenta;
+}
+.isRef{
+  color:blue;
+  cursor: pointer;
 }
 .is-map {
   /* text-decoration: underline; */

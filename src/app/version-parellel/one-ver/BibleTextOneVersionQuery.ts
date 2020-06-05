@@ -5,7 +5,10 @@ import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 import { AddSnInfo } from './AddSnInfo';
 import { DOneLine } from './AddBase';
 import { AddMergeVerse } from './AddMergeVerse';
-import { AddParenthesesUnv } from './AddParenthesesUnv';
+import { AddParenthesesUnvNcv } from './AddParenthesesUnv';
+import { AddTitleH3 } from './AddTitleHx';
+import { AddReferenceCnv } from './AddReferenceCnv';
+import { AddBrCnv } from './AddBrCnv';
 export class BibleTextOneVersionQuery {
   async mainAsync(verses: VerseRange, ver?: string): Promise<DOneLine[]> {
     if (ver === undefined) {
@@ -15,18 +18,25 @@ export class BibleTextOneVersionQuery {
     let re1 = await this.getBibleTexts(verses, ver);
 
     const isSN = true; const isMapPhoto = true;
+
     if (ver === 'unv') {
+      // 和合本
       re1 = await new AddMergeVerse().mainAsync(re1, verses);
-      console.log(re1);
-      re1 = await new AddParenthesesUnv().mainAsync(re1, verses);
-      console.log(re1);
+      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
+      re1 = false ? re1 : await new AddSnInfo().mainAsync(re1, verses);
+      re1 = await new AddMapPhotoInfo().mainAsync(re1, verses);
+      return re1;
+    } else if (ver === 'ncv') {
+      // 新譯本
+      re1 = await new AddMergeVerse().mainAsync(re1, verses);
+      re1 = await new AddTitleH3().mainAsync(re1, verses);
+      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
+      re1 = await new AddReferenceCnv().mainAsync(re1, verses);
+      re1 = await new AddMapPhotoInfo().mainAsync(re1, verses);
+      re1 = await new AddBrCnv().mainAsync(re1, verses);
     }
 
-    const re2 = false === /unv|kjv/gi.test(ver) ? re1 : await new AddSnInfo().mainAsync(re1, verses);
-
-    const re3 = await new AddMapPhotoInfo().mainAsync(re2, verses);
-
-    return re3;
+    return re1;
   }
 
   private async getBibleTexts(verses: VerseRange, ver: string): Promise<DOneLine[]> {
