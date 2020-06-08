@@ -8,8 +8,9 @@ import { DialogOrigDictOpenor } from 'src/app/side-nav-right/info-dialog/DialogO
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DText } from './AddBase';
+import { DText, DOneLine } from './AddBase';
 import { DialogRefOpenor } from 'src/app/side-nav-right/info-dialog/DialogRefOpenor';
+import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
 
 
 @Component({
@@ -41,8 +42,8 @@ export class OneVerComponent implements OnInit, OnChanges {
   private async getDataAsync() {
     this.data = await new BibleTextOneVersionQuery().mainAsync(this.verseRange, this.ver);
   }
-  onClickVerse(it1, it2) {
-    this.clickVerse.emit(it1.address);
+  onClickVerse(it1: DOneLine) {
+    this.clickVerse.emit(firstOrDefault(it1.addresses.verses));
   }
   onClickAddress(it1) {
 

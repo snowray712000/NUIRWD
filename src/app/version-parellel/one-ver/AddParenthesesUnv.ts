@@ -2,7 +2,7 @@ import { IAddBase, DOneLine, DText } from './AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { deepCopy } from 'src/app/tools/deepCopy';
-/** ncv 新譯本也用 */
+/** unv用, ncv 新譯本也用, 全型小括號 */
 export class AddParenthesesUnvNcv implements IAddBase {
   /** 若都沒有, 就回傳 lines, 不然, 會回傳新的一份 */
   async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
@@ -13,8 +13,9 @@ export class AddParenthesesUnvNcv implements IAddBase {
       for (const it2 of it1.children) {
         // const r1 = new SplitStringByRegexVer2().main(it2.w, /（[^）]+）/g);
         // const r1 = new SplitStringByRegexVer2().main(it2.w, /（[^（]*（[^）]*）[^）]*）|（[^）]+）/g);
-        const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（[^）]+）)/g);
-        // console.log(r1);
+        // const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（[^）]+）)/g);
+        const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（([^）]+)）)|(?:\(([^\)]+)\))/g);
+        console.log(r1);
         for (const it3 of r1) {
           const r2 = deepCopy(it2);
           if (it3.exec === undefined) {
@@ -26,9 +27,17 @@ export class AddParenthesesUnvNcv implements IAddBase {
               this.doWhenHave2Parentheses(r2, it3, re1);
             } else {
               // 一層括號的
-              r2.w = it3.exec[0];
-              r2.isParentheses = 1;
-              re1.push(r2);
+              if (it3.exec[4] !== undefined) {
+                // 全型
+                r2.w = it3.exec[0];
+                r2.isParenthesesFW = 1;
+                re1.push(r2);
+              } else if (it3.exec[5] !== undefined) {
+                // 半型括號
+                r2.w = it3.exec[0];
+                r2.isParenthesesHW = 1;
+                re1.push(r2);
+              }
             }
             isExistChange = true;
           }
@@ -45,11 +54,11 @@ export class AddParenthesesUnvNcv implements IAddBase {
     exec?: RegExpExecArray;
   }, re1: DText[]) {
     r2.w = it3.exec[1];
-    r2.isParentheses = 1;
+    r2.isParenthesesFW = 1;
     re1.push(r2);
     let r3 = deepCopy(r2);
     r3.w = it3.exec[2];
-    r3.isParentheses2 = 1;
+    r3.isParenthesesFW2 = 1;
     re1.push(r3);
     r3 = deepCopy(r2);
     r3.w = it3.exec[3];

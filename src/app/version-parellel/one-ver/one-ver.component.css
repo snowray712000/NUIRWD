@@ -16,12 +16,17 @@
   /* white-space: pre; */
   /* content:"\000A"; */
 }
-.isParentheses {
+.isParenthesesHW {
+  /* font-size: 1.2em; */
+  /* font-weight: 800; */
+  color: mediumorchid;
+}
+.isParenthesesFW {
   /* font-size: 1.2em; */
   /* font-weight: 800; */
   color: darkviolet;
 }
-.isParentheses2 {
+.isParenthesesFW2 {
   /* font-size: 1.2em; */
   color: magenta;
 }

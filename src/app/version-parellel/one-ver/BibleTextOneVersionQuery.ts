@@ -9,6 +9,7 @@ import { AddParenthesesUnvNcv } from './AddParenthesesUnv';
 import { AddTitleH3 } from './AddTitleHx';
 import { AddReferenceCnv } from './AddReferenceCnv';
 import { AddBrCnv } from './AddBrCnv';
+import { AddBrStdandard } from './AddBrStdandard';
 export class BibleTextOneVersionQuery {
   async mainAsync(verses: VerseRange, ver?: string): Promise<DOneLine[]> {
     if (ver === undefined) {
@@ -18,6 +19,9 @@ export class BibleTextOneVersionQuery {
     let re1 = await this.getBibleTexts(verses, ver);
 
     const isSN = true; const isMapPhoto = true;
+    // console.log(ver);
+    // console.log(re1);
+
 
     if (ver === 'unv') {
       // 和合本
@@ -34,6 +38,10 @@ export class BibleTextOneVersionQuery {
       re1 = await new AddReferenceCnv().mainAsync(re1, verses);
       re1 = await new AddMapPhotoInfo().mainAsync(re1, verses);
       re1 = await new AddBrCnv().mainAsync(re1, verses);
+    } else if (ver === 'cbol') {
+      // 原文直譯
+      re1 = await new AddBrStdandard().mainAsync(re1, verses);
+      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
     }
 
     return re1;
@@ -42,6 +50,7 @@ export class BibleTextOneVersionQuery {
   private async getBibleTexts(verses: VerseRange, ver: string): Promise<DOneLine[]> {
     const re1 = await this.getTextFromApi(verses, ver);
     // console.log(re1);
+
     const re2 = re1.record.map(a1 => {
       const addresses = new VerseRange();
       const book = new BookNameToId().cvtName2Id(a1.engs);

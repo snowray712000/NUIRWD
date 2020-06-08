@@ -19,7 +19,7 @@ export class AddReferenceCnv implements IAddBase {
       const re1: DText[] = [];
       for (const it2 of it1.children) {
         // 新譯本的 Reference 只會出現在 括號內
-        if (it2.isParentheses === undefined) {
+        if (it2.isParenthesesFW === undefined) {
           re1.push(it2);
           continue;
         }
