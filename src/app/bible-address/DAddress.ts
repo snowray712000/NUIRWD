@@ -41,3 +41,38 @@ export function isTheSameAddress(addr1: DAddress, addr2: DAddress) {
 
   return addr1.book === addr2.book && addr1.chap === addr2.chap && addr1.verse === addr2.verse;
 }
+export function isLessThenAddress(addr1: DAddress, addr2: DAddress) {
+  if (addr1 === undefined || addr2 === undefined) {
+    return undefined;
+  }
+  if (addr1.book < addr2.book) {
+    return true;
+  } else if (addr1.book > addr2.book) {
+    return false;
+  } else {
+    if (addr1.chap < addr2.chap) {
+      return true;
+    } else if (addr1.chap > addr2.chap) {
+      return false;
+    } else {
+      if (addr1.verse < addr2.verse) {
+        return true;
+      } else if (addr1.verse > addr2.verse) {
+        return false;
+      } else {
+        return false;
+      }
+
+    }
+  }
+
+}
+export function isGreaterThenAddress(addr1: DAddress, addr2: DAddress) {
+  if (isLessThenAddress(addr1, addr2)) {
+    return false;
+  }
+  if (isTheSameAddress(addr1, addr2)) {
+    return false;
+  }
+  return true;
+}

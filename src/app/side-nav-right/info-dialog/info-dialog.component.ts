@@ -6,7 +6,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { OrigDictQueryor } from './OrigDictQueryor';
 import { OrigDictResultPreProcess } from './OrigDictResultPreProcess';
 import { DInfoDialogData } from './DInfoDialogData';
-import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { linq_first } from 'src/app/linq-like/linq_first';
 import { DialogRefOpenor } from './DialogRefOpenor';
 import { DialogOrigDictOpenor } from './DialogOrigDictOpenor';
 import { DictSourceVersionsTools } from './DictSourceVersionsTools';
@@ -92,7 +92,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     this.innerHtmlContent = this.sanitizer.bypassSecurityTrustHtml(domStr);
 
     const GorH = isOldTestment ? 'H' : 'G';
-    const orig = firstOrDefault(r1s.map(a1 => a1.orig), a1 => a1 !== undefined); // 浸宣版, 不會有 orig
+    const orig = linq_first(r1s.map(a1 => a1.orig), a1 => a1 !== undefined); // 浸宣版, 不會有 orig
     // tslint:disable-next-line: max-line-length
     this.innerHtmlTitle = `<span class="separatorParent"><span>${GorH}${sn}</span><span class="separator"></span><span>${orig}</span></span>`;
     this.detectChange.markForCheck();

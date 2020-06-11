@@ -7,7 +7,7 @@ import { BookNameAndId } from '../const/book-name/BookNameAndId';
 import { VerseRangeToString } from 'src/app/bible-address/VerseRangeToString';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { ParsingReferenceDescription } from './ParsingReferenceDescription';
-import { firstOrDefault } from '../linq-like/FirstOrDefault';
+import { linq_first } from '../linq-like/linq_first';
 import { DAddress } from './DAddress';
 
 export class VerseRange {
@@ -23,6 +23,10 @@ export class VerseRange {
       throw error;
     }
   }
+  /** fromReferenceDescription 縮寫 */
+  public static fD(describe: string, book1BasedDefault: number = 40): VerseRange {
+    return VerseRange.fromReferenceDescription(describe, book1BasedDefault);
+  }
   /**
    * @param bibleVersionQ 不一定用到，若有指定版本時，會用到。
    */
@@ -35,7 +39,7 @@ export class VerseRange {
     if (this.verses.length === 0 || d === undefined) {
       return false;
     }
-    const r1 = firstOrDefault(this.verses, a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
+    const r1 = linq_first(this.verses, a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
     return r1 !== undefined;
   }
   public add(v: DAddress): void { this.verses.push(v); }

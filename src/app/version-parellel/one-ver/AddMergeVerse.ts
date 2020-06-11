@@ -1,6 +1,7 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DOneLine, IAddBase } from './AddBase';
-import { linq_last, firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { linq_first } from 'src/app/linq-like/linq_first';
+import { linq_last } from "src/app/linq-like/linq_last";
 import { getNextAddress, isTheSameAddress } from 'src/app/bible-address/DAddress';
 /** 'a' 和合本 併入上節 Ps8:6-9 或 Ps8:6-9.60:1-2.92:1-4.Ps8:8 */
 export class AddMergeVerse implements IAddBase {
@@ -46,7 +47,7 @@ export class AddMergeVerse implements IAddBase {
       return false;
     }
     const v1 = linq_last(lineA.addresses.verses);
-    const v2 = firstOrDefault(lineB.addresses.verses);
+    const v2 = linq_first(lineB.addresses.verses);
     if (v1.book !== v2.book) {
       return false;
     }

@@ -1,5 +1,5 @@
 import { getVerseCount } from 'src/app/const/count-of-verse';
-import { range_linq } from 'src/app/linq-like/Range_linq';
+import { linq_range } from 'src/app/linq-like/linq_range';
 import { getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 import { IBookNameTryGetBookIdResult, IGetAddressesType } from './VerseRange';
 import { DAddress } from './DAddress';
@@ -120,26 +120,26 @@ export class GetAddresses {
     }
     // 1:2 - 1:結束
     const verse1End = getVerseCount(this.idBook, add.ch1);
-    const re = range_linq(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
+    const re = linq_range(add.vr1, verse1End - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
     // 中間章節, 例如  1:2-3:24, 第2章 從 2 開始, 有 1 章 (3-1-1)
     if (add.ch1 + 1 < add.ch2) {
-      const r2 = range_linq(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
+      const r2 = linq_range(add.ch1 + 1, add.ch2 - add.ch1 - 1).map(ch => this.generateOneChap(ch));
       r2.forEach(a1 => a1.forEach(a2 => re.push(a2)));
     }
     // 最後章節, 例 -3:31
-    range_linq(1, add.vr2).map(a1 => {
+    linq_range(1, add.vr2).map(a1 => {
       return { book: this.idBook, chap: add.ch2, verse: a1 };
     }).forEach(a1 => re.push(a1));
     return re;
   }
   private generateFromType1(add: IGetAddressesType): DAddress[] {
     // 1:12-43
-    return range_linq(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
+    return linq_range(add.vr1, add.vr2 - add.vr1 + 1, 1).map(a1 => this.new_DAddress(this.idBook, add.ch1, a1));
   }
   /** 2:1-End */
   private generateOneChap(ch: number): DAddress[] {
     const verseEnd = getVerseCount(this.idBook, ch);
-    return range_linq(1, verseEnd).map(a2 => this.new_DAddress(this.idBook, ch, a2));
+    return linq_range(1, verseEnd).map(a2 => this.new_DAddress(this.idBook, ch, a2));
   }
   private new_DAddress(book, chap, verse) { return { book, chap, verse }; }
   private getLastVerseAddress(): DAddress {
@@ -164,7 +164,7 @@ export class GetAddresses {
     // 7-9
     const last = this.getLastVerseAddress();
     const ch = last !== undefined ? last.chap : 1;
-    return range_linq(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => {
+    return linq_range(add.vr1, add.vr2 - add.vr1 + 1).map(a1 => {
       return { book: this.idBook, chap: ch, verse: a1 };
     });
   }

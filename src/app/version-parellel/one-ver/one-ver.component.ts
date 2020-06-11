@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ChangeDetectorRef, Output, EventEmitter, ViewChildren, AfterViewChecked, ElementRef } from '@angular/core';
 import { RouteStartedWhenFrame } from 'src/app/rwd-frameset/RouteStartedWhenFrame';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IsLocalHostDevelopment } from 'src/app/fhl-api/IsLocalHostDevelopment';
@@ -10,7 +10,8 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DText, DOneLine } from './AddBase';
 import { DialogRefOpenor } from 'src/app/side-nav-right/info-dialog/DialogRefOpenor';
-import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { linq_first } from 'src/app/linq-like/linq_first';
+import { linq_zip } from 'src/app/linq-like/linq_zip';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
   templateUrl: './one-ver.component.html',
   styleUrls: ['./one-ver.component.css']
 })
-export class OneVerComponent implements OnInit, OnChanges {
+export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() ver: string; // = 'unv';
   data;
   @Input() isShowSn = true;
@@ -27,7 +28,9 @@ export class OneVerComponent implements OnInit, OnChanges {
   @Input() isShowMapPhoto = true;
   @Output() clickVerse = new EventEmitter<DAddress>();
   private verseRange: VerseRange;
-
+  @ViewChildren('oneline', { read: false }) viewOneLines;
+  private isNeedGetHeight = true;
+  @Output() gettedHeight = new EventEmitter<DOneLineHeight[]>();
   constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
     const routeFrame = new RouteStartedWhenFrame(this.route, this.router);
 
@@ -39,11 +42,35 @@ export class OneVerComponent implements OnInit, OnChanges {
       }
     });
   }
+  ngAfterViewChecked(): void {
+    const refs: ElementRef[] = this.viewOneLines._results;
+    const data: DOneLine[] = this.data;
+    const ver: string = this.ver;
+
+    if (this.isNeedGetHeight === true && refs.length !== 0) {
+      // console.log(this.viewOneLines);
+
+      const r1: number[] = refs.map(a1 => a1.nativeElement.offsetHeight);
+      const r3 = linq_zip<DOneLineHeight, number, DOneLine>(r1, data, (a1, a2) => {
+        return {
+          addresses: a2.addresses,
+          cy: a1,
+          ver,
+        };
+      });
+      // console.log(r3);
+      this.gettedHeight.emit(r3);
+
+      this.isNeedGetHeight = false;
+    }
+
+    // throw new Error("Method not implemented.");
+  }
   private async getDataAsync() {
     this.data = await new BibleTextOneVersionQuery().mainAsync(this.verseRange, this.ver);
   }
   onClickVerse(it1: DOneLine) {
-    this.clickVerse.emit(firstOrDefault(it1.addresses.verses));
+    this.clickVerse.emit(linq_first(it1.addresses.verses));
   }
   onClickAddress(it1) {
 
@@ -85,3 +112,10 @@ export class OneVerComponent implements OnInit, OnChanges {
 
 }
 
+export interface DOneLineHeight {
+  addresses?: VerseRange;
+  cy?: number;
+  /** 算出來的結果, 若不需設定, 則為 undefined */
+  cy2?: number;
+  ver?: string;
+}

@@ -1,7 +1,8 @@
 <div class='text-base'>
   <div *ngFor="let it1 of data;let i1=index" [class.odd]="i1%2===1 && isBreakLineEachVerse"
     [class.no-break-line]="false===isBreakLineEachVerse"
-    (click)="onClickVerse(it1)">
+    (click)="onClickVerse(it1)"
+    #oneline>
     <span class='address' [style.color]="settingAddressShow.getColor()" *ngIf="settingAddressShow.isAddressBefore()"
       (click)="onClickAddress(it1)">
       {{settingAddressShow.getAddressesShow(it1.addresses)}}

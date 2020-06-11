@@ -1,6 +1,6 @@
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { ApiSc, DApiScResult } from 'src/app/fhl-api/ApiSc';
-import { range_linq } from 'src/app/linq-like/Range_linq';
+import { linq_range } from 'src/app/linq-like/linq_range';
 import { NumberStringGet, NumberType } from './NumberStringGet';
 import { ICommentToolDataGetter, DCommentOneData, DCommentQueryResult } from './comment-tool-interfaces';
 import { ScApiNextPrevGetter } from '../../fhl-api/ScApiNextPrevGetter';
@@ -165,10 +165,10 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
     // const ulistTp4 = '☆';
     // const listTp5 =
     // 壹、 貳、
-    const rr1 = range_linq(0, 9).map(a1 => new NumberStringGet().main(a1, NumberType.壹) + '、');
+    const rr1 = linq_range(0, 9).map(a1 => new NumberStringGet().main(a1, NumberType.壹) + '、');
     const reg1 = new RegExp(`^(\\s*)(?:${rr1.join('|')})`, 'i');
 
-    const rr2 = range_linq(1, 99).map(a1 => new NumberStringGet().main(a1, NumberType.一));
+    const rr2 = linq_range(1, 99).map(a1 => new NumberStringGet().main(a1, NumberType.一));
     // 一、 二、 三、
     const rr2a = rr2.map(a1 => a1 + '、').join('|');
     const reg2 = new RegExp(`^(\\s*)(?:${rr2a})`, 'i');
@@ -178,15 +178,15 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
     const reg3 = new RegExp(`^(\\s*)(?:${rr3})`, 'i');
 
     // 1. 2. 3. 4. 注意! '.' 是reg中的特殊符號
-    const rr4 = range_linq(0, 99).map(a1 => a1 + '\\.').join('|');
+    const rr4 = linq_range(0, 99).map(a1 => a1 + '\\.').join('|');
     const reg4 = new RegExp(`^(\\s*)(?:${rr4})`, 'i');
 
     // (1) (2) (3) (4) 注意! '(' ')' 是reg中的特殊符號
-    const rr5 = range_linq(0, 99).map(a1 => '\\(' + a1 + '\\)').join('|');
+    const rr5 = linq_range(0, 99).map(a1 => '\\(' + a1 + '\\)').join('|');
     const reg5 = new RegExp(`^(\\s*)(?:${rr5})`, 'i');
 
     // a. b. c. d. e. 注意! '.'是reg中的特殊符號
-    const rrr5 = range_linq(1, 26).map(a1 => new NumberStringGet().main(a1, NumberType.a) + '\\.').join('|');
+    const rrr5 = linq_range(1, 26).map(a1 => new NumberStringGet().main(a1, NumberType.a) + '\\.').join('|');
     const reg55 = new RegExp(`^(\\s*)(?:${rrr5})`, 'i');
 
     const reg6 = new RegExp(`^(\\s*)●`, 'i');

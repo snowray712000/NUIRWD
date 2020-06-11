@@ -15,7 +15,7 @@ export class AddParenthesesUnvNcv implements IAddBase {
         // const r1 = new SplitStringByRegexVer2().main(it2.w, /（[^（]*（[^）]*）[^）]*）|（[^）]+）/g);
         // const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（[^）]+）)/g);
         const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（([^）]+)）)|(?:\(([^\)]+)\))/g);
-        console.log(r1);
+        // console.log(r1);
         for (const it3 of r1) {
           const r2 = deepCopy(it2);
           if (it3.exec === undefined) {

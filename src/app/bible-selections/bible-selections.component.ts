@@ -10,7 +10,7 @@ import { BookNameLang } from '../const/book-name/BookNameLang';
 import { inject } from '@angular/core/testing';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
-import { range_linq } from '../linq-like/Range_linq';
+import { linq_range } from '../linq-like/linq_range';
 import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 
@@ -61,7 +61,7 @@ export class BibleSelectionsComponent implements OnInit {
     return `/bible/${eng}${ch}`; // /bible/Mt1
   }
   private getCountChapArray() {
-    return range_linq(1, getChapCount(this.beSelectedBookId));
+    return linq_range(1, getChapCount(this.beSelectedBookId));
   }
   private getList(): DListShow[] {
     const r1 = type1.map(a1 => {

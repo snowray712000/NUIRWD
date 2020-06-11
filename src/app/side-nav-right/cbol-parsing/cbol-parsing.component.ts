@@ -4,7 +4,7 @@ import { getChapCount } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { GetWordsFromQbResult } from './GetWordsFromQbResult';
 import { GetExpsFromQbResult } from './GetExpsFromQbResult';
-import { zip } from 'src/app/linq-like/zip';
+import { linq_zip } from 'src/app/linq-like/linq_zip';
 import { assert } from 'src/app/tools/assert';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -19,7 +19,7 @@ import { TextWithSnConvertor } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { firstOrDefault } from 'src/app/linq-like/FirstOrDefault';
+import { linq_first } from 'src/app/linq-like/linq_first';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
@@ -77,7 +77,7 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     }
 
     // console.log(this.words); // [{wid,word,sn,exp,orig,pro,wform} ]
-    const r1 = firstOrDefault(this.words, a1 => a1.wid === arg.wid);
+    const r1 = linq_first(this.words, a1 => a1.wid === arg.wid);
 
     const fn1 = (a2: string) => a2 !== undefined ? a2 : '';
     const pro = fn1(r1.pro);
@@ -206,7 +206,7 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     // [[{"w":"起初，"}],[{"w":"上帝創造天和地。"}]]
 
     assert(() => words.length === exps.length, '行數要一 樣');
-    const re = zip(words, exps, (a1, a2) => {
+    const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
     // console.log(re);
@@ -225,7 +225,7 @@ export class CbolParsingComponent implements OnInit, OnChanges {
 
 
     assert(() => words.length === exps.length, '行數要一 樣');
-    const re = zip(words, exps, (a1, a2) => {
+    const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
     // console.log(re);

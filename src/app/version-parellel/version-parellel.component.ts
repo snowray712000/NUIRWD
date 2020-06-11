@@ -8,6 +8,8 @@ import { IOnChangedSettingIsSn } from './version-parellel-interfaces';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
 import { DAddress } from '../bible-address/DAddress';
+import { DOneLineHeight } from './one-ver/one-ver.component';
+import { HeightCalc } from './HeightCalc';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   private versAll: OneBibleVersion[];
   private onChangedSettingIsSn: IOnChangedSettingIsSn;
   @Output() clickVerse = new EventEmitter<{ address: DAddress, ver: string }>();
+  private mapVer2Heights = new Map<string, DOneLineHeight[]>();
   constructor(private cr: ComponentFactoryResolver,
     private detectChange: ChangeDetectorRef) {
 
@@ -130,6 +133,18 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
     const dom = asHTMLElement(this.baseDiv.element.nativeElement);
   }
+  onGettedHeight(info: DOneLineHeight[]) {
+    const map = this.mapVer2Heights;
+    if (info.length > 0) {
+      map.set(info[0].ver, info);
+      // console.log(map);
+      if (map.size === this.versions.length) {
+        console.log('calc');
+        const r1 = new HeightCalc().main(map);
+        console.log(r1);
+      }
+    }
+  }
   onClickVerse(address: DAddress, verEng: string) {
     // console.log(address);
     // console.log(verEng);
@@ -142,3 +157,4 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     return 'column';
   }
 }
+

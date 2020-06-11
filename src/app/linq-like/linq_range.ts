@@ -1,4 +1,4 @@
-export function range_linq(i= 0, count = 10, delta = 1): number[] {
+export function linq_range(i= 0, count = 10, delta = 1): number[] {
   const re = new Array<number>();
   let r1 = 0;
   let r2 = i;
