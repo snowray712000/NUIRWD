@@ -1,5 +1,8 @@
-<div class="example-container" #baseFrame (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
-  [class.example-is-mobile]="isMobile()">
+<!-- <div class="example-container" #baseFrame (window:resize)="onResize($event)" (window:orientationchange)="onResize($event)"
+  [class.example-is-mobile]="isMobile()"> -->
+<div class="example-container" #baseFrame
+(window:resize)="onResize($event)"
+[class.example-is-mobile]="isMobile()">
 
   <mat-toolbar color="primary" class='example-toolbar'>
     <button mat-icon-button (click)="snavLeft.toggle()">
@@ -18,7 +21,7 @@
 
   <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 64 : 0">
     <mat-sidenav #snavLeft [mode]="'push'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.min-width.px]="170"
-      (closed)="onClosedLeftSide()">
+      (opened)="onOpenedLeftSide()" (closed)="onClosedLeftSide()">
       <app-side-nav-left [verIdsOfInit]="verIdsOfInit" (notifyChangedBibleVersionIds)="onChangedBibleVersionIds($event)"
         (notifyChangedIsSn)="onNotifyChangedIsSn($event)"></app-side-nav-left>
     </mat-sidenav>

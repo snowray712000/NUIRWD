@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked, ViewChildren } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { isArrayEqualLength, isArrayEqual } from '../tools/arrayEqual';
@@ -10,6 +10,8 @@ import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
 import { DAddress } from '../bible-address/DAddress';
 import { DOneLineHeight } from './one-ver/one-ver.component';
 import { HeightCalc } from './HeightCalc';
+import { EventSideNavs, IEventSideNavs } from '../rwd-frameset/EventSideNavs';
+import { EventVersionsChanged } from '../side-nav-left/ver-select/EventVersionControlBridge';
 
 
 @Component({
@@ -32,11 +34,14 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   private onChangedSettingIsSn: IOnChangedSettingIsSn;
   @Output() clickVerse = new EventEmitter<{ address: DAddress, ver: string }>();
   private mapVer2Heights = new Map<string, DOneLineHeight[]>();
+  private isChildCalced: 0 | 1 = 0;
+  widthEach: number;
   constructor(private cr: ComponentFactoryResolver,
     private detectChange: ChangeDetectorRef) {
 
     const routeFrame = new RouteStartedWhenFrame();
     routeFrame.routeTools.verseRange$.subscribe(a1 => {
+      this.mapVer2Heights.clear();
       // console.log(this.versions);
 
       // this.bibleLink = routeFrame.routeTools.descriptionLast;
@@ -45,6 +50,18 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
       //   this.chaps = a2;
       // });
     });
+
+    setTimeout(() => {
+      const r1 = new EventSideNavs();
+      r1.leftChanged$.subscribe(isOpened => {
+        this.mapVer2Heights.clear(); // 這樣, 準備重算高度
+      });
+      const eventsVersionsChanged = new EventVersionsChanged();
+      eventsVersionsChanged.changed$.subscribe(vers => {
+        this.mapVer2Heights.clear(); // 這樣, 準備重算高度
+      });
+    }, 0);
+
 
     this.bindIsSnOnChangedEvent();
   }
@@ -111,7 +128,10 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     this.width = width;
 
     const isEnoughOld = this.isEnoughWidthParellel;
-    this.isEnoughWidthParellel = this.calcEachVersionWidths() > this.widthLimitSet;
+    const widthEach = this.calcEachVersionWidths();
+    this.widthEach = widthEach;
+
+    this.isEnoughWidthParellel = widthEach > this.widthLimitSet;
     if (isEnoughOld !== this.isEnoughWidthParellel) {
       this.detectChange.detectChanges();
     }
@@ -134,14 +154,16 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     const dom = asHTMLElement(this.baseDiv.element.nativeElement);
   }
   onGettedHeight(info: DOneLineHeight[]) {
+    this.isChildCalced = 0;
     const map = this.mapVer2Heights;
     if (info.length > 0) {
       map.set(info[0].ver, info);
       // console.log(map);
       if (map.size === this.versions.length) {
-        console.log('calc');
-        const r1 = new HeightCalc().main(map);
-        console.log(r1);
+        new HeightCalc().main(map);
+        this.isChildCalced = 1;
+        this.detectChange.markForCheck();
+        this.mapVer2Heights.clear();
       }
     }
   }

@@ -5,7 +5,7 @@ import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 
 /** 使用 \r\n 或 \n 來換行的 */
 export class AddBrStdandard implements IAddBase {
-  async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistChange = false;
 

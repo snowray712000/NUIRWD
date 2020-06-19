@@ -10,13 +10,20 @@ import { AddTitleH3 } from './AddTitleHx';
 import { AddReferenceCnv } from './AddReferenceCnv';
 import { AddBrCnv } from './AddBrCnv';
 import { AddBrStdandard } from './AddBrStdandard';
+import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 export class BibleTextOneVersionQuery {
+  dataMapAndPhoto: DApiSobjResult[];
+  constructor(dataMapAndPhoto?: DApiSobjResult[]) {
+    this.dataMapAndPhoto = dataMapAndPhoto;
+  }
   async mainAsync(verses: VerseRange, ver?: string): Promise<DOneLine[]> {
     if (ver === undefined) {
       ver = 'unv';
     }
+    // console.log(verses);
 
     let re1 = await this.getBibleTexts(verses, ver);
+    // console.log(re1);
 
     const isSN = true; const isMapPhoto = true;
     // console.log(ver);
@@ -25,23 +32,23 @@ export class BibleTextOneVersionQuery {
 
     if (ver === 'unv') {
       // 和合本
-      re1 = await new AddMergeVerse().mainAsync(re1, verses);
-      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
-      re1 = false ? re1 : await new AddSnInfo().mainAsync(re1, verses);
-      re1 = await new AddMapPhotoInfo().mainAsync(re1, verses);
+      re1 = new AddMergeVerse().main(re1, verses);
+      re1 = new AddParenthesesUnvNcv().main(re1, verses);
+      re1 = false ? re1 : new AddSnInfo().main(re1, verses);
+      re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
       return re1;
     } else if (ver === 'ncv') {
       // 新譯本
-      re1 = await new AddMergeVerse().mainAsync(re1, verses);
-      re1 = await new AddTitleH3().mainAsync(re1, verses);
-      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
-      re1 = await new AddReferenceCnv().mainAsync(re1, verses);
-      re1 = await new AddMapPhotoInfo().mainAsync(re1, verses);
-      re1 = await new AddBrCnv().mainAsync(re1, verses);
+      re1 = new AddMergeVerse().main(re1, verses);
+      re1 = new AddTitleH3().main(re1, verses);
+      re1 = new AddParenthesesUnvNcv().main(re1, verses);
+      re1 = new AddReferenceCnv().main(re1, verses);
+      re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
+      re1 = new AddBrCnv().main(re1, verses);
     } else if (ver === 'cbol') {
       // 原文直譯
-      re1 = await new AddBrStdandard().mainAsync(re1, verses);
-      re1 = await new AddParenthesesUnvNcv().mainAsync(re1, verses);
+      re1 = new AddBrStdandard().main(re1, verses);
+      re1 = new AddParenthesesUnvNcv().main(re1, verses);
     }
 
     return re1;

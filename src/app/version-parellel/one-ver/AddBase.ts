@@ -1,8 +1,7 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 
 export interface IAddBase {
-  /** 有的需要 async, 如 sobj, 有的需 verses, 如 sobj */
-  mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]>;
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[];
 }
 
 /** w,sn,tp,tp2 */

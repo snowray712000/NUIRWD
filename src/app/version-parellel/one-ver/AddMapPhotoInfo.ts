@@ -1,17 +1,22 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookChapDistinctTool } from './BookChapDistinctTool';
-import { ApiSobj, DApiSobOneRecord } from 'src/app/fhl-api/ApiSobj';
+import { ApiSobj, DApiSobOneRecord, DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { linq_distinct } from 'src/app/linq-like/linq_distinct';
 import { linq_first } from 'src/app/linq-like/linq_first';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { DOneLine, DText } from './AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 export class AddMapPhotoInfo {
+  private re3: DApiSobjResult[];
+  /** const re3 = await this.getPhotoMapFromApi(verses); */
+  constructor(dataPhotoAndMap?: DApiSobjResult[]) {
+    this.re3 = dataPhotoAndMap;
+  }
   /** 若這經文範例 verses 中沒有任何 sobj 資料, 回傳 re2 */
-  async mainAsync(re2: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
-    const re3 = await this.getPhotoMapFromApi(verses);
+  main(re2: DOneLine[], verses: VerseRange): DOneLine[] {
+    const re3 = this.re3;
     // console.log(re3);
-    if (re3[0].record.length === 0) {
+    if (re3 === undefined || re3[0].record.length === 0) {
       return re2;
     }
     const map1 = new Map<number, DApiSobOneRecord>();
@@ -109,11 +114,13 @@ export class AddMapPhotoInfo {
     // console.log(re4EachLine);
     return re4EachLine;
   }
-  private async getPhotoMapFromApi(verses: VerseRange) {
+  // tslint:disable-next-line: member-ordering
+  public static async getPhotoMapFromApi(verses: VerseRange) {
     const r1 = new BookChapDistinctTool(verses);
     const r2 = r1.addressesOfBookChap.map(a1 => {
-      a1.verse = -1;
-      return new ApiSobj().querySobjAsync({ address: a1 }).toPromise();
+      const r3 = deepCopy(a1);
+      r3.verse = -1 ;
+      return new ApiSobj().querySobjAsync({ address: r3 }).toPromise();
     });
     const re3 = await Promise.all(r2);
     return re3;

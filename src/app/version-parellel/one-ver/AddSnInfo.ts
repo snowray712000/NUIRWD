@@ -3,7 +3,7 @@ import { DOneLine, DText, IAddBase } from './AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 export class AddSnInfo implements IAddBase {
-  async mainAsync(lines: DOneLine[], verses: import('../../bible-address/VerseRange').VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: import('../../bible-address/VerseRange').VerseRange): DOneLine[] {
 
     const re: DOneLine[] = [];
     let isExistChange = false;

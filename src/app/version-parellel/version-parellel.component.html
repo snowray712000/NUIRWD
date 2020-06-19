@@ -2,7 +2,9 @@
      [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
      <span *ngIf="versions.length === 0">請選擇聖經版本</span>
 
-     <app-one-ver fxFlex="100%" *ngFor="let item of getVersInEngs()" [isShowSn]="getIsShowSn()" [isShowMapPhoto]="getIsShowMapPhoto()" [isBreakLineEachVerse]="getIsBreakLineEachVerse()" [ver]="item" (clickVerse)="onClickVerse($event,item)"
-     (gettedHeight)="onGettedHeight($event)">
+     <app-one-ver #oneVer fxFlex="100%" *ngFor="let item of getVersInEngs()" [isShowSn]="getIsShowSn()" [isShowMapPhoto]="getIsShowMapPhoto()" [isBreakLineEachVerse]="getIsBreakLineEachVerse()" [ver]="item" (clickVerse)="onClickVerse($event,item)"
+     (gettedHeight)="onGettedHeight($event)"
+     [setCy2Calced]="isChildCalced"
+     [isEnoughWidthParellel]="isEnoughWidthParellel">
      </app-one-ver>
 </div>

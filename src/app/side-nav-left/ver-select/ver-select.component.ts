@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { BibleVersionQueryService } from '../../fhl-api/bible-version-query.service';
-import { of, Observable, interval as rxjsInterval } from 'rxjs';
+import { of, Observable, interval as rxjsInterval, Subscriber } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { tap, map, catchError, shareReplay } from 'rxjs/operators';
 import { IBibleVersionQueryService } from 'src/app/fhl-api/IBibleVersionQueryService';
@@ -9,6 +9,7 @@ import { IConvertBibleVersionId2Eng, IConvertBibleVersionEng2Id } from '../../fh
 import { ConvertBibleVersionTool } from '../../fhl-api/convert-bible-version';
 import { MatListOption } from '@angular/material/list';
 import { setTimeoutTrySleepTry } from 'src/app/tools/setTimeoutTrySleepTry';
+import { EventVersionControlBridge } from './EventVersionControlBridge';
 
 // IConvertBibleVersionEng2Id 會用到, (通用的) - checkbox 轉回 id 時會用
 function testData() {
@@ -29,7 +30,6 @@ function testData() {
     },
   ]);
 }
-
 @Component({
   selector: 'app-ver-select',
   templateUrl: './ver-select.component.html',
@@ -45,17 +45,25 @@ export class VerSelectComponent implements OnInit, AfterViewInit {
   @Output() notify = new EventEmitter<Array<number>>();
   @Input() verIdsOfInit: number[] = [];
   verClass = testData();
+  changedVersions$: Observable<string[]>;
+  obVers: Subscriber<string[]>;
   constructor() {
     this.versionQ = new VersionsQuery(undefined);
     const cvtVer = new ConvertBibleVersionTool();
     this.eng2id = cvtVer;
     this.id2eng = cvtVer;
+    this.changedVersions$ = new Observable<string[]>(obVers => {
+      this.obVers = obVers;
+    });
+    this.changedVersions$.toPromise().then(a1 => { });
+    /** 只需 new 一次 , 供 static */
+    new EventVersionControlBridge(this.changedVersions$);
   }
   ngAfterViewInit(): void {
     let opts: QueryList<any>;
     setTimeoutTrySleepTry(() => {
       opts = this.verOpts;
-      return opts.length === 0 || this.verClass === undefined ;
+      return opts.length === 0 || this.verClass === undefined;
     }, () => {
       this.id2eng.convertIds2EngsAsync(this.verIdsOfInit).then(engs => {
         opts.forEach(a1 => {
@@ -78,6 +86,7 @@ export class VerSelectComponent implements OnInit, AfterViewInit {
   /** 在 html 中, checkbox select changed 時會自動觸發這個 */
   private onSelectChanged() {
     const vers = this.getVersionsFromVerCControls();
+    this.obVers.next(vers);
     const pthis = this;
     this.eng2id.convertEngs2IdsAsync(vers).then(a1 => {
       pthis.notify.emit(a1);

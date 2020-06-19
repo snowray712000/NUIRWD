@@ -50,8 +50,7 @@ export class HeightCalcWithoutMerge {
       if (tft[i1] === true) {
         const r2 = this.data.get(a1);
         return r2[idxs[i1]].cy;
-      }
-      else {
+      } else {
         return undefined;
       }
     }).filter(a1 => a1 !== undefined);
@@ -67,8 +66,7 @@ export class HeightCalcWithoutMerge {
       if (it !== undefined) {
         if (m === undefined) {
           m = it;
-        }
-        else {
+        } else {
           m = isLessThenAddress(it, m) ? it : m;
         }
       }
@@ -82,8 +80,7 @@ export class HeightCalcWithoutMerge {
       const r2 = this.data.get(keys[i1]);
       if (it1 >= r2.length) {
         r1.push(undefined);
-      }
-      else {
+      } else {
         r1.push(r2[it1].addresses.verses[0]);
       }
     }

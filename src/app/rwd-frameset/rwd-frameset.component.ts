@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { asHTMLElement } from '../tools/asHTMLElement';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, observable, fromEvent } from 'rxjs';
 import { appInstance } from '../app.module';
 import { isArrayEqual } from '../tools/arrayEqual';
 import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
@@ -11,19 +11,26 @@ import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-shee
 import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteStartedWhenFrame } from './RouteStartedWhenFrame';
+import { SideNavsOnFrame } from "./SideNavsOnFrame";
 import { DAddress } from '../bible-address/DAddress';
+import { log } from 'util';
+import { DEventWindowSizeChanged, EventWindowSizeChanged } from './EventWindowSizeChanged';
+import { assert } from '../tools/assert';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
   styleUrls: ['./rwd-frameset.component.css']
 })
-export class RwdFramesetComponent implements AfterViewInit {
+export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private onVerIdsChanged: IOnChangedBibleVersionIds;
   /** U: Update Ver: Bible Version */
   private iUpdateVerIds: IUpdateBibleVersionIds;
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
   addressActived: DAddress;
+  @ViewChild('snavLeft', null) leftSideNav;
+  @ViewChild('snavRight', null) rightSideNav;
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -34,11 +41,16 @@ export class RwdFramesetComponent implements AfterViewInit {
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
     this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
     this.initAboutVerChangeOrUpdate();
+
+
+  }
+  ngOnInit(): void {
   }
   onClickVerse(info: { address: DAddress, ver: string }) {
     this.addressActived = info.address;
     this.detectChange.markForCheck();
   }
+
 
   private media: MediaMatcher;
   // private detectChange: ChangeDetectorRef;
@@ -82,8 +94,13 @@ export class RwdFramesetComponent implements AfterViewInit {
   private onChangedBibleVersionIds(ids) {
     this.iUpdateVerIds.updateBibleVersionIds(ids);
   }
+  onOpenedLeftSide() {
+    // console.log('on opened left side');
+  }
   /** html in use */
   private onClosedLeftSide() {
+    // console.log('on closed left side');
+
     if (this.isMobile()) {
     }
     this.checkWidthAndReRenderIfNeed();
@@ -92,10 +109,14 @@ export class RwdFramesetComponent implements AfterViewInit {
 
   }
   ngAfterViewInit(): void {
+    // 設定 static  變數, 此行放在 建構子不行, 因為 side nav 還是 undefined
+    new SideNavsOnFrame(this.leftSideNav, this.rightSideNav);
+
     this.checkWidthAndReRenderIfNeed();
   }
+
   /** html in use */
-  private onResize() {
+  private onResize(r1) {
     this.checkWidthAndReRenderIfNeed();
   }
   private checkWidthAndReRenderIfNeed() {

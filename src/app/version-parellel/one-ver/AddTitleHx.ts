@@ -3,7 +3,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { deepCopy } from 'src/app/tools/deepCopy';
 export class AddTitleH3 implements IAddBase {
-  async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistChange = false;
 

@@ -48,10 +48,14 @@ export class RouteStartedWhenFrame {
     // console.log(r1);
 
     if (this.isNullOrEmptyVerses(this.routeTools.verseRangeLast)) {
-      return VerseRange.fromReferenceDescription(r1, 40);
+      const r2 = VerseRange.fromReferenceDescription(r1, 40);
+      // console.log(r2);
+      return r2;
     } else {
       const r3 = this.routeTools.verseRangeLast;
-      return VerseRange.fromReferenceDescription(r1, r3.verses[0].book);
+      const r4 = VerseRange.fromReferenceDescription(r1, r3.verses[0].book);
+      // console.log(r4);
+      return r4;
     }
   }
   private isNullOrEmptyVerses(a1: VerseRange) {

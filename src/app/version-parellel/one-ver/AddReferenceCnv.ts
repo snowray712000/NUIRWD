@@ -11,7 +11,7 @@ export class AddReferenceCnv implements IAddBase {
   private static reg1: RegExp;
   static reg2: RegExp;
   constructor() { }
-  async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistChange = false;
 

@@ -5,7 +5,7 @@ import { deepCopy } from 'src/app/tools/deepCopy';
 /** unv用, ncv 新譯本也用, 全型小括號 */
 export class AddParenthesesUnvNcv implements IAddBase {
   /** 若都沒有, 就回傳 lines, 不然, 會回傳新的一份 */
-  async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistChange = false;
     for (const it1 of lines) {

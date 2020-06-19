@@ -3,7 +3,7 @@ import { deepCopy } from 'src/app/tools/deepCopy';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 
 export class AddBrCnv implements IAddBase {
-  async mainAsync(lines: DOneLine[], verses: VerseRange): Promise<DOneLine[]> {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
     for (const it1 of lines) {
       const re1: DText[] = [];
       // 這個是h3, 下一個不是時, 就加一個
