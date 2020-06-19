@@ -91,17 +91,29 @@
   })
 </script>
 <script>
+  var todos = [
+    '(RD) 200619a浸宣舊約上線了 stwcbhdic.php',
+    '(RD) 200619a Bug發現, ios平板的地圖無法正常顯示(電腦版可以)',
+  ];
   var data105MathB = [
     {
+      na: '200619b_浸宣舊約原文字典上線',
+      na2: [
+         '新增 - 浸宣舊約原文字典上線.'
+        , '(Bug) 地圖、相片會出不來，先拿掉。 #平板'
+        , '(Bug) 切換書卷章節不正常。 #平板'
+        , '(Bug修復) - 舊約Sn Click正確。'
+      ]
+    },
+    {
       na: '200619a_高度自動對齊',
-      na2: [ '高度自動對齊, 當視窗改變, 版本數量改變, Sn開關改變, 手機旋轉, 都會重新計算'
-        ,'(RD) 新增了 EventVerseChanged, 這個可以任何地方使用 left right 開啟/關閉 事件.'
+      na2: ['高度自動對齊, 當視窗改變, 版本數量改變, Sn開關改變, 手機旋轉, 都會重新計算'
+        , '(RD) 新增了 EventVerseChanged, 這個可以任何地方使用 left right 開啟/關閉 事件.'
         , '(RD) 新增了 EventVersionsChanged, 可任何地方使用 versions changed'
         , '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個'
         , '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個'
         , '(RD技術) 原生訊息, 要透過 fromEvent 才能夠有一個以上訂閱. 例 window resize'
         , '(RD技術) debounceTime 不錯, 若訊息異常密集, 可以用這個, 100ms 內, 只允許一個.'
-        , '(RD) 浸宣舊約上線了 stwcbhdic.php'
       ]
     },
     {

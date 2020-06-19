@@ -10,7 +10,7 @@ export class ApiSdOrSbdagCore {
     isOldTestment?: boolean;
     isSimpleChinese?: boolean;
   }): Observable<DApiSdResult> {
-    assert(() => this.sdOrSbdag === 'sd' || this.sdOrSbdag === 'sbdag');
+    assert(() => this.sdOrSbdag === 'sd' || this.sdOrSbdag === 'sbdag' || this.sdOrSbdag === 'stwcbhdic');
     // `N=0&k=11&gb=0`; N=0, 新約 N=1, 舊約
     const gb = arg.isSimpleChinese !== undefined ? (arg.isSimpleChinese ? 1 : 0) : 0;
     const N = arg.isOldTestment !== undefined ? (arg.isOldTestment ? 1 : 0) : 0;

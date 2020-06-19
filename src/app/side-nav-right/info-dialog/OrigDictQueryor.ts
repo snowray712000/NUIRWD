@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiSbdag } from '../../fhl-api/ApiSbdag';
+import { ApiStwcbhdic } from "../../fhl-api/ApiStwcbhdic";
 import { ApiSd } from '../../fhl-api/ApiSd';
 import { DApiSdResult } from '../../fhl-api/DApiSdResult';
 
@@ -17,7 +18,11 @@ export class OrigDictQueryor {
     arg.ver = arg.ver !== undefined ? arg.ver : '中文';
 
     if (arg.ver === '浸宣') {
-      return new ApiSbdag().queryQsbAsync(arg).pipe(map(a1 => this.cvtFromSbdagApi(a1)));
+      if (!arg.isOldTestment) {
+        return new ApiSbdag().queryQsbAsync(arg).pipe(map(a1 => this.cvtFromSbdagApi(a1)));
+      } else {
+        return new ApiStwcbhdic().queryQsbAsync(arg).pipe(map(a1 => this.cvtFromSbdagApi(a1)));
+      }
     } else if (arg.ver === '英文' || arg.ver === '中文') {
       return new ApiSd().queryQsbAsync(arg).pipe(map(a1 => this.cvtFromSdApi(a1, arg.ver)));
     }

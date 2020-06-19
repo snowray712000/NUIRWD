@@ -35,7 +35,7 @@ export class BibleTextOneVersionQuery {
       re1 = new AddMergeVerse().main(re1, verses);
       re1 = new AddParenthesesUnvNcv().main(re1, verses);
       re1 = false ? re1 : new AddSnInfo().main(re1, verses);
-      re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
+      // re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
       return re1;
     } else if (ver === 'ncv') {
       // 新譯本

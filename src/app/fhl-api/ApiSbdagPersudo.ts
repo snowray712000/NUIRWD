@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { DApiSdResult } from "./DApiSdResult";
+import { DApiSdResult } from './DApiSdResult';
 export class ApiSbdagPersudo {
   queryQsbAsync(arg: {
     sn: string;

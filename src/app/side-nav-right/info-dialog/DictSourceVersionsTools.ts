@@ -9,7 +9,7 @@ export class DictSourceVersionsTools {
       vers.push('中文');
     }
     // 按 cbol 順序, 中文->浸宣->英文
-    if (checkedStates.isSbdag && !isOldStatement) {
+    if (checkedStates.isSbdag) {
       vers.push('浸宣');
     }
     if (checkedStates.isEng) {

@@ -139,6 +139,9 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
   onClickRef(it1: DText) {
     new DialogRefOpenor(this.dialog).showDialog(it1.refDescription);
   }
+  onClickOrig(it2) {
+    new DialogOrigDictOpenor(this.dialog).showDialog({ sn: it2.sn, isOld: it2.tp === 'H' });
+  }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     this.logName('changes');
 
@@ -186,9 +189,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
     }
     this.lineCys2 = re;
   }
-  onClickOrig(it2) {
-    new DialogOrigDictOpenor(this.dialog).showDialog({ sn: it2.sn, isOld: it2.isOld });
-  }
+
   getMapLink(it) {
     let base = '/';
     if (IsLocalHostDevelopment.isLocalHost) {
