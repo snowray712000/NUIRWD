@@ -1,0 +1,24 @@
+<div>
+  <mat-dialog-content>
+    <div *ngFor="let it1 of data; let i1=index" [class.odd]="i1%2===1">
+      <span>
+        <span *ngFor="let it2 of it1.children; let i2=index">
+          <br *ngIf="it2.isBr!==undefined" />
+          <hr *ngIf="it2.isHr!==undefined" />
+          <!-- <span *ngIf="it2.isHr!==undefined" ><br/>－－<br/></span> -->
+          <span *ngIf="it2.sn!==undefined" class="orig" (click)="onClickOrig(it2.w)">
+            {{it2.w}}
+          </span>
+          <span *ngIf="it2.key!==undefined" [class]="getKeywordClass(it2)">{{it2.w}}</span>
+          <span *ngIf="it2.isRef===1" class='reference' [attr.data-ref]="'#'+it2.refDescription+'|'"
+            (click)="onClickReference('#'+it2.refDescription+'|')">{{it2.w}}</span>
+          <span *ngIf="getIsPureText(it2)">{{it2.w}}</span>
+        </span>
+        <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
+          (click)="onClickReference(getReferenceEntireChap(it1))">
+          ({{it1.addresses.toStringChineseShort()}})
+        </span>
+      </span>
+    </div>
+  </mat-dialog-content>
+</div>

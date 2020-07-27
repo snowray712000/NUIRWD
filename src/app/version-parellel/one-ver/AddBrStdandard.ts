@@ -5,7 +5,7 @@ import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 
 /** 使用 \r\n 或 \n 來換行的 */
 export class AddBrStdandard implements IAddBase {
-  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
+  main(lines: DOneLine[], verses?: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistChange = false;
 
@@ -30,5 +30,13 @@ export class AddBrStdandard implements IAddBase {
     }
 
     return isExistChange ? re : lines;
+  }
+  /** OrigDict 使用, 核心也是用 main() */
+  main2(lines: DText[]): DText[] {
+    const r1: DOneLine = {
+      children: lines
+    };
+    const r2 = this.main([r1]);
+    return r2[0].children;
   }
 }

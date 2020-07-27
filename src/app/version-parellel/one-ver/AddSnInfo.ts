@@ -2,8 +2,10 @@ import { TextWithSnConvertor } from 'src/app/side-nav-right/cbol-parsing/TextWit
 import { DOneLine, DText, IAddBase } from './AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
+import { VerseRange } from 'src/app/bible-address/VerseRange';
+/** WG WTG WAG WTH WH */
 export class AddSnInfo implements IAddBase {
-  main(lines: DOneLine[], verses: import('../../bible-address/VerseRange').VerseRange): DOneLine[] {
+  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
 
     const re: DOneLine[] = [];
     let isExistChange = false;
@@ -49,3 +51,5 @@ export class AddSnInfo implements IAddBase {
     return inOutRe2;
   }
 }
+
+

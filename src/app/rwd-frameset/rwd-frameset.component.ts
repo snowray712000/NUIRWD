@@ -17,6 +17,9 @@ import { log } from 'util';
 import { DEventWindowSizeChanged, EventWindowSizeChanged } from './EventWindowSizeChanged';
 import { assert } from '../tools/assert';
 import { map } from 'rxjs/operators';
+import { ajax } from 'jquery';
+import { DialogSearchResultOpenor } from './search-result-dialog/DialogSearchResultOpenor';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -34,6 +37,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
   ) {
     // tslint:disable-next-line: no-unused-expression
     new RouteStartedWhenFrame(route, router); // 傳值 static 進去
@@ -49,6 +53,13 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   onClickVerse(info: { address: DAddress, ver: string }) {
     this.addressActived = info.address;
     this.detectChange.markForCheck();
+  }
+  onClickSearch(txt: string) {
+    if (txt === undefined || txt.length === 0) {
+      return;
+    }
+
+    new DialogSearchResultOpenor(this.dialog).showDialog(txt);
   }
 
 
@@ -161,7 +172,6 @@ interface SideWidthStyle {
   maxWidth: number,
   width: number,
 }
-
 /** test 用 bibleVersion, 以後會跟 global setting 放在一起 */
 class TestVerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVersionIds {
   private ids;

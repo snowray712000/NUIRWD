@@ -81,7 +81,7 @@ export class InfoDialogComponent implements OnInit, AfterViewChecked {
     const tasks = vers.map(a1 => new OrigDictQueryor().queryDictAsync({
       sn,
       isOldTestment,
-      ver: a1
+      ver: a1 as '中文' | '英文' | '浸宣'
     }).toPromise());
     const r1s = (await Promise.all(tasks)).filter(a1 => a1 !== null && a1.text !== null);
     // console.log(r1s);

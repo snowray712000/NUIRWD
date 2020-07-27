@@ -1,17 +1,23 @@
 <!-- <div class="example-container" #baseFrame (window:resize)="onResize($event)" (window:orientationchange)="onResize($event)"
   [class.example-is-mobile]="isMobile()"> -->
-<div class="example-container" #baseFrame
-(window:resize)="onResize($event)"
-[class.example-is-mobile]="isMobile()">
+<div class="example-container" #baseFrame (window:resize)="onResize($event)" [class.example-is-mobile]="isMobile()">
 
   <mat-toolbar color="primary" class='example-toolbar'>
     <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <button mat-icon-button (click)="onClickBibleSelect()">
-      <mat-icon>view_comfy</mat-icon>
-      <span *ngIf="!isMobile()">聖經目錄</span>
+    <span (click)="onClickBibleSelect()">
+      <button mat-icon-button>
+        <mat-icon>view_comfy</mat-icon>
+      </button>
+      <span style="cursor: pointer;" *ngIf="!isMobile()">聖經目錄</span>
+    </span>
+
+    <input #seachinput matInput placeholder="G81 H81 #太12:31;路2;3| 摩西" />
+    <button mat-icon-button (click)="onClickSearch(seachinput.value)">
+      <mat-icon>search</mat-icon>
     </button>
+
     <span class="example-fill-remaining-space"></span>
 
     <button mat-icon-button (click)="snavRight.toggle()">

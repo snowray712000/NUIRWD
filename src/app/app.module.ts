@@ -37,9 +37,11 @@ import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.compo
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
 import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
+import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog/search-result-dialog.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   InfoDialogComponent,
+  SearchResultDialogComponent,
 );
 
 
@@ -55,6 +57,7 @@ const entryComponents = new Array<any>(
     CbolParsingComponent,
     BibleSelectionsComponent,
     InfoDialogComponent,
+    SearchResultDialogComponent,
     TextWithSnDirective,
     ChainToolComponent,
     CommentToolComponent,

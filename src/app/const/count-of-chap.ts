@@ -4,7 +4,7 @@ export function getChapCount(book1based: number): number {
   if (book1based >= 1 && book1based <= 66) {
     return cnum[book1based - 1];
   }
-  throw new Error('Error Book id, must 1~66');
+  throw new Error('Error Book id, must 1~66' + 'you pass ' + book1based);
 }
 let bookIdsOnlyOneChap: Array<number>;
 export function getChapCountEqual1BookIds() {

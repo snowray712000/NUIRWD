@@ -35,6 +35,12 @@ export interface DText {
   refDescription?: string;
   /** 換行, 新譯本 h3 與 非h3 交接觸 */
   isBr?: 1;
+  /** hr/, 原文字典，不同本用這個隔開. */
+  isHr?: 1;
+  /** 搜尋時，找到的keyword，例如「摩西」 */
+  key?: string;
+  /** 搜尋時，找到的keyword，例如「摩西 亞倫」, 摩西, 0, 這可能是上色要用到 */
+  keyIdx0based?: number;
 }
 
 
