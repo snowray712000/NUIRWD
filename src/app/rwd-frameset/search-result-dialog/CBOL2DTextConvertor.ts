@@ -1,4 +1,4 @@
-import { DText } from 'src/app/version-parellel/one-ver/AddBase';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import * as LQ from 'linq';

@@ -4,7 +4,7 @@ import { ApiSobj, DApiSobOneRecord, DApiSobjResult } from 'src/app/fhl-api/ApiSo
 import { linq_distinct } from 'src/app/linq-like/linq_distinct';
 import { linq_first } from 'src/app/linq-like/linq_first';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DOneLine, DText } from './AddBase';
+import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 export class AddMapPhotoInfo {
   private re3: DApiSobjResult[];

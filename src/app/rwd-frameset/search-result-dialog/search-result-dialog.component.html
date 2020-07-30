@@ -1,24 +1,134 @@
 <div>
-  <mat-dialog-content>
-    <div *ngFor="let it1 of data; let i1=index" [class.odd]="i1%2===1">
-      <span>
-        <span *ngFor="let it2 of it1.children; let i2=index">
-          <br *ngIf="it2.isBr!==undefined" />
-          <hr *ngIf="it2.isHr!==undefined" />
-          <!-- <span *ngIf="it2.isHr!==undefined" ><br/>－－<br/></span> -->
-          <span *ngIf="it2.sn!==undefined" class="orig" (click)="onClickOrig(it2.w)">
-            {{it2.w}}
-          </span>
-          <span *ngIf="it2.key!==undefined" [class]="getKeywordClass(it2)">{{it2.w}}</span>
-          <span *ngIf="it2.isRef===1" class='reference' [attr.data-ref]="'#'+it2.refDescription+'|'"
-            (click)="onClickReference('#'+it2.refDescription+'|')">{{it2.w}}</span>
-          <span *ngIf="getIsPureText(it2)">{{it2.w}}</span>
-        </span>
-        <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
-          (click)="onClickReference(getReferenceEntireChap(it1))">
-          ({{it1.addresses.toStringChineseShort()}})
+  <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
+    <span *ngIf="typeFunction==='keyword'">
+      <!-- <span>關鍵字查詢</span> -->
+      <span *ngIf="data!==undefined">
+        <!-- 統計結果 -->
+        <span>
+          <mat-tab-group>
+            <mat-tab label="分類">
+              <div style="line-height: 1.5em;white-space: nowrap;">
+                <span *ngFor="let it1 of dataCountClassor; let i1=index">
+                  <span *ngIf="i1!==0">,</span>
+                  <span class='classor' [class.classor-selected]="searchFilter===it1.name"
+                    (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
+                </span>
+              </div>
+            </mat-tab>
+            <mat-tab label="書卷">
+              <div style="line-height: 1.5em;white-space: nowrap;">
+                <span *ngFor="let it1 of dataCountBook; let i1=index">
+                  <span *ngIf="i1!==0">,</span>
+                  <span class='classor' [class.classor-selected]="searchFilter===it1.name"
+                    (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
+                </span>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="設定">
+              <span style="line-height: 1.3em;">
+                <!-- 設定 聖經版本查詢 -->
+                <mat-form-field appearance="fill">
+                  <mat-label>查詢版本</mat-label>
+                  <mat-select [(value)]="biblerVersionSelected"
+                    (selectionChange)="onBibleVersionSelectionChanged($event)">
+                    <mat-option *ngFor="let food of biblerVersions" [value]="food.name">
+                      {{food.nameShow}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- 設定 關鍵字要不要上色 -->
+                <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
+                  關鍵字上色</mat-slide-toggle>
+              </span>
+
+            </mat-tab>
+          </mat-tab-group>
         </span>
       </span>
+    </span>
+    <span *ngIf="typeFunction==='reference'">
+      <span> {{getKeyword()}} </span>
+      <span style="color:gray;"> ({{biblerVersionSelectedShowName}}) </span>
+      <!-- <a [routerLink]="getReferenceLink()"> 切換網址到 </a> -->
+      <a [href]="getReferenceLink()"> 切換網址 </a>
+    </span>
+    <span *ngIf="typeFunction==='orig-dict'">
+      <!-- 出現經文 按鈕 -->
+      <button mat-button (click)="onClickOrigCollection()">{{getKeyword()}} 彙編</button>
+    </span>
+    <span *ngIf="typeFunction==='orig-collection'">
+      <!-- 原文彙編 統計結果 -->
+      <span>
+        <mat-tab-group>
+          <!-- 原文彙編 統計結果 分類 -->
+          <mat-tab label="分類">
+            <div style="line-height: 1.5em;white-space: nowrap;">
+              <span *ngFor="let it1 of dataCountClassor; let i1=index">
+                <span *ngIf="i1!==0">,</span>
+                <span class='classor' [class.classor-selected]="searchFilter===it1.name"
+                  (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
+              </span>
+            </div>
+          </mat-tab>
+          <!-- 原文彙編 統計結果 書卷 -->
+          <mat-tab label="書卷">
+            <div style="line-height: 1.5em;white-space: nowrap;">
+              <span *ngFor="let it1 of dataCountBook; let i1=index">
+                <span *ngIf="i1!==0">,</span>
+                <span class='classor' [class.classor-selected]="searchFilter===it1.name"
+                  (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
+              </span>
+            </div>
+          </mat-tab>
+          <!-- 原文彙編 統計結果 設定 -->
+          <mat-tab label="設定">
+            <span style="line-height: 1.3em;">
+              <!-- 原文彙編 設定 聖經版本查詢 -->
+              <mat-form-field appearance="fill">
+                <mat-label>查詢版本</mat-label>
+                <mat-select [(value)]="bibleVersionSnSelected"
+                  (selectionChange)="onBibleVersionSelectionSnChanged($event)">
+                  <mat-option *ngFor="let food of bibleVersionsSn" [value]="food.name">
+                    {{food.nameShow}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- 設定 關鍵字要不要上色 -->
+              <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
+                關鍵字上色</mat-slide-toggle>
+            </span>
+
+          </mat-tab>
+        </mat-tab-group>
+      </span>
+    </span>
+
+    <span *ngIf="data===undefined">查詢中...</span>
+    <span *ngIf="data!==undefined && data.length===0">查無資料</span>
+  </div>
+  <mat-dialog-content>
+    <div style="padding-bottom: 4em;">
+      <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1">
+        <span>
+          <span *ngFor="let it2 of it1.children; let i2=index">
+            <br *ngIf="it2.isBr!==undefined" />
+            <hr *ngIf="it2.isHr!==undefined" />
+            <!-- <span *ngIf="it2.isHr!==undefined" ><br/>－－<br/></span> -->
+            <span *ngIf="it2.sn!==undefined && it2.key===undefined" class="orig" (click)="onClickOrig(it2.w)">
+              {{it2.w}}
+            </span>
+            <span *ngIf="it2.key!==undefined" [class]="getKeywordClass(it2)">{{it2.w}}</span>
+            <span *ngIf="it2.isRef===1" class='reference' [attr.data-ref]="'#'+it2.refDescription+'|'"
+              (click)="onClickReference('#'+it2.refDescription+'|')">{{it2.w}}</span>
+            <span *ngIf="getIsPureText(it2)">{{it2.w}}</span>
+          </span>
+          <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
+            (click)="onClickReference(getReferenceEntireChap(it1))">
+            ({{it1.addresses.toStringChineseShort()}})
+          </span>
+        </span>
+      </div>
     </div>
   </mat-dialog-content>
 </div>

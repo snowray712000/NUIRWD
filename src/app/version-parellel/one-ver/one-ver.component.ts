@@ -8,7 +8,7 @@ import { DialogOrigDictOpenor } from 'src/app/side-nav-right/info-dialog/DialogO
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DText, DOneLine } from './AddBase';
+import { DText, DOneLine } from '../../bible-text-convertor/AddBase';
 import { DialogRefOpenor } from 'src/app/side-nav-right/info-dialog/DialogRefOpenor';
 import { linq_first } from 'src/app/linq-like/linq_first';
 import { linq_zip } from 'src/app/linq-like/linq_zip';

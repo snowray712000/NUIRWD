@@ -1,4 +1,4 @@
-import { DText } from 'src/app/version-parellel/one-ver/AddBase';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { IOrigDictGetter } from './search-result-dialog.component';
 import { OrigDictCBOLApiGetter } from './OrigDictCBOLApiGetter';
 import { map } from 'rxjs/operators';

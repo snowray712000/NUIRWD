@@ -1,4 +1,4 @@
-import { DOneLine, DText } from './AddBase';
+import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
@@ -83,7 +83,7 @@ export class AddSnForOrigDictCbolChinese {
     return r2[0].children;
   }
   private generateRegex() {
-    
+
     return /^[ 　\t]?(\d+[a-z]?)^[ 　\t\r\n]/gi; // 一定要有空白隔開, 但若在字首又不一定要有
   }
 }

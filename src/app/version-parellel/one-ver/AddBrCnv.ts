@@ -1,4 +1,4 @@
-import { IAddBase, DText, DOneLine } from './AddBase';
+import { IAddBase, DText, DOneLine } from '../../bible-text-convertor/AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 

@@ -1,5 +1,5 @@
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DText } from 'src/app/version-parellel/one-ver/AddBase';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 export class TextWithSnConvertor {
   // [0] {<WG1519a>} 或 <WG1519a>
   // [1],[5] WTG or WG

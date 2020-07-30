@@ -3,7 +3,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 import { AddSnInfo } from './AddSnInfo';
-import { DOneLine } from './AddBase';
+import { DOneLine } from '../../bible-text-convertor/AddBase';
 import { AddMergeVerse } from './AddMergeVerse';
 import { AddParenthesesUnvNcv } from './AddParenthesesUnv';
 import { AddTitleH3 } from './AddTitleHx';
@@ -11,6 +11,7 @@ import { AddReferenceCnv } from './AddReferenceCnv';
 import { AddBrCnv } from './AddBrCnv';
 import { AddBrStdandard } from './AddBrStdandard';
 import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
+import { cvt_unv } from 'src/app/bible-text-convertor/unv';
 export class BibleTextOneVersionQuery {
   dataMapAndPhoto: DApiSobjResult[];
   constructor(dataMapAndPhoto?: DApiSobjResult[]) {
@@ -32,10 +33,7 @@ export class BibleTextOneVersionQuery {
 
     if (ver === 'unv') {
       // 和合本
-      re1 = new AddMergeVerse().main(re1, verses);
-      re1 = new AddParenthesesUnvNcv().main(re1, verses);
-      re1 = false ? re1 : new AddSnInfo().main(re1, verses);
-      // re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
+      re1 = cvt_unv(re1, { verses: verses, isMapPhotoInfo: 0, isSnExist: 1 });
       return re1;
     } else if (ver === 'ncv') {
       // 新譯本

@@ -1,4 +1,4 @@
-import { DText } from 'src/app/version-parellel/one-ver/AddBase';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
 import { CBOL2DTextConvertor } from './CBOL2DTextConvertor';
@@ -8,20 +8,18 @@ export class OrigDictCBOLApiGetter {
   async mainAsync(arg: { sn: string; isOld?: 1 | 0; }) {
     const re1 = await getAsync(arg.sn, arg.isOld);
     const re2 = re1.record[0];
-    console.log(re2.dic_text);
-    console.log(re2.edic_text);
 
     return cvtAndMerge(re2);
 
-    function cvtAndMerge(re2: DApiSdRecord): DText[] {
+    function cvtAndMerge(records: DApiSdRecord): DText[] {
       // 轉換 CBOL 中文, 再轉換 CBOL 英文, 再回傳
       if (arg.isOld === 1) {
-        const r1 = cvtOldChinese(re2.dic_text);
-        const r2 = cvtOldEng(re2.edic_text);
+        const r1 = cvtOldChinese(records.dic_text);
+        const r2 = cvtOldEng(records.edic_text);
         return r1.concat({ w: '', isHr: 1 }).concat(r2);
       } else {
-        const r1 = cvtNewChinese(re2.dic_text);
-        const r2 = cvtNewEng(re2.edic_text);
+        const r1 = cvtNewChinese(records.dic_text);
+        const r2 = cvtNewEng(records.edic_text);
         return r1.concat({ w: '', isHr: 1 }).concat(r2);
       }
     }

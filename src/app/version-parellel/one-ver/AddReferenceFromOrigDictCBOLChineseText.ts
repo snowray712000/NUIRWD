@@ -1,4 +1,4 @@
-import { DOneLine, DText } from './AddBase';
+import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';

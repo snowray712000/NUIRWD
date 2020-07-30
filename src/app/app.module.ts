@@ -28,6 +28,7 @@ import { SideNavRightComponent } from './side-nav-right/side-nav-right.component
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 import { InfoDialogComponent } from './side-nav-right/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -89,6 +90,7 @@ const entryComponents = new Array<any>(
     MatSlideToggleModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSelectModule,
   ],
   providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],

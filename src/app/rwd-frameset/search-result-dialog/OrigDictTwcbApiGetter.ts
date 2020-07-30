@@ -1,4 +1,4 @@
-import { DText } from 'src/app/version-parellel/one-ver/AddBase';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { AddReferenceFromOrigDictText } from 'src/app/version-parellel/one-ver/AddReferenceFromOrigDictText';
 import { ApiStwcbhdic } from 'src/app/fhl-api/ApiStwcbhdic';
 import { DApiSdResult } from 'src/app/fhl-api/DApiSdResult';
@@ -10,7 +10,6 @@ export class OrigDictTwcbApiGetter {
   async mainAsync(arg: { sn: string; isOld?: 0 | 1; }): Promise<DText[]> {
     const re1 = await getAsync(arg.sn, arg.isOld);
     const re2 = re1.record[0];
-    console.log(re2.dic_text);
     if (arg.isOld === 1) {
       return cvtOld(re2.dic_text);
     }
@@ -33,8 +32,7 @@ export class OrigDictTwcbApiGetter {
     async function getAsync(sn: string, isOld?: 1 | 0): Promise<DApiSdResult> {
       if (isOld) {
         return new ApiStwcbhdic().queryQsbAsync({ sn, isOldTestment: true, isSimpleChinese: false }).toPromise();
-      }
-      else {
+      } else {
         return new ApiSbdag().queryQsbAsync({ sn, isOldTestment: false, isSimpleChinese: false }).toPromise();
       }
     }

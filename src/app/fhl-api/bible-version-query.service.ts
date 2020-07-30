@@ -52,8 +52,8 @@ export class BibleVersionQueryService implements IBibleVersionQueryService {
       r1.id = id++;
       r1.na = b1.book;
       r1.naChinese = b1.cname;
-      r1.isExistNewTestment = b1.otonly === false;
-      r1.isExistOldTestment = b1.ntonly === false;
+      r1.isExistNewTestment = b1.otonly === 0;
+      r1.isExistOldTestment = b1.ntonly === 0;
       r1.isExistStrongNumber = b1.strong === 1;
       r1.isAllowDownload = b1.candownload === 1;
       r1.tLastModifiedTime = new Date(b1.version);

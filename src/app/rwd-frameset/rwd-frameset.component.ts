@@ -20,6 +20,7 @@ import { map } from 'rxjs/operators';
 import { ajax } from 'jquery';
 import { DialogSearchResultOpenor } from './search-result-dialog/DialogSearchResultOpenor';
 import { MatDialog } from '@angular/material/dialog';
+import { VerseRange } from '../bible-address/VerseRange';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -31,6 +32,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private iUpdateVerIds: IUpdateBibleVersionIds;
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
+  private routeVerseRange: VerseRange;
   addressActived: DAddress;
   @ViewChild('snavLeft', null) leftSideNav;
   @ViewChild('snavRight', null) rightSideNav;
@@ -40,7 +42,10 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     private dialog: MatDialog,
   ) {
     // tslint:disable-next-line: no-unused-expression
-    new RouteStartedWhenFrame(route, router); // 傳值 static 進去
+    const r1 = new RouteStartedWhenFrame(route, router); // 傳值 static 進去
+    r1.routeTools.verseRange$.subscribe(a1 => {
+      this.routeVerseRange = a1;
+    });
 
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
     this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
@@ -54,12 +59,15 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     this.addressActived = info.address;
     this.detectChange.markForCheck();
   }
+  onSearchInputEnter(txt: string) {
+    this.onClickSearch(txt);
+  }
   onClickSearch(txt: string) {
     if (txt === undefined || txt.length === 0) {
       return;
     }
 
-    new DialogSearchResultOpenor(this.dialog).showDialog(txt);
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: txt, addresses: this.routeVerseRange.verses });
   }
 
 

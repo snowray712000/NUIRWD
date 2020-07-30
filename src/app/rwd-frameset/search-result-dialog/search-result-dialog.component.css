@@ -30,3 +30,14 @@
 .key6{
   color: maroon;
 }
+.classor{
+  color: blue;
+  cursor: pointer;
+}
+.classor-selected{
+  color: red;
+}
+.version-opt{
+  color: blue;
+  cursor: pointer;
+}

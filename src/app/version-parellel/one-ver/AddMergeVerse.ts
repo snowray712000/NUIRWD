@@ -1,5 +1,5 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { DOneLine, IAddBase } from './AddBase';
+import { DOneLine, IAddBase } from '../../bible-text-convertor/AddBase';
 import { linq_first } from 'src/app/linq-like/linq_first';
 import { linq_last } from "src/app/linq-like/linq_last";
 import { getNextAddress, isTheSameAddress } from 'src/app/bible-address/DAddress';
