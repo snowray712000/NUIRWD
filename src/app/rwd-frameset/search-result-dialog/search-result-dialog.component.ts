@@ -242,6 +242,7 @@ export class SearchResultDialogComponent implements OnInit {
 
     this.setBiblerVersionSelectedShowName();
     this.setBiblerVersionSelectedSnShowName();
+
     return;
 
     async function verQ() {
@@ -279,7 +280,12 @@ export class SearchResultDialogComponent implements OnInit {
     const r2 = /#?([^|]+)/.exec(r1);
     const r3 = r2[1].replace(/\s/g, ''); // 空白字元
     const r4 = r3.replace(/;/g, '.'); // 網址不能用;,所以當時用.來取代, 在解析時, 會再轉為 ;
-    return `/#/bible/${r4}`;
+
+    // 當上傳到 /NUI/200802a_rwd/ 時, 若直接傳 /#/bible/ 會到 bible.fhl.net/#/bible 而非想要的地方
+    // pathname 就是 html 的位置, 含'/' 所以是加 #/ 而非 /#/
+    // 這個 bug 上傳到 server 才會出現
+    const r5 = window.location.pathname + `#/bible/${r4}`;
+    return r5;
   }
 
   private statisticsKeywordClassor() {

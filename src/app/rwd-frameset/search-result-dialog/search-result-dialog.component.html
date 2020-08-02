@@ -30,9 +30,9 @@
                 <!-- 設定 聖經版本查詢 -->
                 <mat-form-field appearance="fill">
                   <mat-label>查詢版本</mat-label>
-                  <mat-select [(value)]="biblerVersionSelected"
+                  <mat-select [(value)]="bibleVersionSelected"
                     (selectionChange)="onBibleVersionSelectionChanged($event)">
-                    <mat-option *ngFor="let food of biblerVersions" [value]="food.name">
+                    <mat-option *ngFor="let food of bibleVersions" [value]="food.name">
                       {{food.nameShow}}
                     </mat-option>
                   </mat-select>
@@ -49,7 +49,7 @@
     </span>
     <span *ngIf="typeFunction==='reference'">
       <span> {{getKeyword()}} </span>
-      <span style="color:gray;"> ({{biblerVersionSelectedShowName}}) </span>
+      <span style="color:gray;"> ({{bibleVersionSelectedShowName}}) </span>
       <!-- <a [routerLink]="getReferenceLink()"> 切換網址到 </a> -->
       <a [href]="getReferenceLink()"> 切換網址 </a>
     </span>
