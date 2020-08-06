@@ -39,10 +39,12 @@ import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool
 import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog/search-result-dialog.component';
+import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   InfoDialogComponent,
   SearchResultDialogComponent,
+  DTextsRendorComponent,
 );
 
 
@@ -64,6 +66,7 @@ const entryComponents = new Array<any>(
     CommentToolComponent,
     ComTextComponent,
     OneVerComponent,
+    DTextsRendorComponent,
   ),
   entryComponents,
   imports: [

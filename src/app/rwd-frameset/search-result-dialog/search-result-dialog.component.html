@@ -54,8 +54,13 @@
       <a [href]="getReferenceLink()"> 切換網址 </a>
     </span>
     <span *ngIf="typeFunction==='orig-dict'">
-      <!-- 出現經文 按鈕 -->
-      <button mat-button (click)="onClickOrigCollection()">{{getKeyword()}} 彙編</button>
+      <div>
+        <!-- 原文字典 彙編 -->
+        <span class='orig' (click)="onClickOrigCollection()">{{getKeyword()}}彙編</span>、
+        <!-- 原文字典, 下個原文,上個原文 -->
+        <span class='orig' (click)="onClickOrig(getOrigPrev())">{{getOrigPrev()}}</span>、
+        <span class='orig' (click)="onClickOrig(getOrigNext())">{{getOrigNext()}}</span>
+      </div>
     </span>
     <span *ngIf="typeFunction==='orig-collection'">
       <!-- 原文彙編 統計結果 -->
@@ -111,18 +116,9 @@
     <div style="padding-bottom: 4em;">
       <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1">
         <span>
-          <span *ngFor="let it2 of it1.children; let i2=index">
-            <br *ngIf="it2.isBr!==undefined" />
-            <hr *ngIf="it2.isHr!==undefined" />
-            <!-- <span *ngIf="it2.isHr!==undefined" ><br/>－－<br/></span> -->
-            <span *ngIf="it2.sn!==undefined && it2.key===undefined" class="orig" (click)="onClickOrig(it2.w)">
-              {{it2.w}}
-            </span>
-            <span *ngIf="it2.key!==undefined" [class]="getKeywordClass(it2)">{{it2.w}}</span>
-            <span *ngIf="it2.isRef===1" class='reference' [attr.data-ref]="'#'+it2.refDescription+'|'"
-              (click)="onClickReference('#'+it2.refDescription+'|')">{{it2.w}}</span>
-            <span *ngIf="getIsPureText(it2)">{{it2.w}}</span>
-          </span>
+
+          <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword" (clickRef)="onClickReference($event)"  (clickOrig)="onClickOrig($event);" ></app-dtexts-rendor>
+
           <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
             (click)="onClickReference(getReferenceEntireChap(it1))">
             ({{it1.addresses.toStringChineseShort()}})
@@ -131,4 +127,7 @@
       </div>
     </div>
   </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">Close</button>
+  </div>
 </div>

@@ -1,0 +1,43 @@
+.orig{
+  color: darkturquoise;
+  cursor: pointer;
+}
+.reference{
+  color: blue;
+  cursor: pointer;
+}
+.odd {
+  background-color: whitesmoke;
+}
+.key0 {
+  color: brown;
+}
+.key1{
+  color: chocolate;
+}
+.key2{
+  color: crimson;
+}
+.key3{
+  color: darkred;
+}
+.key4{
+  color: darkgoldenrod;
+}
+.key5{
+  color: firebrick;
+}
+.key6{
+  color: maroon;
+}
+.classor{
+  color: blue;
+  cursor: pointer;
+}
+.classor-selected{
+  color: red;
+}
+.version-opt{
+  color: blue;
+  cursor: pointer;
+}

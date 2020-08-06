@@ -6,7 +6,7 @@ export interface IAddBase {
 
 /** w,sn,tp,tp2 */
 export interface DText {
-  w: string;
+  w?: string;
   sn?: string;
   /** H, Hebrew G, Greek */
   tp?: 'H' | 'G';
@@ -41,6 +41,19 @@ export interface DText {
   key?: string;
   /** 搜尋時，找到的keyword，例如「摩西 亞倫」, 摩西, 0, 這可能是上色要用到 */
   keyIdx0based?: number;
+  listTp?: 'ol' | 'ul';
+  /** 1是第一層, 0就是純文字了 */
+  listLevel?: number;
+  /** 當時分析的層數 */
+  listIdx?: number[];
+  /** 若出現這個, html 就要加 <li> */
+  isListStart?: 1 | 0;
+  /** 若出現這個, html 就要加 </li> */
+  isListEnd?: 1 | 0;
+  /** 若出現這個, html 就要加 </ol> 或 </ul> */
+  isOrderStart?: 1 | 0;
+  /** 若出現這個, html 就要加 </ol> 或 </ul> */
+  isOrderEnd?: 1 | 0;
 }
 
 

@@ -45,35 +45,19 @@ export class SearchResultDialogComponent implements OnInit {
   dataCountClassor: DKeywordClassor[] = [];
   /** 關鍵字查詢完後，透過 statisticsKeywordClassor 算出來的統計，單一書卷 */
   dataCountBook: DKeywordClassor[] = [];
-  searchFilter: string = '全部';
+  searchFilter = '全部';
   /** 會查詢一次 */
   bibleVersions: { name: string, nameShow: string }[] = [];
-  bibleVersionSelected: string = 'unv';
-  bibleVersionSnSelected: string = 'unv';
-  bibleVersionSelectedShowName: string = '和合本';
-  bibleVersionSnSelectedShowName: string = '和合本';
+  bibleVersionSelected = 'unv';
+  bibleVersionSnSelected = 'unv';
+  bibleVersionSelectedShowName = '和合本';
+  bibleVersionSnSelectedShowName = '和合本';
   /** 不要將關鍵字上色, 因為要作報告用, copy 到 pptx上又要改色 */
   isEnableColorKeyword: 0 | 1 = 1;
   bibleVersionsSn: { nameShow: string; name: string; }[];
+  typeFunction: 'orig-dict' | 'orig-collection' | 'keyword' | 'reference';
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) { }
-
-  typeFunction: 'orig-dict' | 'orig-collection' | 'keyword' | 'reference';
-  private determineTypeFunction() {
-    if (this.getIsDict() || this.getIsOrig()) {
-      if (this.dataByParent.isDictCollection === 1) {
-        this.typeFunction = 'orig-collection';
-      } else {
-        this.typeFunction = 'orig-dict';
-      }
-    } else {
-      if (this.getIsReference()) {
-        this.typeFunction = 'reference';
-      } else {
-        this.typeFunction = 'keyword';
-      }
-    }
-  }
   ngOnInit() {
     this.initVersionsAsync();
     this.isEnableColorKeyword = new SearchSetting().loadIsEnableColorKeyword();
@@ -99,6 +83,22 @@ export class SearchResultDialogComponent implements OnInit {
         pthis.data = [{ children: a1 }];
         pthis.changeDetector.markForCheck();
       });
+    }
+  }
+  private determineTypeFunction() {
+
+    if (this.getIsDict() || this.getIsOrig()) {
+      if (this.dataByParent.isDictCollection === 1) {
+        this.typeFunction = 'orig-collection';
+      } else {
+        this.typeFunction = 'orig-dict';
+      }
+    } else {
+      if (this.getIsReference()) {
+        this.typeFunction = 'reference';
+      } else {
+        this.typeFunction = 'keyword';
+      }
     }
   }
   getDefaultAddress(): DAddress {
@@ -148,6 +148,23 @@ export class SearchResultDialogComponent implements OnInit {
       isOld: re1[1] !== undefined && re1[1].toUpperCase() === 'H' ? 1 : 0
     };
   }
+  getOrigNextPrev(isNext: 0 | 1) {
+    const r1 = this.getOrig();
+    const r2 = /\d+/i.exec(r1.sn);
+    const r3 = parseInt(r2[0], 10);
+    const HorG = r1.isOld === 1 ? 'H' : 'G';
+    if (isNext === 1) {
+      return `${HorG}${r3 + 1}`;
+    } else {
+      return `${HorG}${r3 - 1}`;
+    }
+  }
+  getOrigNext() {
+    return this.getOrigNextPrev(1);
+  }
+  getOrigPrev() {
+    return this.getOrigNextPrev(0);
+  }
   getIsDict() {
     return this.dataByParent.isDict !== undefined;
   }
@@ -184,9 +201,6 @@ export class SearchResultDialogComponent implements OnInit {
       isDictCollection: 1,
       addresses: this.dataByParent.addresses
     });
-
-
-
   }
   setBiblerVersionSelectedShowName(biblerVersionSelected?: string) {
     const name = biblerVersionSelected === undefined ? this.bibleVersionSelected : biblerVersionSelected;
@@ -252,9 +266,7 @@ export class SearchResultDialogComponent implements OnInit {
       // return r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
     }
   }
-  getIsPureText(a1: DText) {
-    return !a1.isBr && !a1.isHr && !a1.sn && !a1.isRef && !a1.key;
-  }
+
   getKeywordClass(a1: DText) {
     if (this.isEnableColorKeyword === 0) {
       if (a1.sn !== undefined) {
