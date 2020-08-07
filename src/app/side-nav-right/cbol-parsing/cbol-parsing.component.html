@@ -45,7 +45,7 @@
       <span>{{i2===0?'unv':'kjv'}}</span><br />
       <span *ngFor="let it1 of it2">
         <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
-          <span appTextWithSn [data]="it1" [snActived]="snActived"
+          <span appTextWithSn [addr]="cur" [data]="it1" [snActived]="snActived"
             (mouseenter)="onMouseEnterSn($event,it1)">{{it1.w}}</span>
         </ng-container>
         <ng-template #elseTemplate>

@@ -1,3 +1,4 @@
+// tslint:disable-next-line: max-line-length
 import { Component, OnInit, Input, OnChanges, ChangeDetectorRef, Output, EventEmitter, ViewChildren, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { RouteStartedWhenFrame } from 'src/app/rwd-frameset/RouteStartedWhenFrame';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { asHTMLElement } from 'src/app/tools/asHTMLElement';
 import { EventOneVerWidthChanged } from './EventOneVerWidthChanged';
 import { EventIsSnToggleChanged } from 'src/app/side-nav-left/side-nav-left.component';
 import { log } from 'util';
+import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 
 @Component({
   selector: 'app-one-ver',
@@ -113,6 +115,11 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
     this.logName('getDataAsync');
     this.dataMapAndPhotos = await AddMapPhotoInfo.getPhotoMapFromApi(this.verseRange);
     this.data = await new BibleTextOneVersionQuery(this.dataMapAndPhotos).mainAsync(this.verseRange, this.ver);
+
+    // 使 注解有個預設值, 不然空空的很像當掉
+    if (this.data !== undefined && this.data.length !== 0) {
+      this.onClickVerse(this.data[0]);
+    }
   }
   getLineHeight(it1: DOneLine, i1) {
     // 還沒有算過 對齊高 cy2
@@ -137,12 +144,14 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
 
   }
   onClickRef(it1: DText) {
-    new DialogRefOpenor(this.dialog).showDialog(it1.refDescription);
+    const keyword = '#' + it1.refDescription + '|';
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: this.verseRange.verses });
   }
-  onClickOrig(it2) {
-    new DialogOrigDictOpenor(this.dialog).showDialog({ sn: it2.sn, isOld: it2.tp === 'H' });
+  onClickOrig(it2: DText) {
+    const keyword = it2.tp + it2.sn;
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: this.verseRange.verses });
   }
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+  ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
     this.logName('changes');
 
     if (this.ver !== undefined) {
@@ -150,8 +159,8 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
         this.changeDetector.markForCheck();
       });
     }
-    if (changes.isShowSn !== undefined){
-      if (changes.isShowSn.currentValue !== changes.isShowSn.previousValue){
+    if (changes.isShowSn !== undefined) {
+      if (changes.isShowSn.currentValue !== changes.isShowSn.previousValue) {
         this.resetLineHeight();
         this.changeDetector.markForCheck();
       }

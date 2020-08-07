@@ -3,7 +3,9 @@ import { map, tap } from 'rxjs/operators';
 import { VerseRange } from '../bible-address/VerseRange';
 import { Observable } from 'rxjs';
 export class RouteStartedWhenFrame {
+  /** 用來 subscribe 的 */
   private static routeStatic: ActivatedRoute;
+  /** 用來 navigate 的 */
   private static routerStatic: Router;
   private static routeTools: DRouteTools = {
     descriptionLast: undefined,
@@ -30,7 +32,7 @@ export class RouteStartedWhenFrame {
   private descriptLastAndVerseLast(route: ActivatedRoute) {
     const r2 = route.params.pipe(
       map(a1 => this.mapToVerseRange(a1)),
-      // tap(a1 => console.log(a1))
+      // tap(a1 => console.log(a1)),
       tap(a1 => {
         if (!this.isNullOrEmptyVerses(a1)) {
           this.routeTools.verseRangeLast = a1;

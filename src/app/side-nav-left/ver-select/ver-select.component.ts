@@ -36,6 +36,7 @@ function testData() {
   styleUrls: ['./ver-select.component.css']
 })
 export class VerSelectComponent implements OnInit, AfterViewInit {
+  /** {na:中文, vers:{na:和合本,eng:unv}[] */
   private versionQ: IVersionsQuery;
   private eng2id: IConvertBibleVersionEng2Id;
   private id2eng: IConvertBibleVersionId2Eng;
@@ -48,6 +49,7 @@ export class VerSelectComponent implements OnInit, AfterViewInit {
   changedVersions$: Observable<string[]>;
   obVers: Subscriber<string[]>;
   constructor() {
+
     this.versionQ = new VersionsQuery(undefined);
     const cvtVer = new ConvertBibleVersionTool();
     this.eng2id = cvtVer;
@@ -78,7 +80,6 @@ export class VerSelectComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-
     if (this.versionQ !== undefined) {
       this.verClass = this.versionQ.queryBibleVersionAsync();
     }

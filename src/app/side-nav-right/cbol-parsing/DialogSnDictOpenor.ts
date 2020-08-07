@@ -1,5 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
 import { InfoDialogComponent } from 'src/app/side-nav-right/info-dialog/info-dialog.component';
+/** 快被取代了， 使用 DialogSearchResultOpenor 取代*/
 export class DialogSnDictOpenor {
   /** dialog 在 component 的 建構子傳入, 是個 service */
   constructor(private dialog: MatDialog) {

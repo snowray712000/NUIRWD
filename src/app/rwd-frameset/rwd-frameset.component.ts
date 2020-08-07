@@ -2,25 +2,23 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { asHTMLElement } from '../tools/asHTMLElement';
-import { Observable, Subscriber, observable, fromEvent } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { appInstance } from '../app.module';
 import { isArrayEqual } from '../tools/arrayEqual';
 import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
 import { VerIdsManager } from './VerIdsManager';
-import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-sheet";
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteStartedWhenFrame } from './RouteStartedWhenFrame';
-import { SideNavsOnFrame } from "./SideNavsOnFrame";
-import { DAddress } from '../bible-address/DAddress';
-import { log } from 'util';
-import { DEventWindowSizeChanged, EventWindowSizeChanged } from './EventWindowSizeChanged';
-import { assert } from '../tools/assert';
-import { map } from 'rxjs/operators';
-import { ajax } from 'jquery';
+import { SideNavsOnFrame } from './SideNavsOnFrame';
+import { DAddress, getNextChapAddress, getPrevChapAddress } from '../bible-address/DAddress';
 import { DialogSearchResultOpenor } from './search-result-dialog/DialogSearchResultOpenor';
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from '../bible-address/VerseRange';
+import { BibleBookNames } from '../const/book-name/BibleBookNames';
+import { BookNameLang } from '../const/book-name/BookNameLang';
+import { getChapCount } from '../const/count-of-chap';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -173,6 +171,52 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
         width: this.widthBaseFrame * 0.5,
       };
     }
+  }
+  getPrevChap() {
+    if (this.addressActived === undefined) {
+      return '創1;';
+    }
+
+    let book = this.addressActived.book;
+    let chap = this.addressActived.chap;
+    const addr = getPrevChapAddress(this.addressActived);
+    let re = '創1;';
+    if (addr === undefined) {
+      if (this.addressActived.book !== 1) {
+        book -= 1; chap = getChapCount(book);
+      }
+    } else {
+      book = addr.book; chap = addr.chap;
+    }
+    re = BibleBookNames.getBookName(book, BookNameLang.太) + chap;
+    // 當上傳到 /NUI/200802a_rwd/ 時, 若直接傳 /#/bible/ 會到 bible.fhl.net/#/bible 而非想要的地方
+    // pathname 就是 html 的位置, 含'/' 所以是加 #/ 而非 /#/
+    // 這個 bug 上傳到 server 才會出現
+    const r5 = window.location.pathname + `#/bible/${re}`;
+    return r5;
+  }
+  getNextChap() {
+    if (this.addressActived === undefined) {
+      return '啟22;';
+    }
+    let book = this.addressActived.book;
+    let chap = this.addressActived.chap;
+    const addr = getNextChapAddress(this.addressActived);
+
+    let re = '啟22;';
+    if (addr === undefined) {
+      if (this.addressActived.book !== 66) {
+        book += 1; chap = 1;
+      }
+    } else {
+      book = addr.book; chap = addr.chap;
+    }
+    re = BibleBookNames.getBookName(book, BookNameLang.太) + chap;
+    // 當上傳到 /NUI/200802a_rwd/ 時, 若直接傳 /#/bible/ 會到 bible.fhl.net/#/bible 而非想要的地方
+    // pathname 就是 html 的位置, 含'/' 所以是加 #/ 而非 /#/
+    // 這個 bug 上傳到 server 才會出現
+    const r5 = window.location.pathname + `#/bible/${re}`;
+    return r5;
   }
 }
 interface SideWidthStyle {

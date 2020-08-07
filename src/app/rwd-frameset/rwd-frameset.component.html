@@ -40,6 +40,8 @@
 
     <mat-sidenav-content>
       <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel>
+      <a [href]="getPrevChap()">上一章</a>、
+      <a [href]="getNextChap()">下一章</a>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

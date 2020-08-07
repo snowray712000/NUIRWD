@@ -1,3 +1,4 @@
+import { DialogOrigDictOpenor } from './../info-dialog/DialogOrigDictOpenor';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
@@ -24,6 +25,7 @@ import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -33,15 +35,15 @@ import { DText } from 'src/app/bible-text-convertor/AddBase';
 export class CbolParsingComponent implements OnInit, OnChanges {
   lines: DLineOnePair[] = [];
   words: DOneRowTable[] = [];
-  next: DOneVerse;
-  prev: DOneVerse;
+  next: DAddress;
+  prev: DAddress;
   isOldTestment = false;
   // domContentWithSn: SafeHtml;
   textsWithSnUnv: DText[];
   textsWithSnKjv: DText[];
   snActived: number = 0;
   verseAddress: string;
-  @Input() cur: DOneVerse = { book: 41, chap: 1, verse: 4 };
+  @Input() cur: DAddress = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
 
@@ -64,9 +66,10 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     }
   }
 
-  onClickOrig(en, a1) {
+  onClickOrig(en, a1: { w: string, sn: string, wid: number }) {
     const type = this.cur.book < 40 ? 'H' : 'G';
-    new DialogSnDictOpenor(this.dialog).showDialog(a1.sn, type);
+    const keyword = type + a1.sn; // G281 或 H281
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.cur] });
   }
   onMouseEnterForSnackBar(en, arg) {
     // console.log(arg);
@@ -238,9 +241,7 @@ interface DLineOnePair {
   words: { w: string, sn?: number }[];
   exps: { w: string }[];
 }
-interface DOneVerse {
-  book: number; chap: number; verse: number;
-}
+
 interface DOneRowTable {
   wid: string;
   word: string;

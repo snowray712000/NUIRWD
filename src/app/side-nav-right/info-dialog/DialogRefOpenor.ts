@@ -1,5 +1,6 @@
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { InfoDialogComponent } from './info-dialog.component';
+/** 被取代, 預計拿掉 */
 export class DialogRefOpenor {
   constructor(private dialog: MatDialog) { }
   showDialog(desc: string): MatDialogRef<InfoDialogComponent, any> {

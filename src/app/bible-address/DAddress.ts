@@ -7,6 +7,21 @@ export interface DAddress {
   verse: number;
   ver?: number;
 }
+/** 若書卷末, 回傳 undefined (不會因此換書卷唷) */
+export function getNextChapAddress(addr: DAddress) {
+  const chap = getChapCount(addr.book);
+  if (addr.chap === chap) {
+    return undefined; // 書卷最後了
+  }
+  return { book: addr.book, chap: addr.chap + 1, verse: 1 };
+}
+/** 若書卷首, 回傳 undefined (不會因此換書卷唷) */
+export function getPrevChapAddress(addr: DAddress) {
+  if (addr.chap === 1) {
+    return undefined; // 書卷最後了
+  }
+  return { book: addr.book, chap: addr.chap - 1, verse: 1 };
+}
 /** 若書卷末, 回傳 undefined */
 export function getNextAddress(addr: DAddress) {
   const chap = getChapCount(addr.book);
