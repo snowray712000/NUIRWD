@@ -24,6 +24,8 @@ const routes: Routes = [
   { path: 'bible/:description', component: RwdFramesetComponent },
   { path: 'edit/:description', component: EditComponent },
   { path: 'qunit/:description', component: QunitsComponent },
+  { path: 'qunit', redirectTo: 'qunit/' },
+  { path: 'qunits', redirectTo: 'qunit/' },
   // { path: 'bible/:description', component: DTextsRendorComponent },
   // { path: 'bible/:description', component: SideNavLeftComponent },
   // { path: 'bible/:description', component: CbolDictComponent },

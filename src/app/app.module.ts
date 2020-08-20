@@ -36,7 +36,7 @@ import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.
 import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
-import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
+// import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog/search-result-dialog.component';
 import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
@@ -66,7 +66,7 @@ const entryComponents = new Array<any>(
     TextWithSnDirective,
     ChainToolComponent,
     CommentToolComponent,
-    ComTextComponent,
+    // ComTextComponent,
     OneVerComponent,
     DTextsRendorComponent,
     EditComponent,

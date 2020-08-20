@@ -1,7 +1,7 @@
 import { DAddress } from './../../bible-address/DAddress';
 import { Directive, Input, ElementRef, HostListener, Output, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogSnDictOpenor } from './DialogSnDictOpenor';
+// import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { SearchResultDialogComponent } from 'src/app/rwd-frameset/search-result-dialog/search-result-dialog.component';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';

@@ -1,4 +1,3 @@
-import { DialogOrigDictOpenor } from './../info-dialog/DialogOrigDictOpenor';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
@@ -18,7 +17,6 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
 import { TextWithSnConvertor } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogSnDictOpenor } from './DialogSnDictOpenor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { linq_first } from 'src/app/linq-like/linq_first';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';

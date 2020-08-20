@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
+// import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
 import { ChainToolDataGetter } from './ChainToolDataGetter';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { EventVerseChanged, IEventVerseChanged } from '../cbol-parsing/EventVerseChanged';
