@@ -1,29 +1,41 @@
 import { SearchSetting } from './../SearchSetting';
 import { log } from 'util';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import * as LQ from 'linq';
 import { getIdxPass } from './getIdxPass';
 import { addListStartAndEnd } from './addListStartAndEnd';
 import { EventManager } from '@angular/platform-browser';
+import { isArrayEqual } from 'src/app/tools/arrayEqual';
 @Component({
   selector: 'app-dtexts-rendor',
   templateUrl: './dtexts-rendor.component.html',
   styleUrls: ['./dtexts-rendor.component.css']
 })
-export class DTextsRendorComponent implements OnInit {
+export class DTextsRendorComponent implements OnInit, OnChanges {
   @Input() datas: DText[] = [];
   @Input() indexs: number[] = undefined;
-  @Input() isEnableColorKeyword: 0 | 1;
+  @Input() isEnableColorKeyword: 0 | 1 = 0;
   @Output() clickRef: EventEmitter<string> = new EventEmitter();
   @Output() clickOrig: EventEmitter<string> = new EventEmitter();
   idxPass: number[];
   constructor() {
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (isCommentUseDtextRendor()) {
+      this.init();
+    }
 
-  ngOnInit() {
+    return;
+    function isCommentUseDtextRendor() {
+      // 如果是注釋, 表單載入就會跑第1次, 切換的時候, 不像 dialog 是重 new 一個, 所以它仍然是 data 改變, 但不是 isFirst.
+      // tslint:disable-next-line: max-line-length
+      return changes.datas !== undefined && changes.indexs === undefined && changes.isEnableColorKeyword === undefined && false === isArrayEqual(changes.datas.previousValue, changes.datas.currentValue);
+    }
+  }
+  init() {
     if (this.indexs === undefined) {
-      // this.datas = gTestData();
+      //   // 只有第1層, indexs 是用 datas 傳進來的, 其它 recursive 是算出來的 getIndexsForChildList()
       this.indexs = gAllIndexs(this.datas);
     }
     this.idxPass = this.idxPass = getIdxPass(this.datas, this.indexs);
@@ -31,7 +43,16 @@ export class DTextsRendorComponent implements OnInit {
     function gAllIndexs(datas: DText[]) {
       return LQ.range(0, datas.length).toArray();
     }
+  }
 
+  ngOnInit() {
+    // 如果是注釋, OnInit時候, datas 會是 undefined, (所以它從 onChange 初始化 indexs)
+    // 如果是 dialog, 就會從這邊初始化
+    if (this.datas === undefined) {
+      return;
+    }
+
+    this.init();
   }
   onClickReference(a1: string) {
     this.clickRef.emit(a1);

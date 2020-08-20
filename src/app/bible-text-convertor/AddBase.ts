@@ -54,6 +54,9 @@ export interface DText {
   isOrderStart?: 1 | 0;
   /** 若出現這個, html 就要加 </ol> 或 </ul> */
   isOrderEnd?: 1 | 0;
+
+  /** idxOrder, 有這個 html 繪圖可以更加漂亮, 交錯深度之類的 */
+  idxOrder?: number;
 }
 
 

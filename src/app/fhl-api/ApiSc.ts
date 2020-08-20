@@ -4,6 +4,7 @@ import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { DAddress } from '../bible-address/DAddress';
 import { FhlUrl } from './FhlUrl';
+import { BookNameToId } from '../const/book-name/book-name-to-id';
 export interface DApiScArg {
   bookId: number;
   address: DAddress;
@@ -29,3 +30,4 @@ export interface DApiScResult {
   prev?: { book?: string, engs?: string, chap?: number, sec?: number };
   record: { title?: string, com_text: string, book_name?: string }[];
 }
+

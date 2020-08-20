@@ -1,0 +1,17 @@
+<div>
+  <div *ngFor="let it1 of datas">
+    <div style="color: blue;">{{it1.na}} group </div>
+    <div>
+      <div *ngFor="let it2 of it1.fns">
+        <span> {{it2.na}} - </span>
+        <span *ngIf="it2.st===1&&it2.expect===undefined&&it2.actual===undefined" style="color: green;"> pass </span>
+        <span *ngIf="it2.actual!==undefined" style="color: red;"> ng </span>
+        <span [class.er]="it2.st!==1"> {{it2.msg}} </span>
+        <div *ngIf="it2.expect!==undefined"><span style="color: royalblue;">expect: </span> {{it2.expect}} </div>
+        <div *ngIf="it2.actual!==undefined"><span style="color: royalblue;">actual: </span> {{it2.actual}} </div>
+
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>

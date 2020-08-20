@@ -42,7 +42,7 @@ class DGlobalSettingBibleVersionLocalStorage implements DGlobalSettingBibleVersi
       const r2 = JSON.parse(r1) as string[];
       this.engs = r2;
     }
-    if (r1 === undefined || this.engs.length === 0) {
+    if (r1 == null || this.engs.length === 0) {
       this.engs = ['unv'];
     }
   }

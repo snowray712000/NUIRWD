@@ -8,18 +8,7 @@
       <span>{{title}}</span>
     </div>
     <mat-divider></mat-divider>
-    <span *ngFor="let it1 of data">
-      <ng-container *ngIf="it1.iReg===undefined; else elseTemplate">
-        <div>
-          <span *ngFor="let it2  of it1.child2" [class.ref]="it2.des!==undefined" [class.orig]="it2.sn!==undefined" (click)="onClickRefOrOrig(it2)">
-            {{it2.w}}
-          </span>
-        </div>
-        <!-- <div>{{it1.w}}</div> -->
-      </ng-container>
-      <ng-template #elseTemplate>
-        <app-com-text [data]="it1" [address]="address"></app-com-text>
-      </ng-template>
-    </span>
+    <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
+    </app-dtexts-rendor>
   </div>
 </div>

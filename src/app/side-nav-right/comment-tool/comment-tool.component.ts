@@ -1,15 +1,16 @@
+import { DialogSearchResultOpenor } from './../../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
+import { DText } from './../../bible-text-convertor/AddBase';
+import { BookNameToId } from './../../const/book-name/book-name-to-id';
+import { ApiSc } from 'src/app/fhl-api/ApiSc';
 import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
 import { EventVerseChanged, IEventVerseChanged } from '../cbol-parsing/EventVerseChanged';
-import { ReferenceAndOrigFinderUsingAtCommentTool } from './com-text/ReferenceAndOrigFinderUsingAtCommentTool';
-import { DCommonetDataShow } from './com-text/DCommonetDataShow';
-import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogOrigDictOpenor } from '../info-dialog/DialogOrigDictOpenor';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
+import { Comment2DText } from './Comment2DText';
+import { AddReferenceInCommentText } from './AddReferenceInCommentText';
 
 @Component({
   selector: 'app-comment-tool',
@@ -18,7 +19,8 @@ import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRan
 })
 export class CommentToolComponent implements OnInit, OnChanges {
   address: DAddress = { book: 1, chap: 1, verse: 2 };
-  data: DCommentOneData[];
+  // data: DCommentOneData[];
+  data: DText[];
   dataQ: ICommentToolDataGetter;
   title: string;
   next: DAddress;
@@ -63,31 +65,65 @@ export class CommentToolComponent implements OnInit, OnChanges {
       this.getData();
     }
   }
-  onClickRefOrOrig(a1: DCommonetDataShow) {
-    if (a1.des !== undefined) {
-      new DialogRefOpenor(this.dialog).showDialog(a1.des);
-    } else if (a1.sn !== undefined) {
-      new DialogOrigDictOpenor(this.dialog).showDialog({ sn: a1.sn, isOld: a1.isOld });
+  onClickReference(a1) {
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: a1, addresses: this.addresses.verses });
+  }
+  onClickOrig(a1) {
+    new DialogSearchResultOpenor(this.dialog)
+      .showDialog({ keyword: getOrigKeyword(a1), isDict: 1, addresses: this.addresses.verses });
+    /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
+    function getOrigKeyword(str: string) {
+      const r1 = /(?:G|H)\d+[a-z]?/i.exec(str);
+      return r1[0];
     }
   }
   async getData() {
-    const r1 = await this.dataQ.mainAsync(this.address);
-    if (this.address.chap === 0) {
-      this.title = '書卷背景';
-    } else {
-      this.title = r1.title;
+    const pthis = this;
+    const re1 = await queryCommentAsync(this.address);
+    this.data = re1.data;
+    setTitleAndPrevNext(re1);
+    this.detector.markForCheck();
+    return;
+    function setTitleAndPrevNext(arg1: DCommentResult) {
+      if (pthis.address.chap === 0) {
+        pthis.title = '書卷背景';
+      } else {
+        pthis.title = arg1.title;
+      }
+
+      pthis.next = arg1.next;
+      pthis.prev = arg1.prev;
     }
-
-    this.next = r1.next;
-    this.prev = r1.prev;
-    this.data = r1.data;
-
-    r1.data.filter(a1 => a1.iReg === undefined).forEach(a1 => {
-      const re1 = new ReferenceAndOrigFinderUsingAtCommentTool().main(a1.w, this.address);
-      a1.child2 = re1;
-    });
-
-
-    this.addresses = new GetAddressRangeFromPrevNext(r1.next, r1.prev).verseRange;
   }
 }
+
+interface DCommentResult { title: string; next?: DAddress; prev?: DAddress; data: DText[]; }
+async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
+  const rr1 = await new ApiSc().queryScAsync({ bookId: 3, address: addr }).toPromise();
+  // console.log(rr1);
+  const rrData = cvtData(rr1.record[0].com_text, addr);
+
+  return addNextPrevTitleAndGenerateResult(rrData);
+
+  function addNextPrevTitleAndGenerateResult(data: DText[]) {
+    const rr2 = rr1.record[0];
+    const rre: DCommentResult = { data, title: rr2.title };
+    if (rr1.next !== undefined) {
+      rre.next = cvtAddr(rr1.next);
+    }
+    if (rr1.prev !== undefined) {
+      rre.prev = cvtAddr(rr1.prev);
+    }
+    return rre;
+  }
+  function cvtAddr(aa1: { engs?: string, chap?: number, sec?: number }): DAddress {
+    // 雖然 engs chap sec 一定會有, 但這樣宣告才能接 ApiSc 的 Result
+    return { book: new BookNameToId().cvtName2Id(aa1.engs), chap: aa1.chap, verse: aa1.sec };
+  }
+  function cvtData(comtext: string, addrSet: DAddress): DText[] {
+    const re1 = new Comment2DText().main(comtext, addrSet);
+    const re2 = new AddReferenceInCommentText().main(re1, addrSet);
+    return re2;
+  }
+}
+

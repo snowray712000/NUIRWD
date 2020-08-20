@@ -4,6 +4,8 @@ import * as LQ from 'linq';
 import { AddReferenceFromOrigDictCBOLChineseText } from "src/app/version-parellel/one-ver/AddReferenceFromOrigDictCBOLChineseText";
 import { addListStartAndEnd } from './dtexts-rendor/addListStartAndEnd';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { newLineNewLineSplit } from './newLineNewLineSplit';
+import { newLineNewLineMerge } from "./newLineNewLineMerge";
 /** 將 cvtNewChinese cvtNewEng cvtOldChinese cvtOldEng 整理, 因為它們 code 很多相同的地方 */
 
 
@@ -21,20 +23,10 @@ export class CBOL2DTextConvertor {
     interface DataWithType { data: DText[]; tp: 'title' | 'orig' | 'AV' | 'TDNT' | 'TWOT' | 'unknown' | '同義字'; }
     const reClassified = splitToPart(r3);
     const reCvtors = LQ.from(reClassified).select(a1 => cvtEachType(a1)).toArray();
-    const re = merge(reCvtors);
+    const re = newLineNewLineMerge(reCvtors);
     return re;
 
-    function merge(datas: DText[][]) {
-      const ree = [];
-      for (const it1 of datas) {
-        for (const it2 of it1) {
-          ree.push(it2);
-        }
-        ree.push({ w: '', isBr: 1 });
-        ree.push({ w: '', isBr: 1 });
-      }
-      return ree;
-    }
+
 
     function splitToPart(data: DText[]): DataWithType[] {
       // 'title': 5203 hudropikos {hoo-dro-pik-os'}
@@ -45,41 +37,10 @@ export class CBOL2DTextConvertor {
       // 'unknown' :
       // '同義字' : 同義字請見 5868 ... G67 有關希律的討論, 見 2264
 
-      const reGroupNewLineNewLine = splitByNewLineNewLine(data);
+      const reGroupNewLineNewLine = newLineNewLineSplit(data);
       const reClassify = classify(reGroupNewLineNewLine) as DataWithType[];
       return reClassify;
 
-      function splitByNewLineNewLine(dataRef: DText[]) {
-        const re: DText[][] = [];
-        const dataClone = [...dataRef];
-        for (let i = 0; i < dataClone.length; i++) {
-          const it = dataClone[i];
-          if (isNeedPsuh()) {
-            re.push(getThisGroup());
-            removeThisGroupAndSetIndexLeft();
-          }
-          continue;
-          function isNeedPsuh() {
-            if (dataClone.length >= i + 2) {
-              if (dataClone[i + 1].isBr === 1 && dataClone[i + 2].isBr === 1) {
-                return true;
-              }
-            }
-            return false;
-          }
-          function getThisGroup() {
-            return LQ.from(dataClone).take(i + 1).toArray();
-          }
-          function removeThisGroupAndSetIndexLeft() {
-            dataClone.splice(0, i + 3);
-            i = -1; // i++ 變成 0
-          }
-        }
-        if (dataClone.length !== 0) {
-          re.push(dataClone);
-        }
-        return re;
-      }
       function classify(group: DText[][]): DataWithType[] {
         return LQ.from(group).select((a1, i1) => {
           if (i1 === 0) {
@@ -179,8 +140,9 @@ export class CBOL2DTextConvertor {
 
         const dataWithTp = datas.map(a1 => checkEachListLevel(a1));
         const dataWithTpConnectedString = connectString(dataWithTp);
+
         const re2 = addListStartAndEnd(dataWithTpConnectedString);
-        // console.log(re2);
+
         const re3 = re2.map(a1 => a1.data);
         return new AddReferenceFromOrigDictCBOLChineseText().main2(re3);
 
@@ -232,7 +194,9 @@ export class CBOL2DTextConvertor {
                 if (isNeedAddChar(cur.data.w)) {
                   cur.data.w += '.';
                 }
-                cur.data.w += it1.data.w.trim();
+                if (it1.data.w !== undefined) {
+                  cur.data.w += it1.data.w.trim();
+                }
                 aa1.splice(i1, 1);
                 i1--; // 在 for loop 會 ++
               }

@@ -30,7 +30,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
-import { InfoDialogComponent } from './side-nav-right/info-dialog/info-dialog.component';
+// import { InfoDialogComponent } from './side-nav-right/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
 import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
@@ -40,9 +40,11 @@ import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-tex
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog/search-result-dialog.component';
 import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
+import { EditComponent } from './edit/edit.component';
+import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
-  InfoDialogComponent,
+  // InfoDialogComponent,
   SearchResultDialogComponent,
   DTextsRendorComponent,
 );
@@ -59,7 +61,7 @@ const entryComponents = new Array<any>(
     SideNavRightComponent,
     CbolParsingComponent,
     BibleSelectionsComponent,
-    InfoDialogComponent,
+    // InfoDialogComponent,
     SearchResultDialogComponent,
     TextWithSnDirective,
     ChainToolComponent,
@@ -67,6 +69,8 @@ const entryComponents = new Array<any>(
     ComTextComponent,
     OneVerComponent,
     DTextsRendorComponent,
+    EditComponent,
+    QunitsComponent,
   ),
   entryComponents,
   imports: [

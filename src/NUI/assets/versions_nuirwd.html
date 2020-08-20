@@ -95,12 +95,27 @@
     '(RD) 200619a Bug發現, ios平板的地圖無法正常顯示(電腦版可以)',
     '情境: 人工輸入換行(需合併);利用空白數量;利用特殊字元;',
     '200802 當查詢時, 輸入 林後21，就給它最後一章(超出範圍)',
+    '0810-移除 code DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent, 但注釋還有用到',
+    '0810-edit',
+    '0810 bug-串珠有時會被誤判為Sn, 非 Ref # 1Ti 1:1,11,12; 2:7; 2Ti 1:11; Tit 1:1; Heb 5:4|',
+    '0819 羅馬書 5:12的注釋，呈現會差很多.',
+    '0819 創 3:20的注釋，#以諾書 71:7|.',
   ];
   var data105MathB = [
-  {
+    {
+      na: '200820a_',
+      na2: [
+        '搜尋功能優化 <a href="/NUI/200820a_rwd/" target="_blank">200820a</a>',
+        '移除-DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent',
+        '新增-仿qunits。/#/qunit/',
+        '重構-注釋顯示。用dtexts-render 取代原來的 com-text InfoDialogComponent',
+
+      ]
+    },
+    {
       na: '200806c_搜尋功能-原文字典排版優化',
       na2: [
-        '搜尋功能優化 <a href="/NUI/200806a_rwd/" target="_blank">200806c</a>',
+        '搜尋功能優化 <a href="/NUI/200806a_rwd/" target="_blank">200806c(毀損)</a>',
         '優化-CBOL 中文、英文、新約、舊約的排版，已經按 ol li 方式產生. (dtexts-rendor-components, 且用到遞迴)',
         'b,',
         '優化-搜尋後,多了 close 鈕按, (iphone手機沒有返回前頁的功能,若填滿沒地方好按掉,也沒esc鍵好用)',
@@ -112,7 +127,6 @@
         '重構,共用 - 串珠 與 搜尋共用. (DialogRefOpenor 預備被拿掉)',
         '重構,共用 - 經文主體、顯示部分 與 搜尋共用. (DialogRefOpenor DialogOrigDictOpenor)',
         '新增-下一章、上一章.',
-
       ]
     },
     {

@@ -19,7 +19,7 @@ export class AddBrStdandard implements IAddBase {
             r2.w = it3.w;
             re1.push(r2);
           } else {
-            r2.w = '';
+            delete r2.w; // r2.w = '';
             r2.isBr = 1;
             re1.push(r2);
             isExistChange = true;
