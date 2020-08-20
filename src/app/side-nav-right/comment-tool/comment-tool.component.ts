@@ -1,3 +1,4 @@
+import * as LQ from 'linq';
 import { DialogSearchResultOpenor } from './../../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { DText } from './../../bible-text-convertor/AddBase';
 import { BookNameToId } from './../../const/book-name/book-name-to-id';
@@ -11,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Comment2DText } from './Comment2DText';
 import { AddReferenceInCommentText } from './AddReferenceInCommentText';
+import { AddOrigDictInCommentText } from './AddOrigDictInCommentText';
 
 @Component({
   selector: 'app-comment-tool',
@@ -123,7 +125,9 @@ async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
   function cvtData(comtext: string, addrSet: DAddress): DText[] {
     const re1 = new Comment2DText().main(comtext, addrSet);
     const re2 = new AddReferenceInCommentText().main(re1, addrSet);
-    return re2;
+    const re3 = new AddOrigDictInCommentText().main(re2);
+    return re3;
   }
 }
+
 

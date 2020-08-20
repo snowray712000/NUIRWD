@@ -1,5 +1,6 @@
 import { prepareDataForAddOrderAndListAtComment } from 'src/app/side-nav-right/comment-tool/prepareDataForAddOrderAndListAtComment';
 import { UT } from './UT';
+/** 注釋開發 */
 export async function test_prepareDataForAddOrderAndListAtComment() {
   const equal = UT.equal;
   return UT.gFnSafe(fns => {
@@ -36,6 +37,20 @@ export async function test_prepareDataForAddOrderAndListAtComment() {
         { data: { w: '● 2-a' }, list: [1, 1] },
         { data: { w: '● 2-b' }, list: [1, 2] },
         { data: { w: '● 1-2' }, list: [2] },
+      ];
+      // 說明文件用
+      const dstExcept2 = [
+        { data: { w: '引言（#1:1-17）' }, list: [] },
+        { data: { w: '一、問安（#1:1-7）' }, list: [1] },
+        { data: { w: '（一）表明自己身份（#1:1）' }, list: [1, 1] },
+        { data: { w: '1.保羅：' }, list: [1, 1, 1] },
+        { data: { w: '(1)耶穌基督的僕人。' }, list: [1, 1, 1, 1] },
+        { data: { w: '(2)奉召為使徒。' }, list: [1, 1, 1, 2] },
+        { data: { w: '(3)特派傳神的福音。' }, list: [1, 1, 1, 3] },
+        { data: { w: '●「保羅」字義是...' }, list: [1, 1, 1, 4] },
+        { data: { w: '●「僕人」.....' }, list: [1, 1, 1, 5] },
+        {}, // 中間略
+        { data: { w: '（二）對所奉召傳的....' }, list: [1, 2] },
       ];
       fns.push(equal('01.沒有換行', dstExcept, dst));
       // fns.push({st:1,msg:})

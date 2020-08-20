@@ -14,7 +14,6 @@ import { prepareDataForAddOrderAndListAtComment } from './prepareDataForAddOrder
 export class Comment2DText {
   main(text: string, addr: DAddress): DText[] {
     // console.clear();
-    // console.log(text);
     const r1 = new AddBrStdandard().main2([{ w: text }]);
     const r2 = this.addOrderList(r1);
     const r3 = addOrderIdx(r2);
@@ -37,10 +36,11 @@ export class Comment2DText {
   private addOrderList(data: DText[]) {
     // 連續2個換行的為一個 group <== 不這麼作, 注釋不適合 #羅1:16-17| 注釋
     const r1: { w?: string; space?: number; tpIdx?: number; }[] = data.map((a1, i1) => ({ idx: i1, ...getInfoEachLine(a1) }));
-
     const r2 = mergeText(r1);
+    // console.log([...r2]);
+
     const r3 = prepareDataForAddOrderAndListAtComment(r2);
-    // console.log(r3);
+    // console.log([...r3]);
     const r4a = addListStartAndEnd(r3);
     // console.log(r4a);
     const r4 = r4a.map(a1 => a1.data);
