@@ -12,8 +12,10 @@ export async function searchAllIndexViaSeApiAsync(arg: { keyword: string; versio
   let re: DSeApiRecord[] = [];
   let offset = 0;
   const url = new FhlUrl().getJsonUrl() + 'se.php';
-  const version = arg.version === undefined ? 'unv' : arg.version;
-  // console.log(version);
+  let version = arg.version === undefined ? 'unv' : arg.version;
+  if ( arg.orig !== 0 ){
+    version = 'unv'; // kjv 與 和合本２０１０好像不能找原文彙編
+  }
 
   while (true) {
     const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=${version}`;

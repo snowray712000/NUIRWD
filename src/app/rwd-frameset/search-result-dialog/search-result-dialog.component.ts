@@ -183,11 +183,6 @@ export class SearchResultDialogComponent implements OnInit {
       return r3;
     }
   }
-  onBibleVersionSelectionSnChanged(a1: MatSelectChange) {
-    new SearchSetting().saveSearchSnBibleVersion(this.bibleVersionSnSelected);
-    this.setBibleVersionSelectedSnShowName();
-    this.queryOrigCollection();
-  }
   /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
   getOrigKeyword(str: string) {
     const r1 = /(?:G|H)\d+[a-z]?/i.exec(str);
@@ -203,23 +198,43 @@ export class SearchResultDialogComponent implements OnInit {
       addresses: this.dataByParent.addresses
     });
   }
-  onClickVersion() {
+  /** 原文彙編呼叫時, 要加參數 */
+  onClickVersion(isSnOnly?: 0 | 1) {
     const na = this.bibleVersionSelected;
     const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
-      { isLimitOne: 1, versions: [na] },
+      { isSnOnly, isLimitOne: 1, versions: [na] },
     );
 
     /** dialog 關閉後 */
+    const pthis = this;
     refdialog.afterClosed().toPromise().then((re: string[]) => {
-      if (re !== undefined && re.length !== 0) {
-        if (this.bibleVersionSelected !== re[0]) {
-          this.bibleVersionSelected = re[0];
-          this.setBibleVersionSelectedShowName();
-          new SearchSetting().saveSearchBibleVersion(this.bibleVersionSelected);
-          this.doDependonType();
-        }
+      if (isSnOnly === 1) {
+        doAfterCloseDialogSnVer(re);
+      } else {
+        doAfterCloseDialogNotSnVer(re);
       }
     });
+
+    function doAfterCloseDialogNotSnVer(re: string[]) {
+      if (re !== undefined && re.length !== 0) {
+        if (pthis.bibleVersionSelected !== re[0]) {
+          pthis.bibleVersionSelected = re[0];
+          pthis.setBibleVersionSelectedShowName();
+          new SearchSetting().saveSearchBibleVersion(pthis.bibleVersionSelected);
+          pthis.doDependonType();
+        }
+      }
+    }
+    function doAfterCloseDialogSnVer(re: string[]) {
+      if (re !== undefined && re.length !== 0) {
+        if (pthis.bibleVersionSnSelected !== re[0]) {
+          pthis.bibleVersionSnSelected = re[0];
+          pthis.setBibleVersionSelectedSnShowName();
+          new SearchSetting().saveSearchSnBibleVersion(pthis.bibleVersionSnSelected);
+          pthis.doDependonType();
+        }
+      }
+    }
   }
   /** init時, 呼叫不傳參數. */
   setBibleVersionSelectedShowName(verSelected?: string) {

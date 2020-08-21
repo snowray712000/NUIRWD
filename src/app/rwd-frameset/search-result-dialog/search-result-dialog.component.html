@@ -28,7 +28,8 @@
             <mat-tab label="設定">
               <span style="line-height: 1.3em;">
                 <!-- 設定 聖經版本查詢 -->
-                <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}}) </span>
+                <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}})
+                </span>
                 <!-- 設定 關鍵字要不要上色 -->
                 <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
                   關鍵字上色</mat-slide-toggle>
@@ -82,15 +83,8 @@
           <mat-tab label="設定">
             <span style="line-height: 1.3em;">
               <!-- 原文彙編 設定 聖經版本查詢 -->
-              <mat-form-field appearance="fill">
-                <mat-label>查詢版本</mat-label>
-                <mat-select [(value)]="bibleVersionSnSelected"
-                  (selectionChange)="onBibleVersionSelectionSnChanged($event)">
-                  <mat-option *ngFor="let food of bibleVersionsSn" [value]="food.name">
-                    {{food.nameShow}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+              <span style="color:blue;cursor: pointer;" (click)="onClickVersion(1)">
+                ({{bibleVersionSnSelectedShowName}}) </span>
               <!-- 設定 關鍵字要不要上色 -->
               <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
                 關鍵字上色</mat-slide-toggle>

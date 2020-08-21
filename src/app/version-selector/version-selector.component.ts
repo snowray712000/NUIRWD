@@ -17,10 +17,13 @@ export class VersionSelectorComponent implements OnInit {
 
   constructor(private changeDetector: ChangeDetectorRef,
     private dialogRef: MatDialogRef<VersionSelectorComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataByParent: { isLimitOne?: 0 | 1; versions?: string[] }) { }
+    @Inject(MAT_DIALOG_DATA) public dataByParent: { isSnOnly?: 0 | 1, isLimitOne?: 0 | 1; versions?: string[] }) { }
   ngOnInit() {
     verQ().then(re => {
-      this.versions = re.record.map(aa1 => ({ na: aa1.book, naChinese: aa1.cname }));
+      const rr1 = this.dataByParent.isSnOnly === 1 ?
+        re.record.filter(a1 => a1.strong === 1) : re.record;
+      const rr2 = rr1.map(aa1 => ({ na: aa1.book, naChinese: aa1.cname }));
+      this.versions = rr2;
       this.versionCurrentNa = [...this.dataByParent.versions];
     });
 
@@ -76,8 +79,8 @@ export class DialogVersionSelectorOpenor {
   /**
    * @param {({ isLimitOne?: 0 | 1; versions?: string[] })} arg 只允許一個，就加1。versions是 unv 等字串
    */
-  showDialog(arg: { isLimitOne?: 0 | 1; versions?: string[] }): MatDialogRef<VersionSelectorComponent, any> {
-    const data = { isLimitOne: arg.isLimitOne, versions: arg.versions };
+  showDialog(arg: { isSnOnly?: 0 | 1; isLimitOne?: 0 | 1; versions?: string[] }): MatDialogRef<VersionSelectorComponent, any> {
+    const data = { isSnOnly: arg.isSnOnly, isLimitOne: arg.isLimitOne, versions: arg.versions };
     const dialogRef = this.dialog.open(VersionSelectorComponent, {
       data
     });

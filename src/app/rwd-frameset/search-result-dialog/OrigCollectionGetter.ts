@@ -9,8 +9,6 @@ import { cvt_kjv } from 'src/app/bible-text-convertor/kjv';
 /** 原文彙編功能 */
 export class OrigCollectionGetter implements IOrigCollectionGetter {
   async mainAsync(arg: { orig: string; version?: string | 'unv' | 'kjv' | 'rcuv'; bookDefault?: number; }): Promise<DOneLine[]> {
-    console.log(arg);
-
     const r2 = getOrig(arg.orig, arg.bookDefault);
     const r3 = await getDataViaApiAsync(r2.orig, r2.isOld);
     const r4 = cvt2lines(r3);

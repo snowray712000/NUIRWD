@@ -4,15 +4,16 @@
 }
 .oneline {
   display: block;
+  padding-left: 2em;
+  text-indent: -2em;
 }
 .address {
   font-size: small;
   cursor: pointer;
-  display: inline-block;
-  vertical-align: top;
+  display: inline;
 }
 .text {
-  display: inline-block;
+  display: inline;
 }
 .isTitle1 {
   /* font-size: 1.2em; */

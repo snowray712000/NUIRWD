@@ -1,7 +1,7 @@
 <div>
   <!-- title -->
-  <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
-    <div *ngIf="isRenderSelections()">
+  <div *ngIf="isRenderSelections()">
+    <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
       <ng-container *ngIf="getSelected().length===0; else elseTemplate">
         選擇版本
       </ng-container>
@@ -25,9 +25,9 @@
   </mat-dialog-content>
 
   <!-- end -->
-  <div mat-dialog-actions>
-    <button mat-button (click)="dialogRef.close(undefined)">Close</button>
-    <div *ngIf="isRenderSelections()">
+  <div *ngIf="isRenderSelections()">
+    <div mat-dialog-actions>
+      <button mat-button (click)="dialogRef.close(undefined)">Close</button>
       <button mat-button [mat-dialog-close]="getDialogResults()" cdkFocusInitial>Ok</button>
     </div>
   </div>
