@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class ReferenceGetter implements IReferenceGetter {
   async mainAsync(arg: { reference: string; version: string }): Promise<DOneLine[]> {
     const recordsFromApi = await getDataAsync(getStrForApi(arg.reference), arg.version);
-    if (recordsFromApi.length === 0) {
+    if (recordsFromApi === undefined || recordsFromApi.length === 0) {
       console.warn(`${arg.reference} get qsb empty`);
       return [];
     }

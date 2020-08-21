@@ -2,9 +2,17 @@
   color: darkturquoise;
   cursor: pointer;
 }
+.oneline {
+  display: block;
+}
 .address {
   font-size: small;
   cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+}
+.text {
+  display: inline-block;
 }
 .isTitle1 {
   /* font-size: 1.2em; */
@@ -30,8 +38,8 @@
   /* font-size: 1.2em; */
   color: magenta;
 }
-.isRef{
-  color:blue;
+.isRef {
+  color: blue;
   cursor: pointer;
 }
 .is-map {

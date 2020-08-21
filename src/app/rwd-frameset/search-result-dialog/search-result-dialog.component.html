@@ -49,7 +49,7 @@
     </span>
     <span *ngIf="typeFunction==='reference'">
       <span> {{getKeyword()}} </span>
-      <span style="color:gray;"> ({{bibleVersionSelectedShowName}}) </span>
+      <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}}) </span>
       <!-- <a [routerLink]="getReferenceLink()"> 切換網址到 </a> -->
       <a [href]="getReferenceLink()"> 切換網址 </a>
     </span>
@@ -117,7 +117,8 @@
       <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1">
         <span>
 
-          <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword" (clickRef)="onClickReference($event)"  (clickOrig)="onClickOrig($event);" ></app-dtexts-rendor>
+          <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword"
+            (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);"></app-dtexts-rendor>
 
           <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
             (click)="onClickReference(getReferenceEntireChap(it1))">

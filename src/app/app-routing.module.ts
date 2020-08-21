@@ -11,6 +11,7 @@ import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtext
 import { EditComponent } from './edit/edit.component';
 import { QueryBindingType } from '@angular/compiler/src/core';
 import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
+import { VersionSelectorComponent } from './version-selector/version-selector.component';
 
 // Ref: 為何用 hash # 舊方法, 而不用新方法, https://blog.csdn.net/gaomingyangc/article/details/79756564
 // 因為, refresh 後, 會 404, 除非去改 server 端.
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: '', redirectTo: urlDefault, pathMatch: 'full' },
   // { path: 'bible/:book/:ichap/:isec', component: OneVerseComponent },
   { path: 'bible/:description', component: RwdFramesetComponent },
+  // { path: 'bible/:description', component: VersionSelectorComponent },
   { path: 'edit/:description', component: EditComponent },
   { path: 'qunit/:description', component: QunitsComponent },
   { path: 'qunit', redirectTo: 'qunit/' },

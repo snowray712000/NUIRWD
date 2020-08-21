@@ -33,6 +33,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { OrigCollectionGetter } from './OrigCollectionGetter';
 import { type } from 'jquery';
+import { DialogVersionSelectorOpenor } from 'src/app/version-selector/version-selector.component';
 @Component({
   selector: 'app-search-result-dialog',
   templateUrl: './search-result-dialog.component.html',
@@ -59,10 +60,15 @@ export class SearchResultDialogComponent implements OnInit {
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) { }
   ngOnInit() {
-    this.initVersionsAsync();
-    this.isEnableColorKeyword = new SearchSetting().loadIsEnableColorKeyword();
-    this.determineTypeFunction();
+    this.initVersionsAsync().then(rre => {
+      this.isEnableColorKeyword = new SearchSetting().loadIsEnableColorKeyword();
+      this.determineTypeFunction();
 
+      this.doDependonType();
+    });
+  }
+  /** init 時會呼叫, 在 dialog 切換版本時也會呼叫 */
+  private doDependonType() {
     const pthis = this;
     if (this.typeFunction === 'orig-dict') {
       qOrigDict();
@@ -177,14 +183,15 @@ export class SearchResultDialogComponent implements OnInit {
       return r3;
     }
   }
-  onBibleVersionSelectionChanged(a1: MatSelectChange) {
+  /** 可不傳參數, 目前沒用到, 它會更新 localstorage 值, 設定ShowName, 重新查詢, 更新 */
+  onBibleVersionSelectionChanged(a1?: MatSelectChange) {
     new SearchSetting().saveSearchBibleVersion(this.bibleVersionSelected);
-    this.setBiblerVersionSelectedShowName();
+    this.setBibleVersionSelectedShowName();
     this.queryKeyword();
   }
   onBibleVersionSelectionSnChanged(a1: MatSelectChange) {
     new SearchSetting().saveSearchSnBibleVersion(this.bibleVersionSnSelected);
-    this.setBiblerVersionSelectedSnShowName();
+    this.setBibleVersionSelectedSnShowName();
     this.queryOrigCollection();
   }
   /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
@@ -202,15 +209,45 @@ export class SearchResultDialogComponent implements OnInit {
       addresses: this.dataByParent.addresses
     });
   }
-  setBiblerVersionSelectedShowName(biblerVersionSelected?: string) {
-    const name = biblerVersionSelected === undefined ? this.bibleVersionSelected : biblerVersionSelected;
-    this.bibleVersionSelectedShowName = LQ.from(this.bibleVersions)
-      .firstOrDefault(a2 => a2.name === name).nameShow;
+  onClickVersion() {
+    const na = this.bibleVersionSelected;
+    const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
+      { isLimitOne: 1, versions: [na] },
+    );
+
+    /** dialog 關閉後 */
+    refdialog.afterClosed().toPromise().then((re: string[]) => {
+      if (re !== undefined && re.length !== 0) {
+        if (this.bibleVersionSelected !== re[0]) {
+          this.bibleVersionSelected = re[0];
+          this.setBibleVersionSelectedShowName();
+          this.doDependonType();
+        }
+      }
+    });
   }
-  setBiblerVersionSelectedSnShowName(biblerVersionSelected?: string) {
-    const name = biblerVersionSelected === undefined ? this.bibleVersionSnSelected : biblerVersionSelected;
-    this.bibleVersionSnSelectedShowName = LQ.from(this.bibleVersions)
-      .firstOrDefault(a2 => a2.name === name).nameShow;
+  /** init時, 呼叫不傳參數. */
+  setBibleVersionSelectedShowName(verSelected?: string) {
+    const name = verSelected === undefined ? this.bibleVersionSelected : verSelected;
+    let r1 = LQ.from(this.bibleVersions).firstOrDefault(a2 => a2.name === name);
+    if (r1 === undefined) {
+      // 應該是錯誤的版本名稱, 此時就給它預設值
+      r1 = this.bibleVersions[0];
+      this.bibleVersionSelected = r1.name;
+    }
+    this.bibleVersionSelectedShowName = r1.nameShow;
+  }
+  /** init時, 呼叫不傳參數. */
+  setBibleVersionSelectedSnShowName(verSelected?: string) {
+    const name = verSelected === undefined ? this.bibleVersionSnSelected : verSelected;
+    let r1 = LQ.from(this.bibleVersionsSn).firstOrDefault(a2 => a2.name === name);
+    if (r1 === undefined) {
+      // 應該是錯誤的版本名稱, 此時就給它預設值
+      r1 = this.bibleVersionsSn[0];
+      this.bibleVersionSnSelected = r1.name;
+    }
+
+    this.bibleVersionSnSelectedShowName = r1.nameShow;
   }
 
   onEnableColorKeywordChanged(a1: MatSlideToggleChange) {
@@ -254,8 +291,8 @@ export class SearchResultDialogComponent implements OnInit {
     this.bibleVersions = r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
     this.bibleVersionsSn = r1.record.filter(a1 => a1.strong === 1).map(a1 => ({ nameShow: a1.cname, name: a1.book }));
 
-    this.setBiblerVersionSelectedShowName();
-    this.setBiblerVersionSelectedSnShowName();
+    this.setBibleVersionSelectedShowName();
+    this.setBibleVersionSelectedSnShowName();
 
     return;
 

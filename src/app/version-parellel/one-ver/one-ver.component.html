@@ -1,5 +1,5 @@
 <div class='text-base' #base>
-  <div *ngFor="let it1 of data;let i1=index" [class.odd]="i1%2===1 && isBreakLineEachVerse"
+  <div class='oneline' *ngFor="let it1 of data;let i1=index" [class.odd]="i1%2===1 && isBreakLineEachVerse"
     [class.no-break-line]="false===isBreakLineEachVerse"
     (click)="onClickVerse(it1)"
     #oneline
@@ -8,7 +8,7 @@
       (click)="onClickAddress(it1)">
       {{settingAddressShow.getAddressesShow(it1.addresses)}}
     </span>
-    <span>
+    <span class='text'>
       <span *ngFor="let it2 of it1.children">
         <span *ngIf="isShowSn && it2.sn!==undefined" class='orig' (click)="onClickOrig(it2)" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined">{{it2.w}}</span>
         <a *ngIf="isShowMapPhoto && it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined"></a>

@@ -1,0 +1,35 @@
+<div>
+  <!-- title -->
+  <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
+    <div *ngIf="isRenderSelections()">
+      <ng-container *ngIf="getSelected().length===0; else elseTemplate">
+        選擇版本
+      </ng-container>
+      <ng-template #elseTemplate>
+        <div>
+          <span *ngFor="let it of getSelected()" (click)="onClick(it)" style="cursor: pointer;word-break: keep-all;"
+            [class.current]="isSelected(it)">
+            {{it.naChinese}}
+          </span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- body -->
+  <mat-dialog-content>
+    <div style="">
+      <span *ngFor="let it of versions; let i1=index" (click)="onClick(it)"
+        style="cursor: pointer;word-break: keep-all;" [class.current]="isSelected(it)">{{it.naChinese}}　</span>
+    </div>
+  </mat-dialog-content>
+
+  <!-- end -->
+  <div mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close(undefined)">Close</button>
+    <div *ngIf="isRenderSelections()">
+      <button mat-button [mat-dialog-close]="getDialogResults()" cdkFocusInitial>Ok</button>
+    </div>
+  </div>
+
+</div>

@@ -42,11 +42,13 @@ import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog
 import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
 import { EditComponent } from './edit/edit.component';
 import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
+import { VersionSelectorComponent } from './version-selector/version-selector.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   // InfoDialogComponent,
   SearchResultDialogComponent,
   DTextsRendorComponent,
+  VersionSelectorComponent,
 );
 
 
@@ -71,6 +73,7 @@ const entryComponents = new Array<any>(
     DTextsRendorComponent,
     EditComponent,
     QunitsComponent,
+    VersionSelectorComponent,
   ),
   entryComponents,
   imports: [
