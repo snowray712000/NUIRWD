@@ -12,9 +12,12 @@ export async function searchAllIndexViaSeApiAsync(arg: { keyword: string; versio
   let re: DSeApiRecord[] = [];
   let offset = 0;
   const url = new FhlUrl().getJsonUrl() + 'se.php';
+  const version = arg.version === undefined ? 'unv' : arg.version;
+  // console.log(version);
+
   while (true) {
-    // const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=${arg.version}`;
-    const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=unv`;
+    const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=${version}`;
+    // const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=unv`;
     // console.log('post');
     // console.log(data);
 

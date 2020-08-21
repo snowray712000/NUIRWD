@@ -183,12 +183,6 @@ export class SearchResultDialogComponent implements OnInit {
       return r3;
     }
   }
-  /** 可不傳參數, 目前沒用到, 它會更新 localstorage 值, 設定ShowName, 重新查詢, 更新 */
-  onBibleVersionSelectionChanged(a1?: MatSelectChange) {
-    new SearchSetting().saveSearchBibleVersion(this.bibleVersionSelected);
-    this.setBibleVersionSelectedShowName();
-    this.queryKeyword();
-  }
   onBibleVersionSelectionSnChanged(a1: MatSelectChange) {
     new SearchSetting().saveSearchSnBibleVersion(this.bibleVersionSnSelected);
     this.setBibleVersionSelectedSnShowName();
@@ -221,6 +215,7 @@ export class SearchResultDialogComponent implements OnInit {
         if (this.bibleVersionSelected !== re[0]) {
           this.bibleVersionSelected = re[0];
           this.setBibleVersionSelectedShowName();
+          new SearchSetting().saveSearchBibleVersion(this.bibleVersionSelected);
           this.doDependonType();
         }
       }
