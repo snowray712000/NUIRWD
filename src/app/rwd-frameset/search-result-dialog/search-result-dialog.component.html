@@ -100,17 +100,15 @@
   </div>
   <mat-dialog-content>
     <div style="padding-bottom: 4em;">
-      <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1">
-        <span>
-
-          <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword"
-            (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);"></app-dtexts-rendor>
-
-          <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
-            (click)="onClickReference(getReferenceEntireChap(it1))">
-            ({{it1.addresses.toStringChineseShort()}})
-          </span>
+      <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1"
+        [class.oneLine]="it1.addresses!==undefined">
+        <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
+          (click)="onClickReference(getReferenceEntireChap(it1))">
+          {{it1.addresses.toStringChineseShort()}}
         </span>
+
+        <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword"
+          (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);"></app-dtexts-rendor>
       </div>
     </div>
   </mat-dialog-content>

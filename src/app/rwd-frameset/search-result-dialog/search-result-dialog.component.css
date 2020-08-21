@@ -1,10 +1,16 @@
-.orig{
+.orig {
   color: darkturquoise;
   cursor: pointer;
 }
-.reference{
+.reference {
   color: blue;
   cursor: pointer;
+  font-size: small;
+}
+.oneLine {
+  display: block;
+  padding-left: 2em;
+  text-indent: -2em;
 }
 .odd {
   background-color: whitesmoke;
@@ -12,32 +18,32 @@
 .key0 {
   color: brown;
 }
-.key1{
+.key1 {
   color: chocolate;
 }
-.key2{
+.key2 {
   color: crimson;
 }
-.key3{
+.key3 {
   color: darkred;
 }
-.key4{
+.key4 {
   color: darkgoldenrod;
 }
-.key5{
+.key5 {
   color: firebrick;
 }
-.key6{
+.key6 {
   color: maroon;
 }
-.classor{
+.classor {
   color: blue;
   cursor: pointer;
 }
-.classor-selected{
+.classor-selected {
   color: red;
 }
-.version-opt{
+.version-opt {
   color: blue;
   cursor: pointer;
 }
