@@ -1,3 +1,4 @@
+import { MatInputModule } from '@angular/material';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule, Injector, Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -101,6 +102,7 @@ const entryComponents = new Array<any>(
     MatDialogModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatInputModule,
   ],
   providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],

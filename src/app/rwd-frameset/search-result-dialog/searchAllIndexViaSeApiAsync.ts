@@ -13,7 +13,9 @@ export async function searchAllIndexViaSeApiAsync(arg: { keyword: string; versio
   let offset = 0;
   const url = new FhlUrl().getJsonUrl() + 'se.php';
   let version = arg.version === undefined ? 'unv' : arg.version;
-  if ( arg.orig !== 0 ){
+
+  // // 修正完畢, 可以了
+  if (arg.orig !== 0 && arg.version === 'rcuv') {
     version = 'unv'; // kjv 與 和合本２０１０好像不能找原文彙編
   }
 

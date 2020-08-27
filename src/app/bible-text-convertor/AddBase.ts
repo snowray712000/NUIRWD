@@ -57,6 +57,9 @@ export interface DText {
 
   /** idxOrder, 有這個 html 繪圖可以更加漂亮, 交錯深度之類的 */
   idxOrder?: number;
+
+  /** twcb orig dict 出現的, 它原本就是 html 格式, 若巢狀, 愈前面的 class 愈裡層 */
+  class?: string;
 }
 
 

@@ -183,6 +183,9 @@ export class SearchResultDialogComponent implements OnInit {
       return r3;
     }
   }
+  getAddressShow(it: DOneLine) {
+    return it.addresses.toStringChineseShort();
+  }
   /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
   getOrigKeyword(str: string) {
     const r1 = /(?:G|H)\d+[a-z]?/i.exec(str);

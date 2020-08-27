@@ -216,6 +216,10 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
   ngOnInit() {
   }
 
+  getAddressShow(it: DOneLine) {
+    return it.addresses.toStringChineseShort();
+  }
+
 }
 
 export interface DOneLineHeight {

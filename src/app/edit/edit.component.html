@@ -1,8 +1,13 @@
-<p>edit works!</p>
-
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Leave a comment</mat-label>
-    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+<mat-label (click)="onClickToggle()">{{getToggleText()}}</mat-label>
+<form class="example-form" style="width: 100%;" *ngIf="isVisibleInput">
+  <mat-form-field class="example-full-width" style="width: 100%;">
+    <!-- <mat-label>輸入資料</mat-label> -->
+    <textarea #textInput matInput placeholder="● 參照 G2342 、 H23" (keydown)="onKeydown($event)"
+      style="height: 42em;"></textarea>
   </mat-form-field>
 </form>
+
+<div *ngIf="!isVisibleInput">
+  <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
+  </app-dtexts-rendor>
+</div>

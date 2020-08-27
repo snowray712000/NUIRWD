@@ -125,4 +125,16 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     const idx = a1.keyIdx0based >= 6 ? 6 : a1.keyIdx0based;
     return `keyword key${idx}`;
   }
+  isClassTwcbExp(it1: DText) {
+    if (it1.class !== undefined) {
+      return /exp/.test(it1.class);
+    }
+    return false;
+  }
+  isClassTwcbIdt(it1: DText) {
+    if (it1.class !== undefined) {
+      return /idt/.test(it1.class);
+    }
+    return false;
+  }
 }

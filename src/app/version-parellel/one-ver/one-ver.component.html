@@ -6,7 +6,8 @@
     [style.height.px]="getLineHeight(it1,i1)">
     <span class='address' [style.color]="settingAddressShow.getColor()" *ngIf="settingAddressShow.isAddressBefore()"
       (click)="onClickAddress(it1)">
-      {{settingAddressShow.getAddressesShow(it1.addresses)}}
+      {{getAddressShow(it1)}}
+      <!-- {{settingAddressShow.getAddressesShow(it1.addresses)}} -->
     </span>
     <span class='text'>
       <span *ngFor="let it2 of it1.children">

@@ -5,6 +5,7 @@ import { DApiSdResult } from 'src/app/fhl-api/DApiSdResult';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { AddSnForOrigDictTwcbNew } from 'src/app/version-parellel/one-ver/AddSnForOrigDictTwcbNew';
 import { ApiSbdag } from 'src/app/fhl-api/ApiSbdag';
+import { OrigStwcbDOMParsor } from 'src/app/fhl-api/Orig/OrigStwcbDOMParsor';
 
 export class OrigDictTwcbApiGetter {
   async mainAsync(arg: { sn: string; isOld?: 0 | 1; }): Promise<DText[]> {
@@ -22,7 +23,9 @@ export class OrigDictTwcbApiGetter {
       const r1 = {
         w: str,
       };
-      let r2 = new AddBrStdandard().main2([r1]);
+      const rr2 = new OrigStwcbDOMParsor().main(str);
+
+      let r2 = new AddBrStdandard().main2(rr2);
       r2 = new AddReferenceFromOrigDictText().main2(r2);
       r2 = new AddSnForOrigDictTwcbNew().main2(r2);
       return r2;
