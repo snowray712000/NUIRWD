@@ -20,10 +20,9 @@ export class OrigDictTwcbApiGetter {
       return cvtNew(str);
     }
     function cvtNew(str: string): DText[] {
-      const r1 = {
-        w: str,
-      };
       const rr2 = new OrigStwcbDOMParsor().main(str);
+      console.log(rr2);
+
 
       let r2 = new AddBrStdandard().main2(rr2);
       r2 = new AddReferenceFromOrigDictText().main2(r2);

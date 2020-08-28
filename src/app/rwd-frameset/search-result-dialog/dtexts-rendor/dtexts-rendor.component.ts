@@ -131,6 +131,12 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     }
     return false;
   }
+  isClassTwcbBibtext(it1: DText) {
+    if (it1.class !== undefined) {
+      return /bibtext/.test(it1.class);
+    }
+    return false;
+  }
   isClassTwcbIdt(it1: DText) {
     if (it1.class !== undefined) {
       return /idt/.test(it1.class);

@@ -12,7 +12,7 @@
       <span *ngIf="it1.isRef===1" class='reference' [attr.data-ref]="'#'+it1.refDescription+'|'"
         (click)="onClickReference('#'+it1.refDescription+'|')">{{it1.w}}</span>
       <span *ngIf="isW(it1)" [class.twcbexp]="isClassTwcbExp(it1)"
-        [class.twcbidt]="isClassTwcbIdt(it1)">{{it1.w}}</span>
+        [class.twcbidt]="isClassTwcbIdt(it1)" [class.twcbbibtext]="isClassTwcbBibtext(it1)">{{it1.w}}</span>
 
       <!-- order or list 巢狀 -->
       <ol class="myOL" *ngIf="it1.isOrderStart===1" style="list-style-type: none;margin: 0em;text-align: justify;"

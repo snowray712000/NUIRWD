@@ -19,6 +19,7 @@ import { VerseRange } from '../bible-address/VerseRange';
 import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { getChapCount } from '../const/count-of-chap';
+import { IsSnManager } from './settings/IsSnManager';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -217,6 +218,13 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     // 這個 bug 上傳到 server 才會出現
     const r5 = window.location.pathname + `#/bible/${re}`;
     return r5;
+  }
+  isOrigOn() {
+    return IsSnManager.s.getFromLocalStorage();
+  }
+  onClickOrigToggle() {
+    const pre = IsSnManager.s.getFromLocalStorage();
+    IsSnManager.s.updateValueAndSaveToStorageAndTriggerEvent(!pre);
   }
 }
 interface SideWidthStyle {

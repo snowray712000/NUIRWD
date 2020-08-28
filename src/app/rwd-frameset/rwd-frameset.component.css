@@ -35,3 +35,9 @@ h1.example-app-name {
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
 }
+.origon{
+  color: green;
+}
+.origoff{
+  color: gray;
+}

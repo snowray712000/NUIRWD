@@ -8,8 +8,14 @@ export class OrigStwcbDOMParsor {
     return this.commentStwcb(html);
   }
   commentStwcb(html: string) {
+    console.log(html);
+
     const r1 = new DOMParser().parseFromString(html, 'text/html');
+    console.log(r1);
+
     const r2 = r1.querySelector('body');
+    console.log(r2);
+
     const r3 = getAllChildren(r2);
     return r3;
 
