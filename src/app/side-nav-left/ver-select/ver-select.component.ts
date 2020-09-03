@@ -10,6 +10,7 @@ import { ConvertBibleVersionTool } from '../../fhl-api/convert-bible-version';
 import { MatListOption } from '@angular/material/list';
 import { setTimeoutTrySleepTry } from 'src/app/tools/setTimeoutTrySleepTry';
 import { EventVersionControlBridge } from './EventVersionControlBridge';
+import { VersionManager } from 'src/app/rwd-frameset/VersionManager';
 
 // IConvertBibleVersionEng2Id 會用到, (通用的) - checkbox 轉回 id 時會用
 function testData() {
@@ -87,6 +88,8 @@ export class VerSelectComponent implements OnInit, AfterViewInit {
   /** 在 html 中, checkbox select changed 時會自動觸發這個 */
   private onSelectChanged() {
     const vers = this.getVersionsFromVerCControls();
+    VersionManager.s.updateValueAndSaveToStorageAndTriggerEvent(vers);
+
     this.obVers.next(vers);
     const pthis = this;
     this.eng2id.convertEngs2IdsAsync(vers).then(a1 => {

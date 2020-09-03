@@ -1,3 +1,4 @@
+import { BookNameConstants } from './BookNameConstants';
 import { BookNameLang } from './BookNameLang';
 import { linq_range } from '../../linq-like/linq_range';
 
@@ -8,6 +9,11 @@ export class BibleBookNames {
     // console.log(this.getBibleName(1));
   }
   public static getBookName(idBook1based: number, lang: BookNameLang) {
+    if (lang === BookNameLang.太GB) {
+      return BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB[idBook1based - 1];
+    } else if (lang === BookNameLang.马太福音GB) {
+      return BookNameConstants.CHINESE_BOOK_NAMES_GB[idBook1based - 1];
+    }
     return BibleBookNames.getBibleName(idBook1based, BookNameLang[BookNameLang[lang]]);
   }
   public static getBookNames(lang: BookNameLang) {

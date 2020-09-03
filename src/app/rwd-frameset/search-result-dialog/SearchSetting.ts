@@ -1,23 +1,53 @@
 export class SearchSetting {
   loadSearchBibleVersion() {
-    const r1 = localStorage.getItem('SearchBibleVersion');
-    return r1 === null ? 'unv' : r1; // 若不存在, 不是回傳 undefined , 是 null
+    return SearchSettingSearchBibleVersion.s.getFromLocalStorage();
   }
   saveSearchBibleVersion(ver: string) {
-    localStorage.setItem('SearchBibleVersion', ver);
+    SearchSettingSearchBibleVersion.s.updateValueAndSaveToStorageAndTriggerEvent(ver);
   }
   loadSearchBibleSnVersion() {
-    const r1 = localStorage.getItem('SearchSnBibleVersion');
-    return r1 === null ? 'unv' : r1; // 若不存在, 不是回傳 undefined , 是 null
+    return SearchSettingSearchBibleSnVersion.s.getFromLocalStorage();
   }
   saveSearchSnBibleVersion(ver: string) {
-    localStorage.setItem('SearchSnBibleVersion', ver);
+    SearchSettingSearchBibleSnVersion.s.updateValueAndSaveToStorageAndTriggerEvent(ver);
   }
   loadIsEnableColorKeyword(): 0 | 1 {
-    const r1 = localStorage.getItem('IsEnableColorKeyword');
-    return r1 === null ? 1 : parseInt(r1, 10) as 0 | 1;
+    return SearchSettingIsEnableColorKeyword.s.getFromLocalStorage() ? 1 : 0;
   }
   saveIsEnableColorKeyword(a1: 0 | 1) {
-    localStorage.setItem('IsEnableColorKeyword', `${a1}`);
+    SearchSettingIsEnableColorKeyword.s.updateValueAndSaveToStorageAndTriggerEvent(a1 === 1);
   }
+}
+
+
+/** 用 static .s */
+export class SearchSettingSearchBibleVersion extends LocalStorageStringBase {
+  static s = new SearchSettingSearchBibleVersion();
+  _getKey(): string {
+    return 'SearchSnBibleVersion';
+  }
+  _getDefaultValue(): string {
+    return 'unv';
+  }
+}
+/** 用 static .s */
+export class SearchSettingSearchBibleSnVersion extends LocalStorageStringBase {
+  static s = new SearchSettingSearchBibleSnVersion();
+  _getKey(): string {
+    return 'SearchBibleSnVersion';
+  }
+  _getDefaultValue(): string {
+    return 'unv';
+  }
+}
+import { LocalStorageBooleanBase } from 'src/app/tools/LocalStorageBooleanBase';
+import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
+/** 用 static .s */
+export class SearchSettingIsEnableColorKeyword extends LocalStorageBooleanBase {
+  static s = new SearchSettingIsEnableColorKeyword();
+  _getKey(): string {
+    return 'IsEnableColorKeyword';
+  }
+  _getDefaultValue() { return true; }
+
 }

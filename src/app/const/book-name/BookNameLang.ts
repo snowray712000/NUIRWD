@@ -4,4 +4,6 @@ export enum BookNameLang {
   '太' = 2,
   '馬太福音' = 3,
   'Mt' = 4,
+  '太GB' = 5,
+  '马太福音GB' = 6,
 }

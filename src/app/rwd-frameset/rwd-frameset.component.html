@@ -39,10 +39,12 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel>
+      <app-version-interlace></app-version-interlace>
+      <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <a [href]="getPrevChap()">上一章</a>、
       <a [href]="getNextChap()">下一章</a>、
-      <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>
+      <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>、
+      <button (click)="onClickDisplaySetting()">顯示設定</button>、
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

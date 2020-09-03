@@ -1,3 +1,4 @@
+import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 
 export interface IAddBase {
@@ -60,10 +61,24 @@ export interface DText {
 
   /** twcb orig dict 出現的, 它原本就是 html 格式, 若巢狀, 愈前面的 class 愈裡層 */
   class?: string;
+
+  // rt.php?engs=Gen&chap=4&version=cnet&id=182 真的缺一參數不可,試過只有id不行
+  // 和合本 2010 版, 是只有 text ([4.1]「該隱」意思是「得」。)
+  // csb: 中文標準譯本 cnet: NET聖經中譯本
+  foot?: { text?: string, engs?: string, chap?: number, version?: 'cnet' | 'csb', id?: number }
+  // 私名號。底線
+  isName?: 0 | 1;
+  // 紅字。耶穌說的話，會被標紅色。有些版本這麼作。
+  isGODSay?: 0 | 1;
+  // 虛點點。和合本，原文不存在，為了句子通順加上的翻譯。
+  isOrigNotExist?: 0 | 1;
 }
 
 
 export interface DOneLine {
   addresses?: VerseRange;
   children?: DText[];
+  ver?: string;
 }
+
+

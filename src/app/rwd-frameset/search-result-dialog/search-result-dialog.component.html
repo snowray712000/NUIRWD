@@ -100,16 +100,7 @@
   </div>
   <mat-dialog-content>
     <div style="padding-bottom: 4em;">
-      <div *ngFor="let it1 of getDataRender(); let i1=index" [class.odd]="i1%2===1"
-        [class.oneLine]="it1.addresses!==undefined">
-        <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
-          (click)="onClickReference(getReferenceEntireChap(it1))">
-          {{getAddressShow(it1)}}
-        </span>
-
-        <app-dtexts-rendor [datas]="it1.children" [isEnableColorKeyword]="isEnableColorKeyword"
-          (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);"></app-dtexts-rendor>
-      </div>
+      <app-dlines-rendor [datas]="getDataRender()"></app-dlines-rendor>
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions>

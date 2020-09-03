@@ -1,3 +1,4 @@
+import { DialogDisplaySettingComponent } from './dialog-display-setting/dialog-display-setting.component';
 // tslint:disable-next-line: max-line-length
 import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -14,12 +15,14 @@ import { RouteStartedWhenFrame } from './RouteStartedWhenFrame';
 import { SideNavsOnFrame } from './SideNavsOnFrame';
 import { DAddress, getNextChapAddress, getPrevChapAddress } from '../bible-address/DAddress';
 import { DialogSearchResultOpenor } from './search-result-dialog/DialogSearchResultOpenor';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VerseRange } from '../bible-address/VerseRange';
 import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { getChapCount } from '../const/count-of-chap';
 import { IsSnManager } from './settings/IsSnManager';
+import { IsVersionVisiableManager } from './IsVersionVisiableManager';
+import { VersionManager } from './VersionManager';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -226,6 +229,13 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     const pre = IsSnManager.s.getFromLocalStorage();
     IsSnManager.s.updateValueAndSaveToStorageAndTriggerEvent(!pre);
   }
+
+
+
+  onClickDisplaySetting() {
+    const re = new DialogDisplaySettingOpenor(this.dialog);
+    const re2 = re.showDialog();
+  }
 }
 interface SideWidthStyle {
   minWidth: number,
@@ -252,3 +262,14 @@ class TestVerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVersio
 }
 
 
+export class DialogDisplaySettingOpenor {
+  constructor(private dialog: MatDialog) { }
+  /**
+   * @param arg keyword 例子, G81 H81 #太2:3|; 摩西
+   */
+  // tslint:disable-next-line: max-line-length
+  showDialog(arg?: {}): MatDialogRef<DialogDisplaySettingComponent, any> {
+    const dialogRef = this.dialog.open(DialogDisplaySettingComponent, undefined);
+    return dialogRef;
+  }
+}

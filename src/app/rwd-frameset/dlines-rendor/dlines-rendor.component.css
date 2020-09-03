@@ -5,6 +5,12 @@
 .reference {
   color: blue;
   cursor: pointer;
+  font-size: small;
+}
+.oneLine {
+  display: block;
+  padding-left: 2em;
+  text-indent: -2em;
 }
 .odd {
   background-color: whitesmoke;
@@ -41,29 +47,8 @@
   color: blue;
   cursor: pointer;
 }
-
-.orderOdd {
-  color: green;
-}
-.orderEvent {
-  color: black;
-}
-
-.myOL {
-  padding-left: 1.5em;
-}
-.myLI {
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-  text-indent: -1.5em;
-}
-.twcbexp {
-  color: purple;
-  font-weight: bold;
-}
-.twcbidt {
-}
-.twcbbibtext{
-  color: violet;
-  font-weight: bold;
+.version {
+  color: blue;
+  cursor: pointer;
+  font-size: small;
 }

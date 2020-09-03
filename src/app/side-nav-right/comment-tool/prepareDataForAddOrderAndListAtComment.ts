@@ -1,7 +1,7 @@
 import { DText } from './../../bible-text-convertor/AddBase';
 import * as LQ from 'linq';
-import { DListAdd } from 'src/app/rwd-frameset/search-result-dialog/dtexts-rendor/addListStartAndEnd';
 import { assert } from 'src/app/tools/assert';
+import { DListAdd } from 'src/app/rwd-frameset/dtexts-rendor/addListStartAndEnd';
 
 interface DDataSpace { w?: string; space?: number; tpIdx?: number; isBr?: 1; };
 /**

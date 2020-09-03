@@ -67,7 +67,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
   }
   private bindIsSnOnChangedEvent() {
     this.isSn = IsSnManager.s.getFromLocalStorage();
-    IsSnManager.s.onChangedIsSn$.subscribe(re => {
+    IsSnManager.s.changed$.subscribe(re => {
       if (this.isSn !== re) {
         this.isSn = re;
         this.detectChange.markForCheck();

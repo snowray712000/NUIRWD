@@ -5,8 +5,8 @@ import { DAddress } from 'src/app/bible-address/DAddress';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { newLineNewLineSplit } from 'src/app/rwd-frameset/search-result-dialog/newLineNewLineSplit';
 import { newLineNewLineMerge } from 'src/app/rwd-frameset/search-result-dialog/newLineNewLineMerge';
-import { addListStartAndEnd } from 'src/app/rwd-frameset/search-result-dialog/dtexts-rendor/addListStartAndEnd';
 import { prepareDataForAddOrderAndListAtComment } from './prepareDataForAddOrderAndListAtComment';
+import { addListStartAndEnd } from 'src/app/rwd-frameset/dtexts-rendor/addListStartAndEnd';
 /**
  * 已包含 換行 處理
  * 非常困難, 花了整整一週開發.

@@ -1,5 +1,4 @@
-import { SearchSetting } from './../SearchSetting';
-import { log } from 'util';
+import { SearchSetting } from './../search-result-dialog/SearchSetting';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import * as LQ from 'linq';
@@ -7,6 +6,7 @@ import { getIdxPass } from './getIdxPass';
 import { addListStartAndEnd } from './addListStartAndEnd';
 import { EventManager } from '@angular/platform-browser';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
+import { IsSnManager } from '../settings/IsSnManager';
 @Component({
   selector: 'app-dtexts-rendor',
   templateUrl: './dtexts-rendor.component.html',
@@ -15,7 +15,6 @@ import { isArrayEqual } from 'src/app/tools/arrayEqual';
 export class DTextsRendorComponent implements OnInit, OnChanges {
   @Input() datas: DText[] = [];
   @Input() indexs: number[] = undefined;
-  @Input() isEnableColorKeyword: 0 | 1 = 0;
   @Output() clickRef: EventEmitter<string> = new EventEmitter();
   @Output() clickOrig: EventEmitter<string> = new EventEmitter();
   idxPass: number[];
@@ -111,19 +110,29 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
 
   isW(aa1: DText) {
     // tslint:disable-next-line: max-line-length
-    const r = [aa1.isBr, aa1.isHr, aa1.isListStart, aa1.isListEnd, aa1.isOrderStart, aa1.isOrderEnd, aa1.isRef, aa1.sn !== undefined ? 1 : 0, aa1.key !== undefined ? 1 : 0];
+    const r = [aa1.isBr, aa1.isHr, aa1.isListStart, aa1.isListEnd, aa1.isOrderStart, aa1.isOrderEnd, aa1.isRef,
+    aa1.sn !== undefined ? 1 : 0,
+    aa1.key !== undefined ? 1 : 0,
+    aa1.foot !== undefined ? 1 : 0,
+    ];
     return LQ.from(r).all(a1 => a1 !== 1);
   }
+  onClickFoot(a1: DText) {
+    console.log(a1.foot);
+  }
   getKeywordClass(a1: DText) {
-    if (this.isEnableColorKeyword === 0) {
-      if (a1.sn !== undefined) {
-        return 'keyword orig';
-      } else {
-        return 'keyword';
-      }
+    if (new SearchSetting().loadIsEnableColorKeyword() !== 1) {
+      return undefined;
     }
-    const idx = a1.keyIdx0based >= 6 ? 6 : a1.keyIdx0based;
-    return `keyword key${idx}`;
+
+    if (a1.keyIdx0based !== undefined) {
+      let re = '';
+      const k = a1.keyIdx0based % 7; // style 顏色目前只有 0-6
+      re += `keyword key${k}`;
+      return re;
+    }
+
+    return undefined;
   }
   isClassTwcbExp(it1: DText) {
     if (it1.class !== undefined) {
@@ -142,5 +151,23 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
       return /idt/.test(it1.class);
     }
     return false;
+  }
+  /** orig or 'orig keyword key0' */
+  getOrigClass(it1: DText) {
+    if (it1.sn !== undefined) {
+      let re = 'orig';
+      if (it1.keyIdx0based !== undefined && isEnable()) {
+        const k = it1.keyIdx0based % 7; // style 顏色目前只有 0-6
+        re += `keyword key${k}`;
+      }
+      return re;
+      function isEnable() {
+        return new SearchSetting().loadIsEnableColorKeyword() === 1;
+      }
+    }
+    return undefined;
+  }
+  getIsShowOrig() {
+    return IsSnManager.s.getFromLocalStorage();
   }
 }

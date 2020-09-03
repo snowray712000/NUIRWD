@@ -1,5 +1,5 @@
-import { addListStartAndEnd, DListAdd } from 'src/app/rwd-frameset/search-result-dialog/dtexts-rendor/addListStartAndEnd';
 import { UT } from './UT';
+import { DListAdd, addListStartAndEnd } from 'src/app/rwd-frameset/dtexts-rendor/addListStartAndEnd';
 /** 開發搜尋dialog時, 原文字典時會用的  */
 export async function test_addListStartAndEndUnitTests() {
   return UT.gFnSafe(re => {

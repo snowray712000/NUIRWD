@@ -1,0 +1,11 @@
+<div *ngFor="let it1 of getDatasOrMergedDatas(); let i1=index" [class.odd]="i1%2===1" [class.oneLine]="it1.addresses!==undefined">
+  <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)"
+    (click)="onClickReference(getReferenceEntireChap(it1))">
+    {{getAddressShow(it1)}}
+  </span>
+
+  <app-dtexts-rendor [datas]="it1.children"
+    (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);"></app-dtexts-rendor>
+
+    <span class='version' *ngIf="it1.ver!==undefined && isVisibleVersion()">({{it1.ver}})</span>
+</div>

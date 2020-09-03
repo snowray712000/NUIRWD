@@ -1,0 +1,118 @@
+.orig {
+  color: darkturquoise;
+  cursor: pointer;
+}
+.reference {
+  color: blue;
+  cursor: pointer;
+}
+.foot {
+  color: blue;
+  cursor: pointer;
+}
+.isName {
+  text-decoration: underline;
+}
+.isGODSay {
+  color: brown;
+}
+.isOrigNotExist{
+  /* 變成灰色很重要, 因為 copy 到 ppt 虛點點是不會被 copy 的 */
+  color: #777;
+  text-decoration: none;
+  border-bottom: 1px dashed #777;
+  font-style: italic;
+}
+.odd {
+  background-color: whitesmoke;
+}
+.key0 {
+  color: brown;
+  cursor: pointer;
+}
+.key1 {
+  color: chocolate;
+  cursor: pointer;
+}
+.key2 {
+  color: crimson;
+  cursor: pointer;
+}
+.key3 {
+
+  cursor: pointer;
+  color: darkgoldenrod;
+}
+.key4 {
+  color: darkred;
+  cursor: pointer;
+}
+.key5 {
+  color: firebrick;
+  cursor: pointer;
+}
+.key6 {
+  color: maroon;
+  cursor: pointer;
+}
+.classor {
+  color: blue;
+  cursor: pointer;
+}
+.classor-selected {
+  color: red;
+}
+.version-opt {
+  color: blue;
+  cursor: pointer;
+}
+
+.orderOdd {
+  color: green;
+}
+.orderEvent {
+  color: black;
+}
+
+.myOL {
+  padding-left: 1.5em;
+}
+.myLI {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  text-indent: -1.5em;
+}
+.twcbexp {
+  color: purple;
+  font-weight: bold;
+}
+.twcbidt {
+}
+.twcbbibtext {
+  color: violet;
+  font-weight: bold;
+}
+.isTitle1 {
+  /* font-size: 1.2em; */
+  font-weight: 800;
+  color: darkmagenta;
+}
+
+.isTitle1::after {
+  /* white-space: pre; */
+  /* content:"\000A"; */
+}
+.isParenthesesHW {
+  /* font-size: 1.2em; */
+  /* font-weight: 800; */
+  color: mediumorchid;
+}
+.isParenthesesFW {
+  /* font-size: 1.2em; */
+  /* font-weight: 800; */
+  color: darkviolet;
+}
+.isParenthesesFW2 {
+  /* font-size: 1.2em; */
+  color: magenta;
+}

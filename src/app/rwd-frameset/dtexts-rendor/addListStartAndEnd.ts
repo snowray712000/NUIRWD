@@ -1,5 +1,5 @@
-import { DText } from './../../../bible-text-convertor/AddBase';
 import * as LQ from 'linq';
+import { DText } from 'src/app/bible-text-convertor/AddBase';
 
 export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
   const isDebug = false;

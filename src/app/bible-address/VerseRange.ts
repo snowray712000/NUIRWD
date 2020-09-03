@@ -1,3 +1,4 @@
+import * as LQ from 'linq';
 import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { getVerseCount } from 'src/app/const/count-of-verse';
@@ -27,6 +28,20 @@ export class VerseRange {
   public static fD(describe: string, book1BasedDefault: number = 40): VerseRange {
     return VerseRange.fromReferenceDescription(describe, book1BasedDefault);
   }
+  /** 任一個 undefined, false。 順序也要一樣。 */
+  public static isTheSame(a1: VerseRange, a2: VerseRange) {
+    if (a1 === undefined || a2 === undefined || a1.verses === undefined || a2.verses === undefined) { return false; }
+
+    const aa1a = a1.verses;
+    const aa2a = a2.verses;
+    if (aa1a.length !== aa2a.length) { return false; }
+
+    return LQ.range(0, aa1a.length).all(i => {
+      const r1 = aa1a[i];
+      const r2 = aa2a[i];
+      return r1.book === r2.book && r1.chap === r2.chap && r1.verse === r2.verse;
+    });
+  }
   /**
    * @param bibleVersionQ 不一定用到，若有指定版本時，會用到。
    */
@@ -49,6 +64,9 @@ export class VerseRange {
   public toStringChineseShort(): string {
     return new VerseRangeToString().main(this.verses, BookNameLang.太);
     // return new VersesToString(this.verses, BookNameLang.太, this.bibleVersionQ).main();
+  }
+  public toStringChineseGBShort(): string {
+    return new VerseRangeToString().main(this.verses, BookNameLang.太GB);
   }
   /** 產生 Mt 4:1-6 使用 VerseRangeToString class 取代這個 */
   public toStringEnglishShort(): string {
@@ -249,4 +267,6 @@ export interface IGetAddressesType {
   ch2: number;
   vr2: number;
 }
+
+
 

@@ -1,0 +1,8 @@
+button{
+  min-width: 4em;
+  min-height: 2em;
+  vertical-align: middle;
+}
+.isActived{
+  color: green;
+}

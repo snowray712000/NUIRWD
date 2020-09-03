@@ -1,0 +1,32 @@
+<div>
+  <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
+    <app-dlines-rendor [datas]="datas"></app-dlines-rendor>
+  </div>
+  <mat-dialog-content>
+    <button *ngFor="let it of ['創1:1','1:1','1','創1v1','1v1','v1','none']" [class.isActived]="isFormatActived(it)"
+      (click)="onClickFormat(it)">
+      {{it}}
+    </button>
+
+    <hr />
+    <div>
+      <button *ngFor="let it of ['創','Ge','创']" [class.isActived]="isLangActived(it)" (click)="onClickLang(it)">
+        {{it}}
+      </button>
+    </div>
+
+    <hr />
+    <div>
+      <button [class.isActived]="isMergeActived('合併')" (click)="onClickMerge()">合併</button>
+    </div>
+
+    <hr />
+    <div>
+      <button (click)="onClickVersionToggle()" [class.isActived]="isVersionShowOn()">版本顯示</button>
+      <button (click)="onClickColorKeywordToggle()" [class.isActived]="isEnableColorKeyword()">關鍵字上色</button>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">Close</button>
+  </div>
+</div>

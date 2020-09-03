@@ -2,10 +2,10 @@ import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard'
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import * as LQ from 'linq';
 import { AddReferenceFromOrigDictCBOLChineseText } from "src/app/version-parellel/one-ver/AddReferenceFromOrigDictCBOLChineseText";
-import { addListStartAndEnd } from './dtexts-rendor/addListStartAndEnd';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { newLineNewLineSplit } from './newLineNewLineSplit';
 import { newLineNewLineMerge } from "./newLineNewLineMerge";
+import { addListStartAndEnd } from '../dtexts-rendor/addListStartAndEnd';
 /** 將 cvtNewChinese cvtNewEng cvtOldChinese cvtOldEng 整理, 因為它們 code 很多相同的地方 */
 
 

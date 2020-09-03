@@ -1,3 +1,4 @@
+import { DialogDisplaySettingComponent } from './rwd-frameset/dialog-display-setting/dialog-display-setting.component';
 import { MatInputModule } from '@angular/material';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule, Injector, Pipe, PipeTransform } from '@angular/core';
@@ -40,16 +41,19 @@ import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool
 // import { ComTextComponent } from './side-nav-right/comment-tool/com-text/com-text.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SearchResultDialogComponent } from './rwd-frameset/search-result-dialog/search-result-dialog.component';
-import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
 import { EditComponent } from './edit/edit.component';
 import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
 import { VersionSelectorComponent } from './version-selector/version-selector.component';
+import { DTextsRendorComponent } from './rwd-frameset/dtexts-rendor/dtexts-rendor.component';
+import { DlinesRendorComponent } from './rwd-frameset/dlines-rendor/dlines-rendor.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   // InfoDialogComponent,
   SearchResultDialogComponent,
   DTextsRendorComponent,
   VersionSelectorComponent,
+  DialogDisplaySettingComponent,
+  DlinesRendorComponent,
 );
 
 
@@ -75,6 +79,8 @@ const entryComponents = new Array<any>(
     EditComponent,
     QunitsComponent,
     VersionSelectorComponent,
+    DialogDisplaySettingComponent,
+    DlinesRendorComponent,
   ),
   entryComponents,
   imports: [

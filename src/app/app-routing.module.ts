@@ -7,7 +7,6 @@ import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.compo
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SideNavLeftComponent } from './side-nav-left/side-nav-left.component';
-import { DTextsRendorComponent } from './rwd-frameset/search-result-dialog/dtexts-rendor/dtexts-rendor.component';
 import { EditComponent } from './edit/edit.component';
 import { QueryBindingType } from '@angular/compiler/src/core';
 import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
