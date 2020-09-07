@@ -7,12 +7,15 @@ import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
-import { EventVerseChanged, IEventVerseChanged } from '../cbol-parsing/EventVerseChanged';
+import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Comment2DText } from './Comment2DText';
 import { AddReferenceInCommentText } from './AddReferenceInCommentText';
 import { AddOrigDictInCommentText } from './AddOrigDictInCommentText';
+import { FunctionIsOpened } from '../FunctionIsOpened';
+import { FunctionSelectionTab } from '../FunctionSelectionTab';
+import { VerseActivedChangedDo } from '../cbol-parsing/VerseActivedChangedDo';
 
 @Component({
   selector: 'app-comment-tool',
@@ -27,12 +30,13 @@ export class CommentToolComponent implements OnInit, OnChanges {
   title: string;
   next: DAddress;
   prev: DAddress;
-  eventVerseChanged: IEventVerseChanged;
   @Input() addressActived: DAddress;
   private addresses = new VerseRange();
   constructor(private detector: ChangeDetectorRef, private dialog: MatDialog) {
     this.dataQ = new CommentToolDataGetter();
-    this.eventVerseChanged = new EventVerseChanged();
+    // 先初始化他們
+    FunctionIsOpened.s.getFromLocalStorage();
+    FunctionSelectionTab.s.getFromLocalStorage();
   }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     if (changes.addressActived !== undefined) {
@@ -43,9 +47,8 @@ export class CommentToolComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.eventVerseChanged.changed$.subscribe(async arg => {
-      // console.log(arg); // book:45,chap:1,verse:1
-      await this.onVerseChanged(arg);
+    VerseActivedChangedDo('註釋', addr => {
+      this.onVerseChanged(addr);
     });
   }
   private async onVerseChanged(arg: DAddress) {

@@ -3,7 +3,7 @@
     <mat-expansion-panel-header>
       設定
     </mat-expansion-panel-header>
-    版本: 2020 0821d_聖經版本 dialog <a href='/NUI/assets/versions_nuirwd.html' target="_blank">詳細清單</a> <br/>
+    版本: 2020 0907a_顯示設定,交錯式 <a href='/NUI/assets/versions_nuirwd.html' target="_blank">詳細清單</a> <br/>
 
     <mat-slide-toggle #issn [checked]="isSnInit" (change)="onChangedIsSn(issn.checked)">SN</mat-slide-toggle>
     <br />
@@ -13,14 +13,14 @@
 
 
   </mat-expansion-panel>
-  <mat-expansion-panel>
+  <!-- <mat-expansion-panel>
     <mat-expansion-panel-header>
       聖經版本
     </mat-expansion-panel-header>
 
     <app-ver-select [verIdsOfInit]="verIdsOfInit" (notify)="onChangedBibleVersionIds($event)"></app-ver-select>
 
-  </mat-expansion-panel>
+  </mat-expansion-panel> -->
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       歷史記錄

@@ -8,6 +8,8 @@ export class OrigStwcbDOMParsor {
     return this.commentStwcb(html);
   }
   commentStwcb(html: string) {
+    const console = { isDebug: true, log: a1 => { if (console.isDebug) { globalThis.console.log(a1); } }, error: a1 => globalThis.console.error(a1), };
+    console.isDebug = false;
     console.log(html);
 
     const r1 = new DOMParser().parseFromString(html, 'text/html');

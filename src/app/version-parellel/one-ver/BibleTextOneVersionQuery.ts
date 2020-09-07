@@ -12,6 +12,8 @@ import { AddBrCnv } from './AddBrCnv';
 import { AddBrStdandard } from './AddBrStdandard';
 import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { cvt_unv } from 'src/app/bible-text-convertor/unv';
+import { cvt_ncv } from "src/app/bible-text-convertor/cvt_ncv";
+import { cvt_cbol } from 'src/app/bible-text-convertor/cvt_cbol';
 export class BibleTextOneVersionQuery {
   dataMapAndPhoto: DApiSobjResult[];
   constructor(dataMapAndPhoto?: DApiSobjResult[]) {
@@ -37,16 +39,10 @@ export class BibleTextOneVersionQuery {
       return re1;
     } else if (ver === 'ncv') {
       // 新譯本
-      re1 = new AddMergeVerse().main(re1, verses);
-      re1 = new AddTitleH3().main(re1, verses);
-      re1 = new AddParenthesesUnvNcv().main(re1, verses);
-      re1 = new AddReferenceCnv().main(re1, verses);
-      re1 = new AddMapPhotoInfo(this.dataMapAndPhoto).main(re1, verses);
-      re1 = new AddBrCnv().main(re1, verses);
+      re1 = cvt_ncv(re1, verses);
     } else if (ver === 'cbol') {
       // 原文直譯
-      re1 = new AddBrStdandard().main(re1, verses);
-      re1 = new AddParenthesesUnvNcv().main(re1, verses);
+      re1 = cvt_cbol(re1, verses);
     }
 
     return re1;

@@ -1,4 +1,28 @@
 export class StorageTools {
+  static getJsonSafely<T>(key: string): T {
+    const r1 = localStorage.getItem(key);
+    if (r1 !== undefined) {
+      try {
+        const r2 = JSON.parse(r1);
+        if (r2 === null) {
+          return undefined;
+        } else {
+          return r2 as T;
+        }
+      } catch {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
+  }
+  static setJson<T>(key: string, val?: T) {
+    if (val === undefined) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(val));
+    }
+  }
   static getArraySafely<T>(key: string): T[] {
     const r1 = localStorage.getItem(key);
     if (r1 !== undefined) {

@@ -7,6 +7,8 @@ export interface DAddress {
   verse: number;
   ver?: number;
 }
+/** 供 linq distinct() 用, 也可用在 orderBy, 當初要開發 merge多個版本之間的經文用. */
+export function DAddressComparor(addr: DAddress) { return addr.book * 10000 + addr.chap * 1000 + addr.verse; }
 /** 若書卷末, 回傳 undefined (不會因此換書卷唷) */
 export function getNextChapAddress(addr: DAddress) {
   const chap = getChapCount(addr.book);

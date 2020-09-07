@@ -22,6 +22,7 @@
 
     <hr />
     <div>
+      <button (click)="onClickSnVisibleToggle()" [class.isActived]="isSnShowOn()">原文編號</button>
       <button (click)="onClickVersionToggle()" [class.isActived]="isVersionShowOn()">版本顯示</button>
       <button (click)="onClickColorKeywordToggle()" [class.isActived]="isEnableColorKeyword()">關鍵字上色</button>
     </div>

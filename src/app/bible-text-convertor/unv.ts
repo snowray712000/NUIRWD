@@ -1,5 +1,5 @@
+import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 
-import { DOneLine } from './AddBase';
 import { VerseRange } from '../bible-address/VerseRange';
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
@@ -48,3 +48,5 @@ export function cvt_unv(data: DOneLine[], settings: { verses: VerseRange, isMapP
     return data;
   }
 }
+
+

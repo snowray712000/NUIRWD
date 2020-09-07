@@ -9,7 +9,7 @@
         <div>
           <span *ngFor="let it of getSelected()" (click)="onClick(it)" style="cursor: pointer;word-break: keep-all;"
             [class.current]="isSelected(it)">
-            {{it.naChinese}}
+            {{it.naChinese}}、
           </span>
         </div>
       </ng-template>

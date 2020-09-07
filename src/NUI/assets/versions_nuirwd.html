@@ -101,25 +101,40 @@
     '0819 羅馬書 5:12的注釋，呈現會差很多.',
     '0819 創 3:20的注釋，#以諾書 71:7|.',
     '0821 優化-選擇書卷,目前的很醜,還是用 dialog 吧.',
-    '0821 優化-選擇版本,準備 dialog 吧.',
-    '0821 重構-經文顯示部分,也可用同樣核心 dtexts-rendor.',
   ];
   var data105MathB = [
     {
       na: 'dev',
       na2: [
         'dev <a href="/NUI/_rwd_dev/" target="_blank">dev</a>',
+        '',
+        'Bug手機-手機網址會導致錯誤',
+        '',
+      ]
+    },
+    {
+      na: '200907a',
+      na2: [
+        'dev <a href="/NUI/200907a_rwd/" target="_blank">200907a</a>',
         '200827a',
         'Bug-原文字典-twcb。浸宣原始資料是html，透過DOMParser後，將不會再出現div這些不該出現的東西了。',
         '承上。原文字典,字眼class是exp的，會被畫成紫色。',
         '優化-原文彙編。kjv版本也可以了，但和合本2010還不行(api不支援)。',
         '200903a',
-        '優化-原文編號按鈕。設定拉到主畫面較方便。',
-        'UnitTest-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
-        '重構-LocalStorageXXXXXBase系列, String, boolean, array。',
-        '重構-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
-        '',
-
+        'RD 優化-原文編號按鈕。設定拉到主畫面較方便。',
+        'RD UnitTest-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
+        'RD重構-LocalStorageXXXXXBase系列, String, boolean, array。',
+        'RD重構-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
+        '200904a',
+        '新增-交錯顯示經文ok(合和本、新譯本、KJV、cbol)',
+        '變更-聖經版本選擇，改為 dialog。',
+        '200907a',
+        'RD修復-上一頁、下一頁。因為主畫面換為交錯式而出現的。',
+        'RD修復-事件Base判斷，Array與JSON判斷是錯的，要用DeepEqual，而非直接等於。',
+        'RD-使用 changed$事件時，可能static還沒初始化好，因此放在 setTimeout 中最保險。',
+        '優化-click event 若功能沒展開，則不要一直取api(降低負荷)。',
+        'RD修復-原本的 EventTool 加上 multicast, 可多人等候。不然上述功能切換只能一個成功。(https://youtu.be/3uuPN9BDyho)',
+        '重構-click event 換為統一的事件方式(與LocalStorageBase的)。',
       ]
     },
     {

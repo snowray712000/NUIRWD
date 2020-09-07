@@ -1,3 +1,5 @@
+import { FunctionSelectionTab } from './../side-nav-right/FunctionSelectionTab';
+import { FunctionIsOpened } from './../side-nav-right/FunctionIsOpened';
 import { DialogDisplaySettingComponent } from './dialog-display-setting/dialog-display-setting.component';
 // tslint:disable-next-line: max-line-length
 import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
@@ -23,6 +25,10 @@ import { getChapCount } from '../const/count-of-chap';
 import { IsSnManager } from './settings/IsSnManager';
 import { IsVersionVisiableManager } from './IsVersionVisiableManager';
 import { VersionManager } from './VersionManager';
+import { DialogVersionSelectorOpenor } from '../version-selector/version-selector.component';
+import { DisplayFormatSetting } from './dialog-display-setting/DisplayFormatSetting';
+import { DisplayLangSetting } from './dialog-display-setting/DisplayLangSetting';
+import { DisplayMergeSetting } from './dialog-display-setting/DisplayMergeSetting';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -176,17 +182,27 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
       };
     }
   }
+  getIsRightSideOpened() {
+    return FunctionIsOpened.s.getFromLocalStorage();
+  }
+  onOpenedRightSide() {
+    FunctionIsOpened.s.updateValueAndSaveToStorageAndTriggerEvent(true);
+  }
+  onClosedRightSide() {
+    FunctionIsOpened.s.updateValueAndSaveToStorageAndTriggerEvent(false);
+  }
   getPrevChap() {
-    if (this.addressActived === undefined) {
+    if (false === this.isValidAddressCurrent()) {
       return '創1;';
     }
 
-    let book = this.addressActived.book;
-    let chap = this.addressActived.chap;
-    const addr = getPrevChapAddress(this.addressActived);
+    const rr1 = this.routeVerseRange.verses[0];
+    let book = rr1.book;
+    let chap = rr1.chap;
+    const addr = getPrevChapAddress(rr1);
     let re = '創1;';
     if (addr === undefined) {
-      if (this.addressActived.book !== 1) {
+      if (rr1.book !== 1) {
         book -= 1; chap = getChapCount(book);
       }
     } else {
@@ -199,17 +215,22 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     const r5 = window.location.pathname + `#/bible/${re}`;
     return r5;
   }
+  isValidAddressCurrent() {
+    return this.routeVerseRange !== undefined && this.routeVerseRange.verses.length !== 0;
+  }
   getNextChap() {
-    if (this.addressActived === undefined) {
+    if (false === this.isValidAddressCurrent()) {
       return '啟22;';
     }
-    let book = this.addressActived.book;
-    let chap = this.addressActived.chap;
-    const addr = getNextChapAddress(this.addressActived);
+
+    const rr1 = this.routeVerseRange.verses[0];
+    let book = rr1.book;
+    let chap = rr1.chap;
+    const addr = getNextChapAddress(rr1);
 
     let re = '啟22;';
     if (addr === undefined) {
-      if (this.addressActived.book !== 66) {
+      if (rr1.book !== 66) {
         book += 1; chap = 1;
       }
     } else {
@@ -230,11 +251,28 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     IsSnManager.s.updateValueAndSaveToStorageAndTriggerEvent(!pre);
   }
 
-
-
   onClickDisplaySetting() {
     const re = new DialogDisplaySettingOpenor(this.dialog);
     const re2 = re.showDialog();
+  }
+  onClickVersions() {
+    const vers = VersionManager.s.getFromLocalStorage();
+    const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
+      { isSnOnly: 0, isLimitOne: 0, versions: vers },
+    );
+
+    /** dialog 關閉後 */
+    const pthis = this;
+    refdialog.afterClosed().toPromise().then((re: string[]) => {
+      if (isEmpty()) {
+        re = ['unv'];
+      }
+
+      VersionManager.s.updateValueAndSaveToStorageAndTriggerEvent(re);
+      function isEmpty() {
+        return re === undefined || re.length === 0;
+      }
+    });
   }
 }
 interface SideWidthStyle {

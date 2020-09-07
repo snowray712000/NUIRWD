@@ -1,3 +1,6 @@
+import { EventVerseChanged } from './../../side-nav-right/cbol-parsing/EventVerseChanged';
+import { VersionManager } from 'src/app/rwd-frameset/VersionManager';
+import * as LQ from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, Input } from '@angular/core';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
@@ -11,6 +14,7 @@ import { DisplayMergeSetting } from '../dialog-display-setting/DisplayMergeSetti
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { DisplayFormatSetting } from '../dialog-display-setting/DisplayFormatSetting';
 import { mergeDOneLineIfAddressContinue } from 'src/app/bible-text-convertor/mergeDOneLineIfAddressContinue';
+import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 
 @Component({
   selector: 'app-dlines-rendor',
@@ -29,6 +33,11 @@ export class DlinesRendorComponent implements OnInit {
       return mergeDOneLineIfAddressContinue(this.datas);
     }
     return this.datas;
+  }
+  onClickVerse(it: DOneLine) {
+    if (it.addresses !== undefined && it.addresses.verses.length !== 0) {
+      EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(it.addresses.verses[0]);
+    }
   }
   /** 供 html 用, 當 reference, 尾部點擊, 看上下文;(整章) */
   getReferenceEntireChap(a1: DOneLine) {
@@ -59,5 +68,16 @@ export class DlinesRendorComponent implements OnInit {
   }
   isVisibleVersion() {
     return IsVersionVisiableManager.s.getFromLocalStorage();
+  }
+  getVersionDisplayName(na: string) {
+    if (VersionManager.s.cacheAbvResult === undefined) {
+      return na;
+    }
+
+    const r2 = LQ.from(VersionManager.s.cacheAbvResult.record).firstOrDefault(a1 => a1.book === na);
+    if (r2 === undefined) {
+      return na;
+    }
+    return r2.cname;
   }
 }

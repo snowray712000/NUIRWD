@@ -12,7 +12,7 @@ import { linq_first } from '../linq-like/linq_first';
 import { DAddress } from './DAddress';
 
 export class VerseRange {
-  private bibleVersionQ: IBibleVersionQueryService;
+  // private bibleVersionQ: IBibleVersionQueryService;
   public verses: DAddress[] = [];
   /** 內容換了 由 ParsingReferenceDescription 完成 */
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
@@ -47,7 +47,7 @@ export class VerseRange {
    */
   // tslint:disable-next-line: no-unnecessary-initializer
   constructor(bibleVersionQ: IBibleVersionQueryService = null) {
-    this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
+    // this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
   }
   /** 判斷是否在此範圍內, 開發 註釋 時需要 */
   public isIn(d: DAddress) {

@@ -1,8 +1,8 @@
 import { UT } from './UT';
 import { OrigStwcbDOMParsor } from 'src/app/fhl-api/Orig/OrigStwcbDOMParsor';
 export async function test_OrigStwcbDOMParsor() {
-  const console = { isDebug: true, log: a1 => { if (console.isDebug) { globalThis.console.log(a1); } } };
-  console.isDebug = true;
+  const console = { isDebug: false, log(a1) { if (console.isDebug) { globalThis.console.log(a1); } }, error(a1) { globalThis.console.error(a1); }, warn(a1) { globalThis.console.warn(a1); } };
+  console.isDebug = false;
   const equal = UT.equal;
 
   return UT.gFnSafe(fns => {

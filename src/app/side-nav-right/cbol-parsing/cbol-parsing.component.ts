@@ -10,7 +10,6 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { IBookNameToId } from 'src/app/const/book-name/i-book-name-to-id';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
-import { EventVerseChanged, IEventVerseChanged } from './EventVerseChanged';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 // import { VerseAddress } from 'src/app/bible-address/VerseAddress';
@@ -24,6 +23,10 @@ import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestme
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
+import { VerseActivedChangedDo, FunctionDoWhenVerseChanged } from './VerseActivedChangedDo';
+import { EventVerseChanged } from './EventVerseChanged';
+import { FunctionIsOpened } from '../FunctionIsOpened';
+import { FunctionSelectionTab } from '../FunctionSelectionTab';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -48,13 +51,10 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   @ViewChild('origList', null) accordion: MatAccordion;
 
   name2id: IBookNameToId = new BookNameToId();
-  eventVerseChanged: IEventVerseChanged;
   @Input() addressActived: DAddress;
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
-
-    this.eventVerseChanged = new EventVerseChanged();
   }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     if (changes.addressActived !== undefined) {
@@ -106,11 +106,9 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     this.snActived = a1.sn;
   }
   ngOnInit() {
-    if (this.eventVerseChanged !== undefined) {
-      this.eventVerseChanged.changed$.subscribe(data => {
-        this.onVerseChanged(data.book, data.chap, data.verse);
-      });
-    }
+    VerseActivedChangedDo('分析', addr => {
+      this.onVerseChanged(addr.book, addr.chap, addr.verse);
+    });
   }
   private createDomFromString(str) {
     return this.sanitizer.bypassSecurityTrustHtml(str);

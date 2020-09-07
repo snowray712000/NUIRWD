@@ -8,6 +8,7 @@ import { IsVersionVisiableManager } from '../IsVersionVisiableManager';
 import { DisplayFormatSetting } from './DisplayFormatSetting';
 import { DisplayLangSetting } from './DisplayLangSetting';
 import { DisplayMergeSetting } from './DisplayMergeSetting';
+import { IsSnManager } from '../settings/IsSnManager';
 
 @Component({
   selector: 'app-dialog-display-setting',
@@ -58,6 +59,12 @@ export class DialogDisplaySettingComponent implements OnInit {
   }
   onClickMerge() {
     DisplayMergeSetting.s.updateValueAndSaveToStorageAndTriggerEvent(!DisplayMergeSetting.s.getFromLocalStorage());
+  }
+  onClickSnVisibleToggle() {
+    IsSnManager.s.updateValueAndSaveToStorageAndTriggerEvent(!IsSnManager.s.getFromLocalStorage());
+  }
+  isSnShowOn() {
+    return IsSnManager.s.getFromLocalStorage();
   }
   isVersionShowOn() {
     return IsVersionVisiableManager.s.getFromLocalStorage();
