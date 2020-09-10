@@ -1,4 +1,3 @@
-import { SearchSetting } from './../search-result-dialog/SearchSetting';
 import * as LQ from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
@@ -9,6 +8,7 @@ import { DisplayFormatSetting } from './DisplayFormatSetting';
 import { DisplayLangSetting } from './DisplayLangSetting';
 import { DisplayMergeSetting } from './DisplayMergeSetting';
 import { IsSnManager } from '../settings/IsSnManager';
+import { IsColorKeyword } from '../settings/IsColorKeyword';
 
 @Component({
   selector: 'app-dialog-display-setting',
@@ -73,11 +73,11 @@ export class DialogDisplaySettingComponent implements OnInit {
     IsVersionVisiableManager.s.updateValueAndSaveToStorageAndTriggerEvent(!IsVersionVisiableManager.s.getFromLocalStorage());
   }
   onClickColorKeywordToggle() {
-    const re = this.isEnableColorKeyword() ? 0 : 1;
-    new SearchSetting().saveIsEnableColorKeyword(re);
+    const re = this.isEnableColorKeyword();
+    IsColorKeyword.s.updateValueAndSaveToStorageAndTriggerEvent(!re);
   }
-  isEnableColorKeyword() {
-    return new SearchSetting().loadIsEnableColorKeyword() === 1;
+  isEnableColorKeyword(): boolean {
+    return IsColorKeyword.s.getFromLocalStorage();
   }
 }
 

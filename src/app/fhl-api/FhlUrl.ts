@@ -17,11 +17,22 @@ export class FhlUrl {
     return `${this.getDomain()}json/`;
   }
   /**
-   * http://bible.fhl.net/json/ 當是 localhost,
-   * 若上網了, 就是 '/json/' , 不會是 bible.fhl.net/json,
-   * 這個 2 版本是給 sbdag.php 用的, 因為它會有 cross 限制
+   * return 'http://bible.fhl.net/json/' at localhost.
+   * return '/json/' at web. not 'bible.fhl.net/json/'
+   *
+   * 當時開發是給 sbdag.php 用的, 因為它有 cross 限制
    */
   getJsonUrl2(): string {
     return `${this.getDomain2()}json/`;
   }
+
+  /**
+   * 取得 .html 的位置 例如 http://bible.fhl.net/NUI/_rwd/
+   * 這是在用 <a href> 的時候可能會用到的.
+   * 例如: getHtmlURL() + '#/bible/Mt1:1-5'
+   */
+  getHtmlURL(): string {
+    return window.location.pathname;
+  }
+
 }

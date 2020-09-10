@@ -1,4 +1,4 @@
-import { SearchSetting } from './../search-result-dialog/SearchSetting';
+import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import * as LQ from 'linq';
@@ -121,7 +121,8 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     console.log(a1.foot);
   }
   getKeywordClass(a1: DText) {
-    if (new SearchSetting().loadIsEnableColorKeyword() !== 1) {
+
+    if (IsColorKeyword.s.getFromLocalStorage() === false) {
       return undefined;
     }
 
@@ -162,7 +163,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
       }
       return re;
       function isEnable() {
-        return new SearchSetting().loadIsEnableColorKeyword() === 1;
+        return IsColorKeyword.s.getFromLocalStorage();
       }
     }
     return undefined;

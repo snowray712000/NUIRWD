@@ -18,9 +18,9 @@
 
   <!-- body -->
   <mat-dialog-content>
-    <div style="">
+    <div>
       <span *ngFor="let it of versions; let i1=index" (click)="onClick(it)"
-        style="cursor: pointer;word-break: keep-all;" [class.current]="isSelected(it)">{{it.naChinese}}　</span>
+        style="cursor: pointer;word-break: break-all;white-space: normal;" [class.current]="isSelected(it)">{{it.naChinese}}　</span>
     </div>
   </mat-dialog-content>
 

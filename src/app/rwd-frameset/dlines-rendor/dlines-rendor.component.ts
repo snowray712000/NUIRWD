@@ -1,5 +1,5 @@
 import { EventVerseChanged } from './../../side-nav-right/cbol-parsing/EventVerseChanged';
-import { VersionManager } from 'src/app/rwd-frameset/VersionManager';
+import { VerForMain } from 'src/app/rwd-frameset/settings/VerForMain';
 import * as LQ from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, Input } from '@angular/core';
@@ -14,7 +14,7 @@ import { DisplayMergeSetting } from '../dialog-display-setting/DisplayMergeSetti
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { DisplayFormatSetting } from '../dialog-display-setting/DisplayFormatSetting';
 import { mergeDOneLineIfAddressContinue } from 'src/app/bible-text-convertor/mergeDOneLineIfAddressContinue';
-import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
+import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 
 @Component({
   selector: 'app-dlines-rendor',
@@ -70,11 +70,9 @@ export class DlinesRendorComponent implements OnInit {
     return IsVersionVisiableManager.s.getFromLocalStorage();
   }
   getVersionDisplayName(na: string) {
-    if (VersionManager.s.cacheAbvResult === undefined) {
-      return na;
-    }
+    const rr1 = VerCache.s.getValue();
 
-    const r2 = LQ.from(VersionManager.s.cacheAbvResult.record).firstOrDefault(a1 => a1.book === na);
+    const r2 = LQ.from(rr1.record).firstOrDefault(a1 => a1.book === na);
     if (r2 === undefined) {
       return na;
     }

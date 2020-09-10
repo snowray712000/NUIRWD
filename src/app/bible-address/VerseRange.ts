@@ -1,6 +1,4 @@
 import * as LQ from 'linq';
-import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
-import { IBibleVersionQueryService } from "src/app/fhl-api/IBibleVersionQueryService";
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/tools/obj';
 import { BookNameAndId } from '../const/book-name/BookNameAndId';
@@ -12,7 +10,6 @@ import { linq_first } from '../linq-like/linq_first';
 import { DAddress } from './DAddress';
 
 export class VerseRange {
-  // private bibleVersionQ: IBibleVersionQueryService;
   public verses: DAddress[] = [];
   /** 內容換了 由 ParsingReferenceDescription 完成 */
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
@@ -46,8 +43,7 @@ export class VerseRange {
    * @param bibleVersionQ 不一定用到，若有指定版本時，會用到。
    */
   // tslint:disable-next-line: no-unnecessary-initializer
-  constructor(bibleVersionQ: IBibleVersionQueryService = null) {
-    // this.bibleVersionQ = bibleVersionQ === undefined ? new BibleVersionQueryService() : bibleVersionQ;
+  constructor() {
   }
   /** 判斷是否在此範圍內, 開發 註釋 時需要 */
   public isIn(d: DAddress) {

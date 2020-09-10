@@ -11,7 +11,7 @@ export class ApiQsb implements IApiQsb {
   queryQsbAsync(args: QsbArgs): Observable<QsbResult> {
     this.defaultValue(args);
     // const url = 'http://bkbible.fhl.net/json/qsb.php';
-    const url = `${new FhlUrl().getJsonUrl()}qsb.php`;
+    const url = `${new FhlUrl().getJsonUrl2()}qsb.php`;
     const r2 = this.generateQueryString(args);
     // const r3 = ajax.post(url, r2).pipe(retry(3), map(a1 => a1.response as QsbResult));
     return ajax.getJSON<QsbResult>(url + r2).pipe(

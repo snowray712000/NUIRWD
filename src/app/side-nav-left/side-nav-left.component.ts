@@ -25,16 +25,11 @@ export class EventIsSnToggleChanged {
 export class SideNavLeftComponent implements OnInit {
   obIsSnToggle: Subscriber<boolean>;
   constructor() { }
-  @Output() notifyChangedBibleVersionIds = new EventEmitter<Array<number>>();
   @Input() verIdsOfInit: number[];
-  @Output() notifyChangedIsSn = new EventEmitter<boolean>();
-  isSnInit: boolean;
-  issnManager: IsSnManager = IsSnManager.s;
   isMapPhotoInit: boolean;
   ismapphotoManager: IsMapPhotoManager = IsMapPhotoManager.s;
 
   ngOnInit() {
-    this.isSnInit = this.issnManager.getFromLocalStorage();
     this.isMapPhotoInit = this.ismapphotoManager.getFromLocalStorage();
 
     this.initEventIsSnChanged();
@@ -47,14 +42,7 @@ export class SideNavLeftComponent implements OnInit {
     // tslint:disable-next-line: no-unused-expression
     new EventIsSnToggleChanged(eventIsSnToggle$);
   }
-  private onChangedBibleVersionIds(ids) {
-    this.notifyChangedBibleVersionIds.emit(ids);
-  }
-  onChangedIsSn(a1: boolean) {
-    this.obIsSnToggle.next(a1);
-    this.notifyChangedIsSn.emit(a1);
-    this.issnManager.updateValueAndSaveToStorageAndTriggerEvent(a1);
-  }
+
   onChangedIsMapPhoto(a1) {
     this.ismapphotoManager.updateValueAndSaveToStorageAndTriggerEvent(a1);
   }

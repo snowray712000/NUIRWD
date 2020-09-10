@@ -1,9 +1,11 @@
+import { VerCache } from "../fhl-api/BibleVersion/VerCache";
+import * as LQ from 'linq';
+// tslint:disable-next-line: max-line-length
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked, ViewChildren } from '@angular/core';
 import { asHTMLElement } from '../tools/asHTMLElement';
-import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
 import { isArrayEqualLength, isArrayEqual } from '../tools/arrayEqual';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
-import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
+import { OneBibleVersion, cvtToOneBibleVersion } from '../fhl-api/BibleVersion/OneBibleVersion';
 import { IOnChangedSettingIsSn } from './version-parellel-interfaces';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
@@ -11,7 +13,8 @@ import { DAddress } from '../bible-address/DAddress';
 import { DOneLineHeight } from './one-ver/one-ver.component';
 import { HeightCalc } from './HeightCalc';
 import { EventSideNavs, IEventSideNavs } from '../rwd-frameset/EventSideNavs';
-import { EventVersionsChanged } from '../side-nav-left/ver-select/EventVersionControlBridge';
+// import { EventVersionsChanged } from '../side-nav-left/ver-select/EventVersionControlBridge';
+// import { BibleVersionsManager } from '../rwd-frameset/settings/BibleVersionsManager';
 
 
 @Component({
@@ -56,10 +59,10 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
       r1.leftChanged$.subscribe(isOpened => {
         this.mapVer2Heights.clear(); // 這樣, 準備重算高度
       });
-      const eventsVersionsChanged = new EventVersionsChanged();
-      eventsVersionsChanged.changed$.subscribe(vers => {
-        this.mapVer2Heights.clear(); // 這樣, 準備重算高度
-      });
+      // const eventsVersionsChanged = new EventVersionsChanged();
+      // eventsVersionsChanged.changed$.subscribe(vers => {
+      //   this.mapVer2Heights.clear(); // 這樣, 準備重算高度
+      // });
     }, 0);
 
 
@@ -111,7 +114,10 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     this.initVersAllAsync();
   }
   async initVersAllAsync() {
-    this.versAll = await new BibleVersionQueryService().queryBibleVersionsAsync().toPromise();
+    const r1 = VerCache.s.getValue();
+    const r2 = LQ.from(r1.record).select(a1 => cvtToOneBibleVersion(a1)).toArray();
+    r2.forEach((a1, i1) => a1.id = i1);
+    this.versAll = r2;
   }
 
   calcEachVersionWidths(): number {

@@ -5,7 +5,8 @@ import { DSearchData } from '../rwd-frameset/search-result-dialog/search-result-
 import { ajax } from 'rxjs/ajax';
 import { FhlUrl } from '../fhl-api/FhlUrl';
 import { map } from 'rxjs/operators';
-import { DAbvResult } from '../fhl-api/ApiAbv';
+import { DAbvResult } from "../fhl-api/BibleVersion/DAbvResult";
+import { VerCache } from "../fhl-api/BibleVersion/VerCache";
 @Component({
   selector: 'app-version-selector',
   templateUrl: './version-selector.component.html',
@@ -19,20 +20,13 @@ export class VersionSelectorComponent implements OnInit {
     private dialogRef: MatDialogRef<VersionSelectorComponent>,
     @Inject(MAT_DIALOG_DATA) public dataByParent: { isSnOnly?: 0 | 1, isLimitOne?: 0 | 1; versions?: string[] }) { }
   ngOnInit() {
-    verQ().then(re => {
-      const rr1 = this.dataByParent.isSnOnly === 1 ?
-        re.record.filter(a1 => a1.strong === 1) : re.record;
-      const rr2 = rr1.map(aa1 => ({ na: aa1.book, naChinese: aa1.cname }));
-      this.versions = rr2;
-      this.versionCurrentNa = [...this.dataByParent.versions];
-    });
+    const re = VerCache.s.getValue();
 
-    async function verQ() {
-      const r1 = await ajax({ url: `${new FhlUrl().getJsonUrl()}uiabv.php` })
-        .pipe(map(a1 => a1.response as DAbvResult)).toPromise();
-      return r1;
-      // return r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
-    }
+    const rr1 = this.dataByParent.isSnOnly === 1 ?
+      re.record.filter(a1 => a1.strong === 1) : re.record;
+    const rr2 = rr1.map(aa1 => ({ na: aa1.book, naChinese: aa1.cname }));
+    this.versions = rr2;
+    this.versionCurrentNa = [...this.dataByParent.versions];
   }
   /** 單選的時候, 直接關閉, 並回傳結果 ['unv'] */
   onClick(it: DVersion) {

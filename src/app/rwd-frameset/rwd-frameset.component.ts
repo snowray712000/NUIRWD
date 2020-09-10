@@ -8,8 +8,8 @@ import { asHTMLElement } from '../tools/asHTMLElement';
 import { Observable, Subscriber } from 'rxjs';
 import { appInstance } from '../app.module';
 import { isArrayEqual } from '../tools/arrayEqual';
-import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
-import { VerIdsManager } from './VerIdsManager';
+// import { IOnChangedBibleVersionIds, IUpdateBibleVersionIds } from './rwd-frameset-interfaces';
+// import { VerIdsManager } from './VerIdsManager';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BibleSelectionsComponent } from '../bible-selections/bible-selections.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +24,7 @@ import { BookNameLang } from '../const/book-name/BookNameLang';
 import { getChapCount } from '../const/count-of-chap';
 import { IsSnManager } from './settings/IsSnManager';
 import { IsVersionVisiableManager } from './IsVersionVisiableManager';
-import { VersionManager } from './VersionManager';
+import { VerForMain } from './settings/VerForMain';
 import { DialogVersionSelectorOpenor } from '../version-selector/version-selector.component';
 import { DisplayFormatSetting } from './dialog-display-setting/DisplayFormatSetting';
 import { DisplayLangSetting } from './dialog-display-setting/DisplayLangSetting';
@@ -35,9 +35,6 @@ import { DisplayMergeSetting } from './dialog-display-setting/DisplayMergeSettin
   styleUrls: ['./rwd-frameset.component.css']
 })
 export class RwdFramesetComponent implements AfterViewInit, OnInit {
-  private onVerIdsChanged: IOnChangedBibleVersionIds;
-  /** U: Update Ver: Bible Version */
-  private iUpdateVerIds: IUpdateBibleVersionIds;
   // tslint:disable-next-line: variable-name
   private _bottomSheet: MatBottomSheet;
   private routeVerseRange: VerseRange;
@@ -84,18 +81,11 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private widthBaseFrame: number;
   // html in use
   private bibleVersions: Array<number> = [];
-  // html in use
-  private verIdsOfInit: number[];
   private isSnOfInit = false;
   @ViewChild('baseFrame', { read: ViewContainerRef, static: false }) baseFrame: ViewContainerRef;
 
   /** 建構子呼叫 */
   private initAboutVerChangeOrUpdate() {
-    const isTest = false;
-    const r1 = !isTest ? new VerIdsManager() : new TestVerIdsManager();
-    this.onVerIdsChanged = r1;
-    this.iUpdateVerIds = r1;
-    this.bindOnChangedBibleVersions();
   }
 
   private onClickBibleSelect() {
@@ -104,22 +94,6 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
         beSelectedBookId: 39
       }
     });
-  }
-  private bindOnChangedBibleVersions() {
-    const pthis = this;
-    this.onVerIdsChanged.onChangedBibleVersionIds$.subscribe({
-      next: (val: Array<number>) => {
-        if (pthis.verIdsOfInit === undefined) {
-          pthis.verIdsOfInit = val;
-        }
-        pthis.bibleVersions = val;
-        pthis.detectChange.markForCheck();
-      },
-    });
-  }
-  /** html in use */
-  private onChangedBibleVersionIds(ids) {
-    this.iUpdateVerIds.updateBibleVersionIds(ids);
   }
   onOpenedLeftSide() {
     // console.log('on opened left side');
@@ -132,9 +106,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     }
     this.checkWidthAndReRenderIfNeed();
   }
-  onNotifyChangedIsSn(isChecked) {
 
-  }
   ngAfterViewInit(): void {
     // 設定 static  變數, 此行放在 建構子不行, 因為 side nav 還是 undefined
     new SideNavsOnFrame(this.leftSideNav, this.rightSideNav);
@@ -256,7 +228,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     const re2 = re.showDialog();
   }
   onClickVersions() {
-    const vers = VersionManager.s.getFromLocalStorage();
+    const vers = VerForMain.s.getFromLocalStorage();
     const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
       { isSnOnly: 0, isLimitOne: 0, versions: vers },
     );
@@ -264,41 +236,23 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     /** dialog 關閉後 */
     const pthis = this;
     refdialog.afterClosed().toPromise().then((re: string[]) => {
-      if (isEmpty()) {
-        re = ['unv'];
-      }
-
-      VersionManager.s.updateValueAndSaveToStorageAndTriggerEvent(re);
-      function isEmpty() {
-        return re === undefined || re.length === 0;
+      if (re === undefined) {
+        // 按 close
+      } else {
+        // 按 ok, 但沒有選
+        if (re.length === 0) {
+          re = ['unv'];
+        }
+        VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(re);
       }
     });
   }
 }
 interface SideWidthStyle {
-  minWidth: number,
-  maxWidth: number,
-  width: number,
+  minWidth: number;
+  maxWidth: number;
+  width: number;
 }
-/** test 用 bibleVersion, 以後會跟 global setting 放在一起 */
-class TestVerIdsManager implements IUpdateBibleVersionIds, IOnChangedBibleVersionIds {
-  private ids;
-  private ob: Subscriber<number[]>;
-  onChangedBibleVersionIds$;
-  constructor() {
-    const pthis = this;
-    this.onChangedBibleVersionIds$ = new Observable<Array<number>>(ob => {
-      pthis.ob = ob;
-    });
-  }
-  updateBibleVersionIds(ids: number[]) {
-    if (!isArrayEqual(ids, this.ids)) {
-      this.ids = ids;
-      this.ob.next(ids);
-    }
-  }
-}
-
 
 export class DialogDisplaySettingOpenor {
   constructor(private dialog: MatDialog) { }

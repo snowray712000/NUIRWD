@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
-import { BibleVersionQueryService } from '../fhl-api/bible-version-query.service';
-import { OneBibleVersion } from '../fhl-api/OneBibleVersion';
+import { OneBibleVersion } from '../fhl-api/BibleVersion/OneBibleVersion';
 import { of, Observable, ConnectableObservable, Subject, interval } from 'rxjs';
 import { map, multicast, tap, share } from 'rxjs/operators';
 
@@ -20,7 +19,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./bible-selections.component.css']
 })
 export class BibleSelectionsComponent implements OnInit {
-  verQ: BibleVersionQueryService = new BibleVersionQueryService();
   @ViewChild('bkch', null) btnToggleBkCh: MatButtonToggleGroup;
   @Input() beSelectedBookId = 40;
   @Input() beSelectedChap = 3;

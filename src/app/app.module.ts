@@ -21,7 +21,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { SideNavLeftComponent } from './side-nav-left/side-nav-left.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { VerSelectComponent } from './side-nav-left/ver-select/ver-select.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BibleSelectionsComponent } from './bible-selections/bible-selections.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -46,6 +45,7 @@ import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
 import { VersionSelectorComponent } from './version-selector/version-selector.component';
 import { DTextsRendorComponent } from './rwd-frameset/dtexts-rendor/dtexts-rendor.component';
 import { DlinesRendorComponent } from './rwd-frameset/dlines-rendor/dlines-rendor.component';
+import { MobileTestComponent } from './mobile-test/mobile-test.component';
 const entryComponents = new Array<any>(
   BibleSelectionsComponent,
   // InfoDialogComponent,
@@ -54,6 +54,7 @@ const entryComponents = new Array<any>(
   VersionSelectorComponent,
   DialogDisplaySettingComponent,
   DlinesRendorComponent,
+  MobileTestComponent,
 );
 
 
@@ -64,7 +65,6 @@ const entryComponents = new Array<any>(
     VersionInterlaceComponent,
     RwdFramesetComponent,
     SideNavLeftComponent,
-    VerSelectComponent,
     SideNavRightComponent,
     CbolParsingComponent,
     BibleSelectionsComponent,
@@ -81,6 +81,7 @@ const entryComponents = new Array<any>(
     VersionSelectorComponent,
     DialogDisplaySettingComponent,
     DlinesRendorComponent,
+    MobileTestComponent,
   ),
   entryComponents,
   imports: [

@@ -1,5 +1,5 @@
 import { EventSideNavs } from "src/app/rwd-frameset/EventSideNavs";
-import { EventVersionsChanged } from 'src/app/side-nav-left/ver-select/EventVersionControlBridge';
+// import { EventVersionsChanged } from 'src/app/side-nav-left/ver-select/EventVersionControlBridge';
 import { Observable, Subscriber } from 'rxjs';
 import { EventWindowSizeChanged } from 'src/app/rwd-frameset/EventWindowSizeChanged';
 import { debounceTime } from 'rxjs/operators';
@@ -20,10 +20,10 @@ export class EventOneVerWidthChanged {
     this.fnGetWidth = fnGetWidth;
     this.changed$ = new Observable<number>(ob => { this.ob = ob; });
     this.changed$.toPromise().then(a1 => { });
-    const eVer$ = new EventVersionsChanged();
-    eVer$.changed$.subscribe(vers => {
-      this.chkIt();
-    });
+    // const eVer$ = new EventVersionsChanged();
+    // eVer$.changed$.subscribe(vers => {
+    //   this.chkIt();
+    // });
     const eSide$ = new EventSideNavs();
     eSide$.leftChanged$.subscribe(isOpened => this.chkIt());
     eSide$.rightChanged$.subscribe(isOpened => this.chkIt());

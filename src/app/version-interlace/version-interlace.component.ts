@@ -3,7 +3,6 @@ import { DisplayMergeSetting } from './../rwd-frameset/dialog-display-setting/Di
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DialogDisplaySettingComponent } from './../rwd-frameset/dialog-display-setting/dialog-display-setting.component';
-import { SearchSetting } from './../rwd-frameset/search-result-dialog/SearchSetting';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { getAddressesText } from 'src/app/bible-address/getAddressesText';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
@@ -20,7 +19,7 @@ import { IsVersionVisiableManager } from '../rwd-frameset/IsVersionVisiableManag
 import { VersionTnterlaceDatasQueryorStandardTestData } from '../rwd-frameset/dlines-rendor/VersionTnterlaceDatasQueryorStandardTestData';
 import { mergeDOneLineIfAddressContinue } from '../bible-text-convertor/mergeDOneLineIfAddressContinue';
 import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/DisplayLangSetting';
-import { VersionManager } from '../rwd-frameset/VersionManager';
+import { VerForMain } from '../rwd-frameset/settings/VerForMain';
 import { mergeDifferentVersionResult } from './mergeDifferentVersionResult';
 import { cvt_unv } from '../bible-text-convertor/unv';
 import { cvt_kjv } from '../bible-text-convertor/kjv';
@@ -49,7 +48,7 @@ export class VersionInterlaceComponent implements OnInit {
     this.datasQ = getDataQDefaultOrNot();
     getVersionChangedObserable().subscribe(vers => {
       if (isTheSame() === false) {
-        console.log(vers);
+        // console.log(vers);
         pthis.versions = vers;
         pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
       }
@@ -78,7 +77,7 @@ export class VersionInterlaceComponent implements OnInit {
       return pthis.datasQ !== undefined ? pthis.datasQ : new VersionTnterlaceDatasQueryorStandardTestData();
     }
     function getVersionChangedObserable(): Observable<string[]> {
-      return VersionManager.s.changed$;
+      return VerForMain.s.changed$;
       return of(['unv']);
     }
     function getRouteChangedObserable(): Observable<VerseRange> {
@@ -132,7 +131,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
 
       interface IOneVerQ { qDataAsync: (ver: string, isGb: boolean) => Promise<{ record: DRecord[] }>; }
 
-      let apiQ: IOneVerQ = getQsbQ(); // getTestQ();
+      const apiQ: IOneVerQ = getQsbQ(); // getTestQ();
       const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB();
       const re1Api = LQ.from(args.versions).select(ver => apiQ.qDataAsync(ver, isGb)).toArray();
       return re1Api;

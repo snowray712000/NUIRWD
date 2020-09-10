@@ -13,27 +13,21 @@ import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
 import { linq_distinct } from 'src/app/linq-like/linq_distinct';
 import * as LQ from 'linq';
-import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { deepCopy } from 'src/app/tools/deepCopy';
-import { AddReferenceFromOrigDictText } from 'src/app/version-parellel/one-ver/AddReferenceFromOrigDictText';
 import { OrigDictGetter } from './OrigDictGetter';
 import { ReferenceGetter } from './ReferenceGetter';
-import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';
 import { KeywordSearchGetter } from './KeywordSearchGetter';
-import { cvtChinesesToBookAndSecToVerse } from './cvtChinesesToBookAndSecToVerse';
 import { BookClassor, DOneBookClassor } from 'src/app/const/book-classify/BookClassor';
-import { BibleVersionQueryService } from 'src/app/fhl-api/bible-version-query.service';
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
-import { DAbvResult } from 'src/app/fhl-api/ApiAbv';
-import { MatSelectChange } from '@angular/material/select';
-import { SearchSetting } from './SearchSetting';
+import { DAbvResult } from "src/app/fhl-api/BibleVersion/DAbvResult";
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { OrigCollectionGetter } from './OrigCollectionGetter';
-import { type } from 'jquery';
 import { DialogVersionSelectorOpenor } from 'src/app/version-selector/version-selector.component';
+import { VerForSearch } from '../settings/VerForSearch';
+import { VerForSnSearch } from '../settings/VerForSnSearch';
+import { IsColorKeyword } from '../settings/IsColorKeyword';
+import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 @Component({
   selector: 'app-search-result-dialog',
   templateUrl: './search-result-dialog.component.html',
@@ -61,7 +55,7 @@ export class SearchResultDialogComponent implements OnInit {
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) { }
   ngOnInit() {
     this.initVersionsAsync().then(rre => {
-      this.isEnableColorKeyword = new SearchSetting().loadIsEnableColorKeyword();
+      this.isEnableColorKeyword = IsColorKeyword.s.getFromLocalStorage() ? 1 : 0;
       this.determineTypeFunction();
 
       this.doDependonType();
@@ -223,7 +217,7 @@ export class SearchResultDialogComponent implements OnInit {
         if (pthis.bibleVersionSelected !== re[0]) {
           pthis.bibleVersionSelected = re[0];
           pthis.setBibleVersionSelectedShowName();
-          new SearchSetting().saveSearchBibleVersion(pthis.bibleVersionSelected);
+          VerForSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSelected);
           pthis.doDependonType();
         }
       }
@@ -233,7 +227,7 @@ export class SearchResultDialogComponent implements OnInit {
         if (pthis.bibleVersionSnSelected !== re[0]) {
           pthis.bibleVersionSnSelected = re[0];
           pthis.setBibleVersionSelectedSnShowName();
-          new SearchSetting().saveSearchSnBibleVersion(pthis.bibleVersionSnSelected);
+          VerForSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSnSelected);
           pthis.doDependonType();
         }
       }
@@ -265,7 +259,7 @@ export class SearchResultDialogComponent implements OnInit {
 
   onEnableColorKeywordChanged(a1: MatSlideToggleChange) {
     this.isEnableColorKeyword = a1.checked ? 1 : 0;
-    new SearchSetting().saveIsEnableColorKeyword(this.isEnableColorKeyword);
+    IsColorKeyword.s.updateValueAndSaveToStorageAndTriggerEvent(this.isEnableColorKeyword === 1);
   }
   onClickOrig(a1: string) {
     new DialogSearchResultOpenor(this.dialog)
@@ -298,23 +292,14 @@ export class SearchResultDialogComponent implements OnInit {
   }
   /** html中 設定查詢版本時會用到 */
   async initVersionsAsync() {
-    this.bibleVersionSelected = new SearchSetting().loadSearchBibleVersion();
-    this.bibleVersionSnSelected = new SearchSetting().loadSearchBibleSnVersion();
-    const r1 = await verQ();
+    this.bibleVersionSelected = VerForSearch.s.getFromLocalStorage();
+    this.bibleVersionSnSelected = VerForSnSearch.s.getFromLocalStorage();
+    const r1 = VerCache.s.getValue();
     this.bibleVersions = r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
     this.bibleVersionsSn = r1.record.filter(a1 => a1.strong === 1).map(a1 => ({ nameShow: a1.cname, name: a1.book }));
 
     this.setBibleVersionSelectedShowName();
     this.setBibleVersionSelectedSnShowName();
-
-    return;
-
-    async function verQ() {
-      const r1 = await ajax({ url: `${new FhlUrl().getJsonUrl()}uiabv.php` })
-        .pipe(map(a1 => a1.response as DAbvResult)).toPromise();
-      return r1;
-      // return r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
-    }
   }
 
   getKeywordClass(a1: DText) {

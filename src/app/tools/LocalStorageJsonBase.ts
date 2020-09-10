@@ -15,6 +15,8 @@ export abstract class LocalStorageJsonBase<T> {
   /** ex. 'SearchBibleVersion' */
   get changed$() { return this.eventTool.changed$; }
   abstract _getKey(): string;
+  /** 不用擔心初始化了嗎。建構子會從 localstorage 讀取. */
+  getValue() { return this.curValue; }
   protected _getDefaultValue(): T { return undefined; }
   constructor() {
     const pthis = this;
@@ -32,6 +34,7 @@ export abstract class LocalStorageJsonBase<T> {
     }
   }
 
+  /** 從 localstorage 讀取, 若不存在, 呼叫 _getDefaultValue() 初始化 */
   getFromLocalStorage() {
     this.curValue = StorageTools.getJsonSafely(this._getKey());
     if (this.curValue == null) {

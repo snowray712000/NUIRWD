@@ -1,17 +1,22 @@
+import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { GetAddresses } from 'src/app/bible-address/GetAddresses';
-import { SplitStringByRegex } from '../tools/SplitStringByRegex';
+import { SplitStringByRegex, SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
 import { SmartDescriptEndParsing } from './SmartDescriptEndParsing';
 import { DAddress } from './DAddress';
 
 export class ParsingReferenceDescription {
-  private static regBookNames: RegExp;
+  /** /1col|約一|約二/gi */
+  static regBookNames: RegExp;
+  // 這樣才會確保 makeSure 被呼叫吧?
+  private static _s = new ParsingReferenceDescription();
   constructor() {
     this.makeSureStaticExist();
   }
 
   main(strDescription: string, defaultAddress?: { book?: number, chap?: number }) {
+    strDescription = strDescription.replace(/\./g, ';');
     const defAddress = this.getDefaultAddress(defaultAddress);
     const re2 = this.splitBook(strDescription, defAddress);
 
@@ -57,15 +62,29 @@ export class ParsingReferenceDescription {
       des: string;
     }[] = [];
 
-    const reg1 = ParsingReferenceDescription.regBookNames;
-    const re = new SplitStringByRegex().main(strDescription, reg1);
+    // 1:4-5;羅1:4;Mt3:3-2 會被切為 '1:4-5;' 、 '羅' 、 '1:4;' 、 Mt 、 3:3-2
+    const re = new SplitStringByRegexVer2().main(strDescription,
+      ParsingReferenceDescription.regBookNames);
+
     let cur = defAddress.book;
-    for (const it of re.data) {
-      const id2 = new BookNameAndId().getIdOrUndefined(it.toLowerCase());
-      if (id2 === undefined) {
-        re2.push({ id: cur, des: it });
+    let curDes = '';
+    for (const it of re) {
+      if (it.exec === undefined) {
+        curDes += it.w;
       } else {
-        cur = id2;
+        // push 前一個 (當是第1個，例如Case 羅1:4;Mt3:3-2 就不會有前面的 1:4-5)
+        if (curDes.length !== 0) {
+          re2.push({ id: cur, des: curDes });
+        }
+        // push 後 reset curDes
+        const id2 = new BookNameAndId().getIdOrUndefined(it.exec[0].toLowerCase());
+        cur = id2 === undefined ? defAddress.book : id2;
+        curDes = '';
+      }
+    }
+    {
+      if (curDes.length !== 0) {
+        re2.push({ id: cur, des: curDes });
       }
     }
     return re2;

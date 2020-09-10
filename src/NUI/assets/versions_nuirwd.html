@@ -101,14 +101,21 @@
     '0819 羅馬書 5:12的注釋，呈現會差很多.',
     '0819 創 3:20的注釋，#以諾書 71:7|.',
     '0821 優化-選擇書卷,目前的很醜,還是用 dialog 吧.',
+    '0907 移除 code-因改為交錯式,parallel相關可以拿掉了.',
   ];
   var data105MathB = [
     {
       na: 'dev',
       na2: [
         'dev <a href="/NUI/_rwd_dev/" target="_blank">dev</a>',
-        '',
-        'Bug手機-手機網址會導致錯誤',
+        '200910a',
+        'Bug-ipad的 羅1:2-3.太1:2-4 錯誤. 書卷id會錯. 原因是 RegExp 被使用後 lastIndex 會改變, 以前有將它重置為 -1, 但實際要重置為 0. 電腦版會正確, 手機版會錯誤.',
+        'Bug-ipad的 版本選擇 dialog 錯誤. 會沒有任何選項. 原因是 word-break: keep-all; 是無效的. 改正為 break-all 就可以了.(當然效果不一樣)',
+        'Bug-ipad的 經文顯示 qsb api 錯誤. 要用 /json/ 不可以直接用 bible.fhl.net. 所以要用 FhlUrl 的 getJsonUrl2().',
+        'Bug-ipad的 經文顯示 版本錯誤. 該顯示(和合本) 會顯示 (unv), 用 BibleVersionCache 代替早期的, 因此先後順序okay了.',
+        '優化-版本選擇. 按下版本選擇的 Close, 會變成 和合本, 但使用者只是想取消, 維持原本版本而已. 改掉了 close 結果.',
+        '重構-版本. 早期用id的部分,全換為unv這方式,並把相關的code移除.',
+        'Bug-ipad的 Reference顯示 錯誤. 重構完「版本」, 就正確了.',
         '',
       ]
     },
