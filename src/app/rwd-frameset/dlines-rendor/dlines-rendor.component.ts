@@ -8,7 +8,7 @@ import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { getAddressesText } from 'src/app/bible-address/getAddressesText';
 import { DialogSearchResultOpenor } from '../search-result-dialog/DialogSearchResultOpenor';
 import { IsVersionVisiableManager } from '../IsVersionVisiableManager';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DisplayMergeSetting } from '../dialog-display-setting/DisplayMergeSetting';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
@@ -23,7 +23,7 @@ import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 })
 export class DlinesRendorComponent implements OnInit {
   @Input() datas: DOneLine[];
-  verseRange: VerseRange = new VerseRange();
+  @Input() verseRange: VerseRange = new VerseRange();
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -53,8 +53,6 @@ export class DlinesRendorComponent implements OnInit {
   }
 
   onClickOrig(a1: string) {
-    console.log(a1);
-
     new DialogSearchResultOpenor(this.dialog)
       .showDialog({ keyword: this.getOrigKeyword(a1), isDict: 1, addresses: this.verseRange.verses });
   }

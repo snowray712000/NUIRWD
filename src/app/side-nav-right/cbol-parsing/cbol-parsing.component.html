@@ -42,7 +42,7 @@
   <mat-divider></mat-divider>
   <div>
     <div *ngFor="let it2 of [textsWithSnUnv,textsWithSnKjv]; let i2=index">
-      <span>{{i2===0?'unv':'kjv'}}</span><br />
+      <span>{{i2===0?'和合本':'KJV'}}</span><br />
       <span *ngFor="let it1 of it2">
         <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
           <span appTextWithSn [addr]="cur" [data]="it1" [snActived]="snActived"

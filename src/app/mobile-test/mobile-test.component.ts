@@ -1,13 +1,19 @@
+import { Dialog2bComponent } from './dialog2b/dialog2b.component';
 import { BookNameAndId } from './../const/book-name/BookNameAndId';
 import * as LQ from 'linq';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SplitStringByRegexVer2, SplitStringByRegex } from '../tools/SplitStringByRegex';
 import { ParsingReferenceDescription } from '../bible-address/ParsingReferenceDescription';
-import { ApiQsb, QsbArgs } from '../fhl-api/ApiQsb';
+import { ApiQsb, DQsbArgs } from '../fhl-api/ApiQsb';
 import { FhlUrl } from '../fhl-api/FhlUrl';
+import { OrigDictGetter } from '../rwd-frameset/search-result-dialog/OrigDictGetter';
+import { OrigDictCBOLApiGetter } from '../rwd-frameset/search-result-dialog/OrigDictCBOLApiGetter';
+import { KeywordSearchGetter } from '../rwd-frameset/search-result-dialog/KeywordSearchGetter';
+import { searchAllIndexViaSeApiAsync } from '../rwd-frameset/search-result-dialog/searchAllIndexViaSeApiAsync';
+import { EventTool } from '../tools/EventTool';
 
 @Component({
   selector: 'app-mobile-test',
@@ -39,23 +45,22 @@ export class MobileTestComponent implements OnInit {
   }
 
   ngOnInit() {
-    const qstr = VerseRange.fD('傳1:1').toStringChineseShort();
-    this.log4 = qstr;
-    this.log5 = `${new FhlUrl().getJsonUrl()}qsb.php?gb=0&version=unv&qstr=${qstr}`;
-    this.log6 = `${new FhlUrl().getJsonUrl2()}qsb.php?gb=0&version=unv&qstr=${qstr}`;
-    const arg: QsbArgs = {
-      qstr,
-      bibleVersion: 'unv',
-      isExistStrong: true,
-      isSimpleChinese: false,
-    };
-    new ApiQsb().queryQsbAsync(arg).subscribe(re => {
-      this.log3 = JSON.stringify(re);
-    });
+
+  }
+  onClick5Freeze() {
+    // const ts = new Date().getTime();
+    // this.case2b().then(re => {
+    //   console.log(re);
+    // });
+
+  }
+  async case2b() {
+    const dialogRef = this.dialog.open(Dialog2bComponent, {});
+    const re = await dialogRef.afterClosed();
+    return re;
   }
   getHref(str) {
     return new FhlUrl().getHtmlURL() + '#/mobile/' + str;
   }
 }
-
 

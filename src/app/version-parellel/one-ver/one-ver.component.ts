@@ -9,14 +9,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DText, DOneLine } from '../../bible-text-convertor/AddBase';
-import { linq_first } from 'src/app/linq-like/linq_first';
 import { linq_zip } from 'src/app/linq-like/linq_zip';
 import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { asHTMLElement } from 'src/app/tools/asHTMLElement';
 import { EventOneVerWidthChanged } from './EventOneVerWidthChanged';
+import * as LQ from 'linq';
 import { EventIsSnToggleChanged } from 'src/app/side-nav-left/side-nav-left.component';
-import { log } from 'util';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 
 @Component({
@@ -136,7 +135,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
     }
   }
   onClickVerse(it1: DOneLine) {
-    this.clickVerse.emit(linq_first(it1.addresses.verses));
+    this.clickVerse.emit(LQ.from(it1.addresses.verses).first());
   }
   onClickAddress(it1) {
 
@@ -186,7 +185,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
 
     for (let i1 = 0; i1 < data.length; i1++) {
       const it1 = data[i1];
-      const r1 = linq_first(lineCys, a1 => a1.addresses === it1.addresses);
+      const r1 = LQ.from(lineCys).firstOrDefault(a1 => a1.addresses === it1.addresses);
 
       if (r1 === undefined) {
         re.set(i1, undefined);

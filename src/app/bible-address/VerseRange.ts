@@ -6,7 +6,6 @@ import { BookNameAndId } from '../const/book-name/BookNameAndId';
 import { VerseRangeToString } from 'src/app/bible-address/VerseRangeToString';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { ParsingReferenceDescription } from './ParsingReferenceDescription';
-import { linq_first } from '../linq-like/linq_first';
 import { DAddress } from './DAddress';
 
 export class VerseRange {
@@ -50,7 +49,7 @@ export class VerseRange {
     if (this.verses.length === 0 || d === undefined) {
       return false;
     }
-    const r1 = linq_first(this.verses, a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
+    const r1 = LQ.from(this.verses).firstOrDefault(a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
     return r1 !== undefined;
   }
   public add(v: DAddress): void { this.verses.push(v); }

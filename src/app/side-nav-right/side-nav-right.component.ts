@@ -1,6 +1,6 @@
 import * as LQ from 'linq';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FunctionSelectionTab } from './FunctionSelectionTab';
 
 @Component({

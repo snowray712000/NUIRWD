@@ -5,6 +5,7 @@ import { cvtChinesesToBookAndSecToVerse } from './cvtChinesesToBookAndSecToVerse
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
 import { DSeApiRecord, DSeApiResult } from './searchAllIndexViaSeApiAsync';
 import { ajax } from 'rxjs/ajax';
+import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
 /**
  * searchAllIndexViaSeApiAsync 之後, 還沒得到經文,
  * 通常會再透過使用這個, 將 bible_text 資訊填入
@@ -19,10 +20,9 @@ export async function queryBibleTextViaQsbApiPost(records: DSeApiRecord[], versi
 
 
   async function getDataAsync() {
-    const url = new FhlUrl().getJsonUrl() + 'qsb.php';
     const qstr = generateQstr();
-    const body = `strong=${strong}&version=${version}&qstr=${qstr}`;
-    const rr1 = await ajax.post(url, body).pipe(map(a1 => a1.response as DSeApiResult)).toPromise();
+    const rr1a = await new ApiQsb().queryQsbAsync({qstr,isExistStrong: strong===1}).toPromise();
+    const rr1 = rr1a as any as DSeApiResult;
 
     cvtChinesesToBookAndSecToVerse(rr1.record);
     return rr1.record;

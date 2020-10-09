@@ -2,371 +2,333 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <title></title>
-  <style>
-  </style>
+    <title></title>
+    <style>
+
+    </style>
 
 </head>
 
 <body style="height: 100%;">
 
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-  <style>
-    .na {
-      color: red;
-      font-weight: bolder;
-    }
-  </style>
-  <!-- 開始內容 -->
-  <p>
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-      aria-controls="collapseExample" style="width: 100%;">
+    <style>
+        .na {
+            color: red;
+            font-weight: bolder;
+        }
+    </style>
+    <!-- 開始內容 -->
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
       NUI (電腦手機通用)版本說明
     </a>
-  </p>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body" id='math105aB'>
-      <!-- <a class="dropdown-item" href="#" target="_blank">Action</a> -->
-      <!-- <a class="dropdown-item" href="#">Action</a> -->
+    </p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body" id='math105aB'>
+            <!-- <a class="dropdown-item" href="#" target="_blank">Action</a> -->
+            <!-- <a class="dropdown-item" href="#">Action</a> -->
+        </div>
     </div>
-  </div>
 </body>
 <script>
-  function gHtml(it) {
-    function isNullOrEmpty(str) {
-      return str === undefined || str.length === 0;
+    function gHtml(it) {
+        function isNullOrEmpty(str) {
+            return str === undefined || str.length === 0;
+        }
+
+        function gArrayList_UlLi(array) {
+            if (Array.isArray(array)) {
+
+                var r4a = it.na2.map(function(a1) {
+                    return '<li>' + a1 + '</li>';
+                }).join('');
+                return re = '<span><ul>' + r4a + '</ul></span>';
+            } else {
+                return undefined;
+            }
+        }
+        // <div>
+        // <span>200529a_點擊節_工具隨著變</span>
+        // youtube、示意圖、
+        // xxxxxxxxxxxxxx<br/>xxxxxxxx
+        // </div>
+        var na = it.na;
+        var r1 = '<span class="na">' + na + '</span><br/>';
+        var r2 = !isNullOrEmpty(it.yt) ? ('<a href="' + it.yt + '" target="_blank">youtube、</a>') : '';
+        var r3 = !isNullOrEmpty(it.img) ? ('<a href="' + it.img + '" target="_blank">示意圖、</a>') : '';
+        var r23 = r2 + r3;
+        if (!isNullOrEmpty(r23)) r23 += '<br/>';
+
+        var r4 = !isNullOrEmpty(it.na2) ? ('<span class="na2">' + it.na2 + '</span>') : '';
+        if (Array.isArray(it.na2))
+            r4 = gArrayList_UlLi(it.na2);
+        console.log(r4);
+
+        return '<div>' + r1 + r23 + r4 + '</div>';
     }
-    function gArrayList_UlLi(array) {
-      if (Array.isArray(array)) {
+    $(function() {
+        // var len1 = '20200410a 統測105 數學B'.length
+        for (const it of data105MathB) {
+            $('#math105aB').append($(gHtml(it)));
+        }
 
-        var r4a = it.na2.map(function (a1) { return '<li>' + a1 + '</li>'; }).join('');
-        return re = '<span><ul>' + r4a + '</ul></span>';
-      } else {
-        return undefined;
-      }
-    }
-    // <div>
-    // <span>200529a_點擊節_工具隨著變</span>
-    // youtube、示意圖、
-    // xxxxxxxxxxxxxx<br/>xxxxxxxx
-    // </div>
-    var na = it.na;
-    var r1 = '<span class="na">' + na + '</span><br/>';
-    var r2 = !isNullOrEmpty(it.yt) ? ('<a href="' + it.yt + '" target="_blank">youtube、</a>') : '';
-    var r3 = !isNullOrEmpty(it.img) ? ('<a href="' + it.img + '" target="_blank">示意圖、</a>') : '';
-    var r23 = r2 + r3; if (!isNullOrEmpty(r23)) r23 += '<br/>';
-
-    var r4 = !isNullOrEmpty(it.na2) ? ('<span class="na2">' + it.na2 + '</span>') : '';
-    if (Array.isArray(it.na2))
-      r4 = gArrayList_UlLi(it.na2);
-    console.log(r4);
-
-    return '<div>' + r1 + r23 + r4 + '</div>';
-  }
-  $(function () {
-    // var len1 = '20200410a 統測105 數學B'.length
-    for (const it of data105MathB) {
-      $('#math105aB').append($(gHtml(it)));
-    }
-
-  })
+    })
 </script>
 <script>
-  var todos = [
-    '(RD) 200619a Bug發現, ios平板的地圖無法正常顯示(電腦版可以)',
-    '情境: 人工輸入換行(需合併);利用空白數量;利用特殊字元;',
-    '200802 當查詢時, 輸入 林後21，就給它最後一章(超出範圍)',
-    '0810-移除 code DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent, 但注釋還有用到',
-    '0810-edit',
-    '0810 bug-串珠有時會被誤判為Sn, 非 Ref # 1Ti 1:1,11,12; 2:7; 2Ti 1:11; Tit 1:1; Heb 5:4|',
-    '0819 羅馬書 5:12的注釋，呈現會差很多.',
-    '0819 創 3:20的注釋，#以諾書 71:7|.',
-    '0821 優化-選擇書卷,目前的很醜,還是用 dialog 吧.',
-    '0907 移除 code-因改為交錯式,parallel相關可以拿掉了.',
-  ];
-  var data105MathB = [
-    {
-      na: 'dev',
-      na2: [
-        'dev <a href="/NUI/_rwd_dev/" target="_blank">dev</a>',
-        '200910a',
-        'Bug-ipad的 羅1:2-3.太1:2-4 錯誤. 書卷id會錯. 原因是 RegExp 被使用後 lastIndex 會改變, 以前有將它重置為 -1, 但實際要重置為 0. 電腦版會正確, 手機版會錯誤.',
-        'Bug-ipad的 版本選擇 dialog 錯誤. 會沒有任何選項. 原因是 word-break: keep-all; 是無效的. 改正為 break-all 就可以了.(當然效果不一樣)',
-        'Bug-ipad的 經文顯示 qsb api 錯誤. 要用 /json/ 不可以直接用 bible.fhl.net. 所以要用 FhlUrl 的 getJsonUrl2().',
-        'Bug-ipad的 經文顯示 版本錯誤. 該顯示(和合本) 會顯示 (unv), 用 BibleVersionCache 代替早期的, 因此先後順序okay了.',
-        '優化-版本選擇. 按下版本選擇的 Close, 會變成 和合本, 但使用者只是想取消, 維持原本版本而已. 改掉了 close 結果.',
-        '重構-版本. 早期用id的部分,全換為unv這方式,並把相關的code移除.',
-        'Bug-ipad的 Reference顯示 錯誤. 重構完「版本」, 就正確了.',
-        '',
-      ]
-    },
-    {
-      na: '200907a',
-      na2: [
-        'dev <a href="/NUI/200907a_rwd/" target="_blank">200907a</a>',
-        '200827a',
-        'Bug-原文字典-twcb。浸宣原始資料是html，透過DOMParser後，將不會再出現div這些不該出現的東西了。',
-        '承上。原文字典,字眼class是exp的，會被畫成紫色。',
-        '優化-原文彙編。kjv版本也可以了，但和合本2010還不行(api不支援)。',
-        '200903a',
-        'RD 優化-原文編號按鈕。設定拉到主畫面較方便。',
-        'RD UnitTest-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
-        'RD重構-LocalStorageXXXXXBase系列, String, boolean, array。',
-        'RD重構-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
-        '200904a',
-        '新增-交錯顯示經文ok(合和本、新譯本、KJV、cbol)',
-        '變更-聖經版本選擇，改為 dialog。',
-        '200907a',
-        'RD修復-上一頁、下一頁。因為主畫面換為交錯式而出現的。',
-        'RD修復-事件Base判斷，Array與JSON判斷是錯的，要用DeepEqual，而非直接等於。',
-        'RD-使用 changed$事件時，可能static還沒初始化好，因此放在 setTimeout 中最保險。',
-        '優化-click event 若功能沒展開，則不要一直取api(降低負荷)。',
-        'RD修復-原本的 EventTool 加上 multicast, 可多人等候。不然上述功能切換只能一個成功。(https://youtu.be/3uuPN9BDyho)',
-        '重構-click event 換為統一的事件方式(與LocalStorageBase的)。',
-      ]
-    },
-    {
-      na: '200821d_',
-      na2: [
-        '搜尋功能優化 <a href="/NUI/200821a_rwd/" target="_blank">200821a,b,c,d</a>',
-        '200821a_ReferenceDialog 可切換版本',
-        '200821b_SearchDialog 切換版本改用 dialog',
-        '200821c_原文彙編Dialog 切換版本改用 dialog',
-        '200821d_Reference Dialog 顯示, 使用 padding-left 與 text-indent.',
-      ]
-    },
-    {
-      na: '200820d_',
-      na2: [
-        '搜尋功能優化 <a href="/NUI/200820a_rwd/" target="_blank">200820a,b,c,d</a>',
-        '(RD)新增-仿qunits。/#/qunit/',
-        '(RD)重構-注釋顯示。用dtexts-render 取代原來的 com-text InfoDialogComponent',
-        '(RD)說明文件(注釋開發)- https://youtu.be/K7ehx-0czG0',
-        'b',
-        '(RD)移除-DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent ComTextComponent',
-        'c',
-        '優化-注釋間格。比較美，不會太擠。',
-        'd',
-        '新增-注釋原文字典。SNH00021、SNG00021、H0021、G0021都可以用。',
-      ]
-    },
-    {
-      na: '200806c_搜尋功能-原文字典排版優化',
-      na2: [
-        '搜尋功能優化 <a href="/NUI/200806a_rwd/" target="_blank">200806c(毀損)</a>',
-        '優化-CBOL 中文、英文、新約、舊約的排版，已經按 ol li 方式產生. (dtexts-rendor-components, 且用到遞迴)',
-        'b,',
-        '優化-搜尋後,多了 close 鈕按, (iphone手機沒有返回前頁的功能,若填滿沒地方好按掉,也沒esc鍵好用)',
-        '優化-原文字典查詢後,能按上一個、下一個原文.(也方便測試)',
-        '優化-預設聖經版本,當載入時,沒版本的時候',
-        '優化-預設載入第1個節的注釋相關內容,當載入時,沒版本的時候.',
-        'c,',
-        '重構,共用 - parsing 與 搜尋共用.(DialogSnDictOpenor DialogOrigDictOpenor 預備被拿掉)',
-        '重構,共用 - 串珠 與 搜尋共用. (DialogRefOpenor 預備被拿掉)',
-        '重構,共用 - 經文主體、顯示部分 與 搜尋共用. (DialogRefOpenor DialogOrigDictOpenor)',
-        '新增-下一章、上一章.',
-      ]
-    },
-    {
-      na: '200730b_搜尋功能,原文彙編',
-      na2: [
-        '搜尋功能優化 <a href="/NUI/200730a_rwd/" target="_blank">200730a</a>',
-        'Bug-修正, 查詢預設版本無效.(因為localStorage若不存在是回傳null, 不是 undefined)',
-        '新增-上色開關, 在作pptx的時候,若查詢關鍵字被上色很麻煩',
-        '新增-Reference版本, 查詢聖經版本設定後, Reference應該也要連動用那個版本',
-        'BUG-修正, 手機版本,會把右邊功能按鈕擠掉, 按不到, 因為input太寬了. (手機版, 設8em, 以 iphon se)',
-        '新增-Reference時, 當想此Ref的注釋,原文,地圖等等, 有「切換網址」就不用手動輸入了. ',
-        'BUG-修正 查詢G81, 然後再按 彼前2:17,5:9 會錯. (原因, qsb api 跨章要用;來取代,即可) ',
-        '新增-原文彙編, 原文查詢後, 可再查彙編. (書卷統計可與keyword查詢共用)',
-        '(RD)-原文彙編, 上色時, sn雖是85, 但經文是085, 所以會沒上到, 注意.',
-        '(RD)-原文彙編, 版本清單,要支援sn的,所以要另外一個全域變數,供sn用.(和合本2010其實有,但不全都有)',
-        'BUG-修正, 搜尋輸入 版本不知道為何不見了.(因為.ts改變數名稱,但html沒同步改)',
-        'BUG-修正, 搜尋輸入 林後2, 按下「切換網址」卻跑到 http://bible.fhl.net/#/bible/林後2, 應該要到 bible.fhl.net/NUI/200730a_rwd/#/bible/林後2 (加上window.location.pathname 指向 html 的路徑)',
-      ]
-    },
-    {
-      na: '200729a_搜尋功能-加上書卷分類',
-      na2: [
-        '搜尋功能優化 <a href="/NUI/200729a_rwd/" target="_blank">200729a</a>',
-        '搜尋關鍵字後, 可以有書卷分類',
-        'Bug-修正, 手機版查詢後, 拉到底會被遮住(讓它不換行)',
-        'Bug-修正, 查詢後, 若0筆, 或不正確, api 會回傳 null, 造成錯誤.',
-        'Bug-修正, 查詢後, 分類0筆還是顯示, 拿掉它.',
-        'Bug-修正, 查詢後, 若0筆, 什麼都不顯示, 就不能「設定」了, (data.length!==0拿掉)',
-      ]
-    },
-    {
-      na: '200727a_搜尋功能',
-      na2: [
-        '新增 - 搜尋功能 <a href="/NUI/200727a_rwd/" target="_blank">200727a</a>'
-        , '可搜尋關鍵字, 原文字典, 參考經文'
-        , '原文字典包含了 浸宣 與 CBOL 版內容'
-      ]
-    },
-    {
-      na: '200619b_浸宣舊約原文字典上線',
-      na2: [
-        '新增 - 浸宣舊約原文字典上線.'
-        , '(Bug) 地圖、相片會出不來，先拿掉。 #平板'
-        , '(Bug) 切換書卷章節不正常。 #平板'
-        , '(Bug修復) - 舊約Sn Click正確。'
-      ]
-    },
-    {
-      na: '200619a_高度自動對齊',
-      na2: ['高度自動對齊, 當視窗改變, 版本數量改變, Sn開關改變, 手機旋轉, 都會重新計算'
-        , '(RD) 新增了 EventVerseChanged, 這個可以任何地方使用 left right 開啟/關閉 事件.'
-        , '(RD) 新增了 EventVersionsChanged, 可任何地方使用 versions changed'
-        , '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個'
-        , '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個'
-        , '(RD技術) 原生訊息, 要透過 fromEvent 才能夠有一個以上訂閱. 例 window resize'
-        , '(RD技術) debounceTime 不錯, 若訊息異常密集, 可以用這個, 100ms 內, 只允許一個.'
-      ]
-    },
-    {
-      na: '200611a_高度計算case都對',
-      na2: [
-        '',
-        '(RD) 高度計算case都對了, HeightCalc class 為核心.',
-        '(RD) 這個很複雜, 使用了 unit test 方式開發.',
-        '(RD) linq_sum linq_max 新增.',
-        '(RD) 還有統一了 linq_xxx 命名方式.',
-        '(RD) address 可以 less than; greater than.',
-      ],
-    },
-    {
-      na: '200608a_原文直譯參考',
-      na2: [
-        '原文直譯版本已完成',
-        '(RD) 文字有換行符號, 換行\\r\\n 版本',
-        '(RD) (原文3:1) 就是內容, 不用 parsing',
-        '(RD) 有全型小括號、半型小括號 兩種',
-      ],
-    },
-    {
-      na: '200606a_Bug_經文點擊後,工具跳至對應節失效',
-      na2: [
-        '已修復',
-        '(RD) 重構 VerseAddress 與 DAddress 時造成的.',
-      ],
-    },
-    {
-      na: '200605a_新譯本',
-      na2: [
-        '標題處理/括號處理/併入上節/標題後換行/參考經文',
-        '可從 <a href="/NUI/_rwd/#/bible/Ps1:1.3:1-2.14:1.16:9.18:1.Mr14:3.16:1.Lu1:74-75">體會</a>',
-        '(RD) 括號較麻煩的是處理到雙層括號',
-        '(RD) 新譯本的參考，特別處, 是用~, 不是用-, 是用；。，, 不是用;, 有時會加「參」這個字',
-      ],
-    },
-    {
-      na: '200604c_和合本全型小括號',
-      na2: [
-        '可能是（或譯），也可能是標題（詩篇）',
-        '可從 <a href="/NUI/_rwd/#/bible/Ps8:6-9.60:1-2.92:1-4.Ps8:8">體會</a>'
-      ],
-    },
-    {
-      na: '200604b_和合本_併入上節',
-      na2: [
-        '如詩篇8就可以看到',
-        '(RD) 經文內容為 \'a\' 時',
-      ],
-    },
-    {
-      na: '200604a_重構_經文轉換',
-      na2: [
-        '(RD) 轉換一致用 DText class, DOneLine class ',
-        '(RD) 任何轉換都是一個 IAddBase interface ',
-      ],
-    },
-    {
-      na: '200603d_重構_砍碼_去掉cbol-dict_抽出info-dialog',
-      na2: [
-        '對使用者無變化.',
-        '(RD) 相關 class 移除 cbol-dict class',
-        '(RD) 相關 class 抽出 info-dialog',
-      ],
-    },
-    {
-      na: '200603c_重構_砍碼_addr統一_去掉起初動態元件',
-      na2: [
-        '對使用者無變化.',
-        '(RD) 將VerseAddress統一為 DAddress, 因此 DAddress 多了 ver?.',
-        '(RD) 最初動態產生概念不需要.',
-        '(RD) 相關 class 移除 one-chap one-verse show-base 相關',
-      ],
-    },
-    {
-      na: '200603b_Bug_Sn非純數字時',
-      na2: [
-        'SN若是 5608a 會錯, 因為原本假設是純數字. #羅5;6|會正常',
-        '承上, 例子為 #Mt6:8.6:18.14:1.Ro9:27|',
-      ],
-      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipM1qQ5ktZonwZ-s-USlKwfwmSsJMbL8QLMS2LoH'
-    },
-    {
-      na: '200603a_Bug_Ro5無法顯示',
-      na2: [
-        '看#羅5|,會沒畫面,#羅5;6|會正常',
-        '(RD) 因為sobj.php 沒資料時, 沒作保護.',
-        '(RD) 重構新增 AddMapPhotoInfo class',
-        '(RD) 之前為測試,bkbible較慢,把其引到bible domain,但 sbdag 會有 cross-origin 問題, 因此此api維持在 bkbible(若是在 bkbible測試時, 當然,若在bible就還是bible domain) ',
-      ],
+    var todos = [
+        '(RD) 200619a Bug發現, ios平板的地圖無法正常顯示(電腦版可以)',
+        '情境: 人工輸入換行(需合併);利用空白數量;利用特殊字元;',
+        '200802 當查詢時, 輸入 林後21，就給它最後一章(超出範圍)',
+        '0810-移除 code DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent, 但注釋還有用到',
+        '0810-edit',
+        '0810 bug-串珠有時會被誤判為Sn, 非 Ref # 1Ti 1:1,11,12; 2:7; 2Ti 1:11; Tit 1:1; Heb 5:4|',
+        '0819 羅馬書 5:12的注釋，呈現會差很多.',
+        '0819 創 3:20的注釋，#以諾書 71:7|.',
+        '0821 優化-選擇書卷,目前的很醜,還是用 dialog 吧.',
+        '0907 移除 code-因改為交錯式,parallel相關可以拿掉了.',
+    ];
+    var data105MathB = [{
+        na: 'dev',
+        na2: [
+            'dev <a href="/NUI/_rwd_dev/" target="_blank">dev</a>',
+            '200910a',
+            'Bug-ipad的 羅1:2-3.太1:2-4 錯誤. 書卷id會錯. 原因是 RegExp 被使用後 lastIndex 會改變, 以前有將它重置為 -1, 但實際要重置為 0. 電腦版會正確, 手機版會錯誤.',
+            'Bug-ipad的 版本選擇 dialog 錯誤. 會沒有任何選項. 原因是 word-break: keep-all; 是無效的. 改正為 break-all 就可以了.(當然效果不一樣)',
+            'Bug-ipad的 經文顯示 qsb api 錯誤. 要用 /json/ 不可以直接用 bible.fhl.net. 所以要用 FhlUrl 的 getJsonUrl2().',
+            'Bug-ipad的 經文顯示 版本錯誤. 該顯示(和合本) 會顯示 (unv), 用 BibleVersionCache 代替早期的, 因此先後順序okay了.',
+            '優化-版本選擇. 按下版本選擇的 Close, 會變成 和合本, 但使用者只是想取消, 維持原本版本而已. 改掉了 close 結果.',
+            '重構-版本. 早期用id的部分,全換為unv這方式,並把相關的code移除.',
+            'Bug-ipad的 Reference顯示 錯誤. 重構完「版本」, 就正確了.',
+            '200926a',
+            'RD. windows 電腦當機',
+            '201009a',
+            'RD. 於 mac 電腦修復完成(可運行)。',
+            'RD. 更新 angular material. 所以改了很多 import 等屬性, 連 module 都必需明確型別。',
+            'RD. 細節記載在 Readme.md',
+        ]
+    }, {
+        na: '200907a',
+        na2: [
+            'dev <a href="/NUI/200907a_rwd/" target="_blank">200907a</a>',
+            '200827a',
+            'Bug-原文字典-twcb。浸宣原始資料是html，透過DOMParser後，將不會再出現div這些不該出現的東西了。',
+            '承上。原文字典,字眼class是exp的，會被畫成紫色。',
+            '優化-原文彙編。kjv版本也可以了，但和合本2010還不行(api不支援)。',
+            '200903a',
+            'RD 優化-原文編號按鈕。設定拉到主畫面較方便。',
+            'RD UnitTest-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
+            'RD重構-LocalStorageXXXXXBase系列, String, boolean, array。',
+            'RD重構-dlines-rendors, 如此, 主畫面、搜尋結果、都可以用一致的顯示了',
+            '200904a',
+            '新增-交錯顯示經文ok(合和本、新譯本、KJV、cbol)',
+            '變更-聖經版本選擇，改為 dialog。',
+            '200907a',
+            'RD修復-上一頁、下一頁。因為主畫面換為交錯式而出現的。',
+            'RD修復-事件Base判斷，Array與JSON判斷是錯的，要用DeepEqual，而非直接等於。',
+            'RD-使用 changed$事件時，可能static還沒初始化好，因此放在 setTimeout 中最保險。',
+            '優化-click event 若功能沒展開，則不要一直取api(降低負荷)。',
+            'RD修復-原本的 EventTool 加上 multicast, 可多人等候。不然上述功能切換只能一個成功。(https://youtu.be/3uuPN9BDyho)',
+            '重構-click event 換為統一的事件方式(與LocalStorageBase的)。',
+        ]
+    }, {
+        na: '200821d_',
+        na2: [
+            '搜尋功能優化 <a href="/NUI/200821a_rwd/" target="_blank">200821a,b,c,d</a>',
+            '200821a_ReferenceDialog 可切換版本',
+            '200821b_SearchDialog 切換版本改用 dialog',
+            '200821c_原文彙編Dialog 切換版本改用 dialog',
+            '200821d_Reference Dialog 顯示, 使用 padding-left 與 text-indent.',
+        ]
+    }, {
+        na: '200820d_',
+        na2: [
+            '搜尋功能優化 <a href="/NUI/200820a_rwd/" target="_blank">200820a,b,c,d</a>',
+            '(RD)新增-仿qunits。/#/qunit/',
+            '(RD)重構-注釋顯示。用dtexts-render 取代原來的 com-text InfoDialogComponent',
+            '(RD)說明文件(注釋開發)- https://youtu.be/K7ehx-0czG0',
+            'b',
+            '(RD)移除-DialogRefOpenor DialogOrigDictOpenor DialogSnDictOpenor InfoDialogComponent ComTextComponent',
+            'c',
+            '優化-注釋間格。比較美，不會太擠。',
+            'd',
+            '新增-注釋原文字典。SNH00021、SNG00021、H0021、G0021都可以用。',
+        ]
+    }, {
+        na: '200806c_搜尋功能-原文字典排版優化',
+        na2: [
+            '搜尋功能優化 <a href="/NUI/200806a_rwd/" target="_blank">200806c(毀損)</a>',
+            '優化-CBOL 中文、英文、新約、舊約的排版，已經按 ol li 方式產生. (dtexts-rendor-components, 且用到遞迴)',
+            'b,',
+            '優化-搜尋後,多了 close 鈕按, (iphone手機沒有返回前頁的功能,若填滿沒地方好按掉,也沒esc鍵好用)',
+            '優化-原文字典查詢後,能按上一個、下一個原文.(也方便測試)',
+            '優化-預設聖經版本,當載入時,沒版本的時候',
+            '優化-預設載入第1個節的注釋相關內容,當載入時,沒版本的時候.',
+            'c,',
+            '重構,共用 - parsing 與 搜尋共用.(DialogSnDictOpenor DialogOrigDictOpenor 預備被拿掉)',
+            '重構,共用 - 串珠 與 搜尋共用. (DialogRefOpenor 預備被拿掉)',
+            '重構,共用 - 經文主體、顯示部分 與 搜尋共用. (DialogRefOpenor DialogOrigDictOpenor)',
+            '新增-下一章、上一章.',
+        ]
+    }, {
+        na: '200730b_搜尋功能,原文彙編',
+        na2: [
+            '搜尋功能優化 <a href="/NUI/200730a_rwd/" target="_blank">200730a</a>',
+            'Bug-修正, 查詢預設版本無效.(因為localStorage若不存在是回傳null, 不是 undefined)',
+            '新增-上色開關, 在作pptx的時候,若查詢關鍵字被上色很麻煩',
+            '新增-Reference版本, 查詢聖經版本設定後, Reference應該也要連動用那個版本',
+            'BUG-修正, 手機版本,會把右邊功能按鈕擠掉, 按不到, 因為input太寬了. (手機版, 設8em, 以 iphon se)',
+            '新增-Reference時, 當想此Ref的注釋,原文,地圖等等, 有「切換網址」就不用手動輸入了. ',
+            'BUG-修正 查詢G81, 然後再按 彼前2:17,5:9 會錯. (原因, qsb api 跨章要用;來取代,即可) ',
+            '新增-原文彙編, 原文查詢後, 可再查彙編. (書卷統計可與keyword查詢共用)',
+            '(RD)-原文彙編, 上色時, sn雖是85, 但經文是085, 所以會沒上到, 注意.',
+            '(RD)-原文彙編, 版本清單,要支援sn的,所以要另外一個全域變數,供sn用.(和合本2010其實有,但不全都有)',
+            'BUG-修正, 搜尋輸入 版本不知道為何不見了.(因為.ts改變數名稱,但html沒同步改)',
+            'BUG-修正, 搜尋輸入 林後2, 按下「切換網址」卻跑到 http://bible.fhl.net/#/bible/林後2, 應該要到 bible.fhl.net/NUI/200730a_rwd/#/bible/林後2 (加上window.location.pathname 指向 html 的路徑)',
+        ]
+    }, {
+        na: '200729a_搜尋功能-加上書卷分類',
+        na2: [
+            '搜尋功能優化 <a href="/NUI/200729a_rwd/" target="_blank">200729a</a>',
+            '搜尋關鍵字後, 可以有書卷分類',
+            'Bug-修正, 手機版查詢後, 拉到底會被遮住(讓它不換行)',
+            'Bug-修正, 查詢後, 若0筆, 或不正確, api 會回傳 null, 造成錯誤.',
+            'Bug-修正, 查詢後, 分類0筆還是顯示, 拿掉它.',
+            'Bug-修正, 查詢後, 若0筆, 什麼都不顯示, 就不能「設定」了, (data.length!==0拿掉)',
+        ]
+    }, {
+        na: '200727a_搜尋功能',
+        na2: [
+            '新增 - 搜尋功能 <a href="/NUI/200727a_rwd/" target="_blank">200727a</a>', '可搜尋關鍵字, 原文字典, 參考經文', '原文字典包含了 浸宣 與 CBOL 版內容'
+        ]
+    }, {
+        na: '200619b_浸宣舊約原文字典上線',
+        na2: [
+            '新增 - 浸宣舊約原文字典上線.', '(Bug) 地圖、相片會出不來，先拿掉。 #平板', '(Bug) 切換書卷章節不正常。 #平板', '(Bug修復) - 舊約Sn Click正確。'
+        ]
+    }, {
+        na: '200619a_高度自動對齊',
+        na2: ['高度自動對齊, 當視窗改變, 版本數量改變, Sn開關改變, 手機旋轉, 都會重新計算', '(RD) 新增了 EventVerseChanged, 這個可以任何地方使用 left right 開啟/關閉 事件.', '(RD) 新增了 EventVersionsChanged, 可任何地方使用 versions changed', '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個', '(RD) 新增了 EventWindowSizeChanged, 可任何地方使用, 手機旋轉也會觸發這個', '(RD技術) 原生訊息, 要透過 fromEvent 才能夠有一個以上訂閱. 例 window resize', '(RD技術) debounceTime 不錯, 若訊息異常密集, 可以用這個, 100ms 內, 只允許一個.']
+    }, {
+        na: '200611a_高度計算case都對',
+        na2: [
+            '',
+            '(RD) 高度計算case都對了, HeightCalc class 為核心.',
+            '(RD) 這個很複雜, 使用了 unit test 方式開發.',
+            '(RD) linq_sum linq_max 新增.',
+            '(RD) 還有統一了 linq_xxx 命名方式.',
+            '(RD) address 可以 less than; greater than.',
+        ],
+    }, {
+        na: '200608a_原文直譯參考',
+        na2: [
+            '原文直譯版本已完成',
+            '(RD) 文字有換行符號, 換行\\r\\n 版本',
+            '(RD) (原文3:1) 就是內容, 不用 parsing',
+            '(RD) 有全型小括號、半型小括號 兩種',
+        ],
+    }, {
+        na: '200606a_Bug_經文點擊後,工具跳至對應節失效',
+        na2: [
+            '已修復',
+            '(RD) 重構 VerseAddress 與 DAddress 時造成的.',
+        ],
+    }, {
+        na: '200605a_新譯本',
+        na2: [
+            '標題處理/括號處理/併入上節/標題後換行/參考經文',
+            '可從 <a href="/NUI/_rwd/#/bible/Ps1:1.3:1-2.14:1.16:9.18:1.Mr14:3.16:1.Lu1:74-75">體會</a>',
+            '(RD) 括號較麻煩的是處理到雙層括號',
+            '(RD) 新譯本的參考，特別處, 是用~, 不是用-, 是用；。，, 不是用;, 有時會加「參」這個字',
+        ],
+    }, {
+        na: '200604c_和合本全型小括號',
+        na2: [
+            '可能是（或譯），也可能是標題（詩篇）',
+            '可從 <a href="/NUI/_rwd/#/bible/Ps8:6-9.60:1-2.92:1-4.Ps8:8">體會</a>'
+        ],
+    }, {
+        na: '200604b_和合本_併入上節',
+        na2: [
+            '如詩篇8就可以看到',
+            '(RD) 經文內容為 \'a\' 時',
+        ],
+    }, {
+        na: '200604a_重構_經文轉換',
+        na2: [
+            '(RD) 轉換一致用 DText class, DOneLine class ',
+            '(RD) 任何轉換都是一個 IAddBase interface ',
+        ],
+    }, {
+        na: '200603d_重構_砍碼_去掉cbol-dict_抽出info-dialog',
+        na2: [
+            '對使用者無變化.',
+            '(RD) 相關 class 移除 cbol-dict class',
+            '(RD) 相關 class 抽出 info-dialog',
+        ],
+    }, {
+        na: '200603c_重構_砍碼_addr統一_去掉起初動態元件',
+        na2: [
+            '對使用者無變化.',
+            '(RD) 將VerseAddress統一為 DAddress, 因此 DAddress 多了 ver?.',
+            '(RD) 最初動態產生概念不需要.',
+            '(RD) 相關 class 移除 one-chap one-verse show-base 相關',
+        ],
+    }, {
+        na: '200603b_Bug_Sn非純數字時',
+        na2: [
+            'SN若是 5608a 會錯, 因為原本假設是純數字. #羅5;6|會正常',
+            '承上, 例子為 #Mt6:8.6:18.14:1.Ro9:27|',
+        ],
+        img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipM1qQ5ktZonwZ-s-USlKwfwmSsJMbL8QLMS2LoH'
+    }, {
+        na: '200603a_Bug_Ro5無法顯示',
+        na2: [
+            '看#羅5|,會沒畫面,#羅5;6|會正常',
+            '(RD) 因為sobj.php 沒資料時, 沒作保護.',
+            '(RD) 重構新增 AddMapPhotoInfo class',
+            '(RD) 之前為測試,bkbible較慢,把其引到bible domain,但 sbdag 會有 cross-origin 問題, 因此此api維持在 bkbible(若是在 bkbible測試時, 當然,若在bible就還是bible domain) ',
+        ],
 
-    },
-    {
-      na: '200530a_章節描述end或e',
-      na2: [
-        '經文連結,可輸入 1:5-end 或 1:5-e 或 1:1-2:end 或 1:1-2:e',
-        '(RD)承上, 關鍵 class SmartDescriptEndParsing',
-        '(RD)若是bkbible, api 會到 bible 而非相對路徑',
-        '(RD)承上,因為開發上傳後測試,需一段時間才能用bible.fhl.net測試',
-      ],
-      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipNyMUcNaHzcjVKg378J2nLMLSo2ypZZXHKrEVIl',
-    },
-    {
-      na: '200529a_點擊節_工具隨著變',
-      na2: ['點擊經文時,串珠,原文解析,註釋會跳至點擊的節', '如示意圖所示', '新增版本清單列表'],
-      img: 'https://photos.google.com/share/AF1QipMUkD8PbUam8ix8qOYptdODtcFJjxU9l2J6YVX-aSrk9pIjCTJP7vXb2PYfbUPFnA/photo/AF1QipOLyoWfJqwFsP3F4nBthHis1EnglEsjis6YougY?key=RGdBMUoyRzc0T2Flb2JUOW5YRm03WmZKRHFaOGlR',
-    },
-    {
-      na: '200528a_Sn_地理_相片開關',
-      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipMTRckQ-oKExJrilBGMe-G44O4C60eEewy_FWxs',
-    },
-    {
-      na: '200527a_顯示不換行_交錯_前後',
-      na2: ['整段顯示方式', '交錯顏色', '經文位置顯示在前或在後(但還沒開放設定)'],
-      img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipPtNcrKa8WpxUzG13CY8rHvSB5yKOkdM6aDXTI6',
-    },
-    {
-      na: '200522a_地圖相片marker',
-      na2: ['地圖/相片的marker', '(RD)使用 background image 好處: 複製經文時不會複製到圖唷!!!'],
-    },
-    {
-      na: '200521c_一版本經文顯示',
-      na2: ['可顯示SN', '(RD)取得 qsb api 結果, parsing 經文與SN.', '(RD)one-ver-component']
-    },
-  ];
+    }, {
+        na: '200530a_章節描述end或e',
+        na2: [
+            '經文連結,可輸入 1:5-end 或 1:5-e 或 1:1-2:end 或 1:1-2:e',
+            '(RD)承上, 關鍵 class SmartDescriptEndParsing',
+            '(RD)若是bkbible, api 會到 bible 而非相對路徑',
+            '(RD)承上,因為開發上傳後測試,需一段時間才能用bible.fhl.net測試',
+        ],
+        img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipNyMUcNaHzcjVKg378J2nLMLSo2ypZZXHKrEVIl',
+    }, {
+        na: '200529a_點擊節_工具隨著變',
+        na2: ['點擊經文時,串珠,原文解析,註釋會跳至點擊的節', '如示意圖所示', '新增版本清單列表'],
+        img: 'https://photos.google.com/share/AF1QipMUkD8PbUam8ix8qOYptdODtcFJjxU9l2J6YVX-aSrk9pIjCTJP7vXb2PYfbUPFnA/photo/AF1QipOLyoWfJqwFsP3F4nBthHis1EnglEsjis6YougY?key=RGdBMUoyRzc0T2Flb2JUOW5YRm03WmZKRHFaOGlR',
+    }, {
+        na: '200528a_Sn_地理_相片開關',
+        img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipMTRckQ-oKExJrilBGMe-G44O4C60eEewy_FWxs',
+    }, {
+        na: '200527a_顯示不換行_交錯_前後',
+        na2: ['整段顯示方式', '交錯顏色', '經文位置顯示在前或在後(但還沒開放設定)'],
+        img: 'https://photos.google.com/album/AF1QipNcOo9KfTVF1bKt1vAzAWxoVay7e15D6HYKFve8/photo/AF1QipPtNcrKa8WpxUzG13CY8rHvSB5yKOkdM6aDXTI6',
+    }, {
+        na: '200522a_地圖相片marker',
+        na2: ['地圖/相片的marker', '(RD)使用 background image 好處: 複製經文時不會複製到圖唷!!!'],
+    }, {
+        na: '200521c_一版本經文顯示',
+        na2: ['可顯示SN', '(RD)取得 qsb api 結果, parsing 經文與SN.', '(RD)one-ver-component']
+    }, ];
 </script>
 
 </html>

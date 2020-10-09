@@ -1,4 +1,4 @@
-import { ApiQsb, QsbArgs, OneQsbRecord } from 'src/app/fhl-api/ApiQsb';
+import { ApiQsb, DQsbArgs, DOneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { AddMapPhotoInfo } from './AddMapPhotoInfo';
@@ -68,7 +68,7 @@ export class BibleTextOneVersionQuery {
 
   private async getTextFromApi(verses: VerseRange, ver: string) {
     const qstr = verses.toStringChineseShort();
-    const arg: QsbArgs = {
+    const arg: DQsbArgs = {
       qstr,
       bibleVersion: ver,
       isExistStrong: true,

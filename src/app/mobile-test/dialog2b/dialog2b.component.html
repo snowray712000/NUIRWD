@@ -1,0 +1,10 @@
+<p>dialog2b works!</p>
+<div>進度列 <span>{{percent}}</span></div>
+<div>訊息 <span>{{msg}}</span></div>
+<button (click)="onCancel()">取消</button><button (click)="onPause()">中止</button>
+
+<div>
+  <div *ngFor="let it1 of data; let i1=index">
+    {{i1}} <span>{{it1}}</span>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 import * as LQ from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { IsVersionVisiableManager } from '../IsVersionVisiableManager';
 import { DisplayFormatSetting } from './DisplayFormatSetting';

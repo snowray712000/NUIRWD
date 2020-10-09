@@ -2,14 +2,18 @@ import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { IOrigDictGetter } from './search-result-dialog.component';
 import { OrigDictCBOLApiGetter } from './OrigDictCBOLApiGetter';
 import { map } from 'rxjs/operators';
-import { ApiSd } from 'src/app/fhl-api/ApiSd';
-import { DApiSdRecord } from 'src/app/fhl-api/DApiSdResult';
+import { ApiSd } from 'src/app/fhl-api/Orig/ApiSd';
+import { DApiSdRecord } from 'src/app/fhl-api/Orig/DApiSdResult';
 import { OrigDictTwcbApiGetter } from './OrigDictTwcbApiGetter';
 
 export class OrigDictGetter implements IOrigDictGetter {
   async mainAsync(arg: { sn: string; isOld?: 0 | 1; }): Promise<DText[]> {
-    const re1 = await getDataAsync();
-    return re1;
+    try {
+      const re1 = await getDataAsync();
+      return re1;
+    } catch {
+      return [{ w: 'API OrigDict 錯誤' }];
+    }
 
     async function getDataAsync() {
       const reCBOL = new OrigDictCBOLApiGetter().mainAsync(arg);

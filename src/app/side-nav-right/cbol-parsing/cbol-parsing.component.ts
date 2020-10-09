@@ -1,3 +1,4 @@
+import * as LQ from 'linq';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
@@ -17,7 +18,6 @@ import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
 import { TextWithSnConvertor } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { linq_first } from 'src/app/linq-like/linq_first';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
@@ -78,7 +78,7 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     }
 
     // console.log(this.words); // [{wid,word,sn,exp,orig,pro,wform} ]
-    const r1 = linq_first(this.words, a1 => a1.wid === arg.wid);
+    const r1 = LQ.from(this.words).firstOrDefault(a1 => a1.wid === arg.wid);
 
     const fn1 = (a2: string) => a2 !== undefined ? a2 : '';
     const pro = fn1(r1.pro);

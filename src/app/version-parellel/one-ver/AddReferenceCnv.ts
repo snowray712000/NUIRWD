@@ -1,3 +1,4 @@
+import * as LQ from 'linq';
 import { IAddBase, DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
@@ -5,7 +6,6 @@ import { deepCopy } from 'src/app/tools/deepCopy';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { first } from 'rxjs/operators';
-import { linq_first } from 'src/app/linq-like/linq_first';
 
 export class AddReferenceCnv implements IAddBase {
   private static reg1: RegExp;
@@ -70,7 +70,7 @@ export class AddReferenceCnv implements IAddBase {
     str = str.replace(/~/g, '-');
 
     // 沒有書卷的, 要在此加 ;
-    const na = BibleBookNames.getBookName(linq_first(addrs.verses).book, BookNameLang.太);
+    const na = BibleBookNames.getBookName(LQ.from(addrs.verses).first().book, BookNameLang.太);
     // console.log(str);
     const r2 = new SplitStringByRegexVer2().main(str, AddReferenceCnv.reg2);
     // console.log(r2);

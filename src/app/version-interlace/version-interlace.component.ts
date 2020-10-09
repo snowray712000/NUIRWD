@@ -10,7 +10,7 @@ import * as LQ from 'linq';
 import { of, Observable, observable } from 'rxjs';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SearchResultDialogComponent, DSearchData } from '../rwd-frameset/search-result-dialog/search-result-dialog.component';
 import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameLang } from '../const/book-name/BookNameLang';
@@ -25,7 +25,7 @@ import { cvt_unv } from '../bible-text-convertor/unv';
 import { cvt_kjv } from '../bible-text-convertor/kjv';
 import { cvt_ncv } from '../bible-text-convertor/cvt_ncv';
 import { cvt_cbol } from '../bible-text-convertor/cvt_cbol';
-import { QsbArgs, ApiQsb } from '../fhl-api/ApiQsb';
+import { DQsbArgs, ApiQsb } from '../fhl-api/ApiQsb';
 
 
 export interface DArgsDatasQueryor { addresses: VerseRange; versions: string[]; }
@@ -168,7 +168,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
         return {
           async qDataAsync(ver, gb) {
             const qstr = args.addresses.toStringChineseShort();
-            const arg: QsbArgs = {
+            const arg: DQsbArgs = {
               qstr,
               bibleVersion: ver,
               isExistStrong: true,

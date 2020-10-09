@@ -1,13 +1,12 @@
 import { DialogDisplaySettingComponent } from './rwd-frameset/dialog-display-setting/dialog-display-setting.component';
-import { MatInputModule } from '@angular/material';
+import { MatInputModule } from '@angular/material/input';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule, Injector, Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { FlexLayoutModule } from '@angular/flex-layout';
+// import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
@@ -46,7 +45,9 @@ import { VersionSelectorComponent } from './version-selector/version-selector.co
 import { DTextsRendorComponent } from './rwd-frameset/dtexts-rendor/dtexts-rendor.component';
 import { DlinesRendorComponent } from './rwd-frameset/dlines-rendor/dlines-rendor.component';
 import { MobileTestComponent } from './mobile-test/mobile-test.component';
-const entryComponents = new Array<any>(
+import { Dialog2bComponent } from './mobile-test/dialog2b/dialog2b.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+const entryComponents = [
   BibleSelectionsComponent,
   // InfoDialogComponent,
   SearchResultDialogComponent,
@@ -55,13 +56,13 @@ const entryComponents = new Array<any>(
   DialogDisplaySettingComponent,
   DlinesRendorComponent,
   MobileTestComponent,
-);
+  Dialog2bComponent,
+];
 
 
 @NgModule({
-  declarations: new Array<any>(
-    AppComponent,
-    VersionParellelComponent,
+  declarations: [
+    AppComponent,   
     VersionInterlaceComponent,
     RwdFramesetComponent,
     SideNavLeftComponent,
@@ -82,11 +83,12 @@ const entryComponents = new Array<any>(
     DialogDisplaySettingComponent,
     DlinesRendorComponent,
     MobileTestComponent,
-  ),
+    Dialog2bComponent,
+  ],
   entryComponents,
   imports: [
     BrowserModule,
-    FlexLayoutModule,
+    // FlexLayoutModule, 新版不相容，目前沒用到，也還解決，所以先ｍａｒｋ起來。
     // import http after browser
     HttpClientModule,
     AppRoutingModule,
@@ -110,6 +112,7 @@ const entryComponents = new Array<any>(
     MatSnackBarModule,
     MatSelectModule,
     MatInputModule,
+    MatProgressBarModule,
   ],
   providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],

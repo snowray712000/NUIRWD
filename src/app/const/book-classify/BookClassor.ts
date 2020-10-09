@@ -14,7 +14,7 @@ export class BookClassor {
       const alls: DOneBookClassor[] = [];
       alls.push(({ name: '全部', books: LQ.range(1, 66).toArray() }));
       alls.push(({ name: '舊約', books: LQ.range(1, 39).toArray() }));
-      alls.push(({ name: '新約', books: LQ.range(40, 66).toArray() }));
+      alls.push(({ name: '新約', books: LQ.range(40, 27).toArray() }));
       alls.push(({ name: '摩西五經', books: LQ.range(1, 5).toArray() }));
       alls.push(({ name: '歷史書', books: LQ.range(6, 12).toArray() }));
       alls.push(({ name: '詩歌智慧書', books: LQ.range(18, 5).toArray() }));

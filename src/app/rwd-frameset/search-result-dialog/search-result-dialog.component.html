@@ -5,24 +5,18 @@
       <span *ngIf="data!==undefined">
         <!-- 統計結果 -->
         <span>
-          <mat-tab-group>
+          <mat-tab-group #mattabkeywordsearch>
             <mat-tab label="分類">
-              <div style="line-height: 1.5em;white-space: nowrap;">
-                <span *ngFor="let it1 of dataCountClassor; let i1=index">
-                  <span *ngIf="i1!==0">,</span>
-                  <span class='classor' [class.classor-selected]="searchFilter===it1.name"
-                    (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
-                </span>
-              </div>
+              <button *ngFor="let it1 of dataCountClassor; let i1=index" (click)="onClickSearchFilter(it1)">
+                <span class='classor'
+                  [class.classor-selected]="searchFilter===it1.name">{{it1.name}}</span><span>{{it1.count?it1.count:'?'}}</span>
+              </button>
             </mat-tab>
             <mat-tab label="書卷">
-              <div style="line-height: 1.5em;white-space: nowrap;">
-                <span *ngFor="let it1 of dataCountBook; let i1=index">
-                  <span *ngIf="i1!==0">,</span>
-                  <span class='classor' [class.classor-selected]="searchFilter===it1.name"
-                    (click)="onClickSearchFilter(it1)">{{it1.name}}</span><span>({{it1.count}})</span>
-                </span>
-              </div>
+              <button *ngFor="let it1 of dataCountBook; let i1=index" (click)="onClickSearchFilter(it1)">
+                <span class='classor'
+                  [class.classor-selected]="searchFilter===it1.name">{{it1.name}}</span><span>{{it1.count?it1.count:'?'}}</span>
+              </button>
             </mat-tab>
 
             <mat-tab label="設定">
@@ -58,7 +52,7 @@
     <span *ngIf="typeFunction==='orig-collection'">
       <!-- 原文彙編 統計結果 -->
       <span>
-        <mat-tab-group>
+        <mat-tab-group #mattabkeywordsearch>
           <!-- 原文彙編 統計結果 分類 -->
           <mat-tab label="分類">
             <div style="line-height: 1.5em;white-space: nowrap;">
@@ -105,5 +99,6 @@
   </mat-dialog-content>
   <div mat-dialog-actions>
     <button mat-button (click)="dialogRef.close()">Close</button>
+    <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
   </div>
 </div>

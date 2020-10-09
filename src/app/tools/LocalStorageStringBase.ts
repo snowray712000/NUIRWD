@@ -29,6 +29,12 @@ export abstract class LocalStorageStringBase {
       this.curValue = a1;
     }
   }
+  getValue(): string {
+    if (this.curValue === undefined) {
+      this.getFromLocalStorage();
+    }
+    return this.curValue;
+  }
 
   getFromLocalStorage() {
     this.curValue = StorageTools.getStringSafely(this._getKey());

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, RouterState } from '@angular/router';
-import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { RwdFramesetComponent } from './rwd-frameset/rwd-frameset.component';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
@@ -15,8 +14,8 @@ import { MobileTestComponent } from './mobile-test/mobile-test.component';
 
 // Ref: 為何用 hash # 舊方法, 而不用新方法, https://blog.csdn.net/gaomingyangc/article/details/79756564
 // 因為, refresh 後, 會 404, 除非去改 server 端.
-// const urlDefault = 'bible/Ro1:1-5.創3:1';
-const urlDefault = 'mobile/Ro1:1-5.創3:1';
+const urlDefault = 'bible/Ro1:1-5.創3:1';
+// const urlDefault = 'mobile/Ro1:1-5.創3:1';
 // const urlDefault = 'edit/q=sdf';
 // const urlDefault = 'qunit/';
 // const urlDefault = 'bible/Ro1:1-2,3-5,2:1-3:1.太3:1', pathMatch: 'full'; // qsb-api 還沒修好
@@ -26,6 +25,7 @@ const routes: Routes = [
   { path: 'bible/:description', component: RwdFramesetComponent },
   // { path: 'bible/:description', component: VersionSelectorComponent },
   { path: 'edit/:description', component: EditComponent },
+  { path: 'edit', redirectTo: 'edit/' },
   { path: 'mobile/:description', component: MobileTestComponent },
   { path: 'qunit/:description', component: QunitsComponent },
   { path: 'qunit', redirectTo: 'qunit/' },

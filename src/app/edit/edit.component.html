@@ -1,5 +1,5 @@
-<mat-label (click)="onClickToggle()">{{getToggleText()}}</mat-label>
-<form class="example-form" style="width: 100%;" *ngIf="isVisibleInput">
+<button (click)="onClickToggle()">{{getToggleText()}}</button>
+<form class="example-form" style="width: 100%;" *ngIf="isEdit">
   <mat-form-field class="example-full-width" style="width: 100%;">
     <!-- <mat-label>輸入資料</mat-label> -->
     <textarea #textInput matInput placeholder="● 參照 G2342 、 H23" (keydown)="onKeydown($event)"
@@ -7,7 +7,8 @@
   </mat-form-field>
 </form>
 
-<div *ngIf="!isVisibleInput">
-  <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
-  </app-dtexts-rendor>
+<div *ngIf="!isEdit">
+  <app-dlines-rendor [datas]="data"></app-dlines-rendor>
+  <!-- <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
+  </app-dtexts-rendor> -->
 </div>

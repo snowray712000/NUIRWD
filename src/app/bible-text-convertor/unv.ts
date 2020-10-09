@@ -5,7 +5,7 @@ import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
 import { AddSnInfo } from '../version-parellel/one-ver/AddSnInfo';
 import { AddMapPhotoInfo } from '../version-parellel/one-ver/AddMapPhotoInfo';
-import * as LQ from "linq";
+import * as LQ from 'linq';
 
 /**
  * 和合本
@@ -49,4 +49,17 @@ export function cvt_unv(data: DOneLine[], settings: { verses: VerseRange, isMapP
   }
 }
 
+/**
+ * 使其能夠有進度列, 並且能中斷. 並且不會凍結
+ * 合併上節處理, 必須
+*/
+export async function cvt_unvAsync(
+  data: DOneLine[],
+  settings: {
+    verses: VerseRange,
+    isMapPhotoInfo?: 0 | 1,
+    isSnExist?: 1 | 0,
+    sn?: string
+  }) {
 
+}

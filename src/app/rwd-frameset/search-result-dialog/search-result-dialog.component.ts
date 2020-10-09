@@ -1,25 +1,21 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
+import { BookNameConstants } from './../../const/book-name/BookNameConstants';
+import { DSeApiRecord } from './searchAllIndexViaSeApiAsync';
+import { DProgressInfo, EventTool } from './../../tools/EventTool';
+import { Component, OnInit, Inject, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
-import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
-import { AddSnInfo } from 'src/app/version-parellel/one-ver/AddSnInfo';
-import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { DialogSearchResultOpenor } from './DialogSearchResultOpenor';
-import { OrigDictQueryor } from 'src/app/side-nav-right/info-dialog/OrigDictQueryor';
-import { ajax } from 'rxjs/ajax';
-import { map } from 'rxjs/operators';
-import { linq_distinct } from 'src/app/linq-like/linq_distinct';
+
 import * as LQ from 'linq';
 import { OrigDictGetter } from './OrigDictGetter';
 import { ReferenceGetter } from './ReferenceGetter';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';
 import { KeywordSearchGetter } from './KeywordSearchGetter';
 import { BookClassor, DOneBookClassor } from 'src/app/const/book-classify/BookClassor';
-import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
-import { DAbvResult } from "src/app/fhl-api/BibleVersion/DAbvResult";
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { OrigCollectionGetter } from './OrigCollectionGetter';
@@ -28,6 +24,9 @@ import { VerForSearch } from '../settings/VerForSearch';
 import { VerForSnSearch } from '../settings/VerForSnSearch';
 import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
+import { MatTabGroup } from '@angular/material/tabs';
+import { MatProgressBar } from "@angular/material/progress-bar";
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-search-result-dialog',
   templateUrl: './search-result-dialog.component.html',
@@ -51,10 +50,14 @@ export class SearchResultDialogComponent implements OnInit {
   isEnableColorKeyword: 0 | 1 = 1;
   bibleVersionsSn: { nameShow: string; name: string; }[];
   typeFunction: 'orig-dict' | 'orig-collection' | 'keyword' | 'reference';
+  @ViewChild('mattabkeywordsearch', { static: false }) mattabkeywordsearch: MatTabGroup;
+  progressValue: number;
+
+  filterSetter: { setFilterAsync: (books: number[]) => Promise<void>; };
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) { }
   ngOnInit() {
-    this.initVersionsAsync().then(rre => {
+    this.initVersionsAsync().then(() => {
       this.isEnableColorKeyword = IsColorKeyword.s.getFromLocalStorage() ? 1 : 0;
       this.determineTypeFunction();
 
@@ -108,31 +111,92 @@ export class SearchResultDialogComponent implements OnInit {
     }
     return r1[0];
   }
-  queryOrigCollection() {
-    const origQ: IOrigCollectionGetter = new OrigCollectionGetter();
-    // tslint:disable-next-line: max-line-length
-    origQ.mainAsync({ orig: this.getKeyword(), version: this.bibleVersionSnSelected, bookDefault: this.getDefaultAddress().book }).then(a1 => {
-      this.data = a1;
-      this.statisticsKeywordClassor();
-      this.changeDetector.markForCheck();
-    });
-    return;
 
-  }
   queryReference() {
     const refQ: IReferenceGetter = new ReferenceGetter();
     refQ.mainAsync({ reference: this.getKeyword(), version: this.bibleVersionSelected }).then(a1 => {
       this.data = a1;
       this.changeDetector.markForCheck();
     });
+
+  }
+  queryOrigCollection() {
+    const origQ = new OrigCollectionGetter();
+    this.filterSetter = origQ;
+    this.bindCollectionEvent({
+      step1IndexFindor$: origQ.step1IndexFindor$,
+      step2BibleTextGettor$: origQ.step2BibleTextGettor$,
+      step3FilterChanged$: origQ.step3FilterChanged$,
+      recordsOfApi() { return origQ.records; },
+      datas() { return origQ.datas; },
+      setFilterAsync(a1) { origQ.setFilterAsync(a1); },
+    });
+
+    const version = this.bibleVersionSnSelected;
+    const bookDefault = this.getDefaultAddress().book;
+    origQ.mainAsync({ orig: this.getKeyword(), version, bookDefault });
+  }
+  /**
+   * 重構出來, 同時供 keyword 與 orig 彙編使用.
+   * 共同點. 都3步驟(找index,取bibletext,setFilter). 都需 datas(), records(), setFilter() 函式
+  */
+  bindCollectionEvent(searchQ: {
+    step1IndexFindor$: Observable<DProgressInfo>;
+    step2BibleTextGettor$: Observable<DProgressInfo>;
+    step3FilterChanged$: Observable<DProgressInfo>;
+    recordsOfApi(): DSeApiRecord[];
+    datas(): DOneLine[];
+    setFilterAsync(books: number[]);
+  }) {
+    const pthis = this;
+    searchQ.step3FilterChanged$.subscribe({
+      next(processInfo) {
+        pthis.data = searchQ.datas();
+        pthis.progressValue = processInfo.progress;
+        pthis.changeDetector.markForCheck();
+      },
+    });
+    searchQ.step1IndexFindor$.subscribe({
+      next(processInfo) {
+        pthis.progressValue = processInfo.progress;
+      }, error(err) {
+      }, complete() {
+        const r1 = searchQ.recordsOfApi();
+        pthis.statisticsKeywordClassor2(r1);
+        // console.log(pthis.dataCountClassor);
+        // console.log(pthis.dataCountBook);
+        pthis.setGroupTabSearchToSuggest();
+        pthis.changeDetector.markForCheck();
+      }
+    });
+    searchQ.step2BibleTextGettor$.subscribe({
+      next(processInfo) {
+        pthis.progressValue = processInfo.progress;
+      }, error(err) {
+      }, complete() {
+        searchQ.setFilterAsync(pthis.getBooksOfClassorOrBook());
+      }
+    });
+
   }
   queryKeyword() {
-    const searchQ: IKeywordSearchGetter = new KeywordSearchGetter();
-    searchQ.mainAsync({ keyword: this.getKeyword(), version: this.bibleVersionSelected }).then(a1 => {
-      this.data = a1;
-      this.statisticsKeywordClassor();
-      this.changeDetector.markForCheck();
+    const pthis = this;
+
+    // reset
+    pthis.data = [];
+    this.statisticsKeywordClassorDefault();
+    const searchQ = new KeywordSearchGetter();
+    this.filterSetter = searchQ;
+    this.bindCollectionEvent({
+      step1IndexFindor$: searchQ.eventStep1VerseQuery$,
+      step2BibleTextGettor$: searchQ.eventStep2BibleTextQuery$,
+      step3FilterChanged$: searchQ.eventStep3DataToLines$,
+      recordsOfApi: () => searchQ.recordsOfApi,
+      datas: () => searchQ.datas,
+      setFilterAsync: (a1) => searchQ.setFilterAsync(a1),
     });
+    const version = VerForSearch.s.getValue();
+    searchQ.mainAsync({ keyword: this.getKeyword(), version });
   }
   getIsOrig() {
     return /G|H[\da-z]+/i.test(this.getKeyword());
@@ -271,22 +335,23 @@ export class SearchResultDialogComponent implements OnInit {
   onClickSearchFilter(a1: DOneBookClassor) {
     if (this.searchFilter !== a1.name) {
       this.searchFilter = a1.name;
+      this.filterSetter.setFilterAsync(this.getBooksOfClassorOrBook());
     }
   }
   /** html 中使用, 當 keyword 功能時, 要再依使用者選擇的過濾方式查詢 */
   getDataRender() {
 
-    if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-collection') {
-      if (this.searchFilter === '全部') {
-        return this.data;
-      }
+    // if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-collection') {
+    //   if (this.searchFilter === '全部') {
+    //     return this.data;
+    //   }
 
-      const books = LQ.from(new BookClassor().getClassorsBooks(this.searchFilter));
-      return LQ.from(this.data).where(a1 => {
-        const r1 = a1.addresses.verses[0];
-        return books.contains(r1.book);
-      }).toArray();
-    }
+    //   const books = LQ.from(new BookClassor().getClassorsBooks(this.searchFilter));
+    //   return LQ.from(this.data).where(a1 => {
+    //     const r1 = a1.addresses.verses[0];
+    //     return books.contains(r1.book);
+    //   }).toArray();
+    // }
 
     return this.data;
   }
@@ -335,13 +400,99 @@ export class SearchResultDialogComponent implements OnInit {
     return r5;
   }
 
+  private statisticsKeywordClassorDefault() {
+    // 分類
+    const r1 = new BookClassor().getAllClassors();
+    this.dataCountClassor = LQ.from(r1).select(a1 => ({ name: a1.name }) as DKeywordClassor).toArray();
+
+    // 書卷
+    const r2 = LQ.range(1, 66).select(bk => (BibleBookNames.getBookName(bk, BookNameLang.太))).toArray();
+    this.dataCountBook = LQ.from(r2).select(a1 => ({ name: a1 }) as DKeywordClassor).toArray();
+  }
+
+
+  /**
+   * 通常 statisticsKeywordClassor2() 呼叫後呼叫, 會自動依搜尋結果的數量, 來決定目前 filter 是什麼 (愈小範圍愈好,但數量10以上)
+   * 會設定 mattabkeywordsearch.selectedIndex 及 searchFilter
+   */
+  private setGroupTabSearchToSuggest() {
+    const pthis = this;
+
+    // 先判定'是否為書卷' (此卷,且數量大於10筆)
+    const rrr1 = tryGetInBook();
+    if (rrr1 !== undefined) {
+      pthis.mattabkeywordsearch.selectedIndex = 1;
+      pthis.searchFilter = rrr1;
+    } else {
+      const rrr2 = tryGetInClassor();
+      pthis.mattabkeywordsearch.selectedIndex = 0;
+      pthis.searchFilter = rrr2;
+    }
+    return;
+    /** 不存在, undefined, 存在 回傳'羅' */
+    function tryGetInBook() {
+      const rr1 = pthis.getDefaultAddress().book;
+      const rr2 = BibleBookNames.getBookName(rr1, BookNameLang.太);
+      const rr3 = LQ.from(pthis.dataCountBook).firstOrDefault(a1 => a1.count > 9 && a1.name === rr2);
+      return rr3 !== undefined ? rr3.name : undefined;
+    }
+    function tryGetInClassor() {
+      const rr1 = new SearchClassorOrderGetter().main(pthis.getDefaultAddress().book);
+      const rr1b = LQ.from(rr1).skip(1).select(a1 => a1.name).toArray(); // skip 1 是書卷, 這裡只需「分類書卷」
+      const rr2 = LQ.from(pthis.dataCountClassor).where(a1 => a1.count > 9).toArray();
+
+      if (rr2.length <= 1) {
+        return '全部';
+      } else {
+        const rr2b = LQ.from(LQ.from(rr2).select(a1 => a1.name).toArray());
+        return LQ.from(rr1b).firstOrDefault(a1 => rr2b.contains(a1));
+      }
+    }
+  }
+  private statisticsKeywordClassor2(records: DSeApiRecord[]) {
+    this.dataCountClassor = calcClassor();
+    this.dataCountBook = calcBookor();
+    return;
+    function calcClassor(): DKeywordClassor[] {
+      const r3: DKeywordClassor[] = [];
+      const r1 = new BookClassor().getAllClassors();
+      for (const it1 of r1) {
+        r3.push({ name: it1.name, count: getcount(it1.books) });
+
+        function getcount(bks: number[]) {
+          return LQ.from(records).where(a1 => LQ.from(bks).contains(a1.book)).count();
+        }
+      }
+
+      return r3.filter(a1 => a1.count !== 0);
+    }
+    function calcBookor(): DKeywordClassor[] {
+      const r1 = LQ.from(records).groupBy(a1 => a1.book).toArray();
+      const r3: DKeywordClassor[] = [];
+      for (const it1 of r1) {
+        const count = it1.count();
+        const name = BibleBookNames.getBookName(it1.first().book, BookNameLang.太);
+        r3.push({ name, count });
+      }
+      return r3;
+    }
+  }
+  /** 設定要使用 setFilter 時, 要傳入 ids of book */
+  private getBooksOfClassorOrBook(): number[] {
+    const r1 = this.searchFilter;
+    const r2 = new BookClassor().getAllClassors();
+    const r3 = LQ.from(r2).firstOrDefault(a1 => a1.name === r1);
+    if (r3 !== undefined) { return r3.books; }
+
+    return [new BookNameAndId().getIdOrUndefined(r1)];
+  }
   private statisticsKeywordClassor() {
     this.dataCountClassor = calcClassor(this.data);
     this.dataCountBook = calcBookor(this.data);
 
     return;
 
-    function calcClassor(data: DOneLine[]) {
+    function calcClassor(data: DOneLine[]): DKeywordClassor[] {
       const r3: DKeywordClassor[] = [];
       const r1 = new BookClassor().getAllClassors();
       for (const it1 of r1) {
@@ -355,8 +506,8 @@ export class SearchResultDialogComponent implements OnInit {
       return r3.filter(a1 => a1.count !== 0);
     }
 
-    function calcBookor(data: DOneLine[]) {
-      const r1 = LQ.from(data).select(a1 => a1.addresses.verses[0]).groupBy(a1 => a1.book);
+    function calcBookor(data: DOneLine[]): DKeywordClassor[] {
+      const r1 = LQ.from(data).select(a1 => a1.addresses.verses[0]).groupBy(a1 => a1.book).toArray();
       const r3: DKeywordClassor[] = [];
       for (const it1 of r1) {
         const count = it1.count();
@@ -372,7 +523,7 @@ export class SearchResultDialogComponent implements OnInit {
 }
 export interface DKeywordClassor {
   name: string;
-  count: number;
+  count?: number;
 }
 
 export interface DSearchData {
@@ -398,5 +549,24 @@ export interface IOrigCollectionGetter {
    * @param arg isOld 在 sn 的 H或G就能判斷, bookDefault 就是傳 book, 若沒有H或G時才會用.
    */
   mainAsync(arg: { orig: string, version?: string | 'kjv' | 'unv' | 'rcuv', bookDefault?: number }): Promise<DOneLine[]>;
+}
+
+/** */
+class SearchClassorOrderGetter {
+  main(book: number): DOneBookClassor[] {
+    if (book < 1 || book > 66) { return []; }
+
+    const r1 = this.generateAll();
+    return r1[book - 1];
+  }
+  generateAll() {
+    const r1 = new BookClassor().getAllClassors();
+    const r2 = LQ.range(1, 66).select(ib => {
+      const rr1 = LQ.from(r1).where(a1 => LQ.from(a1.books).contains(ib)).orderBy(a1 => a1.books.length).toArray();
+      const rr2 = [{ name: BibleBookNames.getBookName(ib, BookNameLang.太), books: [ib] }].concat(rr1);
+      return rr2;
+    }).toArray();
+    return r2;
+  }
 }
 

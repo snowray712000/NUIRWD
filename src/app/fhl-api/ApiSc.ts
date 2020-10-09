@@ -20,7 +20,7 @@ export class ApiSc {
     // const param = `k=${arg.sn}`;
 
     // const url = `http://bkbible.fhl.net/json/sc.php?${param}`;
-    const url = `${new FhlUrl().getJsonUrl()}sc.php?${param}`;
+    const url = `${new FhlUrl().getJsonUrl2()}sc.php?${param}`;
     const ob$ = ajax.getJSON<DApiScResult>(url);
     return ob$;
   }

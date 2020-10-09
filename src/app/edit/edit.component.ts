@@ -1,74 +1,95 @@
+import { DOneLine } from './../bible-text-convertor/AddBase';
+import { EventTool } from 'src/app/tools/EventTool';
+import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { log } from 'util';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import { DText } from '../bible-text-convertor/AddBase';
 import { DAddress } from '../bible-address/DAddress';
-import { BookNameToId } from '../const/book-name/book-name-to-id';
 import { Comment2DText } from '../side-nav-right/comment-tool/Comment2DText';
 import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddReferenceInCommentText';
 import { AddOrigDictInCommentText } from '../side-nav-right/comment-tool/AddOrigDictInCommentText';
 import { DialogSearchResultOpenor } from '../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { ConnectableObservable } from 'rxjs';
+
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
-  constructor(private detector: ChangeDetectorRef, private dialog: MatDialog) { }
-  data: DText[];
+  isVisibleVE = new ValueEvent(true);
+  data: DOneLine[];
   addresses: VerseRange = VerseRange.fD('太1:1-2;創1:1-2');
-  isVisibleInput = true;
-  @ViewChild('textInput', null) btnToggleBkCh;
-
-  ngOnInit() {
-    const relast = window.localStorage.getItem('edit');
-    // this.btnToggleBkCh.nativeElement.value = relast === undefined ? '' : relast;
-    this.updateView();
+  @ViewChild('textInput', { static: false }) textInput;
+  constructor(private detector: ChangeDetectorRef, private dialog: MatDialog) { }
+  get isEdit(): boolean { return this.isVisibleVE.get(); }
+  setEdit(str: string) {
+    this.textInput.nativeElement.value = str;
   }
+  getEdit(): string {
+    return this.textInput.nativeElement.value as string;
+  }
+  ngOnInit() {
+    setTimeout(() => {
+      this.setEdit(MyEdit.s.getValue());
+    }, 0);
+
+    this.isVisibleVE.changed$.subscribe(re => {
+      if (this.isEdit) {
+        // 要加 timeout 不然 textInput 會是 undefined
+        setTimeout(() => {
+          // tslint:disable-next-line: curly
+          if (this.textInput !== undefined)
+            this.setEdit(MyEdit.s.getValue());
+        }, 0);
+
+      } else {
+
+        this.updateData(MyEdit.s.getValue());
+
+      }
+    });
+
+  }
+
   onClickToggle() {
+    // 存檔
+    if (this.isEdit) {
+      const r1 = this.textInput.nativeElement.value as string;
+      if (r1 !== undefined && r1.length !== 0) {
+        MyEdit.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
+      }
+    }
+
+    // 切換
+    this.isVisibleVE.setAndTrigger(!this.isEdit);
     const pthis = this;
     if (isChangeToResult()) {
-      this.updateView();
+      // this.updateView();
     }
-    this.isVisibleInput = !this.isVisibleInput;
     return;
-    function isChangeToResult() { return pthis.isVisibleInput; }
+    function isChangeToResult() { return !pthis.isEdit; }
   }
   updateView() {
-    if (this.btnToggleBkCh === undefined) { return; }
-    const r1 = this.btnToggleBkCh.nativeElement;
-    let r2 = r1.value as string;
-    if (r2 === undefined || r2.length === 0) {
-      r2 = this.getExample();
+    if (this.textInput === undefined) { return; }
+    const r1 = this.textInput.nativeElement;
+    const r2 = r1.value as string;
+    if (r2 !== undefined && r2.length !== 0) {
+      this.updateData(r2);
     }
-    this.updateData(r2);
   }
   getToggleText() {
-    return this.isVisibleInput ? '顯示結果' : '顯示編輯';
-  }
-
-  onFocusout(e) {
-    const dom = e.target;
-    const re = $(dom).val() as string;
-    if (re == null || re.trim().length === 0) {
-      $('#text-input').val($('#text-input2').val());
-    }
-    window.localStorage.setItem('edit', re);
-    this.updateData(re);
-
-
+    return this.isEdit ? '顯示結果' : '顯示編輯';
   }
   updateData(text) {
     // 參考註釋
     const addr = { book: 40, chap: 1, verse: 1 };
     const rrData = cvtData(text, addr);
-    this.data = rrData;
-    // re = 'G02532';
-    // let re = parseTextToOrigOrReference(re);
-    // $('#show').html(re);
-    // findPrsingTableSnClassAndLetItCanClick(0, $('#show'));
+
+    const rrData2: DOneLine[] = [{ children: rrData }];
+    this.data = rrData2;
 
     function cvtData(comtext: string, addrSet?: DAddress): DText[] {
       const re1 = new Comment2DText().main(comtext, addrSet);
@@ -121,25 +142,48 @@ export class EditComponent implements OnInit {
       }
     }
   }
-  getExample() {
-    return `
-    這是範例:
-    ☆ 原文字典
-        ☆ 描述中，用G2532表示希臘原文 Greek
-        ☆ 描述中，用H113表示希伯來原文 Hebrew
+}
 
-    ☆ 參考經文
-        ☆ （אַבְרָהָם H85「多人之父」）「亞伯拉罕」。出現於耶穌的家譜中，#太1:1,2,17;路3:34|。
-        ☆ 參考規則，請參閱 <a href='http://bible.fhl.net/new/allreadme.html'>信望愛經文參照查詢</a> 第三點
-        ✩ 目前此處只開放，中文縮寫「創、初、利」... 以後會再加上其它的。
+class ValueEvent<T> {
+  protected curValue: T;
+  protected events = new EventTool<T>();
+  constructor(initial: T) {
+    this.curValue = initial;
+  }
+  setAndTrigger(arg: T) {
+    this.curValue = arg;
+    this.events.trigger(arg);
+  }
+  get(): T { return this.curValue; }
+  get changed$(): ConnectableObservable<T> { return this.events.changed$; }
+}
+class MyEdit extends LocalStorageStringBase {
+  static s = new MyEdit();
+  _getKey(): string {
+    return 'MyEdit';
+  }
+  _getDefaultValue(): string {
+    return getExample();
+    function getExample() {
+      return `
+      這是範例:
+      ☆ 原文字典
+          ☆ 描述中，用G2532表示希臘原文 Greek
+          ☆ 描述中，用H113表示希伯來原文 Hebrew
 
-    ☆ 建議符號 (以後會以這個為開發方式)
-        「●」：經文註釋
-        「◎」：個人感想與應用
-        「○」：相關經文
-        「☆」：特殊注意事項
-        ☆ https://a2z.fhl.net/php/pcom.php?book=3&engs=Matt&chap=0
-        ✩ 愈接近上格式, 會轉的愈漂亮，(若開發好後)`;
+      ☆ 參考經文
+          ☆ （אַבְרָהָם H85「多人之父」）「亞伯拉罕」。出現於耶穌的家譜中，#太1:1,2,17;路3:34|。
+          ☆ 參考規則，請參閱 <a href='http://bible.fhl.net/new/allreadme.html'>信望愛經文參照查詢</a> 第三點
+          ✩ 目前此處只開放，中文縮寫「創、初、利」... 以後會再加上其它的。
+
+      ☆ 建議符號 (以後會以這個為開發方式)
+          「●」：經文註釋
+          「◎」：個人感想與應用
+          「○」：相關經文
+          「☆」：特殊注意事項
+          ☆ https://a2z.fhl.net/php/pcom.php?book=3&engs=Matt&chap=0
+          ✩ 愈接近上格式, 會轉的愈漂亮，(若開發好後)`;
+    }
   }
 
 }

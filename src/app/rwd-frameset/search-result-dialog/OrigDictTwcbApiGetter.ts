@@ -1,20 +1,24 @@
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { AddReferenceFromOrigDictText } from 'src/app/version-parellel/one-ver/AddReferenceFromOrigDictText';
-import { ApiStwcbhdic } from 'src/app/fhl-api/ApiStwcbhdic';
-import { DApiSdResult } from 'src/app/fhl-api/DApiSdResult';
+import { ApiStwcbhdic } from 'src/app/fhl-api/Orig/ApiStwcbhdic';
+import { DApiSdResult } from 'src/app/fhl-api/Orig/DApiSdResult';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { AddSnForOrigDictTwcbNew } from 'src/app/version-parellel/one-ver/AddSnForOrigDictTwcbNew';
-import { ApiSbdag } from 'src/app/fhl-api/ApiSbdag';
+import { ApiSbdag } from 'src/app/fhl-api/Orig/ApiSbdag';
 import { OrigStwcbDOMParsor } from 'src/app/fhl-api/Orig/OrigStwcbDOMParsor';
 
 export class OrigDictTwcbApiGetter {
   async mainAsync(arg: { sn: string; isOld?: 0 | 1; }): Promise<DText[]> {
-    const re1 = await getAsync(arg.sn, arg.isOld);
-    const re2 = re1.record[0];
-    if (arg.isOld === 1) {
-      return cvtOld(re2.dic_text);
+    try {
+      const re1 = await getAsync(arg.sn, arg.isOld);
+      const re2 = re1.record[0];
+      if (arg.isOld === 1) {
+        return cvtOld(re2.dic_text);
+      }
+      return cvtNew(re2.dic_text);
+    } catch {
+      return [{ w: 'Twcb api 錯誤. sn: ' + arg.sn + ' isOld:' + arg.isOld }];
     }
-    return cvtNew(re2.dic_text);
 
     function cvtOld(str: string): DText[] {
       return cvtNew(str);
@@ -33,9 +37,9 @@ export class OrigDictTwcbApiGetter {
 
     async function getAsync(sn: string, isOld?: 1 | 0): Promise<DApiSdResult> {
       if (isOld) {
-        return new ApiStwcbhdic().queryQsbAsync({ sn, isOldTestment: true, isSimpleChinese: false }).toPromise();
+        return new ApiStwcbhdic().queryOrigAsync({ sn, isOldTestment: true });
       } else {
-        return new ApiSbdag().queryQsbAsync({ sn, isOldTestment: false, isSimpleChinese: false }).toPromise();
+        return new ApiSbdag().queryOrigAsync({ sn, isOldTestment: false });
       }
     }
   }

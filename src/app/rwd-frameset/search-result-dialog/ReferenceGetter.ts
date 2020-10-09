@@ -4,7 +4,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { AddSnInfo } from 'src/app/version-parellel/one-ver/AddSnInfo';
 import { IReferenceGetter } from './search-result-dialog.component';
-import { ApiQsb, OneQsbRecord } from 'src/app/fhl-api/ApiQsb';
+import { ApiQsb, DOneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { map } from 'rxjs/operators';
 export class ReferenceGetter implements IReferenceGetter {
   async mainAsync(arg: { reference: string; version: string }): Promise<DOneLine[]> {
@@ -18,7 +18,7 @@ export class ReferenceGetter implements IReferenceGetter {
     re2 = new AddBrStdandard().main(re2, re2[0].addresses);
     re2 = new AddSnInfo().main(re2, re2[0].addresses);
     return re2;
-    async function getDataAsync(str: string, version: string): Promise<OneQsbRecord[]> {
+    async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
       const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version });
       const r2 = r1.pipe(map(a1 => a1.record));
       return r2.toPromise();

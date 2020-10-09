@@ -88,7 +88,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private initAboutVerChangeOrUpdate() {
   }
 
-  private onClickBibleSelect() {
+  onClickBibleSelect() {
     this._bottomSheet.open(BibleSelectionsComponent, {
       data: {
         beSelectedBookId: 39
@@ -99,7 +99,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     // console.log('on opened left side');
   }
   /** html in use */
-  private onClosedLeftSide() {
+  onClosedLeftSide() {
     // console.log('on closed left side');
 
     if (this.isMobile()) {
@@ -115,7 +115,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
 
   /** html in use */
-  private onResize(r1) {
+  onResize(r1) {
     this.checkWidthAndReRenderIfNeed();
   }
   private checkWidthAndReRenderIfNeed() {
@@ -127,18 +127,18 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
 
   /** 低於 800px 視作手機 */
-  private isMobile() {
+  isMobile() {
     const r1 = this.media.matchMedia('(max-width: 800px)'); // 現在電腦最小可設 800x600
     return r1.matches;
   }
-  private getBaseFrameWidth() {
+  getBaseFrameWidth() {
     if (this.baseFrame === undefined) {
       return null;
     }
     return asHTMLElement(this.baseFrame.element.nativeElement).offsetWidth;
   }
 
-  private getSideRightWidth(): SideWidthStyle {
+  getSideRightWidth(): SideWidthStyle {
     if (this.isMobile()) {
       return {
         minWidth: null,

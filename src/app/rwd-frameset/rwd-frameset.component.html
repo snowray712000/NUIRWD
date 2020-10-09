@@ -2,49 +2,46 @@
   [class.example-is-mobile]="isMobile()"> -->
 <div class="example-container" #baseFrame (window:resize)="onResize($event)" [class.example-is-mobile]="isMobile()">
 
-  <mat-toolbar color="primary" class='example-toolbar'>
-    <button mat-icon-button (click)="snavLeft.toggle()">
+    <mat-toolbar color="primary" class='example-toolbar'>
+        <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span (click)="onClickBibleSelect()">
+        <span (click)="onClickBibleSelect()">
       <button mat-icon-button>
         <mat-icon>view_comfy</mat-icon>
       </button>
       <span style="cursor: pointer;" *ngIf="!isMobile()">聖經目錄</span>
-    </span>
+        </span>
 
-    <input #seachinput matInput placeholder="G81 H81 #太12:31;路2;3| 摩西"
-      (keyup.enter)="onSearchInputEnter(seachinput.value)" [style.width]="isMobile()?'8em':undefined"/>
-    <button mat-icon-button (click)="onClickSearch(seachinput.value)">
+        <input #seachinput matInput placeholder="G81 H81 #太12:31;路2;3| 摩西" (keyup.enter)="onSearchInputEnter(seachinput.value)" [style.width]="isMobile()?'8em':undefined" />
+        <button mat-icon-button (click)="onClickSearch(seachinput.value)">
       <mat-icon>search</mat-icon>
     </button>
 
-    <span class="example-fill-remaining-space"></span>
+        <span class="example-fill-remaining-space"></span>
 
-    <button mat-icon-button (click)="snavRight.toggle()">
+        <button mat-icon-button (click)="snavRight.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-  </mat-toolbar>
+    </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 64 : 0">
-    <mat-sidenav #snavLeft [mode]="'push'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.min-width.px]="170"
-      (opened)="onOpenedLeftSide()" (closed)="onClosedLeftSide()">
-      <app-side-nav-left [verIdsOfInit]="verIdsOfInit"></app-side-nav-left>
-    </mat-sidenav>
-    <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()"
-      fixedTopGap="64" [style.width.px]="getSideRightWidth().width" [style.min-width.px]="getSideRightWidth().minWidth"
-      [style.max-width.px]="getSideRightWidth().maxWidth" [opened]="getIsRightSideOpened()" (opened)="onOpenedRightSide()" (closed)="onClosedRightSide()">
-      <app-side-nav-right [addressActived]="addressActived"></app-side-nav-right>
-    </mat-sidenav>
+    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 64 : 0">
+        <mat-sidenav #snavLeft [mode]="'push'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.min-width.px]="170" (opened)="onOpenedLeftSide()" (closed)="onClosedLeftSide()">
+            <app-side-nav-left></app-side-nav-left>
+        </mat-sidenav>
+        <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.width.px]="getSideRightWidth().width" [style.min-width.px]="getSideRightWidth().minWidth" [style.max-width.px]="getSideRightWidth().maxWidth"
+            [opened]="getIsRightSideOpened()" (opened)="onOpenedRightSide()" (closed)="onClosedRightSide()">
+            <app-side-nav-right [addressActived]="addressActived"></app-side-nav-right>
+        </mat-sidenav>
 
-    <mat-sidenav-content>
-      <app-version-interlace></app-version-interlace>
-      <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
-      <a [href]="getPrevChap()">上一章</a>、
-      <a [href]="getNextChap()">下一章</a>、
-      <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>、
-      <button (click)="onClickDisplaySetting()">顯示設定</button>、
-      <button (click)="onClickVersions()">版本</button>、
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+        <mat-sidenav-content>
+            <app-version-interlace></app-version-interlace>
+            <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
+            <a [href]="getPrevChap()">上一章</a>、
+            <a [href]="getNextChap()">下一章</a>、
+            <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>、
+            <button (click)="onClickDisplaySetting()">顯示設定</button>、
+            <button (click)="onClickVersions()">版本</button>、
+        </mat-sidenav-content>
+    </mat-sidenav-container>
 </div>

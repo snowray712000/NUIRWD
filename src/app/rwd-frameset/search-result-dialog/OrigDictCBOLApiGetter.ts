@@ -2,14 +2,19 @@ import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
 import { CBOL2DTextConvertor } from './CBOL2DTextConvertor';
-import { DApiSdResult, DApiSdRecord } from 'src/app/fhl-api/DApiSdResult';
+import { DApiSdResult, DApiSdRecord } from 'src/app/fhl-api/Orig/DApiSdResult';
+import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
+import { ApiSd } from 'src/app/fhl-api/Orig/ApiSd';
 
 export class OrigDictCBOLApiGetter {
   async mainAsync(arg: { sn: string; isOld?: 1 | 0; }) {
-    const re1 = await getAsync(arg.sn, arg.isOld);
-    const re2 = re1.record[0];
-
-    return cvtAndMerge(re2);
+    try {
+      const re1 = await getAsync(arg.sn, arg.isOld);
+      const re2 = re1.record[0];
+      return cvtAndMerge(re2);
+    } catch {
+      return [{ w: 'CBOL api 錯誤. sn: ' + arg.sn + ' isOld:' + arg.isOld }];
+    }
 
     function cvtAndMerge(records: DApiSdRecord): DText[] {
       // 轉換 CBOL 中文, 再轉換 CBOL 英文, 再回傳
@@ -37,9 +42,7 @@ export class OrigDictCBOLApiGetter {
       return new CBOL2DTextConvertor().main({ str, isOld: 1, isChinese: 0 });
     }
     async function getAsync(sn: string, isOld?: 1 | 0): Promise<DApiSdResult> {
-      const N = isOld === 1 ? '1' : '0';
-      return ajax({ url: `http://bible.fhl.net/json/sd.php?N=${N}&k=${sn}` })
-        .pipe(map(a1 => a1.response as DApiSdResult)).toPromise();
+      return new ApiSd().queryOrigAsync({ sn, isOldTestment: isOld === 1 });
     }
   }
 }

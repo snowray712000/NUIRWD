@@ -1,4 +1,3 @@
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 
 export interface IAddBase {
