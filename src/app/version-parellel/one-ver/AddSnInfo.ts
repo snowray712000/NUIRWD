@@ -6,31 +6,43 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 /** WG WTG WAG WTH WH */
 export class AddSnInfo implements IAddBase {
   main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
-
     const re: DOneLine[] = [];
     let isExistChange = false;
-
     for (const it1 of lines) {
-      const re1: DText[] = [];
-      for (const it2 of it1.children) {
-        const r3 = new SplitStringByRegexVer2().main(it2.w, /{<(W(T?)A?(G|H))(\d+[a-z]?)>}|<(W(T?)A?(G|H))(\d+[a-z]?)>/ig);
-        for (const it3 of r3) {
-          const r2 = deepCopy(it2);
-          if (it3.exec === undefined) {
-            r2.w = it3.w;
-            re1.push(r2);
-          } else {
-            re1.push(this.doSn(it3.exec, r2));
-            isExistChange = true;
-          }
-        }
+      const re1 = this.doOne(it1);            
+      if (isExistChange === false && re1 !== it1.children) {
+        isExistChange = true;
       }
       re.push({ addresses: it1.addresses, children: re1 });
-    }
-    // console.log(re);
-
+    }    
     return isExistChange ? re : lines;
-    // return lines.map(a1 => this.cvt(a1));
+  }
+  /** 如果 return === input 表示沒變更。 這是為了 async 拆出來的 */
+  mainOne(one: DOneLine): DOneLine {
+    const re = this.doOne(one);  
+    if (re === one.children) return one;
+    return { addresses: one.addresses, children: re };
+  }
+  /** 如果 return 與 it1.children 一樣，表示沒變 */
+  private doOne(it1: DOneLine): DText[] {
+    let isExistChange = false;
+
+    const re1: DText[] = [];
+    for (const it2 of it1.children) {
+      const r3 = new SplitStringByRegexVer2().main(it2.w, /{<(W(T?)A?(G|H))(\d+[a-z]?)>}|<(W(T?)A?(G|H))(\d+[a-z]?)>/ig);      
+      for (const it3 of r3) {
+        const r2 = deepCopy(it2);
+        if (it3.exec === undefined) {
+          r2.w = it3.w;
+          re1.push(r2);
+        } else {
+          re1.push(this.doSn(it3.exec, r2));
+          isExistChange = true;
+        }
+      }
+    }    
+    if (isExistChange) return re1;
+    return it1.children;
   }
   /** re2 是 in out, 因為要保持原來的其它不變的屬性 */
   private doSn(exec: RegExpExecArray, inOutRe2: DText) {

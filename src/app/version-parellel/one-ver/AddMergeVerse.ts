@@ -5,7 +5,7 @@ import { getNextAddress, isTheSameAddress } from 'src/app/bible-address/DAddress
 /** 'a' 和合本 併入上節 Ps8:6-9 或 Ps8:6-9.60:1-2.92:1-4.Ps8:8 */
 export class AddMergeVerse implements IAddBase {
   /** 若有合併, 回傳新的一份, 若沒有, 即回傳 lines */
-  main(lines: DOneLine[], verses: VerseRange): DOneLine[] {
+  main(lines: DOneLine[], verses?: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];
     let isExistMerge = false;
     for (let i1 = 0; i1 < lines.length; i1++) {

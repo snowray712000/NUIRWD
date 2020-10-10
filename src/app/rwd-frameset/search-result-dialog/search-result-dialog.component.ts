@@ -121,6 +121,7 @@ export class SearchResultDialogComponent implements OnInit {
 
   }
   queryOrigCollection() {
+    const pthis = this;
     const origQ = new OrigCollectionGetter();
     this.filterSetter = origQ;
     this.bindCollectionEvent({
@@ -151,7 +152,7 @@ export class SearchResultDialogComponent implements OnInit {
     const pthis = this;
     searchQ.step3FilterChanged$.subscribe({
       next(processInfo) {
-        pthis.data = searchQ.datas();
+        pthis.data = searchQ.datas();        
         pthis.progressValue = processInfo.progress;
         pthis.changeDetector.markForCheck();
       },

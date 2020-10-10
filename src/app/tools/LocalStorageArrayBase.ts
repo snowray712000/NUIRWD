@@ -6,7 +6,6 @@ import { EventTool } from './EventTool';
  * 3. default。可實作或不實作 getDefaultValue()
  */
 
-
 export abstract class LocalStorageArrayBase<T> {
   protected curValue: T[];
   protected eventTool = new EventTool<T[]>();
@@ -16,6 +15,9 @@ export abstract class LocalStorageArrayBase<T> {
   get changed$() { return this.eventTool.changed$; }
   abstract _getKey(): string;
   protected _getDefaultValue(): T[] { return []; }
+  /** 一般初始化，null 就是呼叫 get default, 但是像 ver 應該空白也要算空白 */
+  protected _isDefaultIfEmpty(): boolean { return false; }
+
   constructor() {
     const pthis = this;
     this.getFromLocalStorage();
@@ -34,7 +36,7 @@ export abstract class LocalStorageArrayBase<T> {
 
   getFromLocalStorage() {
     this.curValue = StorageTools.getArraySafely<T>(this._getKey());
-    if (this.curValue == null) {
+    if (this.curValue == null || (this._isDefaultIfEmpty() && this.curValue.length===0)) {
       this.curValue = this._getDefaultValue();
     }
     return this.curValue;

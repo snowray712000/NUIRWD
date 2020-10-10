@@ -11,13 +11,16 @@ export class ApiQsb {
     // 開發者, 不要把 args 中的 version 拿掉, 因為有時候要指定特定版本 (parsing時,指定unv,kjv)
     this.defaultValue(args);
     // const url = 'http://bkbible.fhl.net/json/qsb.php';
-    const url = `${new FhlUrl().getJsonUrl2()}qsb.php`;
+    const url = `${new FhlUrl().getJsonUrl2()}qsb.php?`;
     const r2 = this.generateQueryString(args);
-    // const r3 = ajax.post(url, r2).pipe(retry(3), map(a1 => a1.response as QsbResult));
-    return ajax.getJSON<DQsbResult>(url + r2).pipe(
-      retry(3),
-      // tap(a1 => console.log(a1)),
-    );
+    const r3 = ajax.post(url, r2).pipe(retry(3),
+    // tap(a1=>console.log(a1)),
+    map(a1 => a1.response as DQsbResult),);
+    return r3;
+    // return ajax.getJSON<DQsbResult>(url + r2).pipe(
+    //   retry(3),
+    //   // tap(a1 => console.log(a1)),
+    // );
   }
   private defaultValue(r1: DQsbArgs) {
     r1.bibleVersion = r1.bibleVersion !== undefined ? r1.bibleVersion : 'unv';
@@ -31,7 +34,7 @@ export class ApiQsb {
 
     // const qstr = encodeURIComponent(args.qstr);
     const qstr = args.qstr;
-    return `?qstr=${qstr}&${strong}&${gb}&${ver}`;
+    return `qstr=${qstr}&${strong}&${gb}&${ver}`;
   }
 }
 

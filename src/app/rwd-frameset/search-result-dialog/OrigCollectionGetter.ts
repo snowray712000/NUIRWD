@@ -3,7 +3,7 @@ import { DProgressInfo } from './../../tools/EventTool';
 import { queryBibleTextViaQsbApiPost } from './queryBibleTextViaQsbApiPost';
 import { searchAllIndexViaSeApiAsync, DSeApiRecord } from './searchAllIndexViaSeApiAsync';
 import { IOrigCollectionGetter } from './search-result-dialog.component';
-import { cvt_unv } from 'src/app/bible-text-convertor/unv';
+import { cvt_unv, cvt_unvAsync } from 'src/app/bible-text-convertor/unv';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
@@ -11,6 +11,7 @@ import { cvt_kjv } from 'src/app/bible-text-convertor/kjv';
 import { EventToolSingle } from 'src/app/tools/EventTool';
 import { delay } from 'q';
 import { SetFilterStatus } from './KeywordSearchGetter';
+
 /** 原文彙編功能 */
 export class OrigCollectionGetter implements IOrigCollectionGetter {
   /** step1 2 3 開發思路, 請看 keyword search 思路 */
@@ -20,7 +21,7 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
   private _status_setFilter: SetFilterStatus;
   /** 在 setFilter 也要用 */
   private arg: { orig: string; version?: string | 'unv' | 'kjv' | 'rcuv'; bookDefault?: number; };
-  /** 在 setFilter 也要用 */
+  /** 在 setFilter 也要用, orig 只有數字 4812a 不會有 G 或 H */
   private argOrig: { orig: string; isOld: 0 | 1; };
   get step1IndexFindor$() { return this._step1Event.changed$; }
   get step2BibleTextGettor$() { return this._step2Event.changed$; }
@@ -111,6 +112,8 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
     await stopPreConvertingAndSetToReady();
 
     pthis._datas = [];
+    console.log(pthis._records);
+    
     const allrecords = getRecordsWhereBooks();
     const cntAll = allrecords.length;
     await safeDoCore();
@@ -133,34 +136,33 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
     }
     async function safeDoCore(fnErr?: (err: any) => Promise<void>) {
       await safeDoAsync(async () => {
-        const r4 = cvt2lines(allrecords);
-        const r5 = cvt(r4);
+        const r4 = cvt2lines(allrecords);        
+        const r5 = await cvt(r4);        
         pthis._datas = r5;
-      });
-
-      // for (let i1 = 0; i1 < allrecords.length; i1++) {
-      //   const it = allrecords[i1];
-      //   if (pthis._status_setFilter === SetFilterStatus.trystopping) {
-      //     break;
-      //   }
-
-      //   pthis._datas.push(cvt2Line(it, pthis._argKeyword));
-      //   if (i1 % 10 === 9) {
-      //     const pro = pthis._datas.length / cntAll * 100;
-      //     pthis._eventDataToLines.trigger({ progress: pro });
-      //     await delay(0); // 避免凍結
-      //   }
-      // }
+      });      
     }
     return;
 
 
-    function cvt(lines: DOneLine[]) {
+    async function cvt(lines: DOneLine[]) {
       const r2 = pthis.argOrig;
       if (arg.version === 'unv') {
         const verses = new VerseRange();
         verses.verses = [{ book: arg.bookDefault, chap: 1, verse: 1 }];
-        return cvt_unv(lines, { verses, isSnExist: 1, isMapPhotoInfo: 0, sn: r2.orig });
+        
+        const sn2 = r2.isOld===1? 'H':'G' +r2.orig;
+        const r5a = await cvt_unvAsync(lines,{
+          verses: verses,
+          isMapPhotoInfo: 0,
+          isSnExist: 1,
+          sn: sn2,
+        },(val,dataNow)=>{          
+          pthis._datas = dataNow;                              
+          pthis._step3Event.trigger({ progress: val });          
+        },()=>{
+          return pthis._status_setFilter === SetFilterStatus.trystopping;
+        });
+        return r5a;        
       } else if (arg.version === 'kjv') {
         const verses = new VerseRange();
         verses.verses = [{ book: arg.bookDefault, chap: 1, verse: 1 }];
