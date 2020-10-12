@@ -38,8 +38,7 @@ export async function searchAllIndexViaSeApiAsync(arg: {
     // console.log('post');
     // console.log(data);
 
-    const rr1 = await ajax.post(url, data).pipe(map(a1 => a1.response as DSeApiResult)).toPromise();
-    console.log(rr1);
+    const rr1 = await ajax.post(url, data).pipe(map(a1 => a1.response as DSeApiResult)).toPromise();    
 
     if (rr1 === null) {
       trigger(0);

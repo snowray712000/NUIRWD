@@ -21,7 +21,7 @@ export async function queryBibleTextViaQsbApiPost(records: DSeApiRecord[], versi
 
   async function getDataAsync() {
     const qstr = generateQstr();
-    const rr1a = await new ApiQsb().queryQsbAsync({qstr,isExistStrong: strong===1}).toPromise();
+    const rr1a = await new ApiQsb().queryQsbAsync({qstr,isExistStrong: strong===1,bibleVersion:version}).toPromise();
     const rr1 = rr1a as any as DSeApiResult;
 
     cvtChinesesToBookAndSecToVerse(rr1.record);

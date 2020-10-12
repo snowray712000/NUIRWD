@@ -6,33 +6,23 @@
       <br *ngIf="it1.isBr===1" />
       <hr *ngIf="it1.isHr===1" />
       <span *ngIf="it1.key!==undefined" [class]="getKeywordClass(it1)">{{it1.w}}</span>
-      <span *ngIf="it1.sn!==undefined && it1.key===undefined && getIsShowOrig()" (click)="onClickOrig(it1.w)"
-        [class]="getOrigClass(it1)">
+<span *ngIf="it1.sn!==undefined && it1.key===undefined && getIsShowOrig()" (click)="onClickOrig(it1.w)" [class]="getOrigClass(it1)">
         {{it1.w}}
       </span>
-      <span *ngIf="it1.isRef===1" [class.isTitle1]="it1.isTitle1===1" class='reference'
-        [attr.data-ref]="'#'+it1.refDescription+'|'"
-        (click)="onClickReference('#'+it1.refDescription+'|')">{{it1.w}}</span>
-      <span *ngIf="it1.foot!==undefined" [class.isTitle1]="it1.isTitle1===1" class='foot'
-        (click)="onClickFoot(it1)">{{it1.w}}</span>
-      <span *ngIf="isW(it1)" [class.isOrigNotExist]="it1.isOrigNotExist===1" [class.isGODSay]="it1.isGODSay===1"
-        [class.isName]="it1.isName===1" [class.isTitle1]="it1.isTitle1===1" [class.twcbexp]="isClassTwcbExp(it1)"
-        [class.twcbidt]="isClassTwcbIdt(it1)" [class.twcbbibtext]="isClassTwcbBibtext(it1)"
-        [class]="getKeywordClass(it1)">{{it1.w}}</span>
+<span *ngIf="it1.isRef===1" [class.isTitle1]="it1.isTitle1===1" class='reference' [attr.data-ref]="'#'+it1.refDescription+'|'" (click)="onClickReference('#'+it1.refDescription+'|')">{{it1.w}}</span>
+<span *ngIf="it1.foot!==undefined" [class.isTitle1]="it1.isTitle1===1" class='foot' (click)="onClickFoot(it1)">{{it1.w}}</span>
+<span *ngIf="isW(it1)" [class.isOrigNotExist]="it1.isOrigNotExist===1" [class.isGODSay]="it1.isGODSay===1" [class.isName]="it1.isName===1" [class.isTitle1]="it1.isTitle1===1" [class.twcbexp]="isClassTwcbExp(it1)" [class.twcbidt]="isClassTwcbIdt(it1)"
+    [class.twcbbibtext]="isClassTwcbBibtext(it1)" [class]="getKeywordClass(it1)">{{it1.w}}</span>
 
-      <!-- order or list 巢狀 -->
-      <ol class="myOL" *ngIf="it1.isOrderStart===1" style="list-style-type: none;margin: 0em;text-align: justify;"
-        [class.orderOdd]="it1.idxOrder!==undefined && (it1.idxOrder%2===1)"
-        [class.orderEvent]="it1.idxOrder!==undefined && (it1.idxOrder%2===0)">
-        <app-dtexts-rendor [datas]="datas" [indexs]="getIndexsForChildOrder(it1,i1)" (clickRef)="clickRef.emit($event);"
-          (clickOrig)="clickOrig.emit($event);"></app-dtexts-rendor>
-      </ol>
-      <li class="myLI" *ngIf="it1.isListStart===1">
-        <app-dtexts-rendor [datas]="datas" [indexs]="getIndexsForChildList(it1,i1)" (clickRef)="clickRef.emit($event);"
-          (clickOrig)="clickOrig.emit($event);">
-        </app-dtexts-rendor>
-      </li>
-    </ng-template>
+<!-- order or list 巢狀 -->
+<ol class="myOL" *ngIf="it1.isOrderStart===1" style="list-style-type: none;margin: 0em;text-align: justify;" [class.orderOdd]="it1.idxOrder!==undefined && (it1.idxOrder%2===1)" [class.orderEvent]="it1.idxOrder!==undefined && (it1.idxOrder%2===0)">
+    <app-dtexts-rendor [datas]="datas" [indexs]="getIndexsForChildOrder(it1,i1)" (clickRef)="clickRef.emit($event);" (clickOrig)="clickOrig.emit($event);"></app-dtexts-rendor>
+</ol>
+<li class="myLI" *ngIf="it1.isListStart===1">
+    <app-dtexts-rendor [datas]="datas" [isShowOrig]="isShowOrig" [indexs]="getIndexsForChildList(it1,i1)" (clickRef)="clickRef.emit($event);" (clickOrig)="clickOrig.emit($event);">
+    </app-dtexts-rendor>
+</li>
+</ng-template>
 
-  </span>
+</span>
 </span>

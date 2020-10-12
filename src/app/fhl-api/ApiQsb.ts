@@ -9,7 +9,8 @@ import { FhlUrl } from './FhlUrl';
 export class ApiQsb {
   queryQsbAsync(args: DQsbArgs): Observable<DQsbResult> {
     // 開發者, 不要把 args 中的 version 拿掉, 因為有時候要指定特定版本 (parsing時,指定unv,kjv)
-    this.defaultValue(args);
+    this.defaultValue(args);    
+    
     // const url = 'http://bkbible.fhl.net/json/qsb.php';
     const url = `${new FhlUrl().getJsonUrl2()}qsb.php?`;
     const r2 = this.generateQueryString(args);

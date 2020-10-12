@@ -25,7 +25,7 @@ export class OrigDictTwcbApiGetter {
     }
     function cvtNew(str: string): DText[] {
       const rr2 = new OrigStwcbDOMParsor().main(str);
-      console.log(rr2);
+      // console.log(rr2);
 
 
       let r2 = new AddBrStdandard().main2(rr2);

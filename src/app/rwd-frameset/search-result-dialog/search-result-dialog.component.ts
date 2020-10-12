@@ -49,7 +49,7 @@ export class SearchResultDialogComponent implements OnInit {
   /** 不要將關鍵字上色, 因為要作報告用, copy 到 pptx上又要改色 */
   isEnableColorKeyword: 0 | 1 = 1;
   bibleVersionsSn: { nameShow: string; name: string; }[];
-  typeFunction: 'orig-dict' | 'orig-collection' | 'keyword' | 'reference';
+  typeFunction: 'orig-dict' | 'orig-keyword' | 'keyword' | 'reference';
   @ViewChild('mattabkeywordsearch', { static: false }) mattabkeywordsearch: MatTabGroup;
   progressValue: number;
 
@@ -69,8 +69,8 @@ export class SearchResultDialogComponent implements OnInit {
     const pthis = this;
     if (this.typeFunction === 'orig-dict') {
       qOrigDict();
-    } else if (this.typeFunction === 'orig-collection') {
-      this.queryOrigCollection();
+    } else if (this.typeFunction === 'orig-keyword') {
+      this.queryOrigKeyword();
     } else if (this.typeFunction === 'reference') {
       this.queryReference();
     } else {
@@ -92,7 +92,7 @@ export class SearchResultDialogComponent implements OnInit {
 
     if (this.getIsDict() || this.getIsOrig()) {
       if (this.dataByParent.isDictCollection === 1) {
-        this.typeFunction = 'orig-collection';
+        this.typeFunction = 'orig-keyword';
       } else {
         this.typeFunction = 'orig-dict';
       }
@@ -120,7 +120,7 @@ export class SearchResultDialogComponent implements OnInit {
     });
 
   }
-  queryOrigCollection() {
+  queryOrigKeyword() {
     const pthis = this;
     const origQ = new OrigCollectionGetter();
     this.filterSetter = origQ;
@@ -131,8 +131,8 @@ export class SearchResultDialogComponent implements OnInit {
       recordsOfApi() { return origQ.records; },
       datas() { return origQ.datas; },
       setFilterAsync(a1) { origQ.setFilterAsync(a1); },
-    });
-
+    });    
+    
     const version = this.bibleVersionSnSelected;
     const bookDefault = this.getDefaultAddress().book;
     origQ.mainAsync({ orig: this.getKeyword(), version, bookDefault });
@@ -152,7 +152,7 @@ export class SearchResultDialogComponent implements OnInit {
     const pthis = this;
     searchQ.step3FilterChanged$.subscribe({
       next(processInfo) {
-        pthis.data = searchQ.datas();        
+        pthis.data = searchQ.datas();  // 顯示的資料      
         pthis.progressValue = processInfo.progress;
         pthis.changeDetector.markForCheck();
       },
@@ -287,12 +287,16 @@ export class SearchResultDialogComponent implements OnInit {
         }
       }
     }
+    /** 
+     * 例如， re: ['kjv']
+    */
     function doAfterCloseDialogSnVer(re: string[]) {
+      
       if (re !== undefined && re.length !== 0) {
         if (pthis.bibleVersionSnSelected !== re[0]) {
           pthis.bibleVersionSnSelected = re[0];
           pthis.setBibleVersionSelectedSnShowName();
-          VerForSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSnSelected);
+          VerForSnSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSnSelected);
           pthis.doDependonType();
         }
       }
@@ -313,6 +317,7 @@ export class SearchResultDialogComponent implements OnInit {
   setBibleVersionSelectedSnShowName(verSelected?: string) {
     const name = verSelected === undefined ? this.bibleVersionSnSelected : verSelected;
     let r1 = LQ.from(this.bibleVersionsSn).firstOrDefault(a2 => a2.name === name);
+    
     if (r1 === undefined) {
       // 應該是錯誤的版本名稱, 此時就給它預設值
       r1 = this.bibleVersionsSn[0];
@@ -339,10 +344,13 @@ export class SearchResultDialogComponent implements OnInit {
       this.filterSetter.setFilterAsync(this.getBooksOfClassorOrBook());
     }
   }
+  getIsShowOrig() {
+    return this.typeFunction === 'orig-keyword'? 1 : undefined ;
+  }
   /** html 中使用, 當 keyword 功能時, 要再依使用者選擇的過濾方式查詢 */
   getDataRender() {
 
-    // if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-collection') {
+    // if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-keyword') {
     //   if (this.searchFilter === '全部') {
     //     return this.data;
     //   }
@@ -359,7 +367,8 @@ export class SearchResultDialogComponent implements OnInit {
   /** html中 設定查詢版本時會用到 */
   async initVersionsAsync() {
     this.bibleVersionSelected = VerForSearch.s.getFromLocalStorage();
-    this.bibleVersionSnSelected = VerForSnSearch.s.getFromLocalStorage();
+    this.bibleVersionSnSelected = VerForSnSearch.s.getFromLocalStorage();    
+    
     const r1 = VerCache.s.getValue();
     this.bibleVersions = r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
     this.bibleVersionsSn = r1.record.filter(a1 => a1.strong === 1).map(a1 => ({ nameShow: a1.cname, name: a1.book }));

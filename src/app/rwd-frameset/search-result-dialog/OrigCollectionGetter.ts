@@ -112,8 +112,7 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
     await stopPreConvertingAndSetToReady();
 
     pthis._datas = [];
-    console.log(pthis._records);
-    
+
     const allrecords = getRecordsWhereBooks();
     const cntAll = allrecords.length;
     await safeDoCore();
@@ -136,10 +135,10 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
     }
     async function safeDoCore(fnErr?: (err: any) => Promise<void>) {
       await safeDoAsync(async () => {
-        const r4 = cvt2lines(allrecords);        
-        const r5 = await cvt(r4);        
+        const r4 = cvt2lines(allrecords);
+        const r5 = await cvt(r4);
         pthis._datas = r5;
-      });      
+      });
     }
     return;
 
@@ -149,20 +148,20 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
       if (arg.version === 'unv') {
         const verses = new VerseRange();
         verses.verses = [{ book: arg.bookDefault, chap: 1, verse: 1 }];
-        
-        const sn2 = r2.isOld===1? 'H':'G' +r2.orig;
-        const r5a = await cvt_unvAsync(lines,{
+
+        const sn2 = r2.isOld === 1 ? 'H' : 'G' + r2.orig;
+        const r5a = await cvt_unvAsync(lines, {
           verses: verses,
           isMapPhotoInfo: 0,
           isSnExist: 1,
           sn: sn2,
-        },(val,dataNow)=>{          
-          pthis._datas = dataNow;                              
-          pthis._step3Event.trigger({ progress: val });          
-        },()=>{
+        }, (val, dataNow) => {
+          pthis._datas = dataNow;
+          pthis._step3Event.trigger({ progress: val });
+        }, () => {
           return pthis._status_setFilter === SetFilterStatus.trystopping;
         });
-        return r5a;        
+        return r5a;
       } else if (arg.version === 'kjv') {
         const verses = new VerseRange();
         verses.verses = [{ book: arg.bookDefault, chap: 1, verse: 1 }];

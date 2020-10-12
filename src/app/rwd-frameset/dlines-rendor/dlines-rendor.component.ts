@@ -24,6 +24,8 @@ import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 export class DlinesRendorComponent implements OnInit {
   @Input() datas: DOneLine[];
   @Input() verseRange: VerseRange = new VerseRange();
+  /** 原文彙編用。不論設定值開或關，當是原文彙編時，一定要開著。 */
+  @Input() isShowOrig?: 0 | 1;
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {

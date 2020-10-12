@@ -15,6 +15,8 @@ import { IsSnManager } from '../settings/IsSnManager';
 export class DTextsRendorComponent implements OnInit, OnChanges {
   @Input() datas: DText[] = [];
   @Input() indexs: number[] = undefined;
+  /** 原文彙編用。不論設定值開或關，當是原文彙編時，一定要開著。 */
+  @Input() isShowOrig?: 0|1; 
   @Output() clickRef: EventEmitter<string> = new EventEmitter();
   @Output() clickOrig: EventEmitter<string> = new EventEmitter();
   idxPass: number[];
@@ -169,6 +171,8 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     return undefined;
   }
   getIsShowOrig() {
-    return IsSnManager.s.getFromLocalStorage();
+    // 當 原文彙編時，一定要顯示 ，
+    if ( this.isShowOrig===undefined ) return IsSnManager.s.getFromLocalStorage();
+    return this.isShowOrig===1;
   }
 }
