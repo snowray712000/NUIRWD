@@ -2,7 +2,7 @@ import * as LQ from 'linq';
 import { UT } from './UT';
 export async function test_techDOMParserTests() {
   const console = { isDebug: true, log: a1 => { if (console.isDebug) { globalThis.console.log(a1); } } };
-  console.isDebug = false;
+  console.isDebug = true;
 
   return UT.gFnSafe(fns => {
     // 01. 基本呼叫

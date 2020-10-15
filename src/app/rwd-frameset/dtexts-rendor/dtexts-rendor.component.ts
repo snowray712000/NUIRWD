@@ -123,7 +123,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     console.log(a1.foot);
   }
   getKeywordClass(a1: DText) {
-
+    return ;
     if (IsColorKeyword.s.getFromLocalStorage() === false) {
       return undefined;
     }

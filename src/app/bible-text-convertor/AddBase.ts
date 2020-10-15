@@ -27,7 +27,7 @@ export interface DText {
   sobj?: any;
   isMap?: boolean;
   isPhoto?: boolean;
-  /** 新譯本是 h3 */
+  /** 新譯本是 h3；和合本2010 h2 */
   isTitle1?: 1;
   /** 交互參照 */
   isRef?: 1;
@@ -67,6 +67,8 @@ export interface DText {
   foot?: { text?: string, engs?: string, chap?: number, version?: 'cnet' | 'csb', id?: number }
   // 私名號。底線
   isName?: 0 | 1;
+  // 粗體。和合本2010、<b></b>
+  isBold?:0|1;
   // 紅字。耶穌說的話，會被標紅色。有些版本這麼作。
   isGODSay?: 0 | 1;
   // 虛點點。和合本，原文不存在，為了句子通順加上的翻譯。

@@ -38,6 +38,7 @@ export class QunitsComponent implements OnInit {
     UT.add(test_mergeDOneLineIfAddressContinue);
     UT.add(test_DAddressComparor);
     UT.add(test_mergeDifferentVersionResult);
+
     UT.testAsync().then(re => this.datas = re);
   }
 }

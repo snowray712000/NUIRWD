@@ -25,7 +25,9 @@ import { cvt_unv } from '../bible-text-convertor/unv';
 import { cvt_kjv } from '../bible-text-convertor/kjv';
 import { cvt_ncv } from '../bible-text-convertor/cvt_ncv';
 import { cvt_cbol } from '../bible-text-convertor/cvt_cbol';
+import { cvt_others } from "../bible-text-convertor/cvt_others";
 import { DQsbArgs, ApiQsb } from '../fhl-api/ApiQsb';
+import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 
 
 export interface DArgsDatasQueryor { addresses: VerseRange; versions: string[]; }
@@ -215,6 +217,8 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
           lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
         } else if (ver === 'cbol') {
           lines1 = cvt_cbol(lines1, args.addresses);
+        } else {   
+          lines1 = cvt_others(lines1, args.addresses);       
         }
 
         LQ.from(lines1).forEach(a1 => a1.ver = ver);

@@ -103,7 +103,15 @@
     var data105MathB = [{
         na: 'dev',
         na2: [
-            'dev <a href="/NUI/_rwd_dev/" target="_blank">dev</a>',
+            '201015a',
+            '新增-經文顯示. other的轉換，以和合本2010為開發. 有雛形了. h2 h3 u b 的 tag 都可顯示, 小括號 原文當然也是.',
+            'RD(經文顯示). cvt_other, 用了 DOMParsor. 與之前不一樣開發邏輯, 且更好. 因為之前同一節多個 u, 會判斷失敗, 另外, h2裡面有換行也會失敗.(原本方法)',
+            
+        ]
+    }, {
+        na: '201012a',
+        na2: [
+            'dev <a href="/NUI/201012a_rwd/" target="_blank">201012a</a>',
             '200910a',
             'Bug-ipad的 羅1:2-3.太1:2-4 錯誤. 書卷id會錯. 原因是 RegExp 被使用後 lastIndex 會改變, 以前有將它重置為 -1, 但實際要重置為 0. 電腦版會正確, 手機版會錯誤.',
             'Bug-ipad的 版本選擇 dialog 錯誤. 會沒有任何選項. 原因是 word-break: keep-all; 是無效的. 改正為 break-all 就可以了.(當然效果不一樣)',
@@ -121,11 +129,10 @@
             '201010a',
             '優化-版本. 若預設沒有版本,會跳出合和本.(之前以為成功了，實際上上平版才知道，沒有).這次真的成功了.',
             '優化-原文彙編(RD). cvt_unvAsync 10筆就會刷一次。(但結果不太有感)。',
+            '201012a',
             'Bug-原文彙編. 設定kjv版時, 下次還是從unv找. 設定好像無效. 因 VerForSnSearch 寫成 VerForSearch, 所以都沒有真正寫入設定值.',
-
-
         ]
-    }, {
+    }, , {
         na: '200907a',
         na2: [
             'dev <a href="/NUI/200907a_rwd/" target="_blank">200907a</a>',

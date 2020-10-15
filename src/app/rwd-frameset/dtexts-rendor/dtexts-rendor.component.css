@@ -97,6 +97,9 @@
   font-weight: 800;
   color: darkmagenta;
 }
+.isBold{
+  font-weight: 800;
+}
 
 .isTitle1::after {
   /* white-space: pre; */
