@@ -9,7 +9,7 @@ import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddRef
  * 開發，是以 和合本2010 去作的
 */
 
-export function cvt_others(data: DOneLine[], verses: VerseRange) {
+export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
   data = new AddMergeVerse().main(data, verses);
 
   let re1: DOneLine[] = [];
@@ -24,14 +24,34 @@ export function cvt_others(data: DOneLine[], verses: VerseRange) {
 
     it1 = replaceNewLineToBr(it1);
     it1 = replaceOrigToPair(it1);
+    if (ver === 'kjv') replaceKJVToPair(it1);
     it1 = addParentheses(it1);
     it1 = doUsingDOMParsor(it1);
     it1 = addReference(it1);
 
     return it1;
+    /** KJV 以 FI 為例，它是 FI Fi 而非 FI /FI 成對 */
+    function replaceKJVToPair(it1) {
+      for (const it2 of it1.children) {
+        if (it2.w !== undefined && isIncludeRef(it2.w)) {
+          // KJV 不是寫 <FI> </FI> 而是 <FI><Fi> 透過大小寫, RF
+          // CM 不是成對的
+          it2.w = it2.w.replace(/(<Fi>)|(<Rf>)|(<CM>)/g, (a1, a2, a3, a4) => {
+            if (a3 != null) return '</RF>';
+            if (a2 != null) return '</FI>';
+            if (a4 != null) return '<CM/>';
+          });
+        }
+      }
+      return;
+      function isIncludeRef(str: string): boolean {
+        return /<Fi>|<Rf>|<CM>/.test(str); // #路1|        
+      }
+    }
     /** 交互參照 */
     function addReference(it1: DOneLine): DOneLine {
       toStandard();
+
       const re1 = new AddReferenceInCommentText().main(
         it1.children, it1.addresses.verses[0]);
       return { children: re1, addresses: it1.addresses, ver: it1.ver };
@@ -46,9 +66,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange) {
             });
           }
         }
-      }
-      function isIncludeRef(str: string): boolean {
-        return /#[^\|]+\|/.test(str); // #路1|        
+        return;
+
+        function isIncludeRef(str: string): boolean {
+          return /#[^\|]+\|/.test(str); // #路1|        
+        }
       }
     }
     /** 小括號
@@ -94,17 +116,24 @@ export function cvt_others(data: DOneLine[], verses: VerseRange) {
           for (const it4 of rrr2)
             re.push(it4);
         } else {
-          if (it3.nodeType === 3)
-            rrr1.w = it3.textContent; // text
-          else if (it3.nodeType === 1 && it3.tagName === 'BR')
-            rrr1.isBr = 1;
-          else if (it3.nodeType === 1 && it3.tagName === 'U') {
+          if (it3.nodeType === 3) rrr1.w = it3.textContent; // text
+          else if (it3.nodeType === 1 && it3.tagName === 'BR') {
+            delete rrr1.w; rrr1.isBr = 1;
+          } else if (it3.nodeType === 1 && it3.tagName === 'U') {
             rrr1.isName = 1; rrr1.w = it3.textContent;
+          } else if (it3.nodeType === 1 && it3.tagName === 'FI') {
+            rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
+          } else if (it3.nodeType === 1 && it3.tagName === 'RF') {
+            rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
+          } else if (it3.nodeType === 1 && it3.tagName === 'CM') {
+            rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
           } else if (/WA?(T?)(H|G)(\d+[a-z]?)(I?)/.test(it3.tagName)) {
             let rr1 = /WA?(T?)(H|G)(\d+[a-z]?)(I?)/.exec(it3.tagName);
             const isT = rr1[1].length !== 0;
             rrr1.tp = rr1[2] as 'G' | 'H';
-            rrr1.sn = rr1[3];
+            let sn = rr1[3]; 
+            sn = sn.replace(/^0+/,''); // 讓 08521a 變為 8521a
+            rrr1.sn = sn
             if (rr1[4].length !== 0)
               rrr1.isCurly = 1;
 
@@ -115,7 +144,7 @@ export function cvt_others(data: DOneLine[], verses: VerseRange) {
               rrr1.w = '<' + rrr1.w + '>';
             if (rrr1.isCurly === 1)
               rrr1.w = '{' + rrr1.w + '}';
-          }
+          } 
           else
             rrr1.w = it3.outerHTML;
           re.push(rrr1);

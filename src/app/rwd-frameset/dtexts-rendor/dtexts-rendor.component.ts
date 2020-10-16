@@ -114,7 +114,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     // tslint:disable-next-line: max-line-length
     const r = [aa1.isBr, aa1.isHr, aa1.isListStart, aa1.isListEnd, aa1.isOrderStart, aa1.isOrderEnd, aa1.isRef,
     aa1.sn !== undefined ? 1 : 0,
-    aa1.key !== undefined ? 1 : 0,
+    // aa1.key !== undefined ? 1 : 0,
     aa1.foot !== undefined ? 1 : 0,
     ];
     return LQ.from(r).all(a1 => a1 !== 1);
@@ -122,20 +122,23 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   onClickFoot(a1: DText) {
     console.log(a1.foot);
   }
-  getKeywordClass(a1: DText) {
-    return ;
-    if (IsColorKeyword.s.getFromLocalStorage() === false) {
-      return undefined;
-    }
+  getKeywordClass(a1: DText) { 
+    const re: string[]=[];
+    if(a1.isParenthesesFW===1)re.push('isParenthesesFW');
+    if(a1.isParenthesesFW2===1)re.push('isParenthesesFW2');
+    if(a1.isParenthesesHW===1)re.push('isParenthesesHW');
+    if(a1.isTitle1===1) re.push('isTitle1');
+    if(a1.isBold===1) re.push('isBold');
+    if(a1.isName===1) re.push('isName');
 
-    if (a1.keyIdx0based !== undefined) {
-      let re = '';
-      const k = a1.keyIdx0based % 7; // style 顏色目前只有 0-6
-      re += `keyword key${k}`;
-      return re;
+    if (IsColorKeyword.s.getFromLocalStorage() ) {
+      if (a1.keyIdx0based !== undefined) {
+        re.push('keyword');        
+        const k = a1.keyIdx0based % 7; // style 顏色目前只有 0-6
+        re.push('key'+k);                
+      }      
     }
-
-    return undefined;
+    return re.join(' ');
   }
   isClassTwcbExp(it1: DText) {
     if (it1.class !== undefined) {
@@ -157,18 +160,14 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   }
   /** orig or 'orig keyword key0' */
   getOrigClass(it1: DText) {
-    if (it1.sn !== undefined) {
-      let re = 'orig';
-      if (it1.keyIdx0based !== undefined && isEnable()) {
-        const k = it1.keyIdx0based % 7; // style 顏色目前只有 0-6
-        re += `keyword key${k}`;
-      }
-      return re;
-      function isEnable() {
-        return IsColorKeyword.s.getFromLocalStorage();
-      }
-    }
-    return undefined;
+    const re:string[] = [];
+    re.push('orig');
+    if (IsColorKeyword.s.getFromLocalStorage() && it1.keyIdx0based !== undefined ){
+      re.push('keyword');
+      const k = it1.keyIdx0based % 7; // style 顏色目前只有 0-6
+      re.push('key'+k);
+    }    
+    return re.join(' ');
   }
   getIsShowOrig() {
     // 當 原文彙編時，一定要顯示 ，

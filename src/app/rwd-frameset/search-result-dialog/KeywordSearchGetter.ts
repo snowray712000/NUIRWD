@@ -17,6 +17,7 @@ import { Renderer2 } from '@angular/core';
 import { searchAllIndexViaSeApiAsync, DSeApiRecord } from './searchAllIndexViaSeApiAsync';
 import { queryBibleTextViaQsbApiPost } from './queryBibleTextViaQsbApiPost';
 import { delay } from 'q';
+import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 
 
 export class KeywordSearchGetter implements IKeywordSearchGetter {
@@ -163,9 +164,20 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
     }
     function cvt2Line(a1: DSeApiRecord, keyword: string) {
       let rre: DText[] = [{ w: a1.bible_text }];
+      rre = formatHtml(rre);
       rre = addKeywords(rre);
-
       return texts2line(rre);
+
+      /** 使搜尋支援 h2 h3 b u 原文 換行 等格式 */
+      function formatHtml(rre: DText[]) {
+        const rr1: DAddress = { book: a1.book, chap: a1.chap, verse: a1.verse };
+        const rr2: VerseRange = new VerseRange();
+        rr2.add(rr1);
+        const rr3: DOneLine = { children: rre, addresses: rr2 };
+        const rr4 = cvt_others([rr3], rr2);
+        return rr4[0].children;
+      }
+
       function addKeywords(texts: DText[]) {
         const keywords = keyword.split(' ');
         const dict = LQ.from(keywords)

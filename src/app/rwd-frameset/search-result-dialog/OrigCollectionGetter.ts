@@ -11,6 +11,8 @@ import { cvt_kjv } from 'src/app/bible-text-convertor/kjv';
 import { EventToolSingle } from 'src/app/tools/EventTool';
 import { delay } from 'q';
 import { SetFilterStatus } from './KeywordSearchGetter';
+import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
+
 
 /** 原文彙編功能 */
 export class OrigCollectionGetter implements IOrigCollectionGetter {
@@ -21,7 +23,7 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
   private _status_setFilter: SetFilterStatus;
   /** 在 setFilter 也要用 */
   private arg: { orig: string; version?: string | 'unv' | 'kjv' | 'rcuv'; bookDefault?: number; };
-  /** 在 setFilter 也要用, orig 只有數字 4812a 不會有 G 或 H */
+  /** 在 setFilter 也要用, orig 只有數字 4812a 不會有 G 或 H ... 而且會去掉前面多餘的0 */
   private argOrig: { orig: string; isOld: 0 | 1; };
   get step1IndexFindor$() { return this._step1Event.changed$; }
   get step2BibleTextGettor$() { return this._step2Event.changed$; }
@@ -51,8 +53,9 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
         isOT = /h/i.test(rr1[1]);
       }
 
-      const orig = rr1[2];
-      return { orig: rr1[2], isOld: isOT ? 1 : 0 };
+      let orig = rr1[2];
+      orig = orig.replace(/^0+/, ''); // 去掉前面多餘的0
+      return { orig: orig, isOld: isOT ? 1 : 0 };
     }
     async function getDataViaApiAsync(orig: string, isOld: 1 | 0) {
 
@@ -144,6 +147,23 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
 
 
     async function cvt(lines: DOneLine[]) {
+      const verses = new VerseRange();
+      verses.verses = [{ book: arg.bookDefault, chap: 1, verse: 1 }];
+      lines = cvt_others(lines, verses, arg.version);
+      addIfIsSnKeyword(lines, pthis.argOrig.orig);
+      return lines;
+      
+      function addIfIsSnKeyword(lines: DOneLine[], snKey: string) {
+        for (const it1 of lines) {
+          for (const it2 of it1.children) {
+            if (it2.sn !== undefined && it2.sn === snKey) {
+              it2.key = snKey;
+              it2.keyIdx0based = 0;
+            }
+          }
+        }
+      }
+
       const r2 = pthis.argOrig;
       if (arg.version === 'unv') {
         const verses = new VerseRange();

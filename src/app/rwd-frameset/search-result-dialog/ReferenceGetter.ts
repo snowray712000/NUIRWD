@@ -6,6 +6,7 @@ import { AddSnInfo } from 'src/app/version-parellel/one-ver/AddSnInfo';
 import { IReferenceGetter } from './search-result-dialog.component';
 import { ApiQsb, DOneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { map } from 'rxjs/operators';
+import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 export class ReferenceGetter implements IReferenceGetter {
   async mainAsync(arg: { reference: string; version: string }): Promise<DOneLine[]> {
     const recordsFromApi = await getDataAsync(getStrForApi(arg.reference), arg.version);
@@ -14,9 +15,8 @@ export class ReferenceGetter implements IReferenceGetter {
       return [];
     }
 
-    let re2 = recordsFromApi.map(a1 => this.cvt2DOneLineDText(a1));
-    re2 = new AddBrStdandard().main(re2, re2[0].addresses);
-    re2 = new AddSnInfo().main(re2, re2[0].addresses);
+    let re2: DOneLine[] = recordsFromApi.map(a1 => this.cvt2DOneLineDText(a1));
+    re2 = cvt_others(re2,re2[0].addresses);
     return re2;
     async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
       const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version });

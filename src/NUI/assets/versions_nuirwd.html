@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <title></title>
     <style>
@@ -20,9 +21,15 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
     <style>
         .na {
@@ -32,9 +39,10 @@
     </style>
     <!-- 開始內容 -->
     <p>
-        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
-      NUI (電腦手機通用)版本說明
-    </a>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+            aria-controls="collapseExample" style="width: 100%;">
+            NUI (電腦手機通用)版本說明
+        </a>
     </p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body" id='math105aB'>
@@ -52,7 +60,7 @@
         function gArrayList_UlLi(array) {
             if (Array.isArray(array)) {
 
-                var r4a = it.na2.map(function(a1) {
+                var r4a = it.na2.map(function (a1) {
                     return '<li>' + a1 + '</li>';
                 }).join('');
                 return re = '<span><ul>' + r4a + '</ul></span>';
@@ -79,7 +87,7 @@
 
         return '<div>' + r1 + r23 + r4 + '</div>';
     }
-    $(function() {
+    $(function () {
         // var len1 = '20200410a 統測105 數學B'.length
         for (const it of data105MathB) {
             $('#math105aB').append($(gHtml(it)));
@@ -106,7 +114,11 @@
             '201015a',
             '新增-經文顯示. other的轉換，以和合本2010為開發. 有雛形了. h2 h3 u b 的 tag 都可顯示, 小括號 原文當然也是.',
             'RD(經文顯示). cvt_other, 用了 DOMParsor. 與之前不一樣開發邏輯, 且更好. 因為之前同一節多個 u, 會判斷失敗, 另外, h2裡面有換行也會失敗.(原本方法)',
-            
+            '201016a',
+            '交互參照顯示. 現在 交互參照 dialog 其它版本也變漂亮了.',
+            '關鍵字搜尋顯示. 現在 關鍵字搜尋 dialog 其它版本也變漂亮了.',
+            '原文彙編顯示. 現在 原文彙編 dialog 變漂亮了.',
+            'RD. 原文彙編核心連和合本也改 cvt_others, kjv要另外再處理一點(也包在裡面了)',
         ]
     }, {
         na: '201012a',
@@ -341,7 +353,7 @@
     }, {
         na: '200521c_一版本經文顯示',
         na2: ['可顯示SN', '(RD)取得 qsb api 結果, parsing 經文與SN.', '(RD)one-ver-component']
-    }, ];
+    },];
 </script>
 
 </html>
