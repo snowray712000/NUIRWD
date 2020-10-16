@@ -32,6 +32,7 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
   private _argKeyword: string;
   /** 避免還沒轉完就轉下一個. ready: bibleText抓完之後 */
   private _status_setFilter: SetFilterStatus = SetFilterStatus.noindex;
+  private _argVersion: string;
 
 
   /** _eventVerseQuery complete 時, 可開始取用 */
@@ -50,6 +51,7 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
   async mainAsync(arg: { keyword: string; version?: string }): Promise<DOneLine[]> {
     const pthis = this;
     pthis._argKeyword = arg.keyword;
+    pthis._argVersion = arg.version;
 
     try {
       const rr1 = await searchAsync(arg.keyword, arg.version);
@@ -91,7 +93,7 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
       }
     }
     async function setPropBibleTexts(records: DSeApiRecord[], version: string) {
-      await queryBibleTextViaQsbApiPost(records, version, 0);
+      await queryBibleTextViaQsbApiPost(records, version, 1);
       return;
     }
 
@@ -174,7 +176,7 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
         const rr2: VerseRange = new VerseRange();
         rr2.add(rr1);
         const rr3: DOneLine = { children: rre, addresses: rr2 };
-        const rr4 = cvt_others([rr3], rr2);
+        const rr4 = cvt_others([rr3], rr2, pthis._argVersion);
         return rr4[0].children;
       }
 

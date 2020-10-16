@@ -16,10 +16,10 @@ export class ReferenceGetter implements IReferenceGetter {
     }
 
     let re2: DOneLine[] = recordsFromApi.map(a1 => this.cvt2DOneLineDText(a1));
-    re2 = cvt_others(re2,re2[0].addresses);
+    re2 = cvt_others(re2, re2[0].addresses, arg.version);
     return re2;
     async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
-      const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version });
+      const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version, isExistStrong: true });
       const r2 = r1.pipe(map(a1 => a1.record));
       return r2.toPromise();
     }

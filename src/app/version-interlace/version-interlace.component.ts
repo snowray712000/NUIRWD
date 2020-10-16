@@ -207,18 +207,12 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
           return { children: [{ w: a1.bible_text }], addresses: vr, ver } as DOneLine;
         }).toArray();
 
-        if (ver === 'unv') {
-          // const isSnExist = IsSnManager.s.getFromLocalStorage() ? 1 : 0;
-          lines1 = cvt_unv(lines1, { verses: args.addresses, isSnExist: 1 }); // sn 一定要有 (顯示會隱藏)
-        } else if (ver === 'kjv') {
-          // const isSnExist = IsSnManager.s.getFromLocalStorage() ? 1 : 0;
-          lines1 = cvt_kjv(lines1, { verses: args.addresses, isSnExist: 1 }); // sn 一定要有 (顯示會隱藏)
-        } else if (ver === 'ncv') {
+        if (ver === 'ncv') {
           lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
         } else if (ver === 'cbol') {
           lines1 = cvt_cbol(lines1, args.addresses);
-        } else {   
-          lines1 = cvt_others(lines1, args.addresses);       
+        } else {
+          lines1 = cvt_others(lines1, args.addresses, ver);
         }
 
         LQ.from(lines1).forEach(a1 => a1.ver = ver);

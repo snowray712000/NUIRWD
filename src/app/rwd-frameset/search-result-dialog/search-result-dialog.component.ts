@@ -200,11 +200,11 @@ export class SearchResultDialogComponent implements OnInit {
     searchQ.mainAsync({ keyword: this.getKeyword(), version });
   }
   getIsOrig() {
-    return /G|H[\da-z]+/i.test(this.getKeyword());
+    return /^G|H\d+[a-z]?$/i.test(this.getKeyword());
   }
 
   getKeyword() {
-    return this.dataByParent.keyword;
+    return this.dataByParent.keyword.trim(); // 前後多一個空白，整個死掉
   }
   getOrig(): { sn: string, isOld?: 0 | 1 } {
     const re1 = /(G|H)?(\d+)/i.exec(this.getKeyword());

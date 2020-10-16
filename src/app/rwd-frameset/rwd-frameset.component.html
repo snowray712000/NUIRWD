@@ -14,7 +14,7 @@
     </span>
 
     <input #seachinput matInput placeholder="G81 H81 #太12:31;路2;3| 摩西"
-      (keyup.enter)="onSearchInputEnter(seachinput.value)" [style.width]="isMobile()?'8em':undefined" [value]="'H4186'" />
+      (keyup.enter)="onSearchInputEnter(seachinput.value)" [style.width]="isMobile()?'8em':undefined">
     <button mat-icon-button (click)="onClickSearch(seachinput.value)">
       <mat-icon>search</mat-icon>
     </button>

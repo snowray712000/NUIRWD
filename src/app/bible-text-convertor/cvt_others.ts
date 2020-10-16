@@ -36,16 +36,17 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
         if (it2.w !== undefined && isIncludeRef(it2.w)) {
           // KJV 不是寫 <FI> </FI> 而是 <FI><Fi> 透過大小寫, RF
           // CM 不是成對的
-          it2.w = it2.w.replace(/(<Fi>)|(<Rf>)|(<CM>)/g, (a1, a2, a3, a4) => {
+          it2.w = it2.w.replace(/(<Fi>)|(<Rf>)|(<CM>)|<Fo>/g, (a1, a2, a3, a4, a5) => {
             if (a3 != null) return '</RF>';
             if (a2 != null) return '</FI>';
             if (a4 != null) return '<CM/>';
+            if (a5 != null) return '</FO>';
           });
         }
       }
       return;
       function isIncludeRef(str: string): boolean {
-        return /<Fi>|<Rf>|<CM>/.test(str); // #路1|        
+        return /<Fi>|<Rf>|<CM>|<Fo>/.test(str); // #路1|        
       }
     }
     /** 交互參照 */
@@ -115,6 +116,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
           let rrr2 = getAllDTextsFromAllChildrenNode(it3.innerHTML, rrr1);
           for (const it4 of rrr2)
             re.push(it4);
+        } else if (it3.nodeType === 1 && /^FO$/.test(it3.tagName)) {
+          rrr1.isTitle1 = 1; // b
+          let rrr2 = getAllDTextsFromAllChildrenNode(it3.innerHTML, rrr1);
+          for (const it4 of rrr2)
+            re.push(it4);
         } else {
           if (it3.nodeType === 3) rrr1.w = it3.textContent; // text
           else if (it3.nodeType === 1 && it3.tagName === 'BR') {
@@ -131,8 +137,8 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             let rr1 = /WA?(T?)(H|G)(\d+[a-z]?)(I?)/.exec(it3.tagName);
             const isT = rr1[1].length !== 0;
             rrr1.tp = rr1[2] as 'G' | 'H';
-            let sn = rr1[3]; 
-            sn = sn.replace(/^0+/,''); // 讓 08521a 變為 8521a
+            let sn = rr1[3];
+            sn = sn.replace(/^0+/, ''); // 讓 08521a 變為 8521a
             rrr1.sn = sn
             if (rr1[4].length !== 0)
               rrr1.isCurly = 1;
@@ -144,7 +150,7 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
               rrr1.w = '<' + rrr1.w + '>';
             if (rrr1.isCurly === 1)
               rrr1.w = '{' + rrr1.w + '}';
-          } 
+          }
           else
             rrr1.w = it3.outerHTML;
           re.push(rrr1);
