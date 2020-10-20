@@ -47,6 +47,7 @@ import { DlinesRendorComponent } from './rwd-frameset/dlines-rendor/dlines-rendo
 import { MobileTestComponent } from './mobile-test/mobile-test.component';
 import { Dialog2bComponent } from './mobile-test/dialog2b/dialog2b.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DialogFootComponent } from './rwd-frameset/dialog-foot/dialog-foot.component';
 const entryComponents = [
   BibleSelectionsComponent,
   // InfoDialogComponent,
@@ -57,6 +58,7 @@ const entryComponents = [
   DlinesRendorComponent,
   MobileTestComponent,
   Dialog2bComponent,
+  DialogFootComponent,
 ];
 
 
@@ -84,6 +86,7 @@ const entryComponents = [
     DlinesRendorComponent,
     MobileTestComponent,
     Dialog2bComponent,
+    DialogFootComponent,
   ],
   entryComponents,
   imports: [

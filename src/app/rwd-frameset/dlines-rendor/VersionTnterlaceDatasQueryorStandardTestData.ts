@@ -45,9 +45,9 @@ export class VersionTnterlaceDatasQueryorStandardTestData implements IDatasQuery
     };
     const rr6: DOneLine = {
       children: [{ w: '到了指定的時候' },
-      { w: '【180】', foot: { engs: 'Gen', chap: 4, version: 'cnet', id: 180 } },
+      { w: '【180】', foot: { book:1, chap: 4, version: 'cnet', id: 180 } },
       { w: '，該隱拿地裏的出產為供物獻' },
-      { w: '【181】', foot: { engs: 'Gen', chap: 4, version: 'cnet', id: 181 } },
+      { w: '【181】', foot: { book:1, chap: 4, version: 'cnet', id: 181 } },
       { w: '給耶和華，' }],
       addresses: VerseRange.fD('創4:3'),
       ver: 'NET聖經中譯本',
@@ -73,7 +73,7 @@ export class VersionTnterlaceDatasQueryorStandardTestData implements IDatasQuery
       children: [
         { w: '耶穌聽了，十分感慨，對跟隨他的人說：' },
         { w: '「我確實地告訴你們：在以色列我沒有見過有這麼大信心', isGODSay: 1 },
-        { w: '【1】', isGODSay: 1, foot: { version: 'csb', id: 1, engs: 'Matt', chap: 8 } },
+        { w: '【1】', isGODSay: 1, foot: { version: 'csb', id: 1, book: 40, chap: 8 } },
         { w: '的人。', isGODSay: 1 }
       ],
       addresses: VerseRange.fD('太8:10'),

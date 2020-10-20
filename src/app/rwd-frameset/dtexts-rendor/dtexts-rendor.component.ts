@@ -3,10 +3,15 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import * as LQ from 'linq';
 import { getIdxPass } from './getIdxPass';
-import { addListStartAndEnd } from './addListStartAndEnd';
-import { EventManager } from '@angular/platform-browser';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
 import { IsSnManager } from '../settings/IsSnManager';
+import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
+import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
+import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
+import { ajaxGetJSON } from 'rxjs/internal/observable/dom/AjaxObservable';
+import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogFootComponent } from '../dialog-foot/dialog-foot.component';
 @Component({
   selector: 'app-dtexts-rendor',
   templateUrl: './dtexts-rendor.component.html',
@@ -16,11 +21,11 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   @Input() datas: DText[] = [];
   @Input() indexs: number[] = undefined;
   /** 原文彙編用。不論設定值開或關，當是原文彙編時，一定要開著。 */
-  @Input() isShowOrig?: 0|1; 
+  @Input() isShowOrig?: 0 | 1;
   @Output() clickRef: EventEmitter<string> = new EventEmitter();
   @Output() clickOrig: EventEmitter<string> = new EventEmitter();
   idxPass: number[];
-  constructor() {
+  constructor(public dialog: MatDialog) {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (isCommentUseDtextRendor()) {
@@ -120,23 +125,45 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     return LQ.from(r).all(a1 => a1 !== 1);
   }
   onClickFoot(a1: DText) {
-    console.log(a1.foot);
-  }
-  getKeywordClass(a1: DText) { 
-    const re: string[]=[];
-    if(a1.isParenthesesFW===1)re.push('isParenthesesFW');
-    if(a1.isParenthesesFW2===1)re.push('isParenthesesFW2');
-    if(a1.isParenthesesHW===1)re.push('isParenthesesHW');
-    if(a1.isTitle1===1) re.push('isTitle1');
-    if(a1.isBold===1) re.push('isBold');
-    if(a1.isName===1) re.push('isName');
+    const pthis = this;
+    if ( a1.foot.text === undefined ){      
+      const r1 = getFromApi().toPromise().then(arg1 => {
+        if ( arg1.status === 'success'){
+          a1.foot.text = arg1.record[0].text;
+          console.log(a1);
+          
+          pthis.dialog.open(DialogFootComponent,{data:a1});
+        }      
+      });
+    } else {
+      console.log(a1);
+      pthis.dialog.open(DialogFootComponent,{data:a1});      
+    }
+    return;
 
-    if (IsColorKeyword.s.getFromLocalStorage() ) {
+    interface DRtResult { record: { id: number, text: string }[], status?: 'success' };
+    function getFromApi(): Observable<DRtResult> {
+      const r1 = BibleBookNames.getBookName(a1.foot.book, BookNameLang.Matt);
+      const r2 = 'engs=' + r1 + '&chap=' + a1.foot.chap + '&version=' + a1.foot.version + '&id=' + a1.foot.id;
+      const r3 = new FhlUrl().getJsonUrl() + 'rt.php?' + r2;
+      return ajaxGetJSON(r3);
+    }
+  }
+  getKeywordClass(a1: DText) {
+    const re: string[] = [];
+    if (a1.isParenthesesFW === 1) re.push('isParenthesesFW');
+    if (a1.isParenthesesFW2 === 1) re.push('isParenthesesFW2');
+    if (a1.isParenthesesHW === 1) re.push('isParenthesesHW');
+    if (a1.isTitle1 === 1) re.push('isTitle1');
+    if (a1.isBold === 1) re.push('isBold');
+    if (a1.isName === 1) re.push('isName');
+
+    if (IsColorKeyword.s.getFromLocalStorage()) {
       if (a1.keyIdx0based !== undefined) {
-        re.push('keyword');        
+        re.push('keyword');
         const k = a1.keyIdx0based % 7; // style 顏色目前只有 0-6
-        re.push('key'+k);                
-      }      
+        re.push('key' + k);
+      }
     }
     return re.join(' ');
   }
@@ -160,18 +187,18 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   }
   /** orig or 'orig keyword key0' */
   getOrigClass(it1: DText) {
-    const re:string[] = [];
+    const re: string[] = [];
     re.push('orig');
-    if (IsColorKeyword.s.getFromLocalStorage() && it1.keyIdx0based !== undefined ){
+    if (IsColorKeyword.s.getFromLocalStorage() && it1.keyIdx0based !== undefined) {
       re.push('keyword');
       const k = it1.keyIdx0based % 7; // style 顏色目前只有 0-6
-      re.push('key'+k);
-    }    
+      re.push('key' + k);
+    }
     return re.join(' ');
   }
   getIsShowOrig() {
     // 當 原文彙編時，一定要顯示 ，
-    if ( this.isShowOrig===undefined ) return IsSnManager.s.getFromLocalStorage();
-    return this.isShowOrig===1;
+    if (this.isShowOrig === undefined) return IsSnManager.s.getFromLocalStorage();
+    return this.isShowOrig === 1;
   }
 }

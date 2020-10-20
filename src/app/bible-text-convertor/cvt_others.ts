@@ -4,6 +4,10 @@ import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParentheses
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { deepCopy } from '../tools/deepCopy';
 import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddReferenceInCommentText';
+import { SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
+import { BibleBookNames } from '../const/book-name/BibleBookNames';
+import { BookNameConstants } from '../const/book-name/BookNameConstants';
+import * as LQ from 'linq';
 
 /**
  * 開發，是以 和合本2010 去作的
@@ -25,11 +29,183 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     it1 = replaceNewLineToBr(it1);
     it1 = replaceOrigToPair(it1);
     if (ver === 'kjv') replaceKJVToPair(it1);
+    if (ver === 'cnet_foot') replaceCnetFootReference(it1);
+    if (ver === 'csb_foot') replaceCsbFootReference(it1); 
     it1 = addParentheses(it1);
     it1 = doUsingDOMParsor(it1);
     it1 = addReference(it1);
+    it1 = addFoot(it1, ver);
 
     return it1;
+    /** 
+     * csb(中文標準譯本－新約only) 版本注釋。在 foot dialog 要用到的
+     * 太1:23 1:23 《以賽亞書》7:14。
+    */
+   function replaceCsbFootReference(it1: DOneLine): DOneLine {
+    const reg = gRegExp();       // doText() 中用
+
+    for (const it2 of it1.children) {
+      doText(it2);
+    }
+
+    return it1;
+    function doText(it2: DText) {
+      if (it2.w === undefined) return;
+
+      let r3 = new SplitStringByRegexVer2().main(it2.w, reg);
+      if (r3.length === 1) { return; }    
+
+      console.log(it2.w);
+      console.log(r3);
+      
+        
+
+      const re: DText[] = [];
+      for (let i3 = r3.length - 1; i3 > -1; i3--) {
+        const it3 = r3[i3];
+        const r4 = deepCopy(it2);
+        r4.w = it3.w;
+        if (it3.exec == null) { re.push(r4); continue; }
+
+        // assert ( it3.exec != null )
+        if (i3 !== 0 && r3[i3 - 1].exec != null) {
+          // [0]: 《以賽亞書》7:14
+          // [1]: 以賽亞書
+          // [2]: 7:14
+          r3[i3 - 1].w += it3.w;
+        } else {
+          it3.w = it3.w.replace(/[(《)|(》)|(；)]/g, (a1, a2, a3, a4) => {
+            if (a2 != null) return '';
+            if (a3 != null) return '';
+            if (a4 != null) return ';';
+          });
+          it3.w = '#' + it3.w + '|';
+          re.push(it3);
+        }
+      }
+      it2.w = LQ.from(re).select(a1 => a1.w)
+        .reverse().toArray().join('');
+
+    }
+    function gRegExp() {
+      BookNameConstants.CHINESE_BOOK_NAMES
+      const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)        
+        .orderByDescending(a1 => a1.length).toArray().join('|');        
+      const reg1 = new RegExp('《(' + str1 + ')》(\\d+[\\d　 :；;,\\-]*)', 'g');
+      // 不行 徒3 因為，奉
+      return reg1;
+    }
+  }
+    /** 
+     * cnet 版本注釋。在 foot dialog 要用到的
+     * 羅1:1 （詩89:3；撒下7:5, 8）
+     * 羅1:4 本處和馬太福音28:18同義：
+     * 創3:1 例：參啟12:9）  舊約偽經《禧年書》(Jubilees) 3:28如此說：「 （假定是希伯來話，見12:26） 在《猶太古史》(Jewish Antiquities)1.1.4 (1.41)
+    */
+    function replaceCnetFootReference(it1: DOneLine): DOneLine {
+      const reg = gRegExp();       // doText() 中用
+      
+      for (const it2 of it1.children) {
+        doText(it2);
+      }
+
+      return it1;
+      function doText(it2: DText) {
+        if (it2.w === undefined) return;
+
+        let r3 = new SplitStringByRegexVer2().main(it2.w, reg);
+        if (r3.length === 1) { return; }
+
+        const re: DText[] = [];
+        for (let i3 = r3.length - 1; i3 > -1; i3--) {
+          const it3 = r3[i3];
+          const r4 = deepCopy(it2);
+          r4.w = it3.w;
+          if (it3.exec == null) { re.push(r4); continue; }
+
+          // assert ( it3.exec != null )
+          if (i3 !== 0 && r3[i3 - 1].exec != null) {
+            r3[i3 - 1].w += it3.w;
+          } else {
+            it3.w = it3.w.replace(/[( +)|(　+)|(；)]/g, (a1, a2, a3, a4) => {
+              if (a2 != null) return '';
+              if (a3 != null) return '';
+              if (a4 != null) return ';';
+            });
+            it3.w = '#' + it3.w + '|';
+            re.push(it3);
+          }
+        }
+        it2.w = LQ.from(re).select(a1 => a1.w)
+          .reverse().toArray().join('');
+
+      }
+      function gRegExp() {
+        BookNameConstants.CHINESE_BOOK_NAMES
+        const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)
+          .concat(BookNameConstants.CHINESE_BOOK_ABBREVIATIONS)
+          .orderByDescending(a1 => a1.length).toArray().join('|');
+        const reg1 = new RegExp('(?:' + str1 + ')\\d+[\\d　 :；;,\\-]*', 'g');
+        // 不行 徒3 因為，奉
+        return reg1;
+      }
+    }
+    /** 注腳。大衛【1】，見 CNET 或是 中文標準譯本 */
+    function addFoot(it1: DOneLine, ver: string): DOneLine {
+      const re: DText[] = [];
+      const addr = it1.addresses.verses[0];
+
+      //const ver = it1.ver;
+      //const address = it1.addresses.verses[0];
+
+      let isChanged = false;
+      for (const it2 of it1.children) {
+        const re2 = doText(it2);
+        if (re2.length === 1) re.push(re2[0]);
+        else {
+          if (isChanged === false) isChanged = true;
+          for (const it3 of re2) { re.push(it3); }
+        }
+      }
+      if (isChanged) {
+        it1.children = re;
+      }
+      return it1;
+      /** 回傳1個，表示沒有變。 */
+      function doText(it2: DText): DText[] {
+        if (it2.w === undefined) {
+          return [it2];
+        }
+
+        const re: DText[] = [];
+        if (it2.w !== undefined) {
+          const r3 = new SplitStringByRegexVer2().main(it2.w, /【(\d+)】/g);
+          if (r3.length === 1) {
+            re.push(it2);
+          } else {
+            if (isChanged === false) {
+              isChanged = true;
+            }
+            for (const it3 of r3) {
+              const r4 = deepCopy(it2) as DText;
+              r4.w = it3.w;
+              if (it3.exec != null) {
+                r4.foot = {
+                  id: parseInt(it3.exec[1]),
+                  version: ver,
+                  book: addr.book,
+                  chap: addr.chap,
+                  verse: addr.verse,
+                };
+              }
+              re.push(r4);
+            }
+          }
+        }
+        return re;
+      }
+
+    }
     /** KJV 以 FI 為例，它是 FI Fi 而非 FI /FI 成對 */
     function replaceKJVToPair(it1) {
       for (const it2 of it1.children) {
