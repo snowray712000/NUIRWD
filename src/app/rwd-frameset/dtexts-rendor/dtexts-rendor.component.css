@@ -13,6 +13,9 @@
 .isName {
   text-decoration: underline;
 }
+.isSnActived{
+  color: blue;
+}
 .isGODSay {
   color: brown;
 }

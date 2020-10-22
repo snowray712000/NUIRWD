@@ -4,3 +4,4 @@ export class IsSnManager extends LocalStorageBooleanBase {
   static s = new IsSnManager();
   _getKey(): string { return 'issn'; }
 }
+

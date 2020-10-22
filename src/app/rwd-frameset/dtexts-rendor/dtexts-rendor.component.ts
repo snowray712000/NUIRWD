@@ -1,10 +1,11 @@
 import { IsColorKeyword } from '../settings/IsColorKeyword';
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import * as LQ from 'linq';
 import { getIdxPass } from './getIdxPass';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
 import { IsSnManager } from '../settings/IsSnManager';
+import { SnActiveEvent } from "../settings/SnActiveEvent";
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
@@ -25,7 +26,17 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   @Output() clickRef: EventEmitter<string> = new EventEmitter();
   @Output() clickOrig: EventEmitter<string> = new EventEmitter();
   idxPass: number[];
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, public detector: ChangeDetectorRef) {
+    const pthis = this;
+    SnActiveEvent.s.changed$.subscribe(a1 => {
+      if (pthis.datas !== undefined) {
+        const r1 = LQ.from(pthis.datas).where(a1 => a1.sn !== undefined);
+        const r2 = g(a1);
+        r1.forEach(a2 => a2.isSnActived = (r2 === g(a2) ? 1 : 0));
+        pthis.detector.markForCheck();
+      }
+      function g(a1) { return a1 === undefined ? '' : a1.tp + a1.sn; }
+    });
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (isCommentUseDtextRendor()) {
@@ -63,8 +74,12 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   onClickReference(a1: string) {
     this.clickRef.emit(a1);
   }
-  onClickOrig(a1: string) {
-    this.clickOrig.emit(a1);
+  onClickOrig(a1: DText) {
+    this.clickOrig.emit(a1.w);
+    SnActiveEvent.s.updateValueAndTriggerEvent(a1); // 平板沒有 mouse move, 所以還是加這一個
+  }
+  onMouseEnterSn(en, a1: DText) {
+    SnActiveEvent.s.updateValueAndTriggerEvent(a1);
   }
   /** tp, 0 OrderStart 1 ListStart */
   getIndexsForChildOrderCore(it1: DText, i1: number, tp: 0 | 1) {
@@ -126,18 +141,18 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   }
   onClickFoot(a1: DText) {
     const pthis = this;
-    if ( a1.foot.text === undefined ){      
+    if (a1.foot.text === undefined) {
       const r1 = getFromApi().toPromise().then(arg1 => {
-        if ( arg1.status === 'success'){
+        if (arg1.status === 'success') {
           a1.foot.text = arg1.record[0].text;
           console.log(a1);
-          
-          pthis.dialog.open(DialogFootComponent,{data:a1});
-        }      
+
+          pthis.dialog.open(DialogFootComponent, { data: a1 });
+        }
       });
     } else {
       console.log(a1);
-      pthis.dialog.open(DialogFootComponent,{data:a1});      
+      pthis.dialog.open(DialogFootComponent, { data: a1 });
     }
     return;
 
@@ -193,6 +208,10 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
       re.push('keyword');
       const k = it1.keyIdx0based % 7; // style 顏色目前只有 0-6
       re.push('key' + k);
+    }
+
+    if (it1.isSnActived === 1) {
+      re.push('isSnActived');
     }
     return re.join(' ');
   }

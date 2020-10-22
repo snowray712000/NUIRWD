@@ -14,19 +14,20 @@ import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 // import { VerseAddress } from 'src/app/bible-address/VerseAddress';
-import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
+import { ApiQsb, DOneQsbRecord, DQsbResult } from 'src/app/fhl-api/ApiQsb';
 import { TextWithSnConvertor } from './TextWithSnConvertor';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { VerseActivedChangedDo, FunctionDoWhenVerseChanged } from './VerseActivedChangedDo';
 import { EventVerseChanged } from './EventVerseChanged';
 import { FunctionIsOpened } from '../FunctionIsOpened';
 import { FunctionSelectionTab } from '../FunctionSelectionTab';
+import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -40,8 +41,9 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   prev: DAddress;
   isOldTestment = false;
   // domContentWithSn: SafeHtml;
-  textsWithSnUnv: DText[];
-  textsWithSnKjv: DText[];
+  textsWithSnUnv: DOneLine[];
+  textsWithSnKjv: DOneLine[];
+  verseRange: VerseRange;
   snActived: number = 0;
   verseAddress: string;
   @Input() cur: DAddress = { book: 41, chap: 1, verse: 4 };
@@ -122,20 +124,44 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     });
   }
   private async queryContentWithSnAsync(bk: number, ch: number, vr: number) {
-    const r1 = new VerseRange();
-    r1.add({ book: bk, chap: ch, verse: vr });
-    // this.thisVerseDescription = r1.toStringChineseShort();
-    const qstr = r1.toStringChineseShort();
+    const pthis = this;
+    const qstr = getQstrForApi();
+    const r1 = [getUnvAsync(), getKjvAsync()];
+    Promise.all(r1).then(qsbResults => {
+      pthis.verseRange = getVerseRange();
+      pthis.textsWithSnUnv = cvtUnv(qsbResults[0]);
+      pthis.textsWithSnKjv = cvtKjv(qsbResults[1]);
+    });
+    return;
+    function cvtKjv(arg: DQsbResult): DOneLine[] {
+      return cvtCommon(arg, 'kjv');
+    }
+    function cvtUnv(arg: DQsbResult): DOneLine[] {
+      return cvtCommon(arg, 'unv');
+    }
+    function cvtCommon(arg: DQsbResult, ver: string): DOneLine[] {
+      const r1: DOneLine = { children: [{ w: arg.record[0].bible_text }], addresses: pthis.verseRange, ver: ver };
 
-    const r3 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
-    // console.log(r3.record[0].bible_text);
-    const rr4 = new TextWithSnConvertor().main(r3.record[0].bible_text);
-    // console.log(rr4);
-    this.textsWithSnUnv = rr4;
-    const r33 = await new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
-    // console.log(r33);
-
-    this.textsWithSnKjv = new TextWithSnConvertor().main(r33.record[0].bible_text);
+      const r2 = cvt_others([r1], pthis.verseRange, ver);
+      return r2;
+    }
+    function getVerseRange() {
+      const verse = new VerseRange();
+      verse.add({ book: bk, chap: ch, verse: vr });
+      return verse;
+    }
+    function getQstrForApi() {
+      const r1 = new VerseRange();
+      r1.add({ book: bk, chap: ch, verse: vr });
+      // this.thisVerseDescription = r1.toStringChineseShort();
+      return r1.toStringChineseShort();
+    }
+    function getUnvAsync() {
+      return new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
+    }
+    function getKjvAsync() {
+      return new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
+    }
   }
   private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
     const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();

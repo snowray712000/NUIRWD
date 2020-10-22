@@ -6,7 +6,7 @@
       <br *ngIf="it1.isBr===1" />
       <hr *ngIf="it1.isHr===1" />
       <!-- <span *ngIf="it1.key!==undefined" [class]="getKeywordClass(it1)">{{it1.w}}</span> -->
-<span *ngIf="it1.sn!==undefined && getIsShowOrig()" (click)="onClickOrig(it1.w)" [class]="getOrigClass(it1)">
+<span *ngIf="it1.sn!==undefined && getIsShowOrig()" [class]="getOrigClass(it1)" (click)="onClickOrig(it1)" (mouseenter)="onMouseEnterSn($event,it1)">
         {{it1.w}}
       </span>
 <span *ngIf="it1.isRef===1" [class.isTitle1]="it1.isTitle1===1" class='reference' [attr.data-ref]="'#'+it1.refDescription+'|'" (click)="onClickReference('#'+it1.refDescription+'|')">{{it1.w}}</span>

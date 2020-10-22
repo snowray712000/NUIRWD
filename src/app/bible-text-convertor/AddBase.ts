@@ -7,11 +7,14 @@ export interface IAddBase {
 /** w,sn,tp,tp2 */
 export interface DText {
   w?: string;
+  /** 不含 H 或 G, 且數字若有零會去頭 */
   sn?: string;
   /** H, Hebrew G, Greek */
   tp?: 'H' | 'G';
   /** T, time */
   tp2?: 'WG' | 'WTG' | 'WAG' | 'WTH' | 'WH';
+  /** 是否等於目前 active sn */
+  isSnActived?: 0|1;
   /** 花括號 */
   isCurly?: 1 | 0;
   /** 此節是 'a', 且無法與上節合併時, 會顯示 '併入上節' 並且加上 isMerge=1, 若已與上節合併, 會修正上節的 verses, 並將此節 remove 掉 */

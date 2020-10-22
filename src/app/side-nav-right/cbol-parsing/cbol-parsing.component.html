@@ -41,19 +41,11 @@
 
   <mat-divider></mat-divider>
   <div>
-    <div *ngFor="let it2 of [textsWithSnUnv,textsWithSnKjv]; let i2=index">
-      <span>{{i2===0?'和合本':'KJV'}}</span><br />
-      <span *ngFor="let it1 of it2">
-        <ng-container *ngIf="it1.sn!==undefined; else elseTemplate">
-          <span appTextWithSn [addr]="cur" [data]="it1" [snActived]="snActived"
-            (mouseenter)="onMouseEnterSn($event,it1)">{{it1.w}}</span>
-        </ng-container>
-        <ng-template #elseTemplate>
-          <span>{{it1.w}}</span>
-        </ng-template>
-      </span>
-    </div>
-    <br />
+    和合本<br/>
+    <app-dlines-rendor [datas]="textsWithSnUnv" [verseRange]
+    ="verseRange" [isShowOrig]="1"></app-dlines-rendor>
+    KJV<br/>
+    <app-dlines-rendor [datas]="textsWithSnKjv" [verseRange]="verseRange" [isShowOrig]="1"></app-dlines-rendor>    
   </div>
   <mat-divider></mat-divider>
   <div class='bottompanel'>
