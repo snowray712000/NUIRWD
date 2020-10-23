@@ -3,7 +3,7 @@ import { DAddress } from './DAddress';
 import { VerseRange } from './VerseRange';
 
 
-export function getAddressesText(verseRange: VerseRange, tp?: '' | '1' | 'v1' | '1:1' | '1v1' | 'none' | '創1v1', lang?: '創' | 'Ge' | '创'): string {
+export function getAddressesText(verseRange: VerseRange, tp?: '' | '1' | 'v1' | '1:1' | '1v1' | 'none' | '創1v1' | '創1:1', lang?: '創' | 'Ge' | '创'): string {
   if (isUndefined()) {
     return undefined;
   }

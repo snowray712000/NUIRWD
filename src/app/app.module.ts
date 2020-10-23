@@ -32,7 +32,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
 // import { InfoDialogComponent } from './side-nav-right/info-dialog/info-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { TextWithSnDirective } from './side-nav-right/cbol-parsing/text-with-sn.directive';
 import { MatSnackBarModule, MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
 import { ChainToolComponent } from './side-nav-right/chain-tool/chain-tool.component';
 import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool.component';
@@ -72,8 +71,7 @@ const entryComponents = [
     CbolParsingComponent,
     BibleSelectionsComponent,
     // InfoDialogComponent,
-    SearchResultDialogComponent,
-    TextWithSnDirective,
+    SearchResultDialogComponent,    
     ChainToolComponent,
     CommentToolComponent,
     // ComTextComponent,

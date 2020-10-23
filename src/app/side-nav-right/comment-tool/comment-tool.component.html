@@ -8,6 +8,8 @@
       <span>{{title}}</span>
     </div>
     <mat-divider></mat-divider>
+    <span *ngIf="data===undefined">資料查詢中</span>
+    <span *ngIf="data!==undefined && data.length===0">查無資料</span>    
     <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
     </app-dtexts-rendor>
   </div>

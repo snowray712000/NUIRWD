@@ -26,6 +26,8 @@ export class DlinesRendorComponent implements OnInit {
   @Input() verseRange: VerseRange = new VerseRange();
   /** 原文彙編用。不論設定值開或關，當是原文彙編時，一定要開著。 */
   @Input() isShowOrig?: 0 | 1;
+  /** reference dialog 使用時, 或是彙編, 都期盼完整顯示經文出處。 */
+  @Input() isShowALLAddress?: 0 | 1;
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -48,7 +50,9 @@ export class DlinesRendorComponent implements OnInit {
     return '#' + BibleBookNames.getBookName(r1.book, BookNameLang.太) + r1.chap + '|';
   }
   getAddressShow(it: DOneLine) {
-    const format = DisplayFormatSetting.s.getFromLocalStorage() as '1:1' | '1' | 'v1' | 'none';
+    let format = DisplayFormatSetting.s.getFromLocalStorage() as '創1:1' | '1:1' | '1' | 'v1' | 'none';
+    if (this.isShowALLAddress === 1) { format = '創1:1' } // 交叉參照，原文彙編。都希望呈現完整
+    
     const lang = DisplayLangSetting.s.getFromLocalStorage() as '創' | 'Ge' | '创';
     return getAddressesText(it.addresses, format, lang);
 

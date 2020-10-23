@@ -43,16 +43,19 @@ export class VersionInterlaceComponent implements OnInit {
   datas: DOneLine[] = [];
   versions: string[] = [];
   verseRange: VerseRange = new VerseRange();
-  datasQ: IDatasQueryor = new DataForInterlaceQueryor();
+  datasQ: IDatasQueryor = new DataForInterlaceQueryor();  
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
+
+  }
+  ngOnInit() {
     const pthis = this;
     this.datasQ = getDataQDefaultOrNot();
+    
     getVersionChangedObserable().subscribe(vers => {
       if (isTheSame() === false) {
-        // console.log(vers);
         pthis.versions = vers;
-        pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
+        if (isEnoughForQuery()) pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
       }
 
       return;
@@ -65,15 +68,21 @@ export class VersionInterlaceComponent implements OnInit {
       }
     });
     getRouteChangedObserable().subscribe(async verseRange => {
-      if (isTheSame() === false) {
-        pthis.verseRange = verseRange;
-        pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
+    if (isTheSame() === false) {
+      pthis.verseRange = verseRange;
+        if (isEnoughForQuery()) pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
       }
       return;
       function isTheSame() {
         return VerseRange.isTheSame(pthis.verseRange, verseRange);
       }
-    });
+    });    
+    
+    // 若不加這個，一開始就會卡在那邊。
+    setTimeout(() => {
+      this.reRefreshDatasAndMarkupNeedUpdateAsync();
+    }, 300);
+    
     return;
     function getDataQDefaultOrNot() {
       return pthis.datasQ !== undefined ? pthis.datasQ : new VersionTnterlaceDatasQueryorStandardTestData();
@@ -86,13 +95,19 @@ export class VersionInterlaceComponent implements OnInit {
       const routeFrame = new RouteStartedWhenFrame();
       return routeFrame.routeTools.verseRange$;
     }
-  }
-  ngOnInit() {
+    function isEnoughForQuery() {
+      if (pthis.versions === undefined || pthis.versions.length === 0) { return false; }
+      if (pthis.verseRange === undefined || pthis.verseRange.verses.length === 0) { return false; }
+      return true;
+    }
   }
   async reRefreshDatasAndMarkupNeedUpdateAsync() {
     const pthis = this;
+    // console.log(pthis.verseRange.toStringChineseShort());
+    // console.log(pthis.versions.join(','));
     let re = await this.datasQ.queryDatasAsync({ addresses: pthis.verseRange, versions: pthis.versions });
     pthis.datas = re;
+    // console.log(pthis.datas);    
     pthis.changeDetector.markForCheck();
   }
 }

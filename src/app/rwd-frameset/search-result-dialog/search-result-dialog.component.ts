@@ -347,6 +347,11 @@ export class SearchResultDialogComponent implements OnInit {
   getIsShowOrig() {
     return this.typeFunction === 'orig-keyword'? 1 : undefined ;
   }
+  getIsShowALLAddress(){
+    if ( this.typeFunction === 'orig-dict'){return 0;}
+    return 1;
+    // if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-keyword' || this.typeFunction === 'reference' ) {return 1;}
+  }
   /** html 中使用, 當 keyword 功能時, 要再依使用者選擇的過濾方式查詢 */
   getDataRender() {
 

@@ -84,6 +84,7 @@ export class CommentToolComponent implements OnInit, OnChanges {
   }
   async getData() {
     const pthis = this;
+    this.data = undefined;
     const re1 = await queryCommentAsync(this.address);
     this.data = re1.data;
     setTitleAndPrevNext(re1);
