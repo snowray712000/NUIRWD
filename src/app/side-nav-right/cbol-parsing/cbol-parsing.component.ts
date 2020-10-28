@@ -7,7 +7,6 @@ import { GetWordsFromQbResult } from './GetWordsFromQbResult';
 import { GetExpsFromQbResult } from './GetExpsFromQbResult';
 import { linq_zip } from 'src/app/linq-like/linq_zip';
 import { assert } from 'src/app/tools/assert';
-import { MatAccordion } from '@angular/material/expansion';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { IBookNameToId } from 'src/app/const/book-name/i-book-name-to-id';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
@@ -44,13 +43,10 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   textsWithSnUnv: DOneLine[];
   textsWithSnKjv: DOneLine[];
   verseRange: VerseRange;
-  snActived: number = 0;
+  snActived: string = '';
   verseAddress: string;
   @Input() cur: DAddress = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
-
-
-  @ViewChild('origList', null) accordion: MatAccordion;
 
   name2id: IBookNameToId = new BookNameToId();
   @Input() addressActived: DAddress;
@@ -116,12 +112,18 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     return this.sanitizer.bypassSecurityTrustHtml(str);
   }
   private async onVerseChanged(bk: number, ch: number, vr: number) {
-    const r1 = this.queryQbAndRefreshAsync(bk, ch, vr);
-    const r2 = this.queryContentWithSnAsync(bk, ch, vr);
-    Promise.all([r1, r2]).then(a1 => {
-      this.verseAddress = `${ch}:${vr}`;
-      this.detectChange.markForCheck();
-    });
+    console.log(bk + ' ' + ch + ' ' + vr);
+
+    await this.queryQbAndRefreshAsync(bk,ch,vr);
+    this.verseAddress = `${ch}:${vr}`;
+    this.detectChange.markForCheck();
+
+    // const r1 = this.queryQbAndRefreshAsync(bk, ch, vr);
+    // const r2 = this.queryContentWithSnAsync(bk, ch, vr);
+    // Promise.all([r1, r2]).then(a1 => {
+    //   this.verseAddress = `${ch}:${vr}`;
+    //   this.detectChange.markForCheck();
+    // });
   }
   private async queryContentWithSnAsync(bk: number, ch: number, vr: number) {
     const pthis = this;
@@ -164,16 +166,26 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     }
   }
   private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
+    const pthis = this;
+    // 此 api 取得中的 record，[0]是整節經文；之後的[1]-[N]就是每一個 table 裡的東西
     const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();
     // console.log(qbResult);
     // qbResult.N === 1 舊約
     this.isOldTestment = qbResult.N === 1;
     if (qbResult.N === 0) {
       this.getWordsFromQbApiResult(qbResult);
+      addWordsOfTp(false);
+      
       this.getLinesFromQbApiResult(qbResult);
+      
+      mergeOrigsToLines();
     } else {
       this.getWordsFromQbApiResult(qbResult); // 看似一樣
+      addWordsOfTp(true);
+
       this.getLinesFromQbApiResultOfOldTestment(qbResult);
+      
+      mergeOrigsToLines();
       // this.getWordsFromQbApiResultOldTestment(qbResult);
     }
 
@@ -183,6 +195,21 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     this.prev = { book: id1, chap: qbResult.prev.chap, verse: qbResult.prev.sec };
     this.next = { book: id2, chap: qbResult.next.chap, verse: qbResult.next.sec };
     this.cur = { book: bk, chap: ch, verse: vr };
+    return;
+    function addWordsOfTp(isOldTestment:boolean){
+      const r1 = isOldTestment?'H':'G';
+      pthis.words.forEach(a1=>a1.tp=r1);
+    }
+    function mergeOrigsToLines(){
+      for (let i1 = 0; i1 < pthis.lines.length; i1++) {
+        const it1 = pthis.lines[i1];
+        
+        const rr1 = LQ.from(it1.words).select(a1=>a1.wid).where(a1=>a1!==undefined);
+        const rr2 = LQ.from(pthis.words).where(a1=>rr1.contains(a1.wid)).toArray();        
+        it1.origs = rr2;
+      }
+    }
+
   }
 
   onChangeSlideToggleIndex(e1: MatSlideToggleChange) {
@@ -195,7 +222,9 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     this.onVerseChanged(this.next.book, this.next.chap, this.next.verse);
   }
 
-  /** words 就是下面的 table, 不是上面的整串文字, 整串文字請看 lines */
+  /** 
+   * this.words 是 output.
+   * words 就是下面的 table, 不是上面的整串文字, 整串文字請看 lines */
   private getWordsFromQbApiResult(qbResult: DQbResult) {
     const re2 = [];
     for (let i = 1; i < qbResult.record.length; i++) {
@@ -219,6 +248,9 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     // console.log(re2);
     this.words = re2;
   }
+  /**
+   * this.lines 是 output.      
+   */
   private getLinesFromQbApiResultOfOldTestment(qbResult: DQbResult) {
     const words = new GetLinesFromQbResultOldTestment().main(qbResult);
     // const words = new GetWordsFromQbResult({ isOldTestment: true }).main(qbResult);
@@ -253,21 +285,25 @@ export class CbolParsingComponent implements OnInit, OnChanges {
     const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
-    // console.log(re);
+    console.log(re);
 
     this.lines = re as DLineOnePair[];
   }
 }
 /** 對應的 原文/中文 */
 interface DLineOnePair {
-  words: { w: string, sn?: number }[];
+  words: { w: string, sn?: number,wid?:number }[];
   exps: { w: string }[];
+  origs?: DOneRowTable[];
 }
 
 interface DOneRowTable {
-  wid: string;
+  wid: number;
   word: string;
-  sn: number;
+  /** 8412a */
+  sn: string;
+  /** H or G */
+  tp?:string;
   exp: string;
   remark?: string;
   orig: string;

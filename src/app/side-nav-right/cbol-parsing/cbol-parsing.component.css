@@ -1,5 +1,5 @@
 .origline {
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 .orig {
   font-size: 1.5em;
@@ -11,7 +11,7 @@
   flex: 1 1 auto;
 }
 .item-title {
-  color: blue;
+  color: darkgreen;
   white-space: nowrap;
   padding-right: 0.5em;
 }
