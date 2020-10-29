@@ -40,7 +40,7 @@
             <span class='item-title'> 原型 </span>
             <span class='orig'> {{a1.orig}} </span>
             <br />
-            <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'"> {{a1.tp}}{{a1.sn}} </span>
+            <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'" class='sn' (click)="onClickSn($event,a1)"> {{a1.tp}}{{a1.sn}} </span>
             <span class='item-title'> 分析 </span>
             <span> {{a1.pro}} </span>
             <span [innerHTML]="createDomFromString(a1.wform)"></span>

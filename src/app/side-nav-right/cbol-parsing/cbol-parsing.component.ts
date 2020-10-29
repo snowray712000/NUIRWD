@@ -72,6 +72,10 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     const keyword = type + a1.sn; // G281 或 H281
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.cur] });
   }
+  onClickSn(en,a1:{tp:string,sn:string}){    
+    const keyword = a1.tp + a1.sn; // G281 或 H281
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.cur] });
+  }
   onMouseEnterForSnackBar(en, arg) {
     // console.log(arg);
     // 可能 {w: "οὐρανὸν", sn: 3772, wid: 11}
@@ -79,6 +83,8 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     if (arg.wid === undefined) {
       return;
     }
+
+    return; // 目前不使用，因為會擋到 toolbar 工具
 
     // console.log(this.words); // [{wid,word,sn,exp,orig,pro,wform} ]
     const r1 = LQ.from(this.words).firstOrDefault(a1 => a1.wid === arg.wid);
