@@ -1,5 +1,6 @@
 import * as LQ from 'linq';
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges } from '@angular/core';
+import * as $ from 'jquery';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges, AfterViewInit } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
 import { getChapCount } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
@@ -27,13 +28,15 @@ import { EventVerseChanged } from './EventVerseChanged';
 import { FunctionIsOpened } from '../FunctionIsOpened';
 import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
+import { ComMatGroup, ComMatTabCommentInfo, ComSideNavRight, ComToolbarTop } from 'src/app/rwd-frameset/settings/ComToolbarTop';
+import { MatToolbar } from '@angular/material/toolbar';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
   styleUrls: ['./cbol-parsing.component.css']
 })
 
-export class CbolParsingComponent implements OnInit, OnChanges {
+export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
   lines: DLineOnePair[] = [];
   words: DOneRowTable[] = [];
   next: DAddress;
@@ -49,10 +52,12 @@ export class CbolParsingComponent implements OnInit, OnChanges {
   @Input() isShowIndex = true;
 
   name2id: IBookNameToId = new BookNameToId();
-  @Input() addressActived: DAddress;
+  @Input() addressActived: DAddress;  
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
+  }
+  ngAfterViewInit(): void {        
   }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     if (changes.addressActived !== undefined) {

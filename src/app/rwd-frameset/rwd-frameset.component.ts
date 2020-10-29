@@ -29,6 +29,8 @@ import { DialogVersionSelectorOpenor } from '../version-selector/version-selecto
 import { DisplayFormatSetting } from './dialog-display-setting/DisplayFormatSetting';
 import { DisplayLangSetting } from './dialog-display-setting/DisplayLangSetting';
 import { DisplayMergeSetting } from './dialog-display-setting/DisplayMergeSetting';
+import { ComSideNavRight, ComToolbarTop } from './settings/ComToolbarTop';
+import { MatToolbar } from '@angular/material/toolbar';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -41,6 +43,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   addressActived: DAddress;
   @ViewChild('snavLeft', null) leftSideNav;
   @ViewChild('snavRight', null) rightSideNav;
+  @ViewChild('toptoolbar', null) topToolbar;
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -111,6 +114,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     // 設定 static  變數, 此行放在 建構子不行, 因為 side nav 還是 undefined
     new SideNavsOnFrame(this.leftSideNav, this.rightSideNav);
 
+    ComToolbarTop.s.setCom(this.topToolbar as MatToolbar);
+    ComSideNavRight.s.setCom(this.rightSideNav);
     this.checkWidthAndReRenderIfNeed();
   }
 

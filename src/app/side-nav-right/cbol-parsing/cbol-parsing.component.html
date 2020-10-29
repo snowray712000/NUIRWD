@@ -1,11 +1,6 @@
 <div [style.overflow-y]="'hidden'">
   <div class='toppanel' [style.white-space]="'nowrap'" [style.direction]="isOldTestment?'rtl':'ltr'">
-    <div class='topbuttons'>
-      <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
-      <span>{{verseAddress}}</span>
-      <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
-      <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
-    </div>
+    
     <div>
       <div *ngFor="let it1 of lines">
         <div class='origline' style="white-space: normal;">
@@ -39,9 +34,9 @@
           <div *ngFor="let a1 of it1.origs; let i1=index" (mouseenter)="onMouseEnterSn($event,a1)">
             <hr />
             <span class='wid'> {{a1.wid}} </span>
-            <span class='orig'> {{a1.word}} </span>                        
+            <span class='orig'> {{a1.word}} </span>
             <span class='item-title'> 簡義 </span>
-            <span> {{a1.exp}} </span>            
+            <span> {{a1.exp}} </span>
             <span class='item-title'> 原型 </span>
             <span class='orig'> {{a1.orig}} </span>
             <br />
@@ -72,4 +67,15 @@
   <mat-chip-list> </mat-chip-list>
 
   <br />
+  <mat-toolbar style="background: inherit;">
+    <!-- toolbar不要遮住最下面的經文 -->
+  </mat-toolbar>
+  <mat-toolbar style="position: fixed;bottom:0">
+    <div class='topbuttons'>
+      <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
+      <span>{{verseAddress}}</span>
+      <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
+      <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
+    </div>
+  </mat-toolbar>
 </div>

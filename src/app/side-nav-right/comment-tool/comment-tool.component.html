@@ -1,16 +1,24 @@
 <div class='com-base'>
-  <div class='tools'>
-    <button mat-raised-button color="accent" (click)="onClickPrev()">前</button>
-    <button mat-raised-button color="accent" (click)="onClickNext()">後</button>
-  </div>
+
   <div class='content'>
     <div>
       <span>{{title}}</span>
     </div>
     <mat-divider></mat-divider>
     <span *ngIf="data===undefined">資料查詢中</span>
-    <span *ngIf="data!==undefined && data.length===0">查無資料</span>    
+    <span *ngIf="data!==undefined && data.length===0">查無資料</span>
     <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
     </app-dtexts-rendor>
   </div>
+
+  <mat-toolbar style="background: inherit;">
+    <!-- toolbar不要遮住最下面的經文 -->
+  </mat-toolbar>
+  <mat-toolbar style="position: fixed;bottom:0">
+    <div class='tools'>
+      <button mat-raised-button color="accent" (click)="onClickPrev()">前</button>
+      <button mat-raised-button color="accent" (click)="onClickNext()">後</button>
+    </div>
+  </mat-toolbar>
+  
 </div>

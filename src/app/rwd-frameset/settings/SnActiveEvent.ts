@@ -27,3 +27,4 @@ export class SnActiveEvent {
   }
   getCurrentValue() { return this.curValue; }
 }
+

@@ -2,7 +2,7 @@
   [class.example-is-mobile]="isMobile()"> -->
 <div class="example-container" #baseFrame (window:resize)="onResize($event)" [class.example-is-mobile]="isMobile()">
 
-  <mat-toolbar color="primary" class='example-toolbar'>
+  <mat-toolbar #toptoolbar color="primary" class='example-toolbar'>
     <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -42,7 +42,7 @@
       <app-version-interlace></app-version-interlace>
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 
-      <mat-toolbar style="position: fixed;bottom:0">
+      <mat-toolbar style="position: absolute;bottom:0">
         <a [href]="getPrevChap()">上一章</a>、
         <a [href]="getNextChap()">下一章</a>、
         <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>、

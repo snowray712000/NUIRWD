@@ -1,5 +1,5 @@
 <div>
-  <mat-tab-group (selectedTabChange)="onSelectedTabChanged($event)" mat-align-tabs="center" [selectedIndex]="getSelectedIndexInitial()">
+  <mat-tab-group #mattabgroup (selectedTabChange)="onSelectedTabChanged($event)" mat-align-tabs="center" [selectedIndex]="getSelectedIndexInitial()">
     <!-- <mat-tab label="字典">
     <app-cbol-dict></app-cbol-dict>
   </mat-tab> -->
@@ -9,7 +9,7 @@
     <mat-tab label="串珠">
       <app-chain-tool [addressActived]="addressActived"></app-chain-tool>
     </mat-tab>
-    <mat-tab label="註釋">
+    <mat-tab #commentinfo label="註釋">
       <app-comment-tool [addressActived]="addressActived"></app-comment-tool>
     </mat-tab>
 

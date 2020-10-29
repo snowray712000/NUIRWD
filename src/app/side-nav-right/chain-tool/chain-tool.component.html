@@ -1,8 +1,5 @@
 <div>
-  <div>
-    <button mat-raised-button color="accent" (click)="onClickPrev()">前</button>
-    <button mat-raised-button color="accent" (click)="onClickNext()">後</button>
-  </div>
+
   <div>
     <div class='title'>{{title}}</div><br/>
     <div *ngFor="let it1 of data">
@@ -16,4 +13,13 @@
       </span>
     </div>
   </div>
+
+  <mat-toolbar style="background: inherit;">
+    <!-- toolbar不要遮住最下面的經文 -->
+  </mat-toolbar>
+  <mat-toolbar style="position: fixed;bottom:0">    
+      <button mat-raised-button color="accent" (click)="onClickPrev()">前</button>
+      <button mat-raised-button color="accent" (click)="onClickNext()">後</button>    
+  </mat-toolbar>
+
 </div>

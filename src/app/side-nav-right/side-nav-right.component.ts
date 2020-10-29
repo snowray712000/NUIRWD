@@ -1,19 +1,24 @@
 import * as LQ from 'linq';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FunctionSelectionTab } from './FunctionSelectionTab';
+import { ComMatGroup, ComMatTabCommentInfo } from '../rwd-frameset/settings/ComToolbarTop';
 
 @Component({
   selector: 'app-side-nav-right',
   templateUrl: './side-nav-right.component.html',
   styleUrls: ['./side-nav-right.component.css']
 })
-export class SideNavRightComponent implements OnInit, OnChanges {
+export class SideNavRightComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() addressActived;
+  @ViewChild('mattabgroup',null) tabGroup;
+  @ViewChild('commentinfo',null) commentinfo;
   constructor() { }
+  ngAfterViewInit(): void {
+    ComMatGroup.s.setCom(this.tabGroup);
+    ComMatTabCommentInfo.s.setCom(this.commentinfo);
+  }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-
-
     // throw new Error("Method not implemented.");
   }
 
