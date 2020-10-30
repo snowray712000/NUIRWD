@@ -4,7 +4,7 @@ import { DText } from './../../bible-text-convertor/AddBase';
 import { BookNameToId } from './../../const/book-name/book-name-to-id';
 import { ApiSc } from 'src/app/fhl-api/ApiSc';
 import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
-import { DAddress } from 'src/app/bible-address/DAddress';
+import { DAddress, getNextAddress, getPrevAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
 import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
@@ -16,6 +16,8 @@ import { AddOrigDictInCommentText } from './AddOrigDictInCommentText';
 import { FunctionIsOpened } from '../FunctionIsOpened';
 import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { VerseActivedChangedDo } from '../cbol-parsing/VerseActivedChangedDo';
+import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
+import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
 
 @Component({
   selector: 'app-comment-tool',
@@ -86,6 +88,7 @@ export class CommentToolComponent implements OnInit, OnChanges {
     const pthis = this;
     this.data = undefined;
     const re1 = await queryCommentAsync(this.address);
+
     this.data = re1.data;
     setTitleAndPrevNext(re1);
     this.detector.markForCheck();
@@ -99,6 +102,8 @@ export class CommentToolComponent implements OnInit, OnChanges {
 
       pthis.next = arg1.next;
       pthis.prev = arg1.prev;
+      let r1 = new GetAddressRangeFromPrevNext(re1.next, re1.prev);
+      pthis.addresses = r1.verseRange;
     }
   }
 }
@@ -124,7 +129,7 @@ async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
   }
   function cvtAddr(aa1: { engs?: string, chap?: number, sec?: number }): DAddress {
     // 雖然 engs chap sec 一定會有, 但這樣宣告才能接 ApiSc 的 Result
-    return { book: new BookNameToId().cvtName2Id(aa1.engs), chap: aa1.chap, verse: aa1.sec };
+    return { book: new BookNameToId().cvtName2Id(aa1.engs.toLowerCase()), chap: aa1.chap, verse: aa1.sec };
   }
   function cvtData(comtext: string, addrSet: DAddress): DText[] {
     const re1 = new Comment2DText().main(comtext, addrSet);

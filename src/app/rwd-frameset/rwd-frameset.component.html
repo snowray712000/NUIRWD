@@ -43,11 +43,11 @@
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 
       <mat-toolbar style="position: absolute;bottom:0">
-        <a [href]="getPrevChap()">上一章</a>、
-        <a [href]="getNextChap()">下一章</a>、
-        <button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>、
-        <button (click)="onClickDisplaySetting()">顯示設定</button>、
-        <button (click)="onClickVersions()">版本</button>、
+        <a mat-raised-button [href]="getPrevChap()">上一章</a>
+        <a mat-raised-button [href]="getNextChap()">下一章</a>
+        <button mat-raised-button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>
+        <button mat-raised-button (click)="onClickDisplaySetting()">顯示設定</button>
+        <button mat-raised-button (click)="onClickVersions()">版本</button>
       </mat-toolbar>
     </mat-sidenav-content>
   </mat-sidenav-container>

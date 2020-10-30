@@ -70,12 +70,15 @@
   <mat-toolbar style="background: inherit;">
     <!-- toolbar不要遮住最下面的經文 -->
   </mat-toolbar>
-  <mat-toolbar style="position: fixed;bottom:0">
+  <mat-toolbar style="position: fixed;bottom:0;z-index: 40;">
     <div class='topbuttons'>
-      <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip>
       <span>{{verseAddress}}</span>
-      <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip>
-      <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle>
+      <button mat-raised-button (click)="onClickPrev()">前1節</button>
+      <button mat-raised-button (click)="onClickNext()">後1節</button>
+      <!-- <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip> -->
+      <!-- <span>{{verseAddress}}</span> -->
+      <!-- <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip> -->
+      <!-- <mat-slide-toggle [checked]="isShowIndex" (change)="onChangeSlideToggleIndex($event)">索引碼</mat-slide-toggle> -->
     </div>
   </mat-toolbar>
 </div>

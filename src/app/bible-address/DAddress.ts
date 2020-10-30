@@ -25,7 +25,7 @@ export function getPrevChapAddress(addr: DAddress) {
   return { book: addr.book, chap: addr.chap - 1, verse: 1 };
 }
 /** 若書卷末, 回傳 undefined */
-export function getNextAddress(addr: DAddress) {
+export function getNextAddress(addr: DAddress) {  
   const chap = getChapCount(addr.book);
   const verse = getVerseCount(addr.book, addr.chap);
 
