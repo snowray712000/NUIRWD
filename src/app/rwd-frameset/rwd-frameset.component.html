@@ -18,6 +18,7 @@
     <button mat-icon-button (click)="onClickSearch(seachinput.value)">
       <mat-icon>search</mat-icon>
     </button>
+    <a mat-raised-button [href]="getMailToHref()">問題回報</a>
 
     <span class="example-fill-remaining-space"></span>
 
@@ -48,6 +49,7 @@
         <button mat-raised-button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">原文編號</button>
         <button mat-raised-button (click)="onClickDisplaySetting()">顯示設定</button>
         <button mat-raised-button (click)="onClickVersions()">版本</button>
+        
       </mat-toolbar>
     </mat-sidenav-content>
   </mat-sidenav-container>

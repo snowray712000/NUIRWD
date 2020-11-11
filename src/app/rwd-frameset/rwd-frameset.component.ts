@@ -77,6 +77,22 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
 
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: txt, addresses: this.routeVerseRange.verses });
   }
+  getMailToHref(){
+    let newline = "%0D%0A";
+
+    // 閱讀章節: 太32:42
+    // 功能: 3
+    // 1. 一般 2.注釋 3.Parsing 4.串珠 0.其它
+    // 簡述(或示意圖):
+    let body = "閱讀章節: http://bible.fhl.net/NUI/_rwd/#bible/" + new RouteStartedWhenFrame().routeTools.descriptionLast 
+    + newline + newline + "功能: _____ " 
+    + newline + "1.一般、2.注釋、3.Parsing、4.串珠、5a.搜尋關鍵字、5b.原文彙編 0.其它" 
+    + newline + newline + "電腦/手機/平版:"
+    + newline + navigator.userAgent    
+    + newline + newline + "簡述問題(或示意圖):"
+    + newline ;
+    return "mailto:tjm@fhl.net,snowray712000@gmail.com?subject=[問題回報] 信望愛聖經工具NUIRWD&body="+body;
+  }
 
 
   private media: MediaMatcher;
