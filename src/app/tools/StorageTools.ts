@@ -77,4 +77,20 @@ export class StorageTools {
       localStorage.removeItem(key);
     }
   }
+  static getNumberSafely(key: string) {
+    const r1 = localStorage.getItem(key);
+    if (r1 !== undefined) {
+      let r2 = parseFloat(r1);
+      return isNaN(r2)? undefined : r2;      
+    } else {
+      return undefined;
+    }
+  }
+  static setNumber(key: string, val?: number) {
+    if (val !== undefined) {
+      localStorage.setItem(key, val.toString());
+    } else {
+      localStorage.removeItem(key);
+    }
+  }
 }

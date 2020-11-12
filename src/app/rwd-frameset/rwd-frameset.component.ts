@@ -31,6 +31,8 @@ import { DisplayLangSetting } from './dialog-display-setting/DisplayLangSetting'
 import { DisplayMergeSetting } from './dialog-display-setting/DisplayMergeSetting';
 import { ComSideNavRight, ComToolbarTop } from './settings/ComToolbarTop';
 import { MatToolbar } from '@angular/material/toolbar';
+import * as $ from 'jquery';
+import { FontSize } from './settings/FontSize';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -77,23 +79,35 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
 
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: txt, addresses: this.routeVerseRange.verses });
   }
-  getMailToHref(){
+  getMailToHref() {
     let newline = "%0D%0A";
 
     // 閱讀章節: 太32:42
     // 功能: 3
     // 1. 一般 2.注釋 3.Parsing 4.串珠 0.其它
     // 簡述(或示意圖):
-    let body = "閱讀章節: http://bible.fhl.net/NUI/_rwd/#bible/" + new RouteStartedWhenFrame().routeTools.descriptionLast 
-    + newline + newline + "功能: _____ " 
-    + newline + "1.一般、2.注釋、3.Parsing、4.串珠、5a.搜尋關鍵字、5b.原文彙編 0.其它" 
-    + newline + newline + "電腦/手機/平版:"
-    + newline + navigator.userAgent    
-    + newline + newline + "簡述問題(或示意圖):"
-    + newline ;
-    return "mailto:tjm@fhl.net,snowray712000@gmail.com?subject=[問題回報] 信望愛聖經工具NUIRWD&body="+body;
+    let body = "閱讀章節: http://bible.fhl.net/NUI/_rwd/#bible/" + new RouteStartedWhenFrame().routeTools.descriptionLast.replace(';', '.')
+      + newline + newline + "功能: _____ "
+      + newline + "1.一般、2.注釋、3.Parsing、4.串珠、5a.搜尋關鍵字、5b.原文彙編 0.其它"
+      + newline + newline + "電腦/手機/平版:"
+      + newline + navigator.userAgent
+      + newline + newline + "簡述問題(或示意圖):"
+      + newline;
+    return "mailto:tjm@fhl.net,snowray712000@gmail.com?subject=[問題回報] 信望愛聖經工具NUIRWD&body=" + body;
   }
-
+  fontLarger() {
+    let r1 = (FontSize.s.getValue() + 0.1);
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;  
+    FontSize.setBodyFontSize(r1);
+    FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
+  }
+  fontSmaller() {
+    let r1 = (FontSize.s.getValue() - 0.1);
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;    
+    if (r1 < 0.1) r1 = 0.1;
+    FontSize.setBodyFontSize(r1);
+    FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
+  }
 
   private media: MediaMatcher;
   // private detectChange: ChangeDetectorRef;

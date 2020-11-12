@@ -9,6 +9,7 @@ import { DisplayLangSetting } from './DisplayLangSetting';
 import { DisplayMergeSetting } from './DisplayMergeSetting';
 import { IsSnManager } from '../settings/IsSnManager';
 import { IsColorKeyword } from '../settings/IsColorKeyword';
+import { FontSize } from '../settings/FontSize';
 
 @Component({
   selector: 'app-dialog-display-setting',
@@ -78,6 +79,19 @@ export class DialogDisplaySettingComponent implements OnInit {
   }
   isEnableColorKeyword(): boolean {
     return IsColorKeyword.s.getFromLocalStorage();
+  }
+  fontLarger() {
+    let r1 = (FontSize.s.getValue() + 0.1);
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;  
+    FontSize.setBodyFontSize(r1);
+    FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
+  }
+  fontSmaller() {
+    let r1 = (FontSize.s.getValue() - 0.1);
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;    
+    if (r1 < 0.1) r1 = 0.1;
+    FontSize.setBodyFontSize(r1);
+    FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
   }
 }
 

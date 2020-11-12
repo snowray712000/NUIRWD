@@ -1,3 +1,4 @@
+import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
 import { LocalStorageArrayBase } from '../../tools/LocalStorageArrayBase';
 /**
  * 用 static .s
@@ -10,5 +11,4 @@ export class VerForMain extends LocalStorageArrayBase<string> {
   _isDefaultIfEmpty() { return true; }
   _getDefaultValue() { return ['unv']; }
 }
-
 
