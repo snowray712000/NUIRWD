@@ -5,7 +5,7 @@
 .reference {
   color: blue;
   cursor: pointer;
-  font-size: small;
+  /* font-size: small; */
 }
 .oneLine {
   display: block;

@@ -86,6 +86,10 @@ export class DialogDisplaySettingComponent implements OnInit {
     FontSize.setBodyFontSize(r1);
     FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
   }
+  fontReset(){
+    FontSize.setBodyFontSize(1);
+    FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(1);
+  }
   fontSmaller() {
     let r1 = (FontSize.s.getValue() - 0.1);
     r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;    
