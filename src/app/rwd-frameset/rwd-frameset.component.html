@@ -2,7 +2,7 @@
   [class.example-is-mobile]="isMobile()"> -->
 <div class="example-container" #baseFrame (window:resize)="onResize($event)" [class.example-is-mobile]="isMobile()">
 
-  <mat-toolbar #toptoolbar color="primary" class='example-toolbar'>
+  <mat-toolbar #toptoolbar color="primary" style="overflow-x: auto;" class='example-toolbar'>
     <button mat-icon-button (click)="snavLeft.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -29,7 +29,7 @@
 
   <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 64 : 0">
     <mat-sidenav #snavLeft [mode]="'push'" [fixedInViewport]="isMobile()" fixedTopGap="64" [style.min-width.px]="170"
-      (opened)="onOpenedLeftSide()" (closed)="onClosedLeftSide()">
+      (opened)="snavRight.close();onOpenedLeftSide()" (closed)="onClosedLeftSide()">
       <app-side-nav-left></app-side-nav-left>
     </mat-sidenav>
     <mat-sidenav #snavRight position="end" [mode]="isMobile() ? 'push' : 'side'" [fixedInViewport]="isMobile()"
@@ -43,7 +43,7 @@
       <app-version-interlace></app-version-interlace>
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 
-      <mat-toolbar style="position: fixed;bottom:0">
+      <mat-toolbar style="position: fixed;bottom:0;overflow-x: auto;">
         <a mat-raised-button [href]="getPrevChap()">上章</a>
         <a mat-raised-button [href]="getNextChap()">下章</a>
         <button mat-raised-button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">SN</button>

@@ -33,6 +33,7 @@ import { ComSideNavRight, ComToolbarTop } from './settings/ComToolbarTop';
 import { MatToolbar } from '@angular/material/toolbar';
 import * as $ from 'jquery';
 import { FontSize } from './settings/FontSize';
+import { DialogChooseChapterComponent } from './dialog-choose-chapter/dialog-choose-chapter.component';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -121,12 +122,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private initAboutVerChangeOrUpdate() {
   }
 
-  onClickBibleSelect() {
-    this._bottomSheet.open(BibleSelectionsComponent, {
-      data: {
-        beSelectedBookId: 39
-      }
-    });
+  onClickBibleSelect() {   
+    this.dialog.open(DialogChooseChapterComponent ,{}); 
   }
   onOpenedLeftSide() {
     // console.log('on opened left side');
