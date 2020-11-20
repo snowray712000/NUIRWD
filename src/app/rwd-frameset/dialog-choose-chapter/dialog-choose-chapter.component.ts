@@ -8,6 +8,7 @@ import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { getChapCount } from 'src/app/const/count-of-chap';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RouteStartedWhenFrame } from '../RouteStartedWhenFrame';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 @Component({
   selector: 'app-dialog-choose-chapter',
   templateUrl: './dialog-choose-chapter.component.html',
@@ -25,14 +26,24 @@ export class DialogChooseChapterComponent implements OnInit {
       let r1 = new RouteStartedWhenFrame().routeTools.verseRangeLast.verses;
       if ( r1.length !== 0){
         this.book = r1[0].book;
-        this.chap = r1[0].chap;
-      }
+        this.chap = r1[0].chap;        
+        
+        if (this.book > 39){
+          this.tp = "新約";
+        }
+      }      
     this.updateBooksShow();
   }
 
   updateBooksShow() {
     const pthis = this;
     let styles = this.stylesSet === '太' ? BookNameLang.太 : BookNameLang.馬太福音;
+    if ( DisplayLangSetting.s.getValue() === '创'){
+      styles = this.stylesSet === '太' ? BookNameLang.太GB : BookNameLang.马太福音GB;
+    } else if ( DisplayLangSetting.s.getValue() === 'Ge'){
+      styles = this.stylesSet === '太' ? BookNameLang.Mt : BookNameLang.Matthew;
+    }
+
     this.booksShow = getBooksShow();
     return;
     function getBooksShow(): { book: number; na: string; }[] {
