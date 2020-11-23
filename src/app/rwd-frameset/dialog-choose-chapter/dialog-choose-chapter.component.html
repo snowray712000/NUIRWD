@@ -12,7 +12,7 @@
     <mat-dialog-content>
         <button *ngFor="let it1 of booksShow;let i1 = index" 
         (click)="onClickOpts(it1)" 
-        mat-raised-button [style.font-size.em]="getFontSize()" style="line-height: normal;margin: 2px;" [class.isActive]="(tp!=='章' && it1.book === book) || (tp==='章'&&it1.book===chap)">
+        mat-raised-button style="font-size: 1em;line-height: normal;margin: 2px;" [class.isActive]="(tp!=='章' && it1.book === book) || (tp==='章'&&it1.book===chap)">
             {{it1.na}} 
         </button>
     </mat-dialog-content>

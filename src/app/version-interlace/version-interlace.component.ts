@@ -121,7 +121,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
 
     // 產生 api 取得資料
     const re1 = queryApiAsync();
-
+    
     // 各別 cvt
     const re2 = cvt();
 
@@ -184,7 +184,8 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       function getQsbQ(): IOneVerQ {
         return {
           async qDataAsync(ver, gb) {
-            const qstr = args.addresses.toStringChineseShort();
+            const qstr = args.addresses.toStringChineseShort();            
+            
             const arg: DQsbArgs = {
               qstr,
               bibleVersion: ver,

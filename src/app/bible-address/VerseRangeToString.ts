@@ -19,7 +19,7 @@ export class VerseRangeToString {
       // a1 可能是 1:23-25 (a1.length===1) (a1[0].length>1 && a1[0].first().chap == a1[0].last().chap)
       // a1 可能是 1:23-2:2 (a1.length===1) (a1[0].length>1 && a1[0].first().chap != a1[0].last().chap)
       // a1 可能是 1:23 (a1.length===1) (a1[0].length==1)
-      // 第2種情況，可能縮成整章可能...約二 case
+      // 第2種情況，可能縮成整章可能...約二 case (但qsb.php實際上, 約二, 會錯誤, 還是要傳入 約二1)
       if (a1.length > 1) {
         // a1: [[23],[25,26,27],[30],[32,33...41,42]]
         const chap = a1[0][0].chap;
@@ -44,7 +44,7 @@ export class VerseRangeToString {
           } else {
             if (vr1.verse === 1 && vr2.verse === getVerseCount(id, chap)) {
               if (getChapCount(id) === 1) {
-                return ''; // 此書若只有一章, 連1都不用
+                return '1'; // 此書若只有一章, 連1都不用 (還是得加1,qsb才能接受)
               }
               return `${chap}`; // case 2 special, 約二整章
             }
