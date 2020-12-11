@@ -27,6 +27,8 @@ import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatProgressBar } from "@angular/material/progress-bar";
 import { Observable } from 'rxjs';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
+import { getGbText } from 'src/app/gb/getGbText';
 @Component({
   selector: 'app-search-result-dialog',
   templateUrl: './search-result-dialog.component.html',
@@ -203,7 +205,7 @@ export class SearchResultDialogComponent implements OnInit {
     return /^G|H\d+[a-z]?$/i.test(this.getKeyword());
   }
 
-  getKeyword() {
+  getKeyword() {    
     return this.dataByParent.keyword.trim(); // 前後多一個空白，整個死掉
   }
   getOrig(): { sn: string, isOld?: 0 | 1 } {
@@ -243,7 +245,7 @@ export class SearchResultDialogComponent implements OnInit {
     }
   }
   getAddressShow(it: DOneLine) {
-    return it.addresses.toStringChineseShort();
+    return DisplayLangSetting.s.getValueIsGB()? it.addresses.toStringChineseGBShort() : it.addresses.toStringChineseShort();
   }
   /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
   getOrigKeyword(str: string) {
@@ -399,7 +401,7 @@ export class SearchResultDialogComponent implements OnInit {
    */
   getReferenceEntireChap(a1: DOneLine) {
     const r1 = a1.addresses.verses[0];
-    return '#' + BibleBookNames.getBookName(r1.book, BookNameLang.太) + r1.chap + '|';
+    return '#' + BibleBookNames.getBookName(r1.book, DisplayLangSetting.s.getBookNameLangWhereIsGB()) + r1.chap + '|';
   }
   /** html 時, 當 reference 時, 若想看這章的注釋等等, 就要把主頁, 轉到那裡 */
   getReferenceLink() {
@@ -421,7 +423,8 @@ export class SearchResultDialogComponent implements OnInit {
     this.dataCountClassor = LQ.from(r1).select(a1 => ({ name: a1.name }) as DKeywordClassor).toArray();
 
     // 書卷
-    const r2 = LQ.range(1, 66).select(bk => (BibleBookNames.getBookName(bk, BookNameLang.太))).toArray();
+    const lang = DisplayLangSetting.s.getBookNameLangWhereIsGB();
+    const r2 = LQ.range(1, 66).select(bk => (BibleBookNames.getBookName(bk, lang))).toArray();
     this.dataCountBook = LQ.from(r2).select(a1 => ({ name: a1 }) as DKeywordClassor).toArray();
   }
 
@@ -447,7 +450,8 @@ export class SearchResultDialogComponent implements OnInit {
     /** 不存在, undefined, 存在 回傳'羅' */
     function tryGetInBook() {
       const rr1 = pthis.getDefaultAddress().book;
-      const rr2 = BibleBookNames.getBookName(rr1, BookNameLang.太);
+      
+      const rr2 = BibleBookNames.getBookName(rr1, DisplayLangSetting.s.getBookNameLangWhereIsGB());
       const rr3 = LQ.from(pthis.dataCountBook).firstOrDefault(a1 => a1.count > 9 && a1.name === rr2);
       return rr3 !== undefined ? rr3.name : undefined;
     }
@@ -457,7 +461,7 @@ export class SearchResultDialogComponent implements OnInit {
       const rr2 = LQ.from(pthis.dataCountClassor).where(a1 => a1.count > 9).toArray();
 
       if (rr2.length <= 1) {
-        return '全部';
+        return getGbText('全部');
       } else {
         const rr2b = LQ.from(LQ.from(rr2).select(a1 => a1.name).toArray());
         return LQ.from(rr1b).firstOrDefault(a1 => rr2b.contains(a1));
@@ -470,10 +474,10 @@ export class SearchResultDialogComponent implements OnInit {
     return;
     function calcClassor(): DKeywordClassor[] {
       const r3: DKeywordClassor[] = [];
-      const r1 = new BookClassor().getAllClassors();
+      const r1 = new BookClassor().getAllClassors();      
       for (const it1 of r1) {
-        r3.push({ name: it1.name, count: getcount(it1.books) });
-
+        let na = it1.name;
+        r3.push({ name: na, count: getcount(it1.books) });
         function getcount(bks: number[]) {
           return LQ.from(records).where(a1 => LQ.from(bks).contains(a1.book)).count();
         }
@@ -486,9 +490,10 @@ export class SearchResultDialogComponent implements OnInit {
       const r3: DKeywordClassor[] = [];
       for (const it1 of r1) {
         const count = it1.count();
-        const name = BibleBookNames.getBookName(it1.first().book, BookNameLang.太);
+
+        const name = BibleBookNames.getBookName(it1.first().book, DisplayLangSetting.s.getBookNameLangWhereIsGB());
         r3.push({ name, count });
-      }
+      }      
       return r3;
     }
   }
@@ -496,7 +501,9 @@ export class SearchResultDialogComponent implements OnInit {
   private getBooksOfClassorOrBook(): number[] {
     const r1 = this.searchFilter;
     const r2 = new BookClassor().getAllClassors();
-    const r3 = LQ.from(r2).firstOrDefault(a1 => a1.name === r1);
+    
+    
+    const r3 = LQ.from(r2).firstOrDefault(a1 => getGbText(a1.name) === r1);
     if (r3 !== undefined) { return r3.books; }
 
     return [new BookNameAndId().getIdOrUndefined(r1)];

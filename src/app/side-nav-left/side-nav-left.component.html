@@ -1,17 +1,17 @@
 <mat-accordion multi="true">
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      設定
+      {{'設定'|gbpipe}}
     </mat-expansion-panel-header>
-    版本: 201121a_猶約二約一Bug去除 <a href='/NUI/assets/versions_nuirwd.html' target="_blank">詳細清單</a> <br/>
-    <mat-slide-toggle #ismapphoto [checked]="isMapPhotoInit" (change)="onChangedIsMapPhoto(ismapphoto.checked)">地理,相片
-    </mat-slide-toggle>
+    版本: 201121a_猶約二約一Bug去除 <a href='/NUI/assets/versions_nuirwd.html' target="_blank">{{'詳細清單'|gbpipe}}</a> <br/>
+    <!-- <mat-slide-toggle #ismapphoto [checked]="isMapPhotoInit" (change)="onChangedIsMapPhoto(ismapphoto.checked)">地理,相片
+    </mat-slide-toggle> -->
 
 
   </mat-expansion-panel>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      歷史記錄
+      {{'歷史記錄'|gbpipe}}
     </mat-expansion-panel-header>
     This the expansion 2 content
   </mat-expansion-panel>

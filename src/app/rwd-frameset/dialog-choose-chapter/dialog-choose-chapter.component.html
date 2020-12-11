@@ -1,12 +1,12 @@
 <div>
     <div mat-dialog-title>
         <mat-toolbar style="overflow-x: auto;">
-            <button mat-raised-button (click)="onClickClassify('舊約')">舊約</button>
-            <button mat-raised-button (click)="onClickClassify('新約')">新約</button>
-            <button mat-raised-button (click)="onClickClassify('章')">章</button>
-            <button mat-raised-button (click)="onClickClassify('希伯來排序')">希伯來排序</button>
+            <button mat-raised-button (click)="onClickClassify('舊約')">{{'舊約'|gbpipe}}</button>
+            <button mat-raised-button (click)="onClickClassify('新約')">{{'新約'|gbpipe}}</button>
+            <button mat-raised-button (click)="onClickClassify('章')">{{'章'|gbpipe}}</button>
+            <button mat-raised-button (click)="onClickClassify('希伯來排序')">{{'希伯來排序'|gbpipe}}</button>
 
-            <button mat-raised-button (click)="onClickFullName()" [class.isActive]="this.stylesSet === '馬太福音'">完整名稱</button>           
+            <button mat-raised-button (click)="onClickFullName()" [class.isActive]="this.stylesSet === '馬太福音'">{{'完整名稱'|gbpipe}}</button>           
         </mat-toolbar>
     </div>
     <mat-dialog-content>

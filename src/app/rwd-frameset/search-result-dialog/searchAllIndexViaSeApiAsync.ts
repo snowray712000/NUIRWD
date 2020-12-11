@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
 import { cvtChinesesToBookAndSecToVerse } from './cvtChinesesToBookAndSecToVerse';
 import { DProgressInfo } from 'src/app/tools/EventTool';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 /**
  * 內部自動呼叫 cvtChinesesToBookAndSecToVerse 了, 所以 book, verse 會存在
  * @param arg orig:0, 關鍵字 1:Greek 2:Hebrew
@@ -31,9 +32,10 @@ export async function searchAllIndexViaSeApiAsync(arg: {
     version = 'unv'; // kjv 與 和合本２０１０好像不能找原文彙編
   }
 
+  let gb = DisplayLangSetting.s.getValueIsGB()?'1':'0';
 
   while (true) {
-    const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=${version}`;
+    const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=${version}&gb=${gb}`;
     // const data = `index_only=1&offset=${offset}&limit=500&orig=${arg.orig}&q=${arg.keyword}&VERSION=unv`;
     // console.log('post');
     // console.log(data);

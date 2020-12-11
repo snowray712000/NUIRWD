@@ -3,13 +3,13 @@
     <!-- <mat-tab label="字典">
     <app-cbol-dict></app-cbol-dict>
   </mat-tab> -->
-    <mat-tab label="分析">
+    <mat-tab [label]="'分析'|gbpipe">
       <app-cbol-parsing [addressActived]="addressActived"></app-cbol-parsing>
     </mat-tab>
-    <mat-tab label="串珠">
+    <mat-tab [label]="'串珠'|gbpipe">
       <app-chain-tool [addressActived]="addressActived"></app-chain-tool>
     </mat-tab>
-    <mat-tab #commentinfo label="註釋">
+    <mat-tab #commentinfo [label]="'註釋'|gbpipe">
       <app-comment-tool [addressActived]="addressActived"></app-comment-tool>
     </mat-tab>
 

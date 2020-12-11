@@ -11,7 +11,7 @@ export function queryOrigCore(api: 'sd.php' | 'stwcbhdic.php' | 'sbdag.php', arg
   sn: string;
   isOldTestment?: boolean;
 }): Promise<DApiSdResult> {
-  const gb = DisplayLangSetting.s.getFromLocalStorageIsGB() ? 1 : 0;
+  const gb = DisplayLangSetting.s.getValueIsGB() ? 1 : 0;
   const N = arg.isOldTestment ? '1' : '0';
   return ajax({ url: `${new FhlUrl().getJsonUrl2()}${api}?N=${N}&k=${arg.sn}&gb=${gb}` })
     .pipe(map(a1 => a1.response as DApiSdResult)).toPromise();

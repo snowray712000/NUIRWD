@@ -47,7 +47,7 @@ export class DlinesRendorComponent implements OnInit {
   getReferenceEntireChap(a1: DOneLine) {
     if (a1 === undefined || a1.addresses === undefined || a1.addresses.verses === undefined) { return '#約3:16'; }
     const r1 = a1.addresses.verses[0];
-    return '#' + BibleBookNames.getBookName(r1.book, BookNameLang.太) + r1.chap + '|';
+    return '#' + BibleBookNames.getBookName(r1.book, DisplayLangSetting.s.getBookNameLangWhereIsGB()) + r1.chap + '|';
   }
   getAddressShow(it: DOneLine) {
     let format = DisplayFormatSetting.s.getFromLocalStorage() as '創1:1' | '1:1' | '1' | 'v1' | 'none';

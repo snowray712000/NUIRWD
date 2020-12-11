@@ -183,8 +183,9 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       }
       function getQsbQ(): IOneVerQ {
         return {
-          async qDataAsync(ver, gb) {
-            const qstr = args.addresses.toStringChineseShort();            
+          async qDataAsync(ver, gb) {            
+            const qstr = DisplayLangSetting.s.getValueIsGB()? args.addresses.toStringChineseGBShort():
+             args.addresses.toStringChineseShort();            
             
             const arg: DQsbArgs = {
               qstr,

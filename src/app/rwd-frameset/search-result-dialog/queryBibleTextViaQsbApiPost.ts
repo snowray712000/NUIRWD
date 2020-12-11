@@ -6,6 +6,7 @@ import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
 import { DSeApiRecord, DSeApiResult } from './searchAllIndexViaSeApiAsync';
 import { ajax } from 'rxjs/ajax';
 import { ApiQsb } from 'src/app/fhl-api/ApiQsb';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 /**
  * searchAllIndexViaSeApiAsync 之後, 還沒得到經文,
  * 通常會再透過使用這個, 將 bible_text 資訊填入
@@ -21,7 +22,8 @@ export async function queryBibleTextViaQsbApiPost(records: DSeApiRecord[], versi
 
   async function getDataAsync() {
     const qstr = generateQstr();
-    const rr1a = await new ApiQsb().queryQsbAsync({qstr,isExistStrong: strong===1,bibleVersion:version}).toPromise();
+    
+    const rr1a = await new ApiQsb().queryQsbAsync({qstr,isExistStrong: strong===1,bibleVersion:version,isSimpleChinese:DisplayLangSetting.s.getValueIsGB()}).toPromise();
     const rr1 = rr1a as any as DSeApiResult;
 
     cvtChinesesToBookAndSecToVerse(rr1.record);
@@ -31,6 +33,9 @@ export async function queryBibleTextViaQsbApiPost(records: DSeApiRecord[], versi
       const addresses = new VerseRange();
       for (const it1 of records) {
         addresses.add(it1 as DAddress);
+      }
+      if (DisplayLangSetting.s.getValueIsGB()){
+        return addresses.toStringChineseGBShort();
       }
       return addresses.toStringChineseShort();
     }

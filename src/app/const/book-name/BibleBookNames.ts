@@ -18,6 +18,15 @@ export class BibleBookNames {
   }
   public static getBookNames(lang: BookNameLang) {
     this.makeSureBibleBookNamesExist();
+    if (lang === BookNameLang.太GB){
+      return BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB;
+    } else if ( lang === BookNameLang.马太福音GB){
+      return BookNameConstants.CHINESE_BOOK_NAMES;
+    } else if ( lang === BookNameLang.太){
+      return BookNameConstants.CHINESE_BOOK_ABBREVIATIONS;
+    } else if (lang === BookNameLang.馬太福音){
+      return BookNameConstants.CHINESE_BOOK_NAMES;
+    }
     const r1 = BookNameLang[BookNameLang[lang]];
     return linq_range(1, 66).map(a1 => this.constNames.get(a1)[r1]);
   }

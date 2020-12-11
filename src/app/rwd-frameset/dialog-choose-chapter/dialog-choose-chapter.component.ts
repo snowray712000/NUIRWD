@@ -117,7 +117,8 @@ export class DialogChooseChapterComponent implements OnInit {
     }
   }
   gotoUrl() {
-    let na = BibleBookNames.getBookName(this.book, BookNameLang.太);
+    const lang = DisplayLangSetting.s.getBookNameLangWhereIsGB();
+    let na = BibleBookNames.getBookName(this.book, lang);
     let r1 = `/bible/${na}${this.chap}`;
     new RouteStartedWhenFrame().router.navigateByUrl(r1);
   }

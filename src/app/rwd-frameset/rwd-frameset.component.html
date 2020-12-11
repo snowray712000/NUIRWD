@@ -10,7 +10,7 @@
       <button mat-icon-button>
         <mat-icon>view_comfy</mat-icon>
       </button>
-      <span style="cursor: pointer;" *ngIf="!isMobile()">聖經目錄</span>
+      <span style="cursor: pointer;" *ngIf="!isMobile()">{{ '聖經目錄' | gbpipe}}</span>
     </span>
 
     <input #seachinput matInput placeholder="G81 H81 #太12:31;路2;3| 摩西"
@@ -18,7 +18,7 @@
     <button mat-icon-button (click)="onClickSearch(seachinput.value)">
       <mat-icon>search</mat-icon>
     </button>
-    <a mat-button [href]="getMailToHref()">異常<mat-icon>email</mat-icon></a>
+    <a mat-button [href]="getMailToHref()">{{'異常'|gbpipe}}<mat-icon>email</mat-icon></a>
 
     <span class="example-fill-remaining-space"></span>
 
@@ -44,11 +44,11 @@
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 
       <mat-toolbar style="position: fixed;bottom:0;overflow-x: auto;">
-        <a mat-raised-button [href]="getPrevChap()">上章</a>
-        <a mat-raised-button [href]="getNextChap()">下章</a>
+        <a mat-raised-button [href]="getPrevChap()">{{'上章'|gbpipe}}</a>
+        <a mat-raised-button [href]="getNextChap()">{{'下章'|gbpipe}}</a>
         <button mat-raised-button (click)="onClickOrigToggle()" [class.origon]="isOrigOn()" [class.origoff]="!isOrigOn()">SN</button>
-        <button mat-raised-button (click)="onClickDisplaySetting()">設定</button>
-        <button mat-raised-button (click)="onClickVersions()">譯本</button>
+        <button mat-raised-button (click)="onClickDisplaySetting()">{{'設定'|gbpipe}}</button>
+        <button mat-raised-button (click)="onClickVersions()">{{'譯本'|gbpipe}}</button>
         
       </mat-toolbar>
     </mat-sidenav-content>

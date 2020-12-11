@@ -35,18 +35,18 @@
             <hr />
             <span class='wid'> {{a1.wid}} </span>
             <span class='orig'> {{a1.word}} </span>
-            <span class='item-title'> 簡義 </span>
+            <span class='item-title'> {{'簡義'|gbpipe}} </span>
             <span> {{a1.exp}} </span>
-            <span class='item-title'> 原型 </span>
+            <span class='item-title'> {{'原型'|gbpipe}} </span>
             <span class='orig'> {{a1.orig}} </span>
             <br />
             <span [style.color]="a1.sn===snActived?'blue':'darkturquoise'" class='sn' (click)="onClickSn($event,a1)"> {{a1.tp}}{{a1.sn}} </span>
-            <span class='item-title'> 分析 </span>
+            <span class='item-title'> {{'分析'|gbpipe}} </span>
             <span> {{a1.pro}} </span>
             <span [innerHTML]="createDomFromString(a1.wform)"></span>
             <span *ngIf="a1.remark!==undefined">
               <br />
-              <span class='item-title'> 備註 </span>
+              <span class='item-title'> {{'備註'|gbpipe}} </span>
               <span [innerHTML]="createDomFromString(a1.remark)"></span>
             </span>
           </div>
@@ -73,8 +73,8 @@
   <mat-toolbar style="position: fixed;bottom:0;z-index: 40;">
     <div class='topbuttons'>
       <span>{{verseAddress}}</span>
-      <button mat-raised-button (click)="onClickPrev()">前1節</button>
-      <button mat-raised-button (click)="onClickNext()">後1節</button>
+      <button mat-raised-button (click)="onClickPrev()">{{'前1節'|gbpipe}}</button>
+      <button mat-raised-button (click)="onClickNext()">{{'後1節'|gbpipe}}</button>
       <!-- <mat-chip color="accent" selected="true" (click)="onClickPrev()" class='btnChip'>前一節</mat-chip> -->
       <!-- <span>{{verseAddress}}</span> -->
       <!-- <mat-chip color="accent" selected="true" (click)="onClickNext()" class='btnChip'>後一節</mat-chip> -->

@@ -14,6 +14,7 @@ import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { cvt_unv } from 'src/app/bible-text-convertor/unv';
 import { cvt_ncv } from "src/app/bible-text-convertor/cvt_ncv";
 import { cvt_cbol } from 'src/app/bible-text-convertor/cvt_cbol';
+import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
 export class BibleTextOneVersionQuery {
   dataMapAndPhoto: DApiSobjResult[];
   constructor(dataMapAndPhoto?: DApiSobjResult[]) {
@@ -66,8 +67,8 @@ export class BibleTextOneVersionQuery {
     return re2;
   }
 
-  private async getTextFromApi(verses: VerseRange, ver: string) {
-    const qstr = verses.toStringChineseShort();
+  private async getTextFromApi(verses: VerseRange, ver: string) {    
+    const qstr = DisplayLangSetting.s.getValueIsGB()? verses.toStringChineseGBShort() : verses.toStringChineseShort();
     const arg: DQsbArgs = {
       qstr,
       bibleVersion: ver,

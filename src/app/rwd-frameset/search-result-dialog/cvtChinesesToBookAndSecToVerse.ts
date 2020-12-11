@@ -1,6 +1,7 @@
 import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
 import * as LQ from 'linq';
 import { DSeApiRecord } from './searchAllIndexViaSeApiAsync';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 /**
  * Record 會有 chineses, 但我要一致用 book
  * Record 會有 sec, 但我要用 verse
@@ -21,7 +22,7 @@ export function cvtChinesesToBookAndSecToVerse(record: DSeApiRecord[]) {
   return;
   function generateDictionay() {
     // tslint:disable-next-line: max-line-length
-    return LQ.from(BookNameConstants.CHINESE_BOOK_ABBREVIATIONS)
+    return LQ.from( DisplayLangSetting.s.getValueIsGB()? BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB : BookNameConstants.CHINESE_BOOK_ABBREVIATIONS)
       .select((a1, i1) => {
         return { na: a1, idx: i1 + 1 };
       }).toDictionary(a1 => a1.na, a1 => a1.idx);

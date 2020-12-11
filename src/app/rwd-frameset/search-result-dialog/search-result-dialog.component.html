@@ -1,32 +1,32 @@
 <div>
-    <div mat-dialog-title style="font-size: 1em;line-height: 1em;">
+    <div mat-dialog-title >
         <span *ngIf="typeFunction==='keyword'">
       <!-- <span>關鍵字查詢</span> -->
         <span *ngIf="data!==undefined">
         <!-- 統計結果 -->
         <span>
           <mat-tab-group #mattabkeywordsearch>
-            <mat-tab label="分類">
-              <button *ngFor="let it1 of dataCountClassor; let i1=index" (click)="onClickSearchFilter(it1)">
+            <mat-tab [label]="'分類'|gbpipe">
+              <button mat-raised-button *ngFor="let it1 of dataCountClassor; let i1=index" (click)="onClickSearchFilter(it1)">
                 <span class='classor'
                   [class.classor-selected]="searchFilter===it1.name">{{it1.name}}</span><span>{{it1.count?it1.count:'?'}}</span>
         </button>
         </mat-tab>
-        <mat-tab label="書卷">
-            <button *ngFor="let it1 of dataCountBook; let i1=index" (click)="onClickSearchFilter(it1)">
+        <mat-tab  [label]="'書卷'|gbpipe">
+            <button mat-raised-button *ngFor="let it1 of dataCountBook; let i1=index" (click)="onClickSearchFilter(it1)">
                 <span class='classor'
                   [class.classor-selected]="searchFilter===it1.name">{{it1.name}}</span><span>{{it1.count?it1.count:'?'}}</span>
               </button>
         </mat-tab>
 
-        <mat-tab label="設定">
-            <span style="line-height: 1.3em;">
+        <mat-tab [label]="'設定'|gbpipe">
+            <span style="line-height: 1.3em;font-size: 1rem;">
                 <!-- 設定 聖經版本查詢 -->
                 <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}})
                 </span>
-            <!-- 設定 關鍵字要不要上色 -->
-            <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
-                關鍵字上色</mat-slide-toggle>
+            <!-- 設定 關鍵字要不要上色 -->           
+              <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
+                {{'關鍵字上色'|gbpipe}}</mat-slide-toggle>
             </span>
 
         </mat-tab>
@@ -35,15 +35,15 @@
         </span>
         </span>
         <span *ngIf="typeFunction==='reference'">
-      <span> {{getKeyword()}} </span>
-        <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}}) </span>
+          <span> {{getKeyword()}} </span>
+          <span style="color:blue;cursor: pointer;" (click)="onClickVersion()"> ({{bibleVersionSelectedShowName}}) </span>
         <!-- <a [routerLink]="getReferenceLink()"> 切換網址到 </a> -->
-        <a [href]="getReferenceLink()"> 切換網址 </a>
+          <a [href]="getReferenceLink()"> {{'切換網址'|gbpipe}} </a>
         </span>
         <span *ngIf="typeFunction==='orig-dict'">
       <div>
         <!-- 原文字典 彙編 -->
-        <span class='orig' (click)="onClickOrigCollection()">{{getKeyword()}}彙編</span>、
+        <span class='orig' (click)="onClickOrigCollection()">{{getKeyword()}}{{'彙編'|gbpipe}}</span>、
         <!-- 原文字典, 下個原文,上個原文 -->
         <span class='orig' (click)="onClickOrig(getOrigPrev())">{{getOrigPrev()}}</span>、
         <span class='orig' (click)="onClickOrig(getOrigNext())">{{getOrigNext()}}</span>
@@ -54,7 +54,7 @@
       <span>
         <mat-tab-group #mattabkeywordsearch>
           <!-- 原文彙編 統計結果 分類 -->
-          <mat-tab label="分類">
+          <mat-tab [label]="'分類'|gbpipe">
             <div style="line-height: 1.5em;white-space: nowrap;">
               <span *ngFor="let it1 of dataCountClassor; let i1=index">
                 <span *ngIf="i1!==0">,</span>
@@ -63,7 +63,7 @@
 </div>
 </mat-tab>
 <!-- 原文彙編 統計結果 書卷 -->
-<mat-tab label="書卷">
+<mat-tab [label]="'書卷'|gbpipe">
     <div style="line-height: 1.5em;white-space: nowrap;">
         <span *ngFor="let it1 of dataCountBook; let i1=index">
                 <span *ngIf="i1!==0">,</span>
@@ -72,14 +72,14 @@
     </div>
 </mat-tab>
 <!-- 原文彙編 統計結果 設定 -->
-<mat-tab label="設定">
+<mat-tab [label]="'設定'|gbpipe">
     <span style="line-height: 1.3em;">
               <!-- 原文彙編 設定 聖經版本查詢 -->
               <span style="color:blue;cursor: pointer;" (click)="onClickVersion(1)">
                 ({{bibleVersionSnSelectedShowName}}) </span>
     <!-- 設定 關鍵字要不要上色 -->
     <mat-slide-toggle [checked]="isEnableColorKeyword===1" (change)="onEnableColorKeywordChanged($event)">
-        關鍵字上色</mat-slide-toggle>
+        {{'關鍵字上色'|gbpipe}}</mat-slide-toggle>
     </span>
 
 </mat-tab>
@@ -87,8 +87,8 @@
 </span>
 </span>
 
-<span *ngIf="data===undefined">查詢中...</span>
-<span *ngIf="data!==undefined && data.length===0">查無資料</span>
+<span *ngIf="data===undefined">{{'查詢中'|gbpipe}}...</span>
+<span *ngIf="data!==undefined && data.length===0">{{'查無資料'|gbpipe}}</span>
 </div>
 <mat-dialog-content>
     <div style="padding-bottom: 4em;">

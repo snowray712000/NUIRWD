@@ -48,6 +48,7 @@ import { Dialog2bComponent } from './mobile-test/dialog2b/dialog2b.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DialogFootComponent } from './rwd-frameset/dialog-foot/dialog-foot.component';
 import { DialogChooseChapterComponent } from './rwd-frameset/dialog-choose-chapter/dialog-choose-chapter.component';
+import { GbPipe } from './gb/getGbText';
 const entryComponents = [
   BibleSelectionsComponent,
   // InfoDialogComponent,
@@ -89,6 +90,7 @@ const entryComponents = [
     Dialog2bComponent,
     DialogFootComponent,
     DialogChooseChapterComponent,
+    GbPipe,
   ],
   entryComponents,
   imports: [

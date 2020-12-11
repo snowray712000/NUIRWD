@@ -7,6 +7,7 @@ import { IReferenceGetter } from './search-result-dialog.component';
 import { ApiQsb, DOneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { map } from 'rxjs/operators';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
+import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 export class ReferenceGetter implements IReferenceGetter {
   async mainAsync(arg: { reference: string; version: string }): Promise<DOneLine[]> {
     const recordsFromApi = await getDataAsync(getStrForApi(arg.reference), arg.version);
@@ -19,7 +20,7 @@ export class ReferenceGetter implements IReferenceGetter {
     re2 = cvt_others(re2, re2[0].addresses, arg.version);
     return re2;
     async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
-      const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version, isExistStrong: true });
+      const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version, isExistStrong: true,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() });
       const r2 = r1.pipe(map(a1 => a1.record));
       return r2.toPromise();
     }
@@ -27,6 +28,9 @@ export class ReferenceGetter implements IReferenceGetter {
       const r1 = /#?([^|]+)\|?/i.exec(str);
       const r2 = r1[1].replace(/\s/g, '');
 
+      if ( DisplayLangSetting.s.getValueIsGB()){
+        return VerseRange.fD(r2).toStringChineseGBShort();
+      }
       const r3 = VerseRange.fD(r2).toStringChineseShort(); // 彼前2:17,5:9 qstr是不行的, 要用 ; 取代它...但直接用 replace 又不行
 
       return r3;

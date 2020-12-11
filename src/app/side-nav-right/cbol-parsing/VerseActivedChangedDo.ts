@@ -11,7 +11,7 @@ export function VerseActivedChangedDo(tabString: '分析' | '註釋' | '串珠',
 export class FunctionDoWhenVerseChanged {
   private tabString: string;
   private fn: (addr: DAddress) => void;
-  main(tabString: '分析' | '註釋' | '串珠', fn: (addr: DAddress) => void) {
+  main(tabString: string, fn: (addr: DAddress) => void) {
     this.tabString = tabString;
     this.fn = fn;
 
@@ -27,10 +27,10 @@ export class FunctionDoWhenVerseChanged {
 
   }
   checkAndDo() {
-    if (FunctionIsOpened.s.getFromLocalStorage() &&
-      this.tabString === FunctionSelectionTab.s.getFromLocalStorage()) {
+    if (FunctionIsOpened.s.getValue() &&
+      this.tabString === FunctionSelectionTab.s.getValue()) {
       // 處理
-      const data = EventVerseChanged.s.getFromLocalStorage();
+      const data = EventVerseChanged.s.getValue();
       this.fn(data);
     }
   }

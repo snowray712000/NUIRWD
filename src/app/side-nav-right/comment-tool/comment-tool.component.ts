@@ -18,6 +18,8 @@ import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { VerseActivedChangedDo } from '../cbol-parsing/VerseActivedChangedDo';
 import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
 import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
+import { getBig5Text } from 'src/app/gb/getGbText';
+import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
 
 @Component({
   selector: 'app-comment-tool',
@@ -95,7 +97,7 @@ export class CommentToolComponent implements OnInit, OnChanges {
     return;
     function setTitleAndPrevNext(arg1: DCommentResult) {
       if (pthis.address.chap === 0) {
-        pthis.title = '書卷背景';
+        pthis.title = DisplayLangSetting.s.getValueIsGB()? getBig5Text('書卷背景') : '書卷背景';
       } else {
         pthis.title = arg1.title;
       }
@@ -110,7 +112,7 @@ export class CommentToolComponent implements OnInit, OnChanges {
 
 interface DCommentResult { title: string; next?: DAddress; prev?: DAddress; data: DText[]; }
 async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
-  const rr1 = await new ApiSc().queryScAsync({ bookId: 3, address: addr }).toPromise();
+  const rr1 = await new ApiSc().queryScAsync({ bookId: 3, address: addr,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }).toPromise();
   // console.log(rr1);
   const rrData = cvtData(rr1.record[0].com_text, addr);
 

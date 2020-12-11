@@ -3,6 +3,8 @@ import { Component, OnInit, Input, OnChanges, ViewChild, AfterViewInit } from '@
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FunctionSelectionTab } from './FunctionSelectionTab';
 import { ComMatGroup, ComMatTabCommentInfo } from '../rwd-frameset/settings/ComToolbarTop';
+import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { getBig5Text } from '../gb/getGbText';
 
 @Component({
   selector: 'app-side-nav-right',
@@ -25,12 +27,15 @@ export class SideNavRightComponent implements OnInit, OnChanges,AfterViewInit {
   ngOnInit() {
   }
   onSelectedTabChanged(arg: MatTabChangeEvent) {
-    FunctionSelectionTab.s.updateValueAndSaveToStorageAndTriggerEvent(arg.tab.textLabel);
+    let r1 = getBig5Text(arg.tab.textLabel);    
+    FunctionSelectionTab.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
   }
   getSelectedIndexInitial() {
-    const r1 = FunctionSelectionTab.s.getFromLocalStorage();
+    const r1 = FunctionSelectionTab.s.getValue();
+
     const r2 = LQ.from(['分析', '串珠', '註釋', '典藏', '有聲', '講道', '地圖', '相片']).indexOf(a1 => a1 === r1);
     return r2 === undefined ? 2 : r2;
+    //   const r2 = LQ.from(['分析', '串珠', '注释', '典藏', '有声', '讲道', '地图', '相片']).indexOf(a1=>a1===r1);
   }
 }
 

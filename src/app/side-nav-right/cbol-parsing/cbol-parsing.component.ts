@@ -30,6 +30,7 @@ import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 import { ComMatGroup, ComMatTabCommentInfo, ComSideNavRight, ComToolbarTop } from 'src/app/rwd-frameset/settings/ComToolbarTop';
 import { MatToolbar } from '@angular/material/toolbar';
+import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -123,7 +124,7 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     return this.sanitizer.bypassSecurityTrustHtml(str);
   }
   private async onVerseChanged(bk: number, ch: number, vr: number) {
-    console.log(bk + ' ' + ch + ' ' + vr);
+    //console.log(bk + ' ' + ch + ' ' + vr);
 
     await this.queryQbAndRefreshAsync(bk,ch,vr);
     this.verseAddress = `${ch}:${vr}`;
@@ -167,6 +168,9 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
       const r1 = new VerseRange();
       r1.add({ book: bk, chap: ch, verse: vr });
       // this.thisVerseDescription = r1.toStringChineseShort();
+      if ( DisplayLangSetting.s.getValueIsGB()){
+        return r1.toStringChineseGBShort();
+      }
       return r1.toStringChineseShort();
     }
     function getUnvAsync() {

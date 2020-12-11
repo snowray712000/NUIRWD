@@ -4,6 +4,8 @@ import { DText } from './../../bible-text-convertor/AddBase';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
+import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
+import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
 /**
  * 與一般的 AddReference 不一樣, 在於 注釋 中的 reference, 很多省略了 書卷名, 例如
  * 引言 ( #1:1-17| ), 所以會傳入 addrSet 作為「若沒有傳入的預設值」
@@ -64,7 +66,7 @@ export class AddReferenceInCommentText {
           const rr1 = rr2.split(/、/);
           const rr3 = rr1.join(';');
           const rr4 = VerseRange.fD(rr3, addr.book);
-          a1.refDescription = rr4.toStringChineseShort();
+          a1.refDescription = DisplayLangSetting.s.getValueIsGB()? rr4.toStringChineseGBShort() : rr4.toStringChineseShort();
         } catch (error) {
           // 創3:20注釋, #以諾書 71:7|
           delete a1.isRef;

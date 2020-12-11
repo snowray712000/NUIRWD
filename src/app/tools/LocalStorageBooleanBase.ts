@@ -38,4 +38,8 @@ export abstract class LocalStorageBooleanBase {
     }
     return this.curValue;
   }
+  getValue(){
+    if ( this.curValue === undefined ){this.getFromLocalStorage();}
+    return this.curValue ;
+  }
 }

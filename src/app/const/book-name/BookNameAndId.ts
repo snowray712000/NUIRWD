@@ -26,11 +26,14 @@ export class BookNameAndId {
     LQ.range(1, 66).forEach(a1 => rr1.set(a1, []));
     const r2 = new Map<string, number>(); // 同時產生 創世記=1, matthew=1
     [BibleBookNames.getBookNames(BookNameLang.馬太福音),
+    BibleBookNames.getBookNames(BookNameLang.马太福音GB),
     BibleBookNames.getBookNames(BookNameLang.Matthew),
     BibleBookNames.getBookNames(BookNameLang.Matt),
     BibleBookNames.getBookNames(BookNameLang.太),
+    BibleBookNames.getBookNames(BookNameLang.太GB),
     BibleBookNames.getBookNames(BookNameLang.Mt)].forEach(a2 => a2.forEach((a1, i) => {
       rr1.get(i + 1).push(a1);
+      // console.log(a1);
       r2.set(a1.toLowerCase(), i + 1);
     }));
     // 特殊中文字 / 別名

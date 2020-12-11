@@ -5,8 +5,8 @@
       <span>{{title}}</span>
     </div>
     <mat-divider></mat-divider>
-    <span *ngIf="data===undefined">資料查詢中</span>
-    <span *ngIf="data!==undefined && data.length===0">查無資料</span>
+    <span *ngIf="data===undefined">{{'資料查詢中'|gbpipe}}</span>
+    <span *ngIf="data!==undefined && data.length===0">{{'查無資料'|gbpipe}}</span>
     <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
     </app-dtexts-rendor>
   </div>
@@ -16,8 +16,8 @@
   </mat-toolbar>
   <mat-toolbar style="position: fixed;bottom:0">
     <div class='tools'>
-      <button mat-raised-button (click)="onClickPrev()">前</button>
-      <button mat-raised-button (click)="onClickNext()">後</button>
+      <button mat-raised-button (click)="onClickPrev()">{{'前'|gbpipe}}</button>
+      <button mat-raised-button (click)="onClickNext()">{{'後'|gbpipe}}</button>
     </div>
   </mat-toolbar>
   
