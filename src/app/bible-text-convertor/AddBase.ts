@@ -76,6 +76,8 @@ export interface DText {
   isGODSay?: 0 | 1;
   // 虛點點。和合本，原文不存在，為了句子通順加上的翻譯。
   isOrigNotExist?: 0 | 1;
+  // rgb(195,39,43) 中文標準譯本 csb ， 紅字，是用 span style css color rgb(x,x,x)
+  cssColor?: string;
 }
 
 

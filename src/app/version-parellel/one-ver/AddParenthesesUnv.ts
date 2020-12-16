@@ -3,6 +3,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { PACKAGE_ROOT_URL } from '@angular/core';
+import { merge } from 'jquery';
 /** unv用, ncv 新譯本也用, 全型小括號 */
 export class AddParenthesesUnvNcv implements IAddBase {
   /** 若都沒有, 就回傳 lines, 不然, 會回傳新的一份 */
@@ -39,7 +40,10 @@ export class AddParenthesesUnvNcv implements IAddBase {
       // const r1 = new SplitStringByRegexVer2().main(it2.w, /（[^）]+）/g);
       // const r1 = new SplitStringByRegexVer2().main(it2.w, /（[^（]*（[^）]*）[^）]*）|（[^）]+）/g);
       // const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（[^）]+）)/g);
-      const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（([^）]+)）)|(?:\(([^\)]+)\))/g);
+      const r1 = new SplitStringByRegexVer2().main(it2.w, /(?:(（[^（]*)(（[^）]*）)([^）]*）))|(?:（([^）]+)）)|(?:\(([^\)]+)\))/g);                  
+      
+      fixColorStyleRGB(r1); // 2020 1216 fix. 中文標準譯本 的顏色 rgb() 的括號，被誤判為標題
+
       if (r1.length === 1) {
         re1.push(it2);
         continue;
@@ -88,6 +92,40 @@ export class AddParenthesesUnvNcv implements IAddBase {
       if (exec[1] !== undefined) return ParenthesesType.Two;
       if (exec[4] !== undefined) return ParenthesesType.Full;
       return ParenthesesType.Half;
+    }
+    function fixColorStyleRGB(r1: { w: string; exec?: RegExpExecArray }[]){
+      // <h3>天國八福</h3><span style=\"color:rgb(195,39,43);\">「靈裡貧乏的人是蒙福</span>
+      // 會被切為 3 個
+      // <h3>天國八福</h3><span style=\"color:rgb
+      // (195,39,43)
+      // ;\">「靈裡貧乏的人是蒙福</span>
+      
+      // 太9:6 一節同時有2個，才發現，要從後處理到前
+      for (let i1 = r1.length-1; i1 >=0 ; i1--) {    
+        
+        if ( isRgb(i1) ){
+          mergeI(i1);
+          r1.splice(i1+1,2); // 移掉 i+1, +2
+        } else {
+        }
+      }
+      return;
+      function isRgb(i:number){
+        if ( i+2 >= r1.length ){
+          return false;
+        }
+        if ( r1[i].w === undefined || r1[i+1].w === undefined || r1[i+2].w === undefined ){
+          return false;
+        }
+        const r1a = /color:rgb$/.test(r1[i].w);
+        const r2a = /^\(\d+,\d+,\d+\)$/.test(r1[i+1].w);        
+        const r3a = /^;">/.test(r1[i+2].w);
+        return r1a && r2a && r3a ;        
+      }
+      function mergeI(i:number){
+        r1[i].w += r1[i+1].w + r1[i+2].w ; 
+        r1[i].exec = undefined;
+      }
     }
   }
 

@@ -229,6 +229,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
         } else if (ver === 'cbol') {
           lines1 = cvt_cbol(lines1, args.addresses);
         } else {
+          // others 裡也可以用 if ver, 所以許多都在裡面了
           lines1 = cvt_others(lines1, args.addresses, ver);
         }
 

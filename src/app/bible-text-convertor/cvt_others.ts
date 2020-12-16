@@ -25,12 +25,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
 
   return re1;
   function cvt_oneLine(it1: DOneLine) {
-
     it1 = replaceNewLineToBr(it1);
     it1 = replaceOrigToPair(it1);
     if (ver === 'kjv') replaceKJVToPair(it1);
     if (ver === 'cnet_foot') replaceCnetFootReference(it1);
-    if (ver === 'csb_foot') replaceCsbFootReference(it1); 
+    if (ver === 'csb_foot') replaceCsbFootReference(it1);
     it1 = addParentheses(it1);
     it1 = doUsingDOMParsor(it1);
     it1 = addReference(it1);
@@ -41,61 +40,56 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
      * csb(中文標準譯本－新約only) 版本注釋。在 foot dialog 要用到的
      * 太1:23 1:23 《以賽亞書》7:14。
     */
-   function replaceCsbFootReference(it1: DOneLine): DOneLine {
-    const reg = gRegExp();       // doText() 中用
+    function replaceCsbFootReference(it1: DOneLine): DOneLine {
+      const reg = gRegExp();       // doText() 中用
 
-    for (const it2 of it1.children) {
-      doText(it2);
-    }
-
-    return it1;
-    function doText(it2: DText) {
-      if (it2.w === undefined) return;
-
-      let r3 = new SplitStringByRegexVer2().main(it2.w, reg);
-      if (r3.length === 1) { return; }    
-
-      console.log(it2.w);
-      console.log(r3);
-      
-        
-
-      const re: DText[] = [];
-      for (let i3 = r3.length - 1; i3 > -1; i3--) {
-        const it3 = r3[i3];
-        const r4 = deepCopy(it2);
-        r4.w = it3.w;
-        if (it3.exec == null) { re.push(r4); continue; }
-
-        // assert ( it3.exec != null )
-        if (i3 !== 0 && r3[i3 - 1].exec != null) {
-          // [0]: 《以賽亞書》7:14
-          // [1]: 以賽亞書
-          // [2]: 7:14
-          r3[i3 - 1].w += it3.w;
-        } else {
-          it3.w = it3.w.replace(/[(《)|(》)|(；)]/g, (a1, a2, a3, a4) => {
-            if (a2 != null) return '';
-            if (a3 != null) return '';
-            if (a4 != null) return ';';
-          });
-          it3.w = '#' + it3.w + '|';
-          re.push(it3);
-        }
+      for (const it2 of it1.children) {
+        doText(it2);
       }
-      it2.w = LQ.from(re).select(a1 => a1.w)
-        .reverse().toArray().join('');
 
+      return it1;
+      function doText(it2: DText) {
+        if (it2.w === undefined) return;
+
+        let r3 = new SplitStringByRegexVer2().main(it2.w, reg);
+        if (r3.length === 1) { return; }
+
+        const re: DText[] = [];
+        for (let i3 = r3.length - 1; i3 > -1; i3--) {
+          const it3 = r3[i3];
+          const r4 = deepCopy(it2);
+          r4.w = it3.w;
+          if (it3.exec == null) { re.push(r4); continue; }
+
+          // assert ( it3.exec != null )
+          if (i3 !== 0 && r3[i3 - 1].exec != null) {
+            // [0]: 《以賽亞書》7:14
+            // [1]: 以賽亞書
+            // [2]: 7:14
+            r3[i3 - 1].w += it3.w;
+          } else {
+            it3.w = it3.w.replace(/[(《)|(》)|(；)]/g, (a1, a2, a3, a4) => {
+              if (a2 != null) return '';
+              if (a3 != null) return '';
+              if (a4 != null) return ';';
+            });
+            it3.w = '#' + it3.w + '|';
+            re.push(it3);
+          }
+        }
+        it2.w = LQ.from(re).select(a1 => a1.w)
+          .reverse().toArray().join('');
+
+      }
+      function gRegExp() {
+        BookNameConstants.CHINESE_BOOK_NAMES
+        const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)
+          .orderByDescending(a1 => a1.length).toArray().join('|');
+        const reg1 = new RegExp('《(' + str1 + ')》(\\d+[\\d　 :；;,\\-]*)', 'g');
+        // 不行 徒3 因為，奉
+        return reg1;
+      }
     }
-    function gRegExp() {
-      BookNameConstants.CHINESE_BOOK_NAMES
-      const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)        
-        .orderByDescending(a1 => a1.length).toArray().join('|');        
-      const reg1 = new RegExp('《(' + str1 + ')》(\\d+[\\d　 :；;,\\-]*)', 'g');
-      // 不行 徒3 因為，奉
-      return reg1;
-    }
-  }
     /** 
      * cnet 版本注釋。在 foot dialog 要用到的
      * 羅1:1 （詩89:3；撒下7:5, 8）
@@ -104,7 +98,7 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     */
     function replaceCnetFootReference(it1: DOneLine): DOneLine {
       const reg = gRegExp();       // doText() 中用
-      
+
       for (const it2 of it1.children) {
         doText(it2);
       }
@@ -276,12 +270,14 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
      * */
     function getAllDTextsFromAllChildrenNode(
       strInnerHTML: string, parentDText?: DText) {
-      let rr3 = parsingToDOMs(strInnerHTML);
 
+      let rr3 = parsingToDOMs(strInnerHTML);
       const re: DText[] = [];
       for (let i3 = 0; i3 < rr3.length; i3++) {
         let rrr1: DText = parentDText === undefined ? {} : deepCopy(parentDText);
         const it3 = rr3[i3] as HTMLElement;
+
+
         if (it3.nodeType === 1 && /^H\d$/.test(it3.tagName)) {
           rrr1.isTitle1 = 1; // h2 h3
           let rrr2 = getAllDTextsFromAllChildrenNode(it3.innerHTML, rrr1);
@@ -297,8 +293,14 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
           let rrr2 = getAllDTextsFromAllChildrenNode(it3.innerHTML, rrr1);
           for (const it4 of rrr2)
             re.push(it4);
-        } else {
-          if (it3.nodeType === 3) rrr1.w = it3.textContent; // text
+        } else if (it3.nodeType === 1 && it3.tagName === 'SPAN' && it3.style !== undefined && it3.style.color !== '') {          
+          rrr1.w = it3.textContent; rrr1.cssColor = it3.style.color; // 路 7:33 紅字中有私名號 
+          let rrr2 = getAllDTextsFromAllChildrenNode(it3.innerHTML, rrr1);
+          for (const it4 of rrr2)
+            re.push(it4);
+        }
+        else {
+          if (it3.nodeType === 3) { rrr1.w = it3.textContent; } // text          
           else if (it3.nodeType === 1 && it3.tagName === 'BR') {
             delete rrr1.w; rrr1.isBr = 1;
           } else if (it3.nodeType === 1 && it3.tagName === 'U') {
