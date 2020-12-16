@@ -23,14 +23,14 @@
     </div>
 
     <div>
-      <button mat-raised-button [class.isActived]="isMergeActived('合併')" (click)="onClickMerge()">合併</button>
+      <button mat-raised-button [class.isActived]="isMergeActived('合併')" (click)="onClickMerge()">{{'合併'|gbpipe}}</button>
     </div>
 
     <div>
-      <button mat-raised-button (click)="onClickSnVisibleToggle()" [class.isActived]="isSnShowOn()">原文編號</button>
-      <button mat-raised-button (click)="onClickVersionToggle()" [class.isActived]="isVersionShowOn()">版本顯示</button>
+      <button mat-raised-button (click)="onClickSnVisibleToggle()" [class.isActived]="isSnShowOn()">{{'原文編號'|gbpipe}}</button>
+      <button mat-raised-button (click)="onClickVersionToggle()" [class.isActived]="isVersionShowOn()">{{'版本顯示'|gbpipe}}</button>
       <button mat-raised-button (click)="onClickColorKeywordToggle()"
-        [class.isActived]="isEnableColorKeyword()">關鍵字上色</button>
+        [class.isActived]="isEnableColorKeyword()">{{'關鍵字上色'|gbpipe}}</button>
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions> </div>
