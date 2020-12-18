@@ -12,3 +12,4 @@ export class VerForMain extends LocalStorageArrayBase<string> {
   _getDefaultValue() { return ['unv']; }
 }
 
+

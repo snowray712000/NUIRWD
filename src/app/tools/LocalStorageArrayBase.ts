@@ -22,23 +22,27 @@ export abstract class LocalStorageArrayBase<T> {
     const pthis = this;
     this.getFromLocalStorage();
     setTimeout(() => {
-      this.eventTool.trigger(this.curValue);
+      pthis.eventTool.trigger(this.curValue);      
     }, 0);
   }
   /** 若 a1 undefined, 則主動 trigger 目前值 */
   updateValueAndSaveToStorageAndTriggerEvent(a1?: T[]) {
     StorageTools.setArray<T>(this._getKey(), a1);
     if (a1 !== this.curValue) {
-      this.eventTool.trigger(a1);
       this.curValue = a1;
+      this.eventTool.trigger(a1);
     }
   }
 
-  getFromLocalStorage() {
+  getFromLocalStorage(): T[] {
     this.curValue = StorageTools.getArraySafely<T>(this._getKey());
-    if (this.curValue == null || (this._isDefaultIfEmpty() && this.curValue.length===0)) {
+    if (this.curValue == null || (this._isDefaultIfEmpty() && this.curValue.length === 0)) {
       this.curValue = this._getDefaultValue();
     }
     return this.curValue;
+  }
+  getValue(): T[] {    
+    if (this.curValue === undefined) { this.getFromLocalStorage(); }
+    return this.curValue === undefined ? this._getDefaultValue() : this.curValue;
   }
 }

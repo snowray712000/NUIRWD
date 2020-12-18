@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
 import { MatSelectionListChange, MatSelectionList } from '@angular/material/list';
 import { longStackSupport } from 'q';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
 import { Observable, Subscriber } from 'rxjs';
+import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
+import { HistorysLink } from '../rwd-frameset/settings/HistorysLink';
+import { FhlUrl } from '../fhl-api/FhlUrl';
 
 export class EventIsSnToggleChanged {
   private static sobj: EventIsSnToggleChanged;
@@ -24,11 +27,27 @@ export class EventIsSnToggleChanged {
 })
 export class SideNavLeftComponent implements OnInit {
   obIsSnToggle: Subscriber<boolean>;
-  constructor() { }
+  historys: string[] = ['創1', '太1']
+  router = new RouteStartedWhenFrame();
+  constructor(private detectChange: ChangeDetectorRef) {
+    const pthis = this;
+    setTimeout(() => {
+      pthis.historys = HistorysLink.s.getValue();
+      HistorysLink.s.changed$.subscribe(a1 => {
+        pthis.historys = HistorysLink.s.getValue();
+        pthis.detectChange.markForCheck();
+      });
+    }, 0);
+  }
   @Input() verIdsOfInit: number[];
   isMapPhotoInit: boolean;
   ismapphotoManager: IsMapPhotoManager = IsMapPhotoManager.s;
 
+  getHistoryLink(a1: string) {
+    const r1 = a1.replace(/;/g,'.');
+    return new FhlUrl().getHtmlURL() + '#/bible/'+r1;
+    
+  }
   ngOnInit() {
     this.isMapPhotoInit = this.ismapphotoManager.getFromLocalStorage();
 

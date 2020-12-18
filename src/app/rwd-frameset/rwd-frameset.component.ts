@@ -34,6 +34,7 @@ import { MatToolbar } from '@angular/material/toolbar';
 import * as $ from 'jquery';
 import { FontSize } from './settings/FontSize';
 import { DialogChooseChapterComponent } from './dialog-choose-chapter/dialog-choose-chapter.component';
+import { HistorysLink } from './settings/HistorysLink';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -55,7 +56,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     // tslint:disable-next-line: no-unused-expression
     const r1 = new RouteStartedWhenFrame(route, router); // 傳值 static 進去
     r1.routeTools.verseRange$.subscribe(a1 => {
-      this.routeVerseRange = a1;
+      this.routeVerseRange = a1;      
+      HistorysLink.s.push_front(r1.routeTools.descriptionLast);
     });
 
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);

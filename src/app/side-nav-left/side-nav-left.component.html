@@ -1,18 +1,20 @@
 <mat-accordion multi="true">
-  <mat-expansion-panel>
+  <mat-expansion-panel expanded="true">
     <mat-expansion-panel-header>
       {{'設定'|gbpipe}}
     </mat-expansion-panel-header>
-    版本: 201211b_繁體簡體切換 <a href='/NUI/assets/versions_nuirwd.html' target="_blank">{{'詳細清單'|gbpipe}}</a> <br/>
+    版本: 201219a_近期記錄 <a href='/NUI/assets/versions_nuirwd.html' target="_blank">{{'詳細清單'|gbpipe}}</a> <br />
     <!-- <mat-slide-toggle #ismapphoto [checked]="isMapPhotoInit" (change)="onChangedIsMapPhoto(ismapphoto.checked)">地理,相片
     </mat-slide-toggle> -->
 
 
   </mat-expansion-panel>
-  <mat-expansion-panel>
+  <mat-expansion-panel expanded="true">
     <mat-expansion-panel-header>
       {{'歷史記錄'|gbpipe}}
     </mat-expansion-panel-header>
-    This the expansion 2 content
+    <a *ngFor="let a1 of historys;" [href]="getHistoryLink(a1)">
+      {{a1}} <br />
+    </a>
   </mat-expansion-panel>
 </mat-accordion>
