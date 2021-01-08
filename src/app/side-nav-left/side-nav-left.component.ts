@@ -7,6 +7,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 import { HistorysLink } from '../rwd-frameset/settings/HistorysLink';
 import { FhlUrl } from '../fhl-api/FhlUrl';
+import { FontSize } from '../rwd-frameset/settings/FontSize';
 
 export class EventIsSnToggleChanged {
   private static sobj: EventIsSnToggleChanged;
@@ -34,8 +35,7 @@ export class SideNavLeftComponent implements OnInit {
     setTimeout(() => {
       pthis.historys = HistorysLink.s.getValue();
       HistorysLink.s.changed$.subscribe(a1 => {
-        pthis.historys = HistorysLink.s.getValue();
-        pthis.detectChange.markForCheck();
+        pthis.historys = HistorysLink.s.getValue();        
       });
     }, 0);
   }
@@ -45,8 +45,12 @@ export class SideNavLeftComponent implements OnInit {
 
   getHistoryLink(a1: string) {
     const r1 = a1.replace(/;/g,'.');
+    
     return new FhlUrl().getHtmlURL() + '#/bible/'+r1;
     
+  }
+  getFontSizeEm(){
+    return FontSize.s.getValue();
   }
   ngOnInit() {
     this.isMapPhotoInit = this.ismapphotoManager.getFromLocalStorage();

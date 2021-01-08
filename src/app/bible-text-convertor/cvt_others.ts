@@ -8,7 +8,10 @@ import { SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
 import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameConstants } from '../const/book-name/BookNameConstants';
 import * as LQ from 'linq';
-
+import {ReferenceOther} from 'ijn-fhl-sharefun-ts/lib/bible-text/ReferenceOther';
+import {ReferenceNcv} from 'ijn-fhl-sharefun-ts/lib/bible-text/ReferenceNcv';
+import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { IReferenceTools } from 'ijn-fhl-sharefun-ts/lib/bible-text/IReferenceTools';
 /**
  * 開發，是以 和合本2010 去作的
 */
@@ -24,7 +27,7 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
   }
 
   return re1;
-  function cvt_oneLine(it1: DOneLine) {
+  function cvt_oneLine(it1: DOneLine) {    
     it1 = replaceNewLineToBr(it1);
     it1 = replaceOrigToPair(it1);
     if (ver === 'kjv') replaceKJVToPair(it1);
@@ -229,19 +232,16 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
 
       /** 讓參考形如 路:1-2 */
       function toStandard() {
-        for (const it2 of it1.children) {
-          if (it2.w !== undefined && isIncludeRef(it2.w)) {
-            // 全型：、點(和合本2010)． ,,, 要換回標準 : 
-            it2.w = it2.w.replace(/(\d+)(?:．|：)(\d+)/g, (a1, a2, a3) => {
-              return `${a2}:${a3}`;
-            });
+        const isGb = DisplayLangSetting.s.getValueIsGB()? 1: undefined;
+        for (const it2 of it1.children) {        
+          // 新譯本特別處理
+          const refTool:IReferenceTools = 
+          ver === 'ncv' ? new ReferenceNcv(it2.w,isGb) : new ReferenceOther(it2.w,isGb);
+          if (refTool.isIncludeRef()){
+            it2.w = refTool.toStandard();            
           }
         }
         return;
-
-        function isIncludeRef(str: string): boolean {
-          return /#[^\|]+\|/.test(str); // #路1|        
-        }
       }
     }
     /** 小括號

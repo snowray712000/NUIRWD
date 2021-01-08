@@ -106,9 +106,8 @@ export class VersionInterlaceComponent implements OnInit {
     // console.log(pthis.verseRange.toStringChineseShort());
     // console.log(pthis.versions.join(','));
     let re = await this.datasQ.queryDatasAsync({ addresses: pthis.verseRange, versions: pthis.versions });
-    pthis.datas = re;
-    // console.log(pthis.datas);    
-    pthis.changeDetector.markForCheck();
+    pthis.datas = re; 
+    //pthis.changeDetector.markForCheck();
   }
 }
 export class DataForInterlaceQueryor implements IDatasQueryor {
@@ -118,13 +117,10 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     }
 
     interface DRecord { bible_text: string; chap: number; chineses: string; engs: string; sec: number; }
-
     // 產生 api 取得資料
     const re1 = queryApiAsync();
-    
     // 各別 cvt
     const re2 = cvt();
-
     // 準備合併 (章節順序-多版本交錯)
     const datas1 = await Promise.all(re2);
     let re3 = mergeDifferentVersionResult(datas1, args.addresses);
@@ -225,7 +221,8 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
         }).toArray();
 
         if (ver === 'ncv') {
-          lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
+          // lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
+          lines1 = cvt_others(lines1, args.addresses, ver);
         } else if (ver === 'cbol') {
           lines1 = cvt_cbol(lines1, args.addresses);
         } else {
