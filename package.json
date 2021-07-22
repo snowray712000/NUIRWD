@@ -11,6 +11,7 @@
     },
     "private": true,
     "dependencies": {
+        "ijnjs": "file:./ijnjs/",
         "@angular/animations": "^10.1.5",
         "@angular/cdk": "^10.2.4",
         "@angular/common": "~10.1.5",
@@ -31,6 +32,7 @@
         "rxjs": "~6.6.0",
         "tslib": "^2.0.0",
         "zone.js": "~0.10.2"
+        
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "~0.1001.5",

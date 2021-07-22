@@ -64,7 +64,7 @@ export class ParsingReferenceDescription {
 
     // 1:4-5;羅1:4;Mt3:3-2 會被切為 '1:4-5;' 、 '羅' 、 '1:4;' 、 Mt 、 3:3-2
     const re = new SplitStringByRegexVer2().main(strDescription,
-      ParsingReferenceDescription.regBookNames);
+      ParsingReferenceDescription.regBookNames); // 1col|羅|約|約一|... 所有書卷
 
     let cur = defAddress.book;
     let curDes = '';

@@ -53,7 +53,12 @@ export class DialogDisplaySettingComponent implements OnInit {
     return DisplayLangSetting.s.getFromLocalStorage() === text;
   }
   onClickLang(text: string) {
+    var isGb = DisplayLangSetting.s.getValueIsGB()
     DisplayLangSetting.s.updateValueAndSaveToStorageAndTriggerEvent(text);
+    if ( isGb != DisplayLangSetting.s.getValueIsGB() ){
+      alert('重新載入，使其生效')
+      location.reload(true)
+    }
   }
   isMergeActived(text: string) {
     return DisplayMergeSetting.s.getFromLocalStorage();

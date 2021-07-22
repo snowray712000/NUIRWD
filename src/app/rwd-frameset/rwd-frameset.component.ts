@@ -35,6 +35,10 @@ import * as $ from 'jquery';
 import { FontSize } from './settings/FontSize';
 import { DialogChooseChapterComponent } from './dialog-choose-chapter/dialog-choose-chapter.component';
 import { HistorysLink } from './settings/HistorysLink';
+import * as Ijnjs from 'ijnjs'
+import * as Enumerable from 'linq'
+import { ApiAbv } from '../fhl-api/BibleVersion/ApiAbv';
+import { DAbvResult } from '../fhl-api/BibleVersion/DAbvResult';
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -63,10 +67,9 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     this.media = appInstance.injector.get<MediaMatcher>(MediaMatcher);
     this._bottomSheet = appInstance.injector.get<MatBottomSheet>(MatBottomSheet);
     this.initAboutVerChangeOrUpdate();
-
-
   }
   ngOnInit(): void {
+
   }
   onClickVerse(info: { address: DAddress, ver: string }) {
     this.addressActived = info.address;
@@ -262,6 +265,38 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     const re2 = re.showDialog();
   }
   onClickVersions() {
+
+    var dialog1: Ijnjs.BibleVersionDialog
+    Ijnjs.testThenDo(()=>{
+      new ApiAbv().queryAbvPhpOrCache(DisplayLangSetting.s.getValueIsGB()).toPromise().then(abvResult=>{
+        dialog1 = initDialog(abvResult)
+        show()
+        return 
+        function initDialog(abvResult:DAbvResult){
+          var abv = abvResult.record.map(a2=>({book:a2.book,cname:a2.cname}))
+          return new Ijnjs.BibleVersionDialog('dialog-version',cbDialogHide, abv ,cbDialogShow)          
+        }
+        function show(){
+          const vers = VerForMain.s.getFromLocalStorage();
+          dialog1.show(vers)
+        }
+        
+      })
+    })
+
+    function cbDialogHide(vers:string[]){
+      const r1 = VerForMain.s.getFromLocalStorage();
+      var isChanged = vers.length != r1.length || Enumerable.from(vers).any(a1=>r1.includes(a1)==false)
+     
+      if ( isChanged ) {
+        VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(vers);
+      }
+    }
+    function cbDialogShow(){
+      $('#dialog-version').css('z-index','1')
+    }
+
+    return 
     const vers = VerForMain.s.getFromLocalStorage();
     const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
       { isSnOnly: 0, isLimitOne: 0, versions: vers },

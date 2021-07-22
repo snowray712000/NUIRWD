@@ -29,7 +29,6 @@ import { cvt_others } from "../bible-text-convertor/cvt_others";
 import { DQsbArgs, ApiQsb } from '../fhl-api/ApiQsb';
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 
-
 export interface DArgsDatasQueryor { addresses: VerseRange; versions: string[]; }
 export interface IDatasQueryor {
   queryDatasAsync(args: DArgsDatasQueryor): Promise<DOneLine[]>;
@@ -46,9 +45,9 @@ export class VersionInterlaceComponent implements OnInit {
   datasQ: IDatasQueryor = new DataForInterlaceQueryor();  
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
-
   }
   ngOnInit() {
+    
     const pthis = this;
     this.datasQ = getDataQDefaultOrNot();
     
