@@ -1,8 +1,0 @@
-
-{
-    "name": "ijnjs",
-    "main": "ijnjs.js",
-    "description": "blablabla",
-    "types": "./ijnjs.d.ts",
-    "version": "0.0.1"
-}

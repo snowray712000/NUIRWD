@@ -1,5 +1,4 @@
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
-import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { GetAddresses } from 'src/app/bible-address/GetAddresses';
 import { SplitStringByRegex, SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
@@ -15,12 +14,13 @@ export class ParsingReferenceDescription {
     this.makeSureStaticExist();
   }
 
-  main(strDescription: string, defaultAddress?: { book?: number, chap?: number }) {
+  main(strDescription: string, defaultAddress?: { book?: number, chap?: number }):DAddress[] {
     strDescription = strDescription.replace(/\./g, ';');
     const defAddress = this.getDefaultAddress(defaultAddress);
     const re2 = this.splitBook(strDescription, defAddress);
 
-    const reVerse = new VerseRange();
+    // 不能 return VerseRange, 這樣會 circular dependency.
+    const reVerse: DAddress[] = []
     for (const it of re2) {
       // 1:2-e
       const re3 = new SmartDescriptEndParsing().main(it.id, it.des);
@@ -28,7 +28,10 @@ export class ParsingReferenceDescription {
         it.des = re3;
       }
 
-      reVerse.addRange(this.getAddressesOneBook(it));
+      var re4 = this.getAddressesOneBook(it)
+      for (const a1 of re4) {
+        reVerse.push(a1)
+      }
     }
 
     return reVerse;

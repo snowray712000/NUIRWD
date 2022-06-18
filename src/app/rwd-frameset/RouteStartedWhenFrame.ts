@@ -2,6 +2,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { VerseRange } from '../bible-address/VerseRange';
 import { Observable } from 'rxjs';
+/**
+ * 使用 route, 當網址發生改變時, 
+ * 也可使用 routeTools, 網址發生改變時, 但這個是 route 處理過的
+ * 
+ * router 則是用來 navigate 網址用的
+ */
 export class RouteStartedWhenFrame {
   /** 用來 subscribe 的 */
   private static routeStatic: ActivatedRoute;
@@ -12,6 +18,14 @@ export class RouteStartedWhenFrame {
     verseRangeLast: undefined,
     verseRange$: undefined,
   };
+
+  /** 當網址改變時 */
+  get route() { return RouteStartedWhenFrame.routeStatic; }
+  /** 要切換網址時用 router.navigate */
+  get router() { return RouteStartedWhenFrame.routerStatic; }
+  /** 當網址改變時 easy 版*/
+  get routeTools() { return RouteStartedWhenFrame.routeTools; }
+
   /**
    *
    * @param route 用來 subscribe 的
@@ -26,6 +40,8 @@ export class RouteStartedWhenFrame {
       this.descriptLastAndVerseLast(route);
     }
   }
+
+  isReady(){return RouteStartedWhenFrame.isAlreadyExistRouteAndRouter() }
   static isAlreadyExistRouteAndRouter() {
     return RouteStartedWhenFrame.routerStatic !== undefined && RouteStartedWhenFrame.routeStatic !== undefined;
   }
@@ -64,9 +80,7 @@ export class RouteStartedWhenFrame {
     return a1 === undefined || a1.verses.length === 0;
   }
 
-  get route() { return RouteStartedWhenFrame.routeStatic; }
-  get router() { return RouteStartedWhenFrame.routerStatic; }
-  get routeTools() { return RouteStartedWhenFrame.routeTools; }
+
 }
 
 interface DRouteTools {

@@ -2,7 +2,7 @@ import { EventVerseChanged } from './../../side-nav-right/cbol-parsing/EventVers
 import { VerForMain } from 'src/app/rwd-frameset/settings/VerForMain';
 import * as LQ from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { getAddressesText } from 'src/app/bible-address/getAddressesText';
@@ -15,6 +15,11 @@ import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting
 import { DisplayFormatSetting } from '../dialog-display-setting/DisplayFormatSetting';
 import { mergeDOneLineIfAddressContinue } from 'src/app/bible-text-convertor/mergeDOneLineIfAddressContinue';
 import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
+import { DAddress, DAddressComparor } from 'src/app/bible-address/DAddress';
+import { RouteStartedWhenFrame } from './../RouteStartedWhenFrame';
+
+import { DomManagers, scrollToSelected } from '../DomManagers';
+declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
 
 @Component({
   selector: 'app-dlines-rendor',
@@ -28,9 +33,43 @@ export class DlinesRendorComponent implements OnInit {
   @Input() isShowOrig?: 0 | 1;
   /** reference dialog 使用時, 或是彙編, 都期盼完整顯示經文出處。 */
   @Input() isShowALLAddress?: 0 | 1;
-  constructor(public dialog: MatDialog) { }
+  /** scroll 用 */
+  @ViewChildren('divEachLine', null) divEachLine;
+  constructor(public dialog: MatDialog, private detectChange: ChangeDetectorRef) {
+    // 將 divEachLine 存起來，隨處使用 (為要作 scroll)
+    
+    testThenDoAsync({ cbTest: () => this.divEachLine != undefined && this.divEachLine._results.length != 0 }).then(() => {
+      DomManagers.s.divContentEachLine = this.divEachLine
+    })
+  }
+
+  verseSelected: DAddress
 
   ngOnInit() {
+    var that = this
+    EventVerseChanged.s.changed$.subscribe(a1 => {
+      // selected 上色
+      that.verseSelected = a1
+
+    })
+    var r1 = new RouteStartedWhenFrame()
+
+    testThenDoAsync({ cbTest: () => r1.isReady() }).then(()=>{
+      r1.routeTools.verseRange$.subscribe(a1 => {
+        // 使用者似乎更喜歡，切過來就自動同步
+        // 不喜歡 "還沒點擊，就保持原本的 selected 網址"
+        EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(a1.verses[0])
+      })
+    })
+  }
+  getIsSelected(a1: DOneLine) {
+    if (a1 == undefined) { return false }
+    if (this.verseSelected == undefined || a1.addresses == undefined) { return false }
+    if (isSame(a1.addresses.verses[0], this.verseSelected)) { return true }
+    return false
+    function isSame(a1: DAddress, a2: DAddress) {
+      return LQ.from(['book', 'chap', 'verse']).all(k => a1[k] == a2[k]);
+    }
   }
   getDatasOrMergedDatas() {
     if (DisplayMergeSetting.s.getFromLocalStorage()) {
@@ -52,7 +91,7 @@ export class DlinesRendorComponent implements OnInit {
   getAddressShow(it: DOneLine) {
     let format = DisplayFormatSetting.s.getFromLocalStorage() as '創1:1' | '1:1' | '1' | 'v1' | 'none';
     if (this.isShowALLAddress === 1) { format = '創1:1' } // 交叉參照，原文彙編。都希望呈現完整
-    
+
     const lang = DisplayLangSetting.s.getFromLocalStorage() as '創' | 'Ge' | '创';
     return getAddressesText(it.addresses, format, lang);
 

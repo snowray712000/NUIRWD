@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 // import { DialogRefOpenor } from '../info-dialog/DialogRefOpenor';
 import { ChainToolDataGetter } from './ChainToolDataGetter';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { KeyedWrite } from '@angular/compiler';
 import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { VerseActivedChangedDo } from '../cbol-parsing/VerseActivedChangedDo';
+import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
+import { TestTime } from 'src/app/tools/TestTime';
 
 
 @Component({
@@ -16,23 +17,14 @@ import { VerseActivedChangedDo } from '../cbol-parsing/VerseActivedChangedDo';
   templateUrl: './chain-tool.component.html',
   styleUrls: ['./chain-tool.component.css']
 })
-export class ChainToolComponent implements OnInit, OnChanges {
+export class ChainToolComponent implements OnInit {
   data: { w: string, des?: string }[][];
   address: DAddress = { book: 1, chap: 3, verse: 6 };
   next: DAddress;
   prev: DAddress;
   title: string;
-  @Input() addressActived;
-  constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) {
-  }
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    if (changes.addressActived !== undefined) {
-      if (changes.addressActived.previousValue !== changes.addressActived.currentValue) {
-        this.onVerseChanged(this.addressActived);
-        this.address = this.addressActived;
-      }
-    }
-    // throw new Error("Method not implemented.");
+  
+  constructor(private detectChange: ChangeDetectorRef, private dialog: MatDialog) {  
   }
 
   onClickRef(arg: { w: string, des: string }) {
@@ -40,21 +32,33 @@ export class ChainToolComponent implements OnInit, OnChanges {
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.address] });
   }
   ngOnInit() {
+    var that = this
     VerseActivedChangedDo('串珠', addr => {
-      this.onVerseChanged(addr);
+
+      var dt1 = new TestTime()
+      that.data = [[{w:'取得資料中...' + addr.chap + ':' + addr.verse}]]
+      dt1.log('串珠 清除資料.')
+      // 讓畫面先更新
+      setTimeout(async () => {                
+        dt1.log('串珠 更新畫面1')
+        await that.onVerseChanged(addr);
+        dt1.log('串珠 verseChanged.')
+        setTimeout(() => {
+          dt1.log('串珠 更新畫面2')
+        }, 0);
+      }, 0);
+
     });
   }
 
   onClickPrev() {
     if (this.prev !== undefined) {
-      this.onVerseChanged(this.prev);
-      this.address = this.prev;
+      EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.prev)
     }
   }
   onClickNext() {
     if (this.next !== undefined) {
-      this.onVerseChanged(this.next);
-      this.address = this.next;
+      EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.next)
     }
   }
 
@@ -65,6 +69,6 @@ export class ChainToolComponent implements OnInit, OnChanges {
     this.next = re.next;
     this.title = re.title;
     this.data = re.data;
-    this.detectChange.markForCheck();
+    // this.detectChange.markForCheck();
   }
 }

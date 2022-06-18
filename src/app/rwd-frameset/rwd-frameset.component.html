@@ -39,7 +39,7 @@
       <app-side-nav-right [addressActived]="addressActived"></app-side-nav-right>
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content #divContent>
       <app-version-interlace></app-version-interlace>
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 

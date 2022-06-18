@@ -3,7 +3,11 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 
-/** 使用 \r\n 或 \n 來換行的 */
+/** 
+ * 使用 \r\n 或 \n 來換行的 
+ * 若沒有任何改變，則回傳原本的，反之，回傳一整份新的
+ * 當時寫的時候，還沒有 DText 存在 children 的考慮
+ **/
 export class AddBrStdandard implements IAddBase {
   main(lines: DOneLine[], verses?: VerseRange): DOneLine[] {
     const re: DOneLine[] = [];

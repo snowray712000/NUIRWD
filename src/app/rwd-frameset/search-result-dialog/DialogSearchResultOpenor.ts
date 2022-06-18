@@ -1,8 +1,15 @@
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SearchResultDialogComponent, DSearchData } from './search-result-dialog.component';
 import { DAddress } from 'src/app/bible-address/DAddress';
+import { Component } from '@angular/core';
+/**
+ * 雖然 T 只會是 SearchResultDialogComponent
+ * 但為了防止
+ */
 export class DialogSearchResultOpenor {
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {    
+    
+  }
   /**
    * @param arg keyword 例子, G81 H81 #太2:3|; 摩西
    */
@@ -18,9 +25,11 @@ export class DialogSearchResultOpenor {
     if (arg.addresses !== undefined) {
       data.addresses = arg.addresses;
     }
+
     const dialogRef = this.dialog.open(SearchResultDialogComponent, {
       data
-    });
+    });    
     return dialogRef;
+
   }
 }

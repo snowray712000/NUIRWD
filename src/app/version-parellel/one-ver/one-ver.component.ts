@@ -17,6 +17,7 @@ import { EventOneVerWidthChanged } from './EventOneVerWidthChanged';
 import * as LQ from 'linq';
 import { EventIsSnToggleChanged } from 'src/app/side-nav-left/side-nav-left.component';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
+import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
 
 @Component({
   selector: 'app-one-ver',
@@ -54,6 +55,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
         this.changeDetector.markForCheck();
       }
     });
+    
     const r1 = new EventOneVerWidthChanged(() => asHTMLElement(this.base.nativeElement).offsetWidth);
     r1.changed$.subscribe(flag => {
       this.resetLineHeight();

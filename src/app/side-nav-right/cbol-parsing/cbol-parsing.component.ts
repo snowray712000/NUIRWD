@@ -2,7 +2,7 @@ import * as LQ from 'linq';
 import * as $ from 'jquery';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges, AfterViewInit } from '@angular/core';
 import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
-import { getChapCount } from 'src/app/const/count-of-chap';
+import { getChapCount, getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { GetWordsFromQbResult } from './GetWordsFromQbResult';
 import { GetExpsFromQbResult } from './GetExpsFromQbResult';
@@ -24,20 +24,23 @@ import { DAddress } from 'src/app/bible-address/DAddress';
 import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { VerseActivedChangedDo, FunctionDoWhenVerseChanged } from './VerseActivedChangedDo';
-import { EventVerseChanged } from './EventVerseChanged';
+
 import { FunctionIsOpened } from '../FunctionIsOpened';
 import { FunctionSelectionTab } from '../FunctionSelectionTab';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 import { ComMatGroup, ComMatTabCommentInfo, ComSideNavRight, ComToolbarTop } from 'src/app/rwd-frameset/settings/ComToolbarTop';
 import { MatToolbar } from '@angular/material/toolbar';
 import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { EventVerseChanged } from './EventVerseChanged';
+import { TestTime } from 'src/app/tools/TestTime';
+import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
   styleUrls: ['./cbol-parsing.component.css']
 })
 
-export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
+export class CbolParsingComponent implements OnInit,AfterViewInit {
   lines: DLineOnePair[] = [];
   words: DOneRowTable[] = [];
   next: DAddress;
@@ -52,20 +55,12 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() cur: DAddress = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
-  name2id: IBookNameToId = new BookNameToId();
-  @Input() addressActived: DAddress;  
+  name2id: IBookNameToId = new BookNameToId();  
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
   }
   ngAfterViewInit(): void {        
-  }
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    if (changes.addressActived !== undefined) {
-      if (changes.addressActived.currentValue !== changes.addressActived.previousValue) {
-        this.onVerseChanged(this.addressActived.book, this.addressActived.chap, this.addressActived.verse);
-      }
-    }
   }
 
   onClickOrig(en, a1: { w: string, sn: string, wid: number }) {
@@ -116,8 +111,17 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     this.snActived = a1.sn;
   }
   ngOnInit() {
+    // console.log('分析')
+    const that = this
     VerseActivedChangedDo('分析', addr => {
+      var dt1 = new TestTime()
+      that.lines = []
+      dt1.log('parsing 清空')
       this.onVerseChanged(addr.book, addr.chap, addr.verse);
+      dt1.log('parsing changed')
+      setTimeout(() => {
+        dt1.log('pasring rendered')
+      }, 0);
     });
   }
   private createDomFromString(str) {
@@ -129,6 +133,7 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     await this.queryQbAndRefreshAsync(bk,ch,vr);
     this.verseAddress = `${ch}:${vr}`;
     this.detectChange.markForCheck();
+
 
     // const r1 = this.queryQbAndRefreshAsync(bk, ch, vr);
     // const r2 = this.queryContentWithSnAsync(bk, ch, vr);
@@ -232,9 +237,13 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
   }
   onClickPrev() {
     this.onVerseChanged(this.prev.book, this.prev.chap, this.prev.verse);
+    EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.prev)
+    scrollToSelected()
   }
   onClickNext() {
     this.onVerseChanged(this.next.book, this.next.chap, this.next.verse);
+    EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.next)
+    scrollToSelected()
   }
 
   /** 
@@ -300,7 +309,7 @@ export class CbolParsingComponent implements OnInit, OnChanges,AfterViewInit {
     const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
-    console.log(re);
+    // console.log(re);
 
     this.lines = re as DLineOnePair[];
   }

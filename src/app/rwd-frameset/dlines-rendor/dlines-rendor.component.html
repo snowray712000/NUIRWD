@@ -1,4 +1,4 @@
-<div *ngFor="let it1 of getDatasOrMergedDatas(); let i1=index" [class.odd]="i1%2===1" [class.oneLine]="it1.addresses!==undefined" (click)="onClickVerse(it1)">
+<div *ngFor="let it1 of getDatasOrMergedDatas(); let i1=index" #divEachLine [class.odd]="i1%2===1" [class.oneLine]="it1.addresses!==undefined" (click)="onClickVerse(it1)" [class.selected]="getIsSelected(it1)">
     <span *ngIf="it1.addresses!==undefined" class="reference" [attr.data-ref]="getReferenceEntireChap(it1)" (click)="onClickReference(getReferenceEntireChap(it1))">
     {{getAddressShow(it1)}}
   </span>

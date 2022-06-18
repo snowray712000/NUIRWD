@@ -1,14 +1,22 @@
+<!-- 首先 有印像的是 rwd 版本 功能分到 side-nav-right
+的確，有 cbol-parsing chain-tool(應該是指串珠) comment(就是指註解了) -->
 <div class='com-base'>
 
   <div class='content'>
     <div>
       <span>{{title}}</span>
+      <!-- 應該是指 馬太福音 1章1節 到 1章17節 這個 -->
     </div>
     <mat-divider></mat-divider>
+
+    <!-- 真正內容在這 app-dtexts-rendor 是核心 -->
+    <!-- 有人傳資料給這個 html 嗎，看上一層 ，好像沒有 -->
+    <!-- 資料核心是 data ，誰傳給它的？-->
     <span *ngIf="data===undefined">{{'資料查詢中'|gbpipe}}</span>
     <span *ngIf="data!==undefined && data.length===0">{{'查無資料'|gbpipe}}</span>
     <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
     </app-dtexts-rendor>
+
   </div>
 
   <mat-toolbar style="background: inherit;">

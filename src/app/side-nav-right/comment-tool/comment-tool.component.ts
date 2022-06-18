@@ -4,10 +4,9 @@ import { DText } from './../../bible-text-convertor/AddBase';
 import { BookNameToId } from './../../const/book-name/book-name-to-id';
 import { ApiSc } from 'src/app/fhl-api/ApiSc';
 import { Component, OnInit, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
-import { DAddress, getNextAddress, getPrevAddress } from 'src/app/bible-address/DAddress';
+import { DAddress, DAddressEqual, DAddressToString, getNextAddress, getPrevAddress } from 'src/app/bible-address/DAddress';
 import { CommentToolDataGetter } from './CommentToolDataGetter';
 import { ICommentToolDataGetter, DCommentOneData } from './comment-tool-interfaces';
-import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 import { MatDialog } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Comment2DText } from './Comment2DText';
@@ -20,6 +19,9 @@ import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
 import { GetAddressRangeFromPrevNext } from 'src/app/bible-address/GetAddressRangeFromPrevNext';
 import { getBig5Text } from 'src/app/gb/getGbText';
 import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
+import { TestTime } from 'src/app/tools/TestTime';
+import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
 
 @Component({
   selector: 'app-comment-tool',
@@ -43,35 +45,61 @@ export class CommentToolComponent implements OnInit, OnChanges {
     FunctionSelectionTab.s.getFromLocalStorage();
   }
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-    if (changes.addressActived !== undefined) {
-      if (changes.addressActived.currentValue !== changes.addressActived.previousValue) {
-        this.onVerseChanged(this.addressActived);
-      }
-    }
+    // if (changes.addressActived !== undefined) {
+    //   if (changes.addressActived.currentValue !== changes.addressActived.previousValue) {
+    //     this.onVerseChanged(this.addressActived);
+    //   }
+    // }
   }
 
   ngOnInit() {
-    VerseActivedChangedDo('註釋', addr => {
-      this.onVerseChanged(addr);
+    // // console.log('註釋') // 確認是否有啟動 listen
+    var that = this
+    VerseActivedChangedDo('註釋',addr => {      
+      var dt1 = new TestTime()
+      that.data = undefined
+      dt1.log('註釋 清空')
+      setTimeout(async () => {
+        dt1.log('註釋 更新畫面1')
+
+        // 邏輯很像，不愧是同個人寫的 ，都是位置改變
+        // 也就是 initial 時 去取得 ， 合理推測，內部會有設定 .data
+        // 因為 上面把 .data 設成 null
+        await that.onVerseChanged(addr)
+        
+        dt1.log('註釋 changed')
+        
+        setTimeout(() => {
+          dt1.log('註釋 更新畫面2')
+        }, 0);
+        
+      }, 0);
     });
   }
   private async onVerseChanged(arg: DAddress) {
-    if (this.addresses.isIn(arg) === false) {
+    // console.log('註釋判定，是否要繼續執行') // 確定傳入的參數正確嗎
+    if (false == DAddressEqual(this.address,arg) && this.addresses.isIn(arg) === false) {
       this.address = arg;
-      await this.getData();
-      this.detector.markForCheck();
+      // console.log('註釋執行動作.' + DAddressToString(arg)) // 確定判定正確嗎
+      await this.getData();      
     }
   }
   onClickPrev() {
     if (this.prev !== undefined) {
-      this.address = this.prev;
-      this.getData();
+      EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.prev)
+      setTimeout(() => {        
+        scrollToSelected()
+      }, 0);
+      // 會觸發 address 與 getData()
     }
   }
   onClickNext() {
     if (this.next !== undefined) {
-      this.address = this.next;
-      this.getData();
+      EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(this.next)
+      setTimeout(() => {        
+        scrollToSelected()
+      }, 0);
+      // 會觸發 address 與 getData()
     }
   }
   onClickReference(a1) {
@@ -88,12 +116,10 @@ export class CommentToolComponent implements OnInit, OnChanges {
   }
   async getData() {
     const pthis = this;
-    this.data = undefined;
     const re1 = await queryCommentAsync(this.address);
 
     this.data = re1.data;
     setTitleAndPrevNext(re1);
-    this.detector.markForCheck();
     return;
     function setTitleAndPrevNext(arg1: DCommentResult) {
       if (pthis.address.chap === 0) {
@@ -112,8 +138,10 @@ export class CommentToolComponent implements OnInit, OnChanges {
 
 interface DCommentResult { title: string; next?: DAddress; prev?: DAddress; data: DText[]; }
 async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
+  // 看起來 rr1 才是真正的原始 api 資料
   const rr1 = await new ApiSc().queryScAsync({ bookId: 3, address: addr,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }).toPromise();
   // console.log(rr1);
+  //  要找的轉換在這
   const rrData = cvtData(rr1.record[0].com_text, addr);
 
   return addNextPrevTitleAndGenerateResult(rrData);

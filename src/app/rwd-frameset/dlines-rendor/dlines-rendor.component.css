@@ -9,8 +9,17 @@
 }
 .oneLine {
   display: block;
-  padding-left: 2em;
-  text-indent: -2em;
+  text-align: justify;
+  /* 以下應該用 rem, 沒必要因為字型放大而間隔拉寬, 字放大已經很佔空間了, 還放大間隔就不好 */
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  padding-right: 0.5rem;
+  padding-left: 1.0rem;
+  text-indent: -0.5rem;
+}
+.selected{
+  background: linear-gradient(to right, rgba(150, 150, 100, 0.1) 0.2%, rgba(150, 150, 100, 0.4) 4%, rgba(150, 150, 100, 0.7) 10%, rgba(150, 150, 100, 0.7) 90%, rgba(150, 150, 100, 0.4) 96%, rgba(150, 150, 100, 0.1) 99.8%);;
+  z-index: -1;
 }
 .odd {
   background-color: whitesmoke;

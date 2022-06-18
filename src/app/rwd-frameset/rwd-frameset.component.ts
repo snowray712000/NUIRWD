@@ -2,7 +2,7 @@ import { FunctionSelectionTab } from './../side-nav-right/FunctionSelectionTab';
 import { FunctionIsOpened } from './../side-nav-right/FunctionIsOpened';
 import { DialogDisplaySettingComponent } from './dialog-display-setting/dialog-display-setting.component';
 // tslint:disable-next-line: max-line-length
-import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectorRef, OnChanges, Input, ViewRef, EmbeddedViewRef, ElementRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { asHTMLElement } from '../tools/asHTMLElement';
 import { Observable, Subscriber } from 'rxjs';
@@ -31,14 +31,16 @@ import { DisplayLangSetting } from './dialog-display-setting/DisplayLangSetting'
 import { DisplayMergeSetting } from './dialog-display-setting/DisplayMergeSetting';
 import { ComSideNavRight, ComToolbarTop } from './settings/ComToolbarTop';
 import { MatToolbar } from '@angular/material/toolbar';
-import * as $ from 'jquery';
+
 import { FontSize } from './settings/FontSize';
 import { DialogChooseChapterComponent } from './dialog-choose-chapter/dialog-choose-chapter.component';
 import { HistorysLink } from './settings/HistorysLink';
-import * as Ijnjs from 'ijnjs'
-import * as Enumerable from 'linq'
 import { ApiAbv } from '../fhl-api/BibleVersion/ApiAbv';
 import { DAbvResult } from '../fhl-api/BibleVersion/DAbvResult';
+import { MatSidenavContent } from '@angular/material/sidenav';
+import { DomManagers } from './DomManagers';
+declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
+
 @Component({
   selector: 'app-rwd-frameset',
   templateUrl: './rwd-frameset.component.html',
@@ -52,15 +54,21 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   @ViewChild('snavLeft', null) leftSideNav;
   @ViewChild('snavRight', null) rightSideNav;
   @ViewChild('toptoolbar', null) topToolbar;
+  @ViewChild('divContent', null) divContent;
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
   ) {
+    
+    testThenDoAsync({cbTest: ()=>this.divContent != undefined}).then(()=>{
+      DomManagers.s.divContent = this.divContent
+    })
+
     // tslint:disable-next-line: no-unused-expression
     const r1 = new RouteStartedWhenFrame(route, router); // 傳值 static 進去
     r1.routeTools.verseRange$.subscribe(a1 => {
-      this.routeVerseRange = a1;      
+      this.routeVerseRange = a1;
       HistorysLink.s.push_front(r1.routeTools.descriptionLast);
     });
 
@@ -72,8 +80,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
 
   }
   onClickVerse(info: { address: DAddress, ver: string }) {
-    this.addressActived = info.address;
-    this.detectChange.markForCheck();
+    // this.addressActived = info.address;
+    // this.detectChange.markForCheck();
   }
   onSearchInputEnter(txt: string) {
     this.onClickSearch(txt);
@@ -103,13 +111,13 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
   fontLarger() {
     let r1 = (FontSize.s.getValue() + 0.1);
-    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;  
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;
     FontSize.setBodyFontSize(r1);
     FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
   }
   fontSmaller() {
     let r1 = (FontSize.s.getValue() - 0.1);
-    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;    
+    r1 = Math.trunc(r1 * 10 + 0.5) / 10.0;
     if (r1 < 0.1) r1 = 0.1;
     FontSize.setBodyFontSize(r1);
     FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
@@ -127,8 +135,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private initAboutVerChangeOrUpdate() {
   }
 
-  onClickBibleSelect() {   
-    this.dialog.open(DialogChooseChapterComponent ,{}); 
+  onClickBibleSelect() {
+    this.dialog.open(DialogChooseChapterComponent, {});
   }
   onOpenedLeftSide() {
     // console.log('on opened left side');
@@ -266,37 +274,40 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
   onClickVersions() {
 
-    var dialog1: Ijnjs.BibleVersionDialog
-    Ijnjs.testThenDo(()=>{
-      new ApiAbv().queryAbvPhpOrCache(DisplayLangSetting.s.getValueIsGB()).toPromise().then(abvResult=>{
-        dialog1 = initDialog(abvResult)
-        show()
-        return 
-        function initDialog(abvResult:DAbvResult){
-          var abv = abvResult.record.map(a2=>({book:a2.book,cname:a2.cname}))
-          return new Ijnjs.BibleVersionDialog('dialog-version',cbDialogHide, abv ,cbDialogShow)          
-        }
-        function show(){
-          const vers = VerForMain.s.getFromLocalStorage();
-          dialog1.show(vers)
-        }
-        
-      })
-    })
+    // var dlg = FHL.BibleVersionDialog.s
+    // dlg.open()
 
-    function cbDialogHide(vers:string[]){
-      const r1 = VerForMain.s.getFromLocalStorage();
-      var isChanged = vers.length != r1.length || Enumerable.from(vers).any(a1=>r1.includes(a1)==false)
-     
-      if ( isChanged ) {
-        VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(vers);
-      }
-    }
-    function cbDialogShow(){
-      $('#dialog-version').css('z-index','1')
-    }
+    // var dialog1: Ijnjs.BibleVersionDialog
+    // Ijnjs.testThenDo(() => {
+    //   new ApiAbv().queryAbvPhpOrCache(DisplayLangSetting.s.getValueIsGB()).toPromise().then(abvResult => {
+    //     dialog1 = initDialog(abvResult)
+    //     show()
+    //     return
+    //     function initDialog(abvResult: DAbvResult) {
+    //       var abv = abvResult.record.map(a2 => ({ book: a2.book, cname: a2.cname }))
+    //       return new Ijnjs.BibleVersionDialog('dialog-version', cbDialogHide, abv, cbDialogShow)
+    //     }
+    //     function show() {
+    //       const vers = VerForMain.s.getFromLocalStorage();
+    //       dialog1.show(vers)
+    //     }
 
-    return 
+    //   })
+    // })
+
+    // function cbDialogHide(vers: string[]) {
+    //   const r1 = VerForMain.s.getFromLocalStorage();
+    //   var isChanged = vers.length != r1.length || Enumerable.from(vers).any(a1 => r1.includes(a1) == false)
+
+    //   if (isChanged) {
+    //     VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(vers);
+    //   }
+    // }
+    // function cbDialogShow() {
+    //   $('#dialog-version').css('z-index', '3')
+    // }
+
+    return
     const vers = VerForMain.s.getFromLocalStorage();
     const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
       { isSnOnly: 0, isLimitOne: 0, versions: vers },
@@ -334,3 +345,4 @@ export class DialogDisplaySettingOpenor {
     return dialogRef;
   }
 }
+

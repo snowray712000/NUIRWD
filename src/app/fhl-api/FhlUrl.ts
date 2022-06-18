@@ -9,7 +9,7 @@ export class FhlUrl {
   /** sbdag.php 用, 配 getJsonUrl2 */
   getDomain2(): string {
     // return IsLocalHostDevelopment.isLocalHost ? 'bkbible.fhl.net' : 'bible.fhl.net';
-    return IsLocalHostDevelopment.isLocalHost ? 'http://bible.fhl.net/' : '/';
+    return IsLocalHostDevelopment.isLocalHost ? 'https://bible.fhl.net/' : '/';
 
   }
   /** http://bible.fhl.net/json/ 當是 localhost, 若上網了, 就是 '/json/' 或 'http://bible.fhl.net/json/ */

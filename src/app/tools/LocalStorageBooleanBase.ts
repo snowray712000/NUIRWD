@@ -26,8 +26,8 @@ export abstract class LocalStorageBooleanBase {
   updateValueAndSaveToStorageAndTriggerEvent(a1?: boolean) {
     StorageTools.setBoolean(this._getKey(), a1);
     if (a1 !== this.curValue) {
-      this.eventTool.trigger(a1);
       this.curValue = a1;
+      this.eventTool.trigger(a1);
     }
   }
 

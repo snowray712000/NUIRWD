@@ -7,6 +7,13 @@ export interface DAddress {
   verse: number;
   ver?: number;
 }
+export function DAddressToString(addr:DAddress){
+  return JSON.stringify(addr)
+}
+export function DAddressEqual(a1:DAddress,a2:DAddress):boolean{
+  var r1 = isTheSameAddress(a1,a2)
+  return r1 == undefined || r1
+}
 /** 供 linq distinct() 用, 也可用在 orderBy, 當初要開發 merge多個版本之間的經文用. */
 export function DAddressComparor(addr: DAddress) { return addr.book * 10000 + addr.chap * 1000 + addr.verse; }
 /** 若書卷末, 回傳 undefined (不會因此換書卷唷) */

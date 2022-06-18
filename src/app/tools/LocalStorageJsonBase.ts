@@ -29,8 +29,9 @@ export abstract class LocalStorageJsonBase<T> {
   updateValueAndSaveToStorageAndTriggerEvent(a1?: T) {
     StorageTools.setJson<T>(this._getKey(), a1);
     if (isDeepEqual(a1, this.curValue) === false) {
+      // 順序 先改 cur 值，再 trigger，因為有人會在 callback 中使用 getValue 而非用 callback 傳入的值 的可能
+      this.curValue = a1; 
       this.eventTool.trigger(a1);
-      this.curValue = a1;
     }
   }
 

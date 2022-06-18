@@ -14,7 +14,9 @@ export class VerseRange {
   public static fromReferenceDescription(describe: string, book1BasedDefault: number): VerseRange {
     try {
       const re = new ParsingReferenceDescription().main(describe, { book: book1BasedDefault });
-      return re;
+      var re2 = new VerseRange()
+      re2.verses = re
+      return re2;
     } catch (error) {
       console.error('fromReferenceDescription');
       throw error;
