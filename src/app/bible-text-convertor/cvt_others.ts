@@ -33,8 +33,8 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     if (ver === 'kjv') replaceKJVToPair(it1);
     if (ver === 'cnet_foot') replaceCnetFootReference(it1);
     if (ver === 'csb_foot') replaceCsbFootReference(it1);
-    it1 = addParentheses(it1);
     it1 = doUsingDOMParsor(it1);
+    it1 = addParentheses(it1);
     it1 = addReference(it1);
     it1 = addFoot(it1, ver);
 
@@ -311,12 +311,12 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
           } else if (it3.nodeType === 1 && it3.tagName === 'CM') {
             rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
-          } else if (/WA?(T?)(H|G)(\d+[a-z]?)(I?)/.test(it3.tagName)) {
-            let rr1 = /WA?(T?)(H|G)(\d+[a-z]?)(I?)/.exec(it3.tagName);
+          } else if (/WA?(T?)(H|G)(\d+[aA]?)(I?)/.test(it3.tagName)) {
+            let rr1 = /WA?(T?)(H|G)(\d+[aA]?)(I?)/.exec(it3.tagName);            
             const isT = rr1[1].length !== 0;
             rrr1.tp = rr1[2] as 'G' | 'H';
             let sn = rr1[3];
-            sn = sn.replace(/^0+/, ''); // 讓 08521a 變為 8521a
+            sn = sn.replace(/^0+/, '').toLocaleLowerCase(); // 讓 08521a 變為 8521a ... tagName 會自動變全大寫，所以造成 8521A 就會抓錯資料
             rrr1.sn = sn
             if (rr1[4].length !== 0)
               rrr1.isCurly = 1;

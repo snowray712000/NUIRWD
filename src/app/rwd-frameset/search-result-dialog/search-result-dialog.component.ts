@@ -209,7 +209,7 @@ export class SearchResultDialogComponent implements OnInit {
     return this.dataByParent.keyword.trim(); // 前後多一個空白，整個死掉
   }
   getOrig(): { sn: string, isOld?: 0 | 1 } {
-    const re1 = /(G|H)?(\d+)/i.exec(this.getKeyword());
+    const re1 = /(G|H)?(\d+[a-z]?)/i.exec(this.getKeyword());
     return {
       sn: re1[2],
       isOld: re1[1] !== undefined && re1[1].toUpperCase() === 'H' ? 1 : 0
