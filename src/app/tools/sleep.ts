@@ -7,3 +7,14 @@ export function sleep(milliseconds: number) {
     }
   }
 }
+
+/**
+ * 用 setTimeout 與 Promise 實作 await 版的 sleep
+ * @param time ms
+ * @returns 
+ */
+export async function sleepAsync(time: number): Promise<void> {
+  return new Promise<void>((res, rej) => {
+    setTimeout(res, time);
+  });
+}

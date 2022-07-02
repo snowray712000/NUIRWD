@@ -8,10 +8,12 @@
 
 ## 記錄
 ### 確認 node npm typescript angular 版本
-node -v。目前我是 14.13.1。若沒有，去網路上抓安裝檔。
-npm -v。目前我是 6.14.8。若沒有，去網路上抓 Node Js (這是一起的)。
-tsc -v。目前我是 4.0.3。若沒有，直接安裝 angular 應該就會有了。
-ng version。目前我是 10.1.5。若沒有，請安裝
+
+- node -v。目前我是 14.13.1。若沒有，去網路上抓安裝檔。
+- npm -v。目前我是 6.14.8。若沒有，去網路上抓 Node Js (這是一起的)。
+- tsc -v。目前我是 4.0.3。若沒有，直接安裝 angular 應該就會有了。
+- ng version。目前我是 10.1.5。若沒有，請安裝
+  - sudo npm install -g @angular/cli
 
 ### 確認 所需套件 material linq jquery hammerjs flex-layout
 * material 注意事項

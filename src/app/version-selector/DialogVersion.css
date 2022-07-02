@@ -1,0 +1,39 @@
+#bible-version-dialog .lang {
+    padding-bottom: 0.25rem;
+}
+
+#bible-version-dialog .selecteds {
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-right-width: 1px;
+    border-right-style: dotted;
+    position: relative;
+}
+
+#bible-version-dialog .offens {
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-right-width: 1px;
+    border-right-style: dotted;
+    position: relative;
+}
+
+#bible-version-dialog .sets {
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-right-width: 1px;
+    border-right-style: dotted;
+    position: relative;
+}
+
+#bible-version-dialog .group-help {
+    position: absolute;
+    right: -0.75rem;
+    top: -1rem;
+    line-height: 2rem;
+    font-size: 0.75rem;
+    color: gray;
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-decoration-color: blue;
+}

@@ -39,6 +39,11 @@ import { ApiAbv } from '../fhl-api/BibleVersion/ApiAbv';
 import { DAbvResult } from '../fhl-api/BibleVersion/DAbvResult';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { DomManagers } from './DomManagers';
+import 'jquery';
+import 'jquery-ui';
+import { BibieVersionDialog } from '../version-selector/DialogVersion';
+import { VerOfOffenForMain } from './settings/VerOfOffenForMain';
+import { VerOfSetsForMain } from './settings/VerOfSetsForMain';
 declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
 
 @Component({
@@ -60,8 +65,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     private router: Router,
     private dialog: MatDialog,
   ) {
-    
-    testThenDoAsync({cbTest: ()=>this.divContent != undefined}).then(()=>{
+
+    testThenDoAsync({ cbTest: () => this.divContent != undefined }).then(() => {
       DomManagers.s.divContent = this.divContent
     })
 
@@ -272,7 +277,38 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     const re = new DialogDisplaySettingOpenor(this.dialog);
     const re2 = re.showDialog();
   }
-  onClickVersions() {
+  async onClickVersions() {
+    /** dialog 關閉後 */
+    BibieVersionDialog.s.setCallbackClosed(jo => {
+      if (jo === undefined) {
+        // 按 close
+      } else {
+        if (jo.selects != undefined) {
+          VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(jo.selects!);
+        } else {
+          // default 
+          VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(['unv']);
+        }
+
+        if (jo.offens != undefined) {
+          VerOfOffenForMain.s.updateValueAndSaveToStorageAndTriggerEvent(jo.offens!)
+        }
+
+        if (jo.sets != undefined) {
+          VerOfSetsForMain.s.updateValueAndSaveToStorageAndTriggerEvent(jo.sets)
+        }
+
+      }
+
+    })
+
+    BibieVersionDialog.s.openAsync({
+      selects: VerForMain.s.getFromLocalStorage(),
+      offens: VerOfOffenForMain.s.getFromLocalStorage(),
+      sets: VerOfSetsForMain.s.getFromLocalStorage(),
+    })
+    return
+    // console.log(jQueryUI);
 
     // var dlg = FHL.BibleVersionDialog.s
     // dlg.open()
@@ -307,7 +343,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     //   $('#dialog-version').css('z-index', '3')
     // }
 
-    return
+    //return
     const vers = VerForMain.s.getFromLocalStorage();
     const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
       { isSnOnly: 0, isLimitOne: 0, versions: vers },
