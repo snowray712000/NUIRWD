@@ -23,6 +23,11 @@
               "src/favicon.ico",              
               "src/assets",
               {
+                "input": "./node_modules/jquery-ui/themes/base/images/",
+                "output": "/images/",
+                "glob": "**/*"
+              },
+              {
                 "input": "./libs/",
                 "glob": "**/*",
                 "output": "/assets/libs/"
