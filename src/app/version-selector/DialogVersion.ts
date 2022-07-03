@@ -4,6 +4,10 @@ import "jquery-ui"
 import * as Enumerable from "linq";
 import { getHtmlOfDialogVersions } from "./getHtmlOfDialogVersions";
 import { constants } from "./ConstantsUsingByDialogVersion";
+import { ApiAbv } from "../fhl-api/BibleVersion/ApiAbv";
+import { DAbvResult } from "../fhl-api/BibleVersion/DAbvResult";
+import { IsLocalHostDevelopment } from "../fhl-api/IsLocalHostDevelopment";
+import { DisplayLangSetting } from "../rwd-frameset/dialog-display-setting/DisplayLangSetting";
 
 
 export interface DDialogOfVersionArgs {
@@ -41,6 +45,56 @@ export class BibieVersionDialog {
 
         this.triggerClickFirstItemOfLanguage();
         this.triggerClickFirstItemOfChineseSubOptions();
+
+        await this.setVersionsFromApiAsync();
+
+    }
+    // 若是簡體，會在此時更新 顯示名稱
+    // 若是abv新增了資料，會加在其它
+    private async setVersionsFromApiAsync() {
+        let abvResult = getTestAbvData() // 因 CROS 限制，開發要用此
+        if ( false == IsLocalHostDevelopment.isLocalHost){
+            const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()
+            abvResult = await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise()            
+        }
+
+        const abvResult2 = Enumerable.from(abvResult.record).select(a1 => {
+            return {
+                na: a1.book,
+                cna: a1.cname
+            }
+        }).toArray()
+
+        const { vers$ } = this.dlgs$
+        if (vers$.find('.book-item').length == 0) {
+            throw new Error('assert .book-item .length != 0')
+        }
+        
+        const others$ = vers$.children('.ot')
+        const dictNa2Dom$ = Enumerable.from(vers$.find('.book-item')).toDictionary(a1 => $(a1).data('data').na, a1 => $(a1));
+        abvResult2.forEach(ver => {
+            const r1 = dictNa2Dom$.get(ver.na)
+            if (r1 != null) {
+                const dataori = r1.data('data') // 可能包含 cds 其它資料
+                dataori.cna = ver.cna
+                r1.data('data', dataori)
+                    .text(ver.cna)
+            } else {
+                $('<span>', {
+                    text: ver.cna,
+                    class: 'book-item btn btn-outline-success',
+                }).data('data', { na: ver.na, cna: ver.cna })
+                    .appendTo(others$)
+            }
+        })
+        return 
+        function getTestAbvData(){
+            return {
+                record: [
+                    { book: 'unv', cname: '和合本' }
+                ]
+            } as DAbvResult
+        }
     }
     // 模擬點擊 語言 選項中的第1個, 即 中文
     // 只有第1次，初始化 dialog 時才會用。
