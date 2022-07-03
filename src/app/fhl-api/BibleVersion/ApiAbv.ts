@@ -19,7 +19,7 @@ export class ApiAbv {
     }
 
     // const url = 'http://bkbible.fhl.net/json/abv.php';
-    const url = `${new FhlUrl().getJsonUrl()}uiabv.php?gb=${isGb?'1':'0'}`;
+    const url = `${new FhlUrl().getJsonUrl2()}uiabv.php?gb=${isGb?'1':'0'}`;
     return ajax.getJSON<DAbvResult>(url, {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET, POST',
