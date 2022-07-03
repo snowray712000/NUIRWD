@@ -53,9 +53,9 @@ export class BibieVersionDialog {
     // 若是abv新增了資料，會加在其它
     private async setVersionsFromApiAsync() {
         let abvResult = getTestAbvData() // 因 CROS 限制，開發要用此
-        if ( false == IsLocalHostDevelopment.isLocalHost){
+        if (false == IsLocalHostDevelopment.isLocalHost) {
             const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()
-            abvResult = await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise()            
+            abvResult = await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise()
         }
 
         const abvResult2 = Enumerable.from(abvResult.record).select(a1 => {
@@ -69,7 +69,7 @@ export class BibieVersionDialog {
         if (vers$.find('.book-item').length == 0) {
             throw new Error('assert .book-item .length != 0')
         }
-        
+
         const others$ = vers$.children('.ot')
         const dictNa2Dom$ = Enumerable.from(vers$.find('.book-item')).toDictionary(a1 => $(a1).data('data').na, a1 => $(a1));
         abvResult2.forEach(ver => {
@@ -87,8 +87,8 @@ export class BibieVersionDialog {
                     .appendTo(others$)
             }
         })
-        return 
-        function getTestAbvData(){
+        return
+        function getTestAbvData() {
             return {
                 record: [
                     { book: 'unv', cname: '和合本' }
@@ -522,6 +522,12 @@ export class BibieVersionDialog {
         await this.triggerCbOpened();
     }
     private jqDialog() {
+        if (this.dlg$ == null || this.dlg$.length == 0 || this.dlg$.dialog == null) {
+            // 上傳時會出現的奇怪問題，現在還沒頭緒，但按 F5 時就會解決
+            // 繁體切換為簡體也會出現
+            location.reload()
+            return
+        }
         this.dlg$.dialog({
             autoOpen: false,
             modal: true,
