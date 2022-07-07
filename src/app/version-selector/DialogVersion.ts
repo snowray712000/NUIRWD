@@ -15,6 +15,26 @@ export interface DDialogOfVersionArgs {
     offens?: string[];
     sets?: string[][];
 }
+export function DDialogOfVersionArgsSetDefaultIfNeed(inoutJoArgs?: DDialogOfVersionArgs) {
+    const def = {
+        selects: ['unv'],
+        offens: ['cbol', 'esv'],
+        sets: [['unv', 'kjv', 'esv', 'cbol'], ['unv', 'esv']]
+    }
+
+    if (inoutJoArgs == undefined) { inoutJoArgs = {} }
+    if (inoutJoArgs.selects == undefined) { inoutJoArgs.selects = g(def.selects) }
+    if (inoutJoArgs.offens == undefined) { inoutJoArgs.offens = g(def.offens) }
+    if (inoutJoArgs.sets == undefined) { inoutJoArgs.sets = g(def.sets) }
+
+    return
+    function g(ja) {
+        /** @type {string[]} */
+        var r = []
+        for (var a of ja) { r.push(a) }
+        return r
+    }
+}
 
 export class BibieVersionDialog {
     private constructor() { }
@@ -125,24 +145,7 @@ export class BibieVersionDialog {
         this.triggerCbOpened();
         return
         function defaultJo() {
-            const def = {
-                selects: ['unv'],
-                offens: ['cbol', 'esv'],
-                sets: [['unv', 'kjv', 'esv', 'cbol'], ['unv', 'esv']]
-            }
-
-            if (joArgs == undefined) { joArgs = {} }
-            if (joArgs.selects == undefined) { joArgs.selects = g(def.selects) }
-            if (joArgs.offens == undefined) { joArgs.offens = g(def.offens) }
-            if (joArgs.sets == undefined) { joArgs.sets = g(def.sets) }
-
-            return
-            function g(ja) {
-                /** @type {string[]} */
-                var r = []
-                for (var a of ja) { r.push(a) }
-                return r
-            }
+            DDialogOfVersionArgsSetDefaultIfNeed(joArgs)
         }
     }
     private id = "bible-version-dialog"
@@ -508,6 +511,9 @@ export class BibieVersionDialog {
             this.generateBaseDiv$().appendTo($('body'))
             await sleepAsync(1);
             this.jqDialog()
+
+            // z-index 101 不夠，會被 angular 的對話方塊蓋掉
+            this.dlg$.parent().css('z-index', 10101)
         }
     }
     private generateBaseDiv$() {

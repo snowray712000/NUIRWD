@@ -29,6 +29,11 @@ import { MatProgressBar } from "@angular/material/progress-bar";
 import { Observable } from 'rxjs';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { getGbText } from 'src/app/gb/getGbText';
+import { BibieVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed } from 'src/app/version-selector/DialogVersion';
+import { VerForMain } from '../settings/VerForMain';
+import { VerOfSetsForMain } from '../settings/VerOfSetsForMain';
+import { VerOfOffenForMain } from '../settings/VerOfOffenForMain';
+
 @Component({
   selector: 'app-search-result-dialog',
   templateUrl: './search-result-dialog.component.html',
@@ -133,8 +138,8 @@ export class SearchResultDialogComponent implements OnInit {
       recordsOfApi() { return origQ.records; },
       datas() { return origQ.datas; },
       setFilterAsync(a1) { origQ.setFilterAsync(a1); },
-    });    
-    
+    });
+
     const version = this.bibleVersionSnSelected;
     const bookDefault = this.getDefaultAddress().book;
     origQ.mainAsync({ orig: this.getKeyword(), version, bookDefault });
@@ -205,7 +210,7 @@ export class SearchResultDialogComponent implements OnInit {
     return /^G|H\d+[a-z]?$/i.test(this.getKeyword());
   }
 
-  getKeyword() {    
+  getKeyword() {
     return this.dataByParent.keyword.trim(); // 前後多一個空白，整個死掉
   }
   getOrig(): { sn: string, isOld?: 0 | 1 } {
@@ -245,7 +250,7 @@ export class SearchResultDialogComponent implements OnInit {
     }
   }
   getAddressShow(it: DOneLine) {
-    return DisplayLangSetting.s.getValueIsGB()? it.addresses.toStringChineseGBShort() : it.addresses.toStringChineseShort();
+    return DisplayLangSetting.s.getValueIsGB() ? it.addresses.toStringChineseGBShort() : it.addresses.toStringChineseShort();
   }
   /** 因為預計 output 是 G80 或 H80 但會出現 <G3956> 或 (G5720) 或 {<G3588>} 這些都要拿掉(脫殼) */
   getOrigKeyword(str: string) {
@@ -264,28 +269,48 @@ export class SearchResultDialogComponent implements OnInit {
   }
   /** 原文彙編呼叫時, 要加參數 */
   onClickVersion(isSnOnly?: 0 | 1) {
-    const na = this.bibleVersionSelected;
-    const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
-      { isSnOnly, isLimitOne: 1, versions: [na] },
-    );
+    const that = this
+    if (isSnOnly == 1) {// 保持原本的方法
+      useOrigMethod()
+    } else {// 新方法
+      BibieVersionDialog.s.setCallbackClosed((jo?: DDialogOfVersionArgs) => {
+        if (jo == null || jo.selects == null || jo.selects.length == 0) {
+          jo = jo || {};
+          jo.selects = [VerForSearch.s.getFromLocalStorage()]
+        }
+        DDialogOfVersionArgsSetDefaultIfNeed(jo)
+        doAfterCloseDialogNotSnVer([jo.selects[0]])//原版本，只會被選1個版本，所以取第1個版本
+      });
+      BibieVersionDialog.s.openAsync({
+        selects: [],
+        offens: VerOfOffenForMain.s.getFromLocalStorage(),
+        sets: VerOfSetsForMain.s.getFromLocalStorage(),
+      })
+    }
+    return;
+    function useOrigMethod() {
+      const na = that.bibleVersionSelected;
+      const refdialog = new DialogVersionSelectorOpenor(that.dialog).showDialog(
+        { isSnOnly, isLimitOne: 1, versions: [na] },
+      );
 
-    /** dialog 關閉後 */
-    const pthis = this;
-    refdialog.afterClosed().toPromise().then((re: string[]) => {
-      if (isSnOnly === 1) {
-        doAfterCloseDialogSnVer(re);
-      } else {
-        doAfterCloseDialogNotSnVer(re);
-      }
-    });
+      /** dialog 關閉後 */
+      refdialog.afterClosed().toPromise().then((re: string[]) => {
+        if (isSnOnly === 1) {
+          doAfterCloseDialogSnVer(re);
+        } else {
+          doAfterCloseDialogNotSnVer(re);
+        }
+      });
+    }
 
     function doAfterCloseDialogNotSnVer(re: string[]) {
       if (re !== undefined && re.length !== 0) {
-        if (pthis.bibleVersionSelected !== re[0]) {
-          pthis.bibleVersionSelected = re[0];
-          pthis.setBibleVersionSelectedShowName();
-          VerForSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSelected);
-          pthis.doDependonType();
+        if (that.bibleVersionSelected !== re[0]) {
+          that.bibleVersionSelected = re[0];
+          that.setBibleVersionSelectedShowName();
+          VerForSearch.s.updateValueAndSaveToStorageAndTriggerEvent(that.bibleVersionSelected);
+          that.doDependonType();
         }
       }
     }
@@ -293,13 +318,13 @@ export class SearchResultDialogComponent implements OnInit {
      * 例如， re: ['kjv']
     */
     function doAfterCloseDialogSnVer(re: string[]) {
-      
+
       if (re !== undefined && re.length !== 0) {
-        if (pthis.bibleVersionSnSelected !== re[0]) {
-          pthis.bibleVersionSnSelected = re[0];
-          pthis.setBibleVersionSelectedSnShowName();
-          VerForSnSearch.s.updateValueAndSaveToStorageAndTriggerEvent(pthis.bibleVersionSnSelected);
-          pthis.doDependonType();
+        if (that.bibleVersionSnSelected !== re[0]) {
+          that.bibleVersionSnSelected = re[0];
+          that.setBibleVersionSelectedSnShowName();
+          VerForSnSearch.s.updateValueAndSaveToStorageAndTriggerEvent(that.bibleVersionSnSelected);
+          that.doDependonType();
         }
       }
     }
@@ -319,7 +344,7 @@ export class SearchResultDialogComponent implements OnInit {
   setBibleVersionSelectedSnShowName(verSelected?: string) {
     const name = verSelected === undefined ? this.bibleVersionSnSelected : verSelected;
     let r1 = LQ.from(this.bibleVersionsSn).firstOrDefault(a2 => a2.name === name);
-    
+
     if (r1 === undefined) {
       // 應該是錯誤的版本名稱, 此時就給它預設值
       r1 = this.bibleVersionsSn[0];
@@ -347,10 +372,10 @@ export class SearchResultDialogComponent implements OnInit {
     }
   }
   getIsShowOrig() {
-    return this.typeFunction === 'orig-keyword'? 1 : undefined ;
+    return this.typeFunction === 'orig-keyword' ? 1 : undefined;
   }
-  getIsShowALLAddress(){
-    if ( this.typeFunction === 'orig-dict'){return 0;}
+  getIsShowALLAddress() {
+    if (this.typeFunction === 'orig-dict') { return 0; }
     return 1;
     // if (this.typeFunction === 'keyword' || this.typeFunction === 'orig-keyword' || this.typeFunction === 'reference' ) {return 1;}
   }
@@ -374,8 +399,8 @@ export class SearchResultDialogComponent implements OnInit {
   /** html中 設定查詢版本時會用到 */
   async initVersionsAsync() {
     this.bibleVersionSelected = VerForSearch.s.getFromLocalStorage();
-    this.bibleVersionSnSelected = VerForSnSearch.s.getFromLocalStorage();    
-    
+    this.bibleVersionSnSelected = VerForSnSearch.s.getFromLocalStorage();
+
     const r1 = VerCache.s.getValue();
     this.bibleVersions = r1.record.map(a1 => ({ nameShow: a1.cname, name: a1.book }));
     this.bibleVersionsSn = r1.record.filter(a1 => a1.strong === 1).map(a1 => ({ nameShow: a1.cname, name: a1.book }));
@@ -450,7 +475,7 @@ export class SearchResultDialogComponent implements OnInit {
     /** 不存在, undefined, 存在 回傳'羅' */
     function tryGetInBook() {
       const rr1 = pthis.getDefaultAddress().book;
-      
+
       const rr2 = BibleBookNames.getBookName(rr1, DisplayLangSetting.s.getBookNameLangWhereIsGB());
       const rr3 = LQ.from(pthis.dataCountBook).firstOrDefault(a1 => a1.count > 9 && a1.name === rr2);
       return rr3 !== undefined ? rr3.name : undefined;
@@ -474,7 +499,7 @@ export class SearchResultDialogComponent implements OnInit {
     return;
     function calcClassor(): DKeywordClassor[] {
       const r3: DKeywordClassor[] = [];
-      const r1 = new BookClassor().getAllClassors();      
+      const r1 = new BookClassor().getAllClassors();
       for (const it1 of r1) {
         let na = it1.name;
         r3.push({ name: na, count: getcount(it1.books) });
@@ -493,7 +518,7 @@ export class SearchResultDialogComponent implements OnInit {
 
         const name = BibleBookNames.getBookName(it1.first().book, DisplayLangSetting.s.getBookNameLangWhereIsGB());
         r3.push({ name, count });
-      }      
+      }
       return r3;
     }
   }
@@ -501,8 +526,8 @@ export class SearchResultDialogComponent implements OnInit {
   private getBooksOfClassorOrBook(): number[] {
     const r1 = this.searchFilter;
     const r2 = new BookClassor().getAllClassors();
-    
-    
+
+
     const r3 = LQ.from(r2).firstOrDefault(a1 => getGbText(a1.name) === r1);
     if (r3 !== undefined) { return r3.books; }
 
