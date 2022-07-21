@@ -28,7 +28,7 @@
         "hammerjs": "^2.0.8",
         "ijn-fhl-sharefun-ts": "^1.0.2",
         "jquery": "^3.5.1",
-        "jquery-ui": "^1.12.1",
+        "jquery-ui": "^1.13.2",
         "linq": "^3.2.3",
         "lit-html": "^2.2.6",
         "package": "^1.0.1",
