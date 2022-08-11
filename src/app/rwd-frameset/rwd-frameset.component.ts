@@ -56,10 +56,10 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private _bottomSheet: MatBottomSheet;
   private routeVerseRange: VerseRange;
   addressActived: DAddress;
-  @ViewChild('snavLeft', null) leftSideNav;
-  @ViewChild('snavRight', null) rightSideNav;
-  @ViewChild('toptoolbar', null) topToolbar;
-  @ViewChild('divContent', null) divContent;
+  @ViewChild('snavLeft') leftSideNav;
+  @ViewChild('snavRight') rightSideNav;
+  @ViewChild('toptoolbar') topToolbar;
+  @ViewChild('divContent') divContent;
   constructor(private detectChange: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,

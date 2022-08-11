@@ -1,7 +1,8 @@
 import { sleepAsync } from "../tools/sleep";
 import "jquery"
 import "jquery-ui"
-import * as Enumerable from "linq";
+import Enumerable from 'linq';
+
 import { getHtmlOfDialogVersions } from "./getHtmlOfDialogVersions";
 import { constants } from "./ConstantsUsingByDialogVersion";
 import { ApiAbv } from "../fhl-api/BibleVersion/ApiAbv";
@@ -28,7 +29,7 @@ export function DDialogOfVersionArgsSetDefaultIfNeed(inoutJoArgs?: DDialogOfVers
     if (inoutJoArgs.sets == undefined) { inoutJoArgs.sets = g(def.sets) }
 
     return
-    function g(ja) {
+    function g<T>(ja:T[]) {
         /** @type {string[]} */
         var r = []
         for (var a of ja) { r.push(a) }
@@ -38,9 +39,9 @@ export function DDialogOfVersionArgsSetDefaultIfNeed(inoutJoArgs?: DDialogOfVers
 
 export class BibieVersionDialog {
     private constructor() { }
-    private static _s: BibieVersionDialog = null;
+    private static _s: BibieVersionDialog ;
     static get s(): BibieVersionDialog {
-        if (this._s == null) {
+        if (this._s == undefined) {
             this._s = new BibieVersionDialog();
         }
         return this._s
@@ -75,7 +76,7 @@ export class BibieVersionDialog {
         let abvResult = getTestAbvData() // 因 CROS 限制，開發要用此
         if (false == IsLocalHostDevelopment.isLocalHost) {
             const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()
-            abvResult = await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise()
+            abvResult = (await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise())!
         }
 
         const abvResult2 = Enumerable.from(abvResult.record).select(a1 => {
@@ -140,7 +141,7 @@ export class BibieVersionDialog {
         }
 
         defaultJo(); // maybe change joArgs                
-        this.dlg$Data = joArgs;
+        this.dlg$Data = joArgs!;
         this.dlg$.dialog("open")
         this.triggerCbOpened();
         return
@@ -149,8 +150,8 @@ export class BibieVersionDialog {
         }
     }
     private id = "bible-version-dialog"
-    private _cbClosed: (jo?: DDialogOfVersionArgs) => void;
-    private _cbOpened: () => void;
+    private _cbClosed!: (jo?: DDialogOfVersionArgs) => void;
+    private _cbOpened!: () => void;
     private triggerCbOpened() {
         if (this._cbOpened == null) {
             console.log('_cbOpened triggered. you cant set custom callback.')
@@ -309,7 +310,7 @@ export class BibieVersionDialog {
          * 
          * @param {{na:string;cna:string}} data 
          */
-        function addItem(data, pthis) {
+        function addItem(data:{na:string;cna:string}, pthis:HTMLElement) {
             addToSelected()
             removeIfOffenExist()
             return
@@ -332,7 +333,7 @@ export class BibieVersionDialog {
          * 
          * @param {{na:string;cna:string}} data 
          */
-        function removeItem(data, pthis) {
+        function removeItem(data:{na:string;cna:string}, pthis:HTMLElement) {
             removeIfSelectedExist()
             addToOffens()
             return
@@ -391,7 +392,7 @@ export class BibieVersionDialog {
                 flexCheckDefault$.trigger('change')
             })
             return
-            function setClass012(i) {
+            function setClass012(i:number) {
                 for (var a of [0, 1, 2]) {
                     if (a == i) {
                         chSubOpts$.eq(a).addClass('active')
@@ -631,8 +632,8 @@ export class BibieVersionDialog {
     private async setWidthHeightAsync() {
         await sleepAsync(1)
         const dlg$ = this.dlg$
-        var cy = $(window).height()
-        var cx = $(window).width()
+        var cy = $(window).height() ?? 1
+        var cx = $(window).width() ?? 1
 
         // dlg$.dialog("option", "maxHeight", cy * 0.95)
         dlg$.dialog("option", "height", cy * 0.95)
@@ -649,15 +650,15 @@ export class BibieVersionDialog {
         var r3 = vers$.find('.book-item')
         r3.removeClass('active')
 
-        getWhereNa(joArgs.selects).forEach(a1 => a1.trigger('click'))
-        getWhereNa(joArgs.offens).reverse().forEach(a1 => {
+        getWhereNa(joArgs.selects!).forEach(a1 => a1.trigger('click'))
+        getWhereNa(joArgs.offens!).reverse().forEach(a1 => {
             $(a1).trigger('click')
             $(a1).trigger('click') // trigger 兩次就會被移到 常用了        
         })
-        joArgs.sets.forEach(addEachSet)
+        joArgs.sets!.forEach(addEachSet)
 
         return
-        function addEachSet(set) {
+        function addEachSet(set:string[]) {
             var r1 = getWhereNa(set)
             var r2 = Enumerable.from(r1).select(a1 => a1.data('data')).toArray()
             var cnas = getText()
@@ -682,7 +683,7 @@ export class BibieVersionDialog {
                 return '(' + nas.length + ')' + two
             }
         }
-        function getWhereNa(names) {
+        function getWhereNa(names:string[]) {
             if (getWhereNa.prototype.dicts == undefined) {
                 getWhereNa.prototype.dicts = Enumerable.from(r3).toDictionary(a1 => $(a1).data('data').na, a1 => $(a1))
             }

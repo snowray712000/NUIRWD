@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 /** 參考 deepCopy。key數量並值一樣。 */
 
 export function isDeepEqual<T>(a: T, b: T): boolean {
@@ -15,7 +15,7 @@ export function isDeepEqual<T>(a: T, b: T): boolean {
       }
 
       if (Array.isArray(ra)) {
-        if (LQ.from(ra as any[]).all(a1 => isDeepEqual(ra, rb)) === false) {
+        if (Enumerable.from(ra as any[]).all(a1 => isDeepEqual(ra, rb)) === false) {
           return false;
         }
       } else if (typeof ra === 'object') {

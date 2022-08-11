@@ -10,7 +10,7 @@ import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { DialogSearchResultOpenor } from './DialogSearchResultOpenor';
 
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { OrigDictGetter } from './OrigDictGetter';
 import { ReferenceGetter } from './ReferenceGetter';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';
@@ -332,7 +332,7 @@ export class SearchResultDialogComponent implements OnInit {
   /** init時, 呼叫不傳參數. */
   setBibleVersionSelectedShowName(verSelected?: string) {
     const name = verSelected === undefined ? this.bibleVersionSelected : verSelected;
-    let r1 = LQ.from(this.bibleVersions).firstOrDefault(a2 => a2.name === name);
+    let r1 = Enumerable.from(this.bibleVersions).firstOrDefault(a2 => a2.name === name);
     if (r1 === undefined) {
       // 應該是錯誤的版本名稱, 此時就給它預設值
       r1 = this.bibleVersions[0];
@@ -343,7 +343,7 @@ export class SearchResultDialogComponent implements OnInit {
   /** init時, 呼叫不傳參數. */
   setBibleVersionSelectedSnShowName(verSelected?: string) {
     const name = verSelected === undefined ? this.bibleVersionSnSelected : verSelected;
-    let r1 = LQ.from(this.bibleVersionsSn).firstOrDefault(a2 => a2.name === name);
+    let r1 = Enumerable.from(this.bibleVersionsSn).firstOrDefault(a2 => a2.name === name);
 
     if (r1 === undefined) {
       // 應該是錯誤的版本名稱, 此時就給它預設值
@@ -365,13 +365,13 @@ export class SearchResultDialogComponent implements OnInit {
   onClickReference(a1: string) {
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: a1, addresses: this.dataByParent.addresses });
   }
-  onClickSearchFilter(a1: DOneBookClassor) {
+  onClickSearchFilter(a1: DKeywordClassor) {
     if (this.searchFilter !== a1.name) {
       this.searchFilter = a1.name;
       this.filterSetter.setFilterAsync(this.getBooksOfClassorOrBook());
     }
   }
-  getIsShowOrig() {
+  getIsShowOrig():0|1 {
     return this.typeFunction === 'orig-keyword' ? 1 : undefined;
   }
   getIsShowALLAddress() {
@@ -387,8 +387,8 @@ export class SearchResultDialogComponent implements OnInit {
     //     return this.data;
     //   }
 
-    //   const books = LQ.from(new BookClassor().getClassorsBooks(this.searchFilter));
-    //   return LQ.from(this.data).where(a1 => {
+    //   const books = Enumerable.from(new BookClassor().getClassorsBooks(this.searchFilter));
+    //   return Enumerable.from(this.data).where(a1 => {
     //     const r1 = a1.addresses.verses[0];
     //     return books.contains(r1.book);
     //   }).toArray();
@@ -445,12 +445,12 @@ export class SearchResultDialogComponent implements OnInit {
   private statisticsKeywordClassorDefault() {
     // 分類
     const r1 = new BookClassor().getAllClassors();
-    this.dataCountClassor = LQ.from(r1).select(a1 => ({ name: a1.name }) as DKeywordClassor).toArray();
+    this.dataCountClassor = Enumerable.from(r1).select(a1 => ({ name: a1.name }) as DKeywordClassor).toArray();
 
     // 書卷
     const lang = DisplayLangSetting.s.getBookNameLangWhereIsGB();
-    const r2 = LQ.range(1, 66).select(bk => (BibleBookNames.getBookName(bk, lang))).toArray();
-    this.dataCountBook = LQ.from(r2).select(a1 => ({ name: a1 }) as DKeywordClassor).toArray();
+    const r2 = Enumerable.range(1, 66).select(bk => (BibleBookNames.getBookName(bk, lang))).toArray();
+    this.dataCountBook = Enumerable.from(r2).select(a1 => ({ name: a1 }) as DKeywordClassor).toArray();
   }
 
 
@@ -477,19 +477,19 @@ export class SearchResultDialogComponent implements OnInit {
       const rr1 = pthis.getDefaultAddress().book;
 
       const rr2 = BibleBookNames.getBookName(rr1, DisplayLangSetting.s.getBookNameLangWhereIsGB());
-      const rr3 = LQ.from(pthis.dataCountBook).firstOrDefault(a1 => a1.count > 9 && a1.name === rr2);
+      const rr3 = Enumerable.from(pthis.dataCountBook).firstOrDefault(a1 => a1.count > 9 && a1.name === rr2);
       return rr3 !== undefined ? rr3.name : undefined;
     }
     function tryGetInClassor() {
       const rr1 = new SearchClassorOrderGetter().main(pthis.getDefaultAddress().book);
-      const rr1b = LQ.from(rr1).skip(1).select(a1 => a1.name).toArray(); // skip 1 是書卷, 這裡只需「分類書卷」
-      const rr2 = LQ.from(pthis.dataCountClassor).where(a1 => a1.count > 9).toArray();
+      const rr1b = Enumerable.from(rr1).skip(1).select(a1 => a1.name).toArray(); // skip 1 是書卷, 這裡只需「分類書卷」
+      const rr2 = Enumerable.from(pthis.dataCountClassor).where(a1 => a1.count > 9).toArray();
 
       if (rr2.length <= 1) {
         return getGbText('全部');
       } else {
-        const rr2b = LQ.from(LQ.from(rr2).select(a1 => a1.name).toArray());
-        return LQ.from(rr1b).firstOrDefault(a1 => rr2b.contains(a1));
+        const rr2b = Enumerable.from(Enumerable.from(rr2).select(a1 => a1.name).toArray());
+        return Enumerable.from(rr1b).firstOrDefault(a1 => rr2b.contains(a1));
       }
     }
   }
@@ -504,14 +504,14 @@ export class SearchResultDialogComponent implements OnInit {
         let na = it1.name;
         r3.push({ name: na, count: getcount(it1.books) });
         function getcount(bks: number[]) {
-          return LQ.from(records).where(a1 => LQ.from(bks).contains(a1.book)).count();
+          return Enumerable.from(records).where(a1 => Enumerable.from(bks).contains(a1.book)).count();
         }
       }
 
       return r3.filter(a1 => a1.count !== 0);
     }
     function calcBookor(): DKeywordClassor[] {
-      const r1 = LQ.from(records).groupBy(a1 => a1.book).toArray();
+      const r1 = Enumerable.from(records).groupBy(a1 => a1.book).toArray();
       const r3: DKeywordClassor[] = [];
       for (const it1 of r1) {
         const count = it1.count();
@@ -528,7 +528,7 @@ export class SearchResultDialogComponent implements OnInit {
     const r2 = new BookClassor().getAllClassors();
 
 
-    const r3 = LQ.from(r2).firstOrDefault(a1 => getGbText(a1.name) === r1);
+    const r3 = Enumerable.from(r2).firstOrDefault(a1 => getGbText(a1.name) === r1);
     if (r3 !== undefined) { return r3.books; }
 
     return [new BookNameAndId().getIdOrUndefined(r1)];
@@ -546,7 +546,7 @@ export class SearchResultDialogComponent implements OnInit {
         r3.push({ name: it1.name, count: getcount(it1.books) });
 
         function getcount(bks: number[]) {
-          return LQ.from(data).where(a1 => LQ.from(bks).contains(a1.addresses.verses[0].book)).count();
+          return Enumerable.from(data).where(a1 => Enumerable.from(bks).contains(a1.addresses.verses[0].book)).count();
         }
       }
 
@@ -554,7 +554,7 @@ export class SearchResultDialogComponent implements OnInit {
     }
 
     function calcBookor(data: DOneLine[]): DKeywordClassor[] {
-      const r1 = LQ.from(data).select(a1 => a1.addresses.verses[0]).groupBy(a1 => a1.book).toArray();
+      const r1 = Enumerable.from(data).select(a1 => a1.addresses.verses[0]).groupBy(a1 => a1.book).toArray();
       const r3: DKeywordClassor[] = [];
       for (const it1 of r1) {
         const count = it1.count();
@@ -608,8 +608,8 @@ class SearchClassorOrderGetter {
   }
   generateAll() {
     const r1 = new BookClassor().getAllClassors();
-    const r2 = LQ.range(1, 66).select(ib => {
-      const rr1 = LQ.from(r1).where(a1 => LQ.from(a1.books).contains(ib)).orderBy(a1 => a1.books.length).toArray();
+    const r2 = Enumerable.range(1, 66).select(ib => {
+      const rr1 = Enumerable.from(r1).where(a1 => Enumerable.from(a1.books).contains(ib)).orderBy(a1 => a1.books.length).toArray();
       const rr2 = [{ name: BibleBookNames.getBookName(ib, BookNameLang.太), books: [ib] }].concat(rr1);
       return rr2;
     }).toArray();

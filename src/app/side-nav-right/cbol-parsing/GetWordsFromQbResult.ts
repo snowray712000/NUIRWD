@@ -1,10 +1,10 @@
 import { ParsingOneLine } from './ParsingOneLine';
-import { DQbResult } from 'src/app/fhl-api/ApiQb';
+import { DQpResult } from 'src/app/fhl-api/ApiQp';
 export class GetWordsFromQbResult {
   private indexRefEachLine: number[];
   private wordEachLine: string[];
   constructor(private arg: { isOldTestment?: boolean } = {}) { }
-  main(arg: DQbResult): { w: string }[][] {
+  main(arg: DQpResult): { w: string }[][] {
     this.calc_wordEachLine(arg);
     // console.log(this.wordEachLine);
 
@@ -14,7 +14,7 @@ export class GetWordsFromQbResult {
     return this.calc_ResultUsingParsingOneLineTool(arg);
   }
 
-  private calc_ResultUsingParsingOneLineTool(arg: DQbResult) {
+  private calc_ResultUsingParsingOneLineTool(arg: DQpResult) {
     const re = [];
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < this.wordEachLine.length; i++) {
@@ -24,7 +24,7 @@ export class GetWordsFromQbResult {
     return re;
   }
 
-  private calc_wordEachLine(arg: DQbResult) {
+  private calc_wordEachLine(arg: DQpResult) {
     const r1 = arg.record[0].word.replace('\r', ''); // 舊約用\n會剩\r, 所以拿掉\r, 新約不會有\r
     const r2 = r1.split('\n');
     if (this.arg.isOldTestment === true) {

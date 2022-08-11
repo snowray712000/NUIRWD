@@ -4,5 +4,5 @@ import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
 export class DisplayFormatSetting extends LocalStorageStringBase {
   static s = new DisplayFormatSetting();
   _getKey() { return 'displayformat'; }
-  _getDefaultValue() { return '創1:1'; }
+  override _getDefaultValue() { return '創1:1'; }
 }

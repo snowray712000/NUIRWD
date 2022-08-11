@@ -8,6 +8,6 @@ import { LocalStorageArrayBase } from '../../tools/LocalStorageArrayBase';
 export class VerOfOffenForMain extends LocalStorageArrayBase<string> {
   static s = new VerOfOffenForMain();
   _getKey(): string { return 'versionsOffens'; }
-  _isDefaultIfEmpty() { return true; }
-  _getDefaultValue() { return []; }
+  override _isDefaultIfEmpty() { return true; }
+  override _getDefaultValue() { return []; }
 }

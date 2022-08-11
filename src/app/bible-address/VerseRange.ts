@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { ObjTools } from 'src/app/tools/obj';
 import { BookNameAndId } from '../const/book-name/BookNameAndId';
@@ -34,7 +34,7 @@ export class VerseRange {
     const aa2a = a2.verses;
     if (aa1a.length !== aa2a.length) { return false; }
 
-    return LQ.range(0, aa1a.length).all(i => {
+    return Enumerable.range(0, aa1a.length).all(i => {
       const r1 = aa1a[i];
       const r2 = aa2a[i];
       return r1.book === r2.book && r1.chap === r2.chap && r1.verse === r2.verse;
@@ -51,7 +51,7 @@ export class VerseRange {
     if (this.verses.length === 0 || d === undefined) {
       return false;
     }
-    const r1 = LQ.from(this.verses).firstOrDefault(a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
+    const r1 = Enumerable.from(this.verses).firstOrDefault(a1 => a1.book === d.book && a1.chap === d.chap && a1.verse === d.verse);
     return r1 !== undefined;
   }
   public add(v: DAddress): void { this.verses.push(v); }

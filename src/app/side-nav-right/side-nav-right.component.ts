@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { Component, OnInit, Input, OnChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FunctionSelectionTab } from './FunctionSelectionTab';
@@ -13,8 +13,8 @@ import { getBig5Text } from '../gb/getGbText';
 })
 export class SideNavRightComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() addressActived;
-  @ViewChild('mattabgroup',null) tabGroup;
-  @ViewChild('commentinfo',null) commentinfo;
+  @ViewChild('mattabgroup') tabGroup;
+  @ViewChild('commentinfo') commentinfo;
   constructor() { }
   ngAfterViewInit(): void {
     ComMatGroup.s.setCom(this.tabGroup);
@@ -33,9 +33,9 @@ export class SideNavRightComponent implements OnInit, OnChanges,AfterViewInit {
   getSelectedIndexInitial() {
     const r1 = FunctionSelectionTab.s.getValue();
 
-    const r2 = LQ.from(['分析', '串珠', '註釋', '典藏', '有聲', '講道', '地圖', '相片']).indexOf(a1 => a1 === r1);
+    const r2 = Enumerable.from(['分析', '串珠', '註釋', '典藏', '有聲', '講道', '地圖', '相片']).indexOf(a1 => a1 === r1);
     return r2 === undefined ? 2 : r2;
-    //   const r2 = LQ.from(['分析', '串珠', '注释', '典藏', '有声', '讲道', '地图', '相片']).indexOf(a1=>a1===r1);
+    //   const r2 = Enumerable.from(['分析', '串珠', '注释', '典藏', '有声', '讲道', '地图', '相片']).indexOf(a1=>a1===r1);
   }
 }
 

@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { DText } from './../../bible-text-convertor/AddBase';
 import { DAddress } from 'src/app/bible-address/DAddress';
@@ -44,7 +44,7 @@ export class AddReferenceInCommentText {
     function connectComma(arg: DText[]) {
       // console.log(...arg);
       const idxRemove = [];
-      LQ.range(0, arg.length - 2).reverse().forEach(i1 => {
+      Enumerable.range(0, arg.length - 2).reverse().forEach(i1 => {
         const cur = arg[i1];
         const nt = arg[i1 + 1];
         const ntnt = arg[i1 + 2];
@@ -60,7 +60,7 @@ export class AddReferenceInCommentText {
       return arg;
     }
     function setRefScriptation(arg: DText[], addr: DAddress) {
-      LQ.from(arg).where(a1 => a1.isRef === 1).forEach(a1 => {
+      Enumerable.from(arg).where(a1 => a1.isRef === 1).forEach(a1 => {
         try {
           const rr2 = a1.w.replace(/#|\|/g, '');
           const rr1 = rr2.split(/、/);

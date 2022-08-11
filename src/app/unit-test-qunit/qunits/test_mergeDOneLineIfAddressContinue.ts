@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { UT } from './UT';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { mergeDOneLineIfAddressContinue } from "src/app/bible-text-convertor/mergeDOneLineIfAddressContinue";
@@ -42,7 +42,7 @@ export async function test_mergeDOneLineIfAddressContinue() {
         { children: [{ w: 'a' }, { w: 'b' }, { w: 'c' }], addresses: VerseRange.fD('創1:1-3') },
         { children: [{ w: 'e' }, { w: 'f' }], addresses: VerseRange.fD('創1:5-6') }
       ];
-      LQ.range(0, 1);
+      Enumerable.range(0, 1);
       fns.push(equal('01a', dstExcept, dst));
     }
     function test02() {

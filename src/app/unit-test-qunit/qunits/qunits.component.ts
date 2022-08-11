@@ -1,5 +1,5 @@
 import { DAddress, DAddressComparor } from 'src/app/bible-address/DAddress';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { Component, OnInit } from '@angular/core';
 import { UT } from './UT';
 import { test_newLineNewLineSplit } from './test_newLineNewLineSplit';
@@ -52,7 +52,7 @@ async function test_XXXX() {
       const datas: DAddress[] = [
         { book: 40, chap: 1, verse: 1 },
       ];
-      const dst = LQ.from(datas).distinct(DAddressComparor).toArray();
+      const dst = Enumerable.from(datas).distinct(DAddressComparor).toArray();
       const dstExcept: DAddress[] = [
         { book: 40, chap: 1, verse: 1 },
       ];

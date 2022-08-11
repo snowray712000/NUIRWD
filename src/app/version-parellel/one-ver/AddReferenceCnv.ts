@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { IAddBase, DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
@@ -84,7 +84,7 @@ export class AddReferenceCnv implements IAddBase {
     str = str.replace(/~/g, '-');
 
     // 沒有書卷的, 要在此加 ;
-    const na = BibleBookNames.getBookName(LQ.from(addrs.verses).first().book, DisplayLangSetting.s.getBookNameLangWhereIsGB());
+    const na = BibleBookNames.getBookName(Enumerable.from(addrs.verses).first().book, DisplayLangSetting.s.getBookNameLangWhereIsGB());
     // console.log(str);
     const r2 = new SplitStringByRegexVer2().main(str, DisplayLangSetting.s.getValueIsGB()? AddReferenceCnv.reg2GB:AddReferenceCnv.reg2);
     // console.log(r2);

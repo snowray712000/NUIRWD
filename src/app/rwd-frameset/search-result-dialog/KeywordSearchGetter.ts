@@ -6,17 +6,16 @@ import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { AddSnInfo } from 'src/app/version-parellel/one-ver/AddSnInfo';
 import { ajax } from 'rxjs/ajax';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DQbResult } from 'src/app/fhl-api/ApiQb';
+import { DQpResult } from 'src/app/fhl-api/ApiQp';
 import { encode } from 'punycode';
-import { of } from 'rxjs';
+import { delay, of } from 'rxjs';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { Renderer2 } from '@angular/core';
 import { searchAllIndexViaSeApiAsync, DSeApiRecord } from './searchAllIndexViaSeApiAsync';
 import { queryBibleTextViaQsbApiPost } from './queryBibleTextViaQsbApiPost';
-import { delay } from 'q';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 
 
@@ -161,8 +160,8 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
       pthis._status_setFilter = SetFilterStatus.converting;
     }
     function getRecordsWhereBooks() {
-      const rr1 = LQ.from(books);
-      return LQ.from(pthis._recordsOfApi).where(a1 => rr1.contains(a1.book)).toArray();
+      const rr1 = Enumerable.from(books);
+      return Enumerable.from(pthis._recordsOfApi).where(a1 => rr1.contains(a1.book)).toArray();
     }
     function cvt2Line(a1: DSeApiRecord, keyword: string) {
       let rre: DText[] = [{ w: a1.bible_text }];
@@ -182,7 +181,7 @@ export class KeywordSearchGetter implements IKeywordSearchGetter {
 
       function addKeywords(texts: DText[]) {
         const keywords = keyword.split(' ');
-        const dict = LQ.from(keywords)
+        const dict = Enumerable.from(keywords)
           .select((a1, i1) => ({ na: a1, idx: i1 }))
           .toDictionary(a1 => a1.na, a1 => a1.idx);
 

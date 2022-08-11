@@ -1,14 +1,14 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 export function newLineNewLineSplit(dataRef: DText[]): DText[][] {
   const re: DText[][] = [];
   const dataClone = [...dataRef];
 
   while (true) {
-    const r1 = LQ.from(dataClone).takeWhile(a1 => a1.isBr === 1).toArray();
+    const r1 = Enumerable.from(dataClone).takeWhile(a1 => a1.isBr === 1).toArray();
     if (r1.length !== 0) { dataClone.splice(0, r1.length); }
 
-    const r2 = LQ.from(dataClone).takeWhile((a1, i1) => {
+    const r2 = Enumerable.from(dataClone).takeWhile((a1, i1) => {
       // this and next next is br
       const rr2 = dataClone[i1 + 1];
 

@@ -1,4 +1,4 @@
-import * as Enumerable from "linq";
+import Enumerable from "linq";
 declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
 export class DomManagers {
     static s: DomManagers = new DomManagers();

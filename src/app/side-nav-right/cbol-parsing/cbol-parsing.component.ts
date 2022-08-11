@@ -1,7 +1,7 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import * as $ from 'jquery';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, OnChanges, AfterViewInit } from '@angular/core';
-import { ApiQb, DQbResult } from 'src/app/fhl-api/ApiQb';
+import { ApiQp, DQpResult } from 'src/app/fhl-api/ApiQp';
 import { getChapCount, getChapCountEqual1BookIds } from 'src/app/const/count-of-chap';
 import { getVerseCount } from 'src/app/const/count-of-verse';
 import { GetWordsFromQbResult } from './GetWordsFromQbResult';
@@ -40,11 +40,12 @@ import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
   styleUrls: ['./cbol-parsing.component.css']
 })
 
-export class CbolParsingComponent implements OnInit,AfterViewInit {
+export class CbolParsingComponent implements OnInit, AfterViewInit {
   lines: DLineOnePair[] = [];
   words: DOneRowTable[] = [];
   next: DAddress;
   prev: DAddress;
+  /** html 會用到的 */
   isOldTestment = false;
   // domContentWithSn: SafeHtml;
   textsWithSnUnv: DOneLine[];
@@ -55,20 +56,27 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
   @Input() cur: DAddress = { book: 41, chap: 1, verse: 4 };
   @Input() isShowIndex = true;
 
-  name2id: IBookNameToId = new BookNameToId();  
+  name2id: IBookNameToId = new BookNameToId();
   constructor(
     private detectChange: ChangeDetectorRef,
     private sanitizer: DomSanitizer, private dialog: MatDialog, public snackBar: MatSnackBar) {
   }
-  ngAfterViewInit(): void {        
+  ngAfterViewInit(): void {
   }
+  getColorBlueOrBlackWhereSn(it: DWord): string {
+    return it.sn === this.snActived ? "blue" : "black";
+  }
+  getColorBlueOrDarkTurquoiseWhereSn(it: DOneRowTable): string {
+    return it.sn === this.snActived ? "blue" : "darkturquoise";
+  }
+  
 
-  onClickOrig(en, a1: { w: string, sn: string, wid: number }) {
+  onClickOrig(en, a1: DWord) {
     const type = this.cur.book < 40 ? 'H' : 'G';
     const keyword = type + a1.sn; // G281 或 H281
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.cur] });
   }
-  onClickSn(en,a1:{tp:string,sn:string}){    
+  onClickSn(en, a1: DOneRowTable) {
     const keyword = a1.tp + a1.sn; // G281 或 H281
     new DialogSearchResultOpenor(this.dialog).showDialog({ keyword, addresses: [this.cur] });
   }
@@ -83,7 +91,7 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
     return; // 目前不使用，因為會擋到 toolbar 工具
 
     // console.log(this.words); // [{wid,word,sn,exp,orig,pro,wform} ]
-    const r1 = LQ.from(this.words).firstOrDefault(a1 => a1.wid === arg.wid);
+    const r1 = Enumerable.from(this.words).firstOrDefault(a1 => a1.wid === arg.wid);
 
     const fn1 = (a2: string) => a2 !== undefined ? a2 : '';
     const pro = fn1(r1.pro);
@@ -124,13 +132,13 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
       }, 0);
     });
   }
-  private createDomFromString(str) {
+  public createDomFromString(str) {
     return this.sanitizer.bypassSecurityTrustHtml(str);
   }
   private async onVerseChanged(bk: number, ch: number, vr: number) {
     //console.log(bk + ' ' + ch + ' ' + vr);
 
-    await this.queryQbAndRefreshAsync(bk,ch,vr);
+    await this.queryQbAndRefreshAsync(bk, ch, vr);
     this.verseAddress = `${ch}:${vr}`;
     this.detectChange.markForCheck();
 
@@ -173,7 +181,7 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
       const r1 = new VerseRange();
       r1.add({ book: bk, chap: ch, verse: vr });
       // this.thisVerseDescription = r1.toStringChineseShort();
-      if ( DisplayLangSetting.s.getValueIsGB()){
+      if (DisplayLangSetting.s.getValueIsGB()) {
         return r1.toStringChineseGBShort();
       }
       return r1.toStringChineseShort();
@@ -185,47 +193,40 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
       return new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
     }
   }
-  private async queryQbAndRefreshAsync(bk: number, ch: number, vr: number) {
-    const pthis = this;
+  private async queryQbAndRefreshAsync(book: number, chap: number, verse: number) {
+    const that = this;
     // 此 api 取得中的 record，[0]是整節經文；之後的[1]-[N]就是每一個 table 裡的東西
-    const qbResult = await new ApiQb().queryQbAsync(bk, ch, vr).toPromise();
-    // console.log(qbResult);
-    // qbResult.N === 1 舊約
-    this.isOldTestment = qbResult.N === 1;
-    if (qbResult.N === 0) {
-      this.getWordsFromQbApiResult(qbResult);
-      addWordsOfTp(false);
-      
-      this.getLinesFromQbApiResult(qbResult);
-      
-      mergeOrigsToLines();
+    const qbResult = await new ApiQp().queryQpAsync(book, chap, verse).toPromise();
+    
+    const isOldTestment = qbResult.N == 1// qbResult.N === 1 舊約        
+    this.isOldTestment = isOldTestment // html using
+    
+    this.updateWordsFromQbApiResult(qbResult);
+    addWordsOfTp(isOldTestment);
+    if (isOldTestment){
+      this.updateLinesFromQbApiResultOfOldTestment(qbResult);
     } else {
-      this.getWordsFromQbApiResult(qbResult); // 看似一樣
-      addWordsOfTp(true);
-
-      this.getLinesFromQbApiResultOfOldTestment(qbResult);
-      
-      mergeOrigsToLines();
-      // this.getWordsFromQbApiResultOldTestment(qbResult);
+      this.getLinesFromQbApiResult(qbResult);
     }
+    mergeOrigsToLines();
 
     // <div style="display: inline-block;white-space: nowrap;">בְּ</div>
     const id1 = this.name2id.cvtName2Id(qbResult.prev.engs);
     const id2 = this.name2id.cvtName2Id(qbResult.next.engs);
     this.prev = { book: id1, chap: qbResult.prev.chap, verse: qbResult.prev.sec };
     this.next = { book: id2, chap: qbResult.next.chap, verse: qbResult.next.sec };
-    this.cur = { book: bk, chap: ch, verse: vr };
+    this.cur = { book: book, chap: chap, verse: verse };
     return;
-    function addWordsOfTp(isOldTestment:boolean){
-      const r1 = isOldTestment?'H':'G';
-      pthis.words.forEach(a1=>a1.tp=r1);
+    function addWordsOfTp(isOldTestment: boolean) {
+      const r1 = isOldTestment ? 'H' : 'G';
+      that.words.forEach(a1 => a1.tp = r1);
     }
-    function mergeOrigsToLines(){
-      for (let i1 = 0; i1 < pthis.lines.length; i1++) {
-        const it1 = pthis.lines[i1];
-        
-        const rr1 = LQ.from(it1.words).select(a1=>a1.wid).where(a1=>a1!==undefined);
-        const rr2 = LQ.from(pthis.words).where(a1=>rr1.contains(a1.wid)).toArray();        
+    function mergeOrigsToLines() {
+      for (let i1 = 0; i1 < that.lines.length; i1++) {
+        const it1 = that.lines[i1];
+
+        const rr1 = Enumerable.from(it1.words).select(a1 => a1.wid).where(a1 => a1 !== undefined);
+        const rr2 = Enumerable.from(that.words).where(a1 => rr1.contains(a1.wid)).toArray();
         it1.origs = rr2;
       }
     }
@@ -249,15 +250,15 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
   /** 
    * this.words 是 output.
    * words 就是下面的 table, 不是上面的整串文字, 整串文字請看 lines */
-  private getWordsFromQbApiResult(qbResult: DQbResult) {
-    const re2 = [];
+  private updateWordsFromQbApiResult(qbResult: DQpResult) {
+    const re2: DOneRowTable[] = [];
     for (let i = 1; i < qbResult.record.length; i++) {
-      const it = qbResult.record[i];
-      const sn = parseInt(it.sn, 10);
-      if (sn === 0) {
-        continue; // +
+      const it = qbResult.record[i];      
+      const sn = trimSnPrefixZeroAndCheckSnOrUndefined(it.sn)
+      if (undefined == sn) {
+        continue
       }
-      const remark = (it.remark !== undefined && it.remark.trim().length !== 0) ? it.remark : undefined;
+      const remark = trimStringAndLength0ReturnUndefined(it.remark)
       re2.push({
         wid: it.wid,
         word: it.word,
@@ -271,11 +272,32 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
     }
     // console.log(re2);
     this.words = re2;
+    function trimStringAndLength0ReturnUndefined(r1?: string) {
+      // fn("") -> undefined
+      // fn("\t") -> undefined
+      // fn(" a ") -> 'a'
+      const r2 = r1?.trim()
+      return r2?.length == 0 ? undefined : r2
+    }
+    /**
+     * assert( ()=> fn("0081a"), "81a")
+     * assert( ()=> fn("0081"), "81")
+     * assert( ()=> fn("00810a"), "810a")
+     * assert( ()=> fn("00"), undefined)
+     * @param sn 
+     * @returns 
+     */
+    function trimSnPrefixZeroAndCheckSnOrUndefined(sn?: string) {
+      if (sn == undefined) { return undefined }
+
+      const r1 = /[1-9]\d*[a-zA-Z]?/g.exec(sn!)
+      return r1 == null ? undefined : r1![0]
+    }
   }
   /**
    * this.lines 是 output.      
    */
-  private getLinesFromQbApiResultOfOldTestment(qbResult: DQbResult) {
+  private updateLinesFromQbApiResultOfOldTestment(qbResult: DQpResult) {
     const words = new GetLinesFromQbResultOldTestment().main(qbResult);
     // const words = new GetWordsFromQbResult({ isOldTestment: true }).main(qbResult);
     // console.log(JSON.stringify(words));
@@ -294,7 +316,7 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
 
     this.lines = re as DLineOnePair[];
   }
-  private getLinesFromQbApiResult(qbResult: DQbResult) {
+  private getLinesFromQbApiResult(qbResult: DQpResult) {
     const words = new GetWordsFromQbResult().main(qbResult);
     // console.log(JSON.stringify(words));
     // tslint:disable-next-line: max-line-length
@@ -316,18 +338,22 @@ export class CbolParsingComponent implements OnInit,AfterViewInit {
 }
 /** 對應的 原文/中文 */
 interface DLineOnePair {
-  words: { w: string, sn?: number,wid?:number }[];
+  words: DWord[];
   exps: { w: string }[];
   origs?: DOneRowTable[];
 }
-
+interface DWord {
+  w: string
+  sn?: string
+  wid: number
+}
 interface DOneRowTable {
   wid: number;
   word: string;
   /** 8412a */
   sn: string;
   /** H or G */
-  tp?:string;
+  tp?: string;
   exp: string;
   remark?: string;
   orig: string;
@@ -384,7 +410,7 @@ class StasticQbGreek {
   }
 
   async qbCall(bk, ch, vs) {
-    return new ApiQb().queryQbAsync(bk, ch, vs).toPromise();
+    return new ApiQp().queryQpAsync(bk, ch, vs).toPromise();
   }
 }
 

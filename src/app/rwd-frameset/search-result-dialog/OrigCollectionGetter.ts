@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DProgressInfo } from './../../tools/EventTool';
 import { queryBibleTextViaQsbApiPost } from './queryBibleTextViaQsbApiPost';
 import { searchAllIndexViaSeApiAsync, DSeApiRecord } from './searchAllIndexViaSeApiAsync';
@@ -9,9 +9,9 @@ import { DAddress } from 'src/app/bible-address/DAddress';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { cvt_kjv } from 'src/app/bible-text-convertor/kjv';
 import { EventToolSingle } from 'src/app/tools/EventTool';
-import { delay } from 'q';
 import { SetFilterStatus } from './KeywordSearchGetter';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
+import { delay } from 'rxjs';
 
 
 /** 原文彙編功能 */
@@ -133,8 +133,8 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
       pthis._status_setFilter = SetFilterStatus.converting;
     }
     function getRecordsWhereBooks() {
-      const rr1 = LQ.from(books);
-      return LQ.from(pthis._records).where(a1 => rr1.contains(a1.book)).toArray();
+      const rr1 = Enumerable.from(books);
+      return Enumerable.from(pthis._records).where(a1 => rr1.contains(a1.book)).toArray();
     }
     async function safeDoCore(fnErr?: (err: any) => Promise<void>) {
       await safeDoAsync(async () => {
@@ -203,7 +203,7 @@ export class OrigCollectionGetter implements IOrigCollectionGetter {
   }
 }
 
-async function safeDoAsync<T>(fnDoAsync: () => Promise<T>, fnErr?: (err: any) => Promise<T>) {
+async function safeDoAsync<T>(fnDoAsync: () => Promise<T>, fnErr?: (err: any) => Promise<T>,defT?:T) {
   try {
     return await fnDoAsync();
   } catch (error) {
@@ -212,8 +212,9 @@ async function safeDoAsync<T>(fnDoAsync: () => Promise<T>, fnErr?: (err: any) =>
         return await fnErr(error);
       } catch (error) {
         console.error('safe do async, fnErr error:');
-        console.log(error);
+        console.log(error);                        
       }
-    }
+    } 
+    return defT
   }
 }

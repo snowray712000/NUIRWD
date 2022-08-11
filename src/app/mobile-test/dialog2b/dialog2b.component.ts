@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { HttpRequest, HttpXhrBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { of } from 'rxjs';
@@ -64,9 +64,9 @@ async function getData2bAsync(): Promise<string[]> {
     }
   };
 
-  const re1 = LQ.range(1, 66).select(i => ajax({ url: `http://bkbible.fhl.net/json/se.php?q=摩西&limit=500&RANGE=3&range_bid=${i}&range_eid=${i}` }))
+  const re1 = Enumerable.range(1, 66).select(i => ajax({ url: `http://bkbible.fhl.net/json/se.php?q=摩西&limit=500&RANGE=3&range_bid=${i}&range_eid=${i}` }))
     .toArray();
-  LQ.from(re1).forEach(a1 => a1.subscribe(fnResp));
+  Enumerable.from(re1).forEach(a1 => a1.subscribe(fnResp));
 
   // const url = 'http://bible.fhl.net/getData';
   // const xhr = new HttpRequest('GET', url);

@@ -4,7 +4,7 @@ export class FunctionSelectionTab extends LocalStorageStringBase {
   _getKey(): string {
     return 'FunctionSelectionTab';
   }
-  _getDefaultValue(): string {
+  override _getDefaultValue(): string {
     return '註釋';
   }
 }

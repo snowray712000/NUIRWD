@@ -162,7 +162,7 @@ class MyEdit extends LocalStorageStringBase {
   _getKey(): string {
     return 'MyEdit';
   }
-  _getDefaultValue(): string {
+  override _getDefaultValue(): string {
     return getExample();
     function getExample() {
       return `

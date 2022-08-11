@@ -14,7 +14,7 @@ import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 import { DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { asHTMLElement } from 'src/app/tools/asHTMLElement';
 import { EventOneVerWidthChanged } from './EventOneVerWidthChanged';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { EventIsSnToggleChanged } from 'src/app/side-nav-left/side-nav-left.component';
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
@@ -34,7 +34,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
   @Output() clickVerse = new EventEmitter<DAddress>();
   private verseRange: VerseRange;
   @ViewChildren('oneline', { read: false }) viewOneLines;
-  @ViewChild('base', null) base;
+  @ViewChild('base') base;
   private isNeedGetHeight = true;
   @Output() gettedHeight = new EventEmitter<DOneLineHeight[]>();
   lineCys: DOneLineHeight[];
@@ -137,7 +137,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
     }
   }
   onClickVerse(it1: DOneLine) {
-    this.clickVerse.emit(LQ.from(it1.addresses.verses).first());
+    this.clickVerse.emit(Enumerable.from(it1.addresses.verses).first());
   }
   onClickAddress(it1) {
 
@@ -158,14 +158,14 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
         this.changeDetector.markForCheck();
       });
     }
-    if (changes.isShowSn !== undefined) {
-      if (changes.isShowSn.currentValue !== changes.isShowSn.previousValue) {
+    if (changes['isShowSn'] !== undefined) {
+      if (changes['isShowSn'].currentValue !== changes['isShowSn'].previousValue) {
         this.resetLineHeight();
         this.changeDetector.markForCheck();
       }
     }
-    if (changes.setCy2Calced !== undefined) {
-      if (changes.setCy2Calced.currentValue !== changes.setCy2Calced.previousValue) {
+    if (changes['setCy2Calced'] !== undefined) {
+      if (changes['setCy2Calced'].currentValue !== changes['setCy2Calced'].previousValue) {
         this.calcCy2();
         // console.log('parent已重算,通知this去取cy2.');
         // console.log(this.data);
@@ -187,7 +187,7 @@ export class OneVerComponent implements OnInit, OnChanges, AfterViewChecked {
 
     for (let i1 = 0; i1 < data.length; i1++) {
       const it1 = data[i1];
-      const r1 = LQ.from(lineCys).firstOrDefault(a1 => a1.addresses === it1.addresses);
+      const r1 = Enumerable.from(lineCys).firstOrDefault(a1 => a1.addresses === it1.addresses);
 
       if (r1 === undefined) {
         re.set(i1, undefined);

@@ -1,11 +1,11 @@
-import { DQbResult } from 'src/app/fhl-api/ApiQb';
+import { DQpResult } from 'src/app/fhl-api/ApiQp';
 import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
 /** 從QbResult的record[0]處理 */
 export class GetLinesFromQbResultOldTestment {
   private static regSplitBySpaceGlobal = /[\s\-]+/g;
   private static regReplaceR = /\r/g;
   private static regSplitBySpace = /[\s\-]+/;
-  main(qbResult: DQbResult) {
+  main(qbResult: DQpResult) {
     const str = qbResult.record[0].word;
     const re1 = this.splitByNewLineAndReverseLine(str);
     const re2 = re1.map(a1 => this.splitEachOrigWordOneLine(a1));
@@ -17,7 +17,7 @@ export class GetLinesFromQbResultOldTestment {
     return str.replace(GetLinesFromQbResultOldTestment.regReplaceR, '').split('\n').reverse();
   }
   // tslint:disable-next-line: max-line-length
-  private setWidEachOrigWord(qbResult: DQbResult, re2: {
+  private setWidEachOrigWord(qbResult: DQpResult, re2: {
     data: string[];
     isStartFromFirstChar: boolean;
   }[]): {

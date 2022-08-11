@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./bible-selections.component.css']
 })
 export class BibleSelectionsComponent implements OnInit {
-  @ViewChild('bkch', null) btnToggleBkCh: MatButtonToggleGroup;
+  @ViewChild('bkch') btnToggleBkCh: MatButtonToggleGroup;
   @Input() beSelectedBookId = 40;
   @Input() beSelectedChap = 3;
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) private data: any
@@ -54,14 +54,14 @@ export class BibleSelectionsComponent implements OnInit {
   onClickChap(event, chap) {
     this.beSelectedChap = chap;
   }
-  private getLink(ch) {
+  getLink(ch) {
     const eng = BibleBookNames.getBookName(this.beSelectedBookId, BookNameLang.Mt);
     return `/bible/${eng}${ch}`; // /bible/Mt1
   }
-  private getCountChapArray() {
+  getCountChapArray() {
     return linq_range(1, getChapCount(this.beSelectedBookId));
   }
-  private getList(): DListShow[] {
+  getList(): DListShow[] {
     const r1 = type1.map(a1 => {
       return {
         naClass: a1.na,

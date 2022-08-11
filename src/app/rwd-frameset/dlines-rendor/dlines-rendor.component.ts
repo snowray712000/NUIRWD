@@ -1,6 +1,6 @@
 import { EventVerseChanged } from './../../side-nav-right/cbol-parsing/EventVerseChanged';
 import { VerForMain } from 'src/app/rwd-frameset/settings/VerForMain';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, Input, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
@@ -34,13 +34,21 @@ export class DlinesRendorComponent implements OnInit {
   /** reference dialog 使用時, 或是彙編, 都期盼完整顯示經文出處。 */
   @Input() isShowALLAddress?: 0 | 1;
   /** scroll 用 */
-  @ViewChildren('divEachLine', null) divEachLine;
+  @ViewChildren('divEachLine') divEachLine;
   constructor(public dialog: MatDialog, private detectChange: ChangeDetectorRef) {
     // 將 divEachLine 存起來，隨處使用 (為要作 scroll)
-    
-    testThenDoAsync({ cbTest: () => this.divEachLine != undefined && this.divEachLine._results.length != 0 }).then(() => {
-      DomManagers.s.divContentEachLine = this.divEachLine
+
+    const that = this
+    testThenDoAsync({cbTest: ()=>{
+      // console.log(that.divEachLine)
+      return that.divEachLine != undefined && that.divEachLine._results.length > 0
+    }}).then(()=>{
+      DomManagers.s.divContentEachLine = that.divEachLine
     })
+    
+    // testThenDoAsync({ cbTest: () => this.divEachLine != undefined && this.divEachLine._results.length != 0 }).then(() => {
+    //   DomManagers.s.divContentEachLine = this.divEachLine
+    // })
   }
 
   verseSelected: DAddress
@@ -68,13 +76,13 @@ export class DlinesRendorComponent implements OnInit {
     if (isSame(a1.addresses.verses[0], this.verseSelected)) { return true }
     return false
     function isSame(a1: DAddress, a2: DAddress) {
-      return LQ.from(['book', 'chap', 'verse']).all(k => a1[k] == a2[k]);
+      return Enumerable.from(['book', 'chap', 'verse']).all(k => a1[k] == a2[k]);
     }
   }
   getDatasOrMergedDatas() {
     if (DisplayMergeSetting.s.getFromLocalStorage()) {
       return mergeDOneLineIfAddressContinue(this.datas);
-    }
+    }    
     return this.datas;
   }
   onClickVerse(it: DOneLine) {
@@ -115,7 +123,7 @@ export class DlinesRendorComponent implements OnInit {
   getVersionDisplayName(na: string) {
     const rr1 = VerCache.s.getValue();
 
-    const r2 = LQ.from(rr1.record).firstOrDefault(a1 => a1.book === na);
+    const r2 = Enumerable.from(rr1.record).firstOrDefault(a1 => a1.book === na);
     if (r2 === undefined) {
       return na;
     }

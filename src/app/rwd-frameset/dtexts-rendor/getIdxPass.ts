@@ -1,5 +1,5 @@
 import { DText } from 'src/app/bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { assert } from 'src/app/tools/assert';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
 /** 這一層, 當遇到 ol 或 li, 它的 child 都不用畫, 在 html 中要用到 */
@@ -15,14 +15,14 @@ export function getIdxPass(datas?: DText[], indexs?: number[]): number[] {
 
   return re;
   function getPair(indexs0: number) {
-    const rr1 = LQ.from(datas).skip(indexs0).indexOf(a1 => a1.isListStart === 1 || a1.isOrderStart === 1);
+    const rr1 = Enumerable.from(datas).skip(indexs0).indexOf(a1 => a1.isListStart === 1 || a1.isOrderStart === 1);
     if (rr1 !== -1) {
       const rr2 = rr1 + indexs0; // 那個 list start 或 order start 的地方.
       const rr3 = getcoresponse(rr2);
       assert(() => rr3 !== -1, '應該有總會有對應的.');
 
       // 2, 8 -> [3,4,5,6,7]
-      const rre = LQ.range(rr2 + 1, rr3 - rr2 - 1).toArray();
+      const rre = Enumerable.range(rr2 + 1, rr3 - rr2 - 1).toArray();
       return rre;
     } else {
       return [];
@@ -32,7 +32,7 @@ export function getIdxPass(datas?: DText[], indexs?: number[]): number[] {
   function getcoresponse(ii1: number) {
     const tp = datas[ii1].isOrderStart === 1 ? 0 : 1;
     let cnt = 0;
-    const rrr1 = LQ.from(datas).skip(ii1 + 1).indexOf(aa1 => {
+    const rrr1 = Enumerable.from(datas).skip(ii1 + 1).indexOf(aa1 => {
       if (tp === 0) {
         if (aa1.isOrderStart === 1) {
           cnt++;

@@ -1,6 +1,6 @@
 import { Dialog2bComponent } from './dialog2b/dialog2b.component';
 import { BookNameAndId } from './../const/book-name/BookNameAndId';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';

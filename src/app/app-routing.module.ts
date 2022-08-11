@@ -7,7 +7,7 @@ import { CommentToolComponent } from './side-nav-right/comment-tool/comment-tool
 import { OneVerComponent } from './version-parellel/one-ver/one-ver.component';
 import { SideNavLeftComponent } from './side-nav-left/side-nav-left.component';
 import { EditComponent } from './edit/edit.component';
-import { QueryBindingType } from '@angular/compiler/src/core';
+
 import { QunitsComponent } from './unit-test-qunit/qunits/qunits.component';
 import { VersionSelectorComponent } from './version-selector/version-selector.component';
 import { MobileTestComponent } from './mobile-test/mobile-test.component';

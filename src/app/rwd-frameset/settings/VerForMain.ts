@@ -8,8 +8,8 @@ import { LocalStorageArrayBase } from '../../tools/LocalStorageArrayBase';
 export class VerForMain extends LocalStorageArrayBase<string> {
   static s = new VerForMain();
   _getKey(): string { return 'versions'; }
-  _isDefaultIfEmpty() { return true; }
-  _getDefaultValue() { return ['unv']; }
+  override _isDefaultIfEmpty() { return true; }
+  override _getDefaultValue() { return ['unv']; }
 }
 
 

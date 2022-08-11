@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DOneLineHeight } from './one-ver/one-ver.component';
 import { linq_max } from '../linq-like/linq_max';
 import { DAddress, isGreaterThenAddress } from '../bible-address/DAddress';
@@ -98,7 +98,7 @@ export class HeightCalcWithMerge {
               break;
             } else {
               // 不一定, idx 要加, 還要看下一個是不是小於等於這個
-              const addr = LQ.from(line[idx + 1].addresses.verses).last();
+              const addr = Enumerable.from(line[idx + 1].addresses.verses).last();
               if (false === isGreaterThenAddress(addr, addrMax)) {
                 idx++;
               } else {
@@ -133,7 +133,7 @@ export class HeightCalcWithMerge {
       if (r1 >= line.length) {
         re.push(undefined);
       } else {
-        re.push(LQ.from(line[r1].addresses.verses).last());
+        re.push(Enumerable.from(line[r1].addresses.verses).last());
       }
     }
     return re;

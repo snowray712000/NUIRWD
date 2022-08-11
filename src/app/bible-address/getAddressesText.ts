@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DAddress } from './DAddress';
 import { VerseRange } from './VerseRange';
 
@@ -42,22 +42,22 @@ export function getAddressesText(verseRange: VerseRange, tp?: '' | '1' | 'v1' | 
     return verseRange === undefined || verseRange.verses.length === 0;
   }
   function isOnlyOneBook(addresses: DAddress[]) {
-    return LQ.from(addresses).select(a1 => a1.book).distinct().count() === 1;
+    return Enumerable.from(addresses).select(a1 => a1.book).distinct().count() === 1;
   }
   // assert one book.
   function isOnlyOneChap(addresses: DAddress[]) {
-    return LQ.from(addresses).select(a1 => a1.chap).distinct().count() === 1;
+    return Enumerable.from(addresses).select(a1 => a1.chap).distinct().count() === 1;
   }
   // assert one book, one chap
   function isContinueVerse(addresses: DAddress[]) {
-    return LQ.range(0, addresses.length).all(i => i + addresses[0].verse === addresses[i].verse);
+    return Enumerable.range(0, addresses.length).all(i => i + addresses[0].verse === addresses[i].verse);
   }
   function getVerseOnly(arg: VerseRange) {
     // 創3:3 顯示 3
     // 創3:3-5 顯示 3-5
     // 創3:3,5 顯示 3,5
     // 創3:3-4:1 顯示 3:3-4:1
-    const cntBook = LQ.from(arg.verses).select(a1 => a1.book).distinct().count();
+    const cntBook = Enumerable.from(arg.verses).select(a1 => a1.book).distinct().count();
     if (arg.verses.length === 1) {
       return arg.verses[0].verse.toString();
     }
@@ -72,7 +72,7 @@ export function getAddressesText(verseRange: VerseRange, tp?: '' | '1' | 'v1' | 
       const v2 = arg.verses[arg.verses.length - 1].verse;
       return `${v1}-${v2}`; // 3-5
     } else {
-      return LQ.from(arg.verses).select(a1 => a1.verse.toString()).toArray().join(','); // 3,5
+      return Enumerable.from(arg.verses).select(a1 => a1.verse.toString()).toArray().join(','); // 3,5
     }
   }
 

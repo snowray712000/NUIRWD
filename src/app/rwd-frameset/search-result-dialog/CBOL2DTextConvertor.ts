@@ -1,6 +1,6 @@
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { AddReferenceFromOrigDictCBOLChineseText } from "src/app/version-parellel/one-ver/AddReferenceFromOrigDictCBOLChineseText";
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 import { newLineNewLineSplit } from './newLineNewLineSplit';
@@ -22,7 +22,7 @@ export class CBOL2DTextConvertor {
 
     interface DataWithType { data: DText[]; tp: 'title' | 'orig' | 'AV' | 'TDNT' | 'TWOT' | 'unknown' | '同義字'; }
     const reClassified = splitToPart(r3);
-    const reCvtors = LQ.from(reClassified).select(a1 => cvtEachType(a1)).toArray();
+    const reCvtors = Enumerable.from(reClassified).select(a1 => cvtEachType(a1)).toArray();
     const re = newLineNewLineMerge(reCvtors);
     return re;
 
@@ -42,7 +42,7 @@ export class CBOL2DTextConvertor {
       return reClassify;
 
       function classify(group: DText[][]): DataWithType[] {
-        return LQ.from(group).select((a1, i1) => {
+        return Enumerable.from(group).select((a1, i1) => {
           if (i1 === 0) {
             return { data: a1, tp: 'title' };
           } else if (i1 === 1) {
@@ -59,7 +59,9 @@ export class CBOL2DTextConvertor {
             return { data: a1, tp: 'unknown' };
           }
         }).toArray() as DataWithType[];
-        return;
+        
+        return [];
+
         function isAV(a1: DText[]) {
           return /^\s*AV ?-|^欽定本 ?-/i.test(a1[0].w);
         }
@@ -91,17 +93,17 @@ export class CBOL2DTextConvertor {
           return datas;
         }
         return [{
-          w: LQ.from(datas).select(a1 => a1.w).toArray().join('')
+          w: Enumerable.from(datas).select(a1 => a1.w).toArray().join('')
         }];
       }
       function cvtOrig(datas: DText[]) {
-        const str = LQ.from(datas).select(a1 => a1.w).merge().toArray().join('');
+        const str = Enumerable.from(datas).select(a1 => a1.w).merge().toArray().join('');
         const str2 = str.split(';');
-        return LQ.from(getBefore(str2[0])).concat(getAfter()).toArray();
+        return Enumerable.from(getBefore(str2[0])).concat(getAfter()).toArray();
 
         function getBefore(strBefore: string): DText[] {
           const rrr1 = new SplitStringByRegexVer2().main(strBefore, /(?:SN)?(H|G)?(\d+[a-z]?)/gi);
-          return LQ.from(rrr1).select(a1 => {
+          return Enumerable.from(rrr1).select(a1 => {
             if (a1.exec == null) {
               return { w: a1.w } as DText;
             }
@@ -130,7 +132,7 @@ export class CBOL2DTextConvertor {
         return cvtOrig(datas);
       }
       function cvtAV(datas: DText[]) {
-        const str = LQ.from(datas).select(a1 => a1.w).merge().toArray().join('');
+        const str = Enumerable.from(datas).select(a1 => a1.w).merge().toArray().join('');
         return [{ w: str }];
       }
       function cvtTDNT(datas: DText[]) {
@@ -170,7 +172,7 @@ export class CBOL2DTextConvertor {
 
           /** [1,1,3] 表示 1a3) */
           function getLevels() {
-            return LQ.range(2, levelMax).takeWhile(i1 => r1[i1].length !== 0).select(i1 => {
+            return Enumerable.range(2, levelMax).takeWhile(i1 => r1[i1].length !== 0).select(i1 => {
               if (/\d+/.test(r1[i1])) {
                 return parseInt(r1[i1], 10);
               }

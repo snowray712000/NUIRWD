@@ -77,6 +77,7 @@ export class AddParenthesesUnvNcv implements IAddBase {
             r2.w = it3.exec[0];
             r2.isParenthesesHW = 1;
             re1.push(r2);
+            break;
           default:
             break;
         }

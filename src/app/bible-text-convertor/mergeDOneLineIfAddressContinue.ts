@@ -1,7 +1,7 @@
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { getNextAddress, isTheSameAddress } from '../bible-address/DAddress';
 export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {
   if (datas === undefined || datas.length === 0) {
@@ -11,7 +11,7 @@ export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {
   }
 
   const re1 = groupContinue();
-  const re2 = LQ.from(re1).select(mergeTo).toArray();
+  const re2 = Enumerable.from(re1).select(mergeTo).toArray();
 
   return re2;
   function isContinue(pre: VerseRange, cur: VerseRange) {
@@ -20,8 +20,8 @@ export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {
       return false;
     }
 
-    const rr1 = LQ.from(pre.verses).lastOrDefault();
-    const rr2 = LQ.from(cur.verses).firstOrDefault();
+    const rr1 = Enumerable.from(pre.verses).lastOrDefault();
+    const rr2 = Enumerable.from(cur.verses).firstOrDefault();
     return isTheSameAddress(getNextAddress(rr1), rr2);
   }
   function groupContinue(): number[][] {
@@ -30,7 +30,7 @@ export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {
     if (datas.length !== 0) {
       let group = [];
       group.push(0);
-      LQ.range(1, datas.length - 1).forEach(i => {
+      Enumerable.range(1, datas.length - 1).forEach(i => {
 
         const pre = datas[i - 1];
         const cur = datas[i];
@@ -63,7 +63,7 @@ export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {
     const dtexts: DText[] = [];
     const addrs = new VerseRange();
 
-    LQ.from(idxs).forEach(i => {
+    Enumerable.from(idxs).forEach(i => {
       const rr1 = datas[i];
       for (const it of rr1.children) {
         dtexts.push(deepCopy(it));

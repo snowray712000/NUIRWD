@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DSearchData } from '../rwd-frameset/search-result-dialog/search-result-dialog.component';
 import { ajax } from 'rxjs/ajax';
@@ -13,11 +13,11 @@ import { VerCache } from "../fhl-api/BibleVersion/VerCache";
   styleUrls: ['./version-selector.component.css']
 })
 export class VersionSelectorComponent implements OnInit {
-  versions: DVersion[];
+  versions!: DVersion[];
   versionCurrentNa: string[] = [];
 
   constructor(private changeDetector: ChangeDetectorRef,
-    private dialogRef: MatDialogRef<VersionSelectorComponent>,
+    public dialogRef: MatDialogRef<VersionSelectorComponent>,
     @Inject(MAT_DIALOG_DATA) public dataByParent: { isSnOnly?: 0 | 1, isLimitOne?: 0 | 1; versions?: string[] }) { }
   ngOnInit() {
     const re = VerCache.s.getValue();
@@ -26,7 +26,7 @@ export class VersionSelectorComponent implements OnInit {
       re.record.filter(a1 => a1.strong === 1) : re.record;
     const rr2 = rr1.map(aa1 => ({ na: aa1.book, naChinese: aa1.cname }));
     this.versions = rr2;
-    this.versionCurrentNa = [...this.dataByParent.versions];
+    this.versionCurrentNa = [...this.dataByParent.versions ?? []];
   }
   /** 單選的時候, 直接關閉, 並回傳結果 ['unv'] */
   onClick(it: DVersion) {
@@ -34,7 +34,7 @@ export class VersionSelectorComponent implements OnInit {
       this.dialogRef.close([it.na]);
     } else {
       if (this.versionCurrentNa.includes(it.na)) {
-        const r1 = LQ.from(this.versionCurrentNa).indexOf(a1 => a1 === it.na);
+        const r1 = Enumerable.from(this.versionCurrentNa).indexOf(a1 => a1 === it.na);
         this.versionCurrentNa.splice(r1, 1);
         this.changeDetector.markForCheck();
       } else {
@@ -51,8 +51,8 @@ export class VersionSelectorComponent implements OnInit {
     return this.dataByParent.isLimitOne !== 1;
   }
   getSelected() {
-    const r1 = LQ.from(this.versions);
-    return LQ.from(this.versionCurrentNa).select(a1 => r1.firstOrDefault(aa1 => aa1.na === a1)).toArray();
+    const r1 = Enumerable.from(this.versions);
+    return Enumerable.from(this.versionCurrentNa).select(a1 => r1.firstOrDefault(aa1 => aa1.na === a1)).toArray();
   }
   getDialogResults() {
     if (this.versionCurrentNa.length === 0) {

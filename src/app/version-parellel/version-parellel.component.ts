@@ -1,5 +1,5 @@
 // import { VerCache } from "../fhl-api/BibleVersion/VerCache";
-// import * as LQ from 'linq';
+// import Enumerable from 'linq';
 // // tslint:disable-next-line: max-line-length
 // import { Component, OnInit, Input, AfterViewInit, ViewChild, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, OnChanges, SimpleChanges, Output, EventEmitter, AfterViewChecked, ViewChildren } from '@angular/core';
 // import { asHTMLElement } from '../tools/asHTMLElement';
@@ -115,7 +115,7 @@
 //   }
 //   async initVersAllAsync() {
 //     const r1 = VerCache.s.getValue();
-//     const r2 = LQ.from(r1.record).select(a1 => cvtToOneBibleVersion(a1)).toArray();
+//     const r2 = Enumerable.from(r1.record).select(a1 => cvtToOneBibleVersion(a1)).toArray();
 //     r2.forEach((a1, i1) => a1.id = i1);
 //     this.versAll = r2;
 //   }

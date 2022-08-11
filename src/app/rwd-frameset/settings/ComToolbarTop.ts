@@ -1,7 +1,6 @@
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatToolbar } from '@angular/material/toolbar';
-import { CombineLatestOperator } from 'rxjs/internal/observable/combineLatest';
 import { ComBase } from './ComBase';
 
 export class ComToolbarTop extends ComBase<MatToolbar> {

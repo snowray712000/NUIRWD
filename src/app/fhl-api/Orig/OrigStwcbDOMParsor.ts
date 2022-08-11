@@ -1,5 +1,5 @@
 import { DText } from './../../bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { merge_nestarray } from 'src/app/tools/merge_nestarray';
 
 export class OrigStwcbDOMParsor {
@@ -36,9 +36,9 @@ export class OrigStwcbDOMParsor {
       } else {
         const rr2 = a1 as HTMLElement;
         const rr3 = rr2.getAttribute('class'); // maybe null
-        const r4 = LQ.from(a1.childNodes).select(aa1 => {
+        const r4 = Enumerable.from(a1.childNodes).select(aa1 => {
           const rr4 = getAllChildren(aa1);
-          LQ.from(rr4).forEach((aaa1: DText) => tryAddClass(aaa1, rr3));
+          Enumerable.from(rr4).forEach((aaa1: DText) => tryAddClass(aaa1, rr3));
           return rr4;
         }).toArray();
         return merge_nestarray(r4);

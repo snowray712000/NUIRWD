@@ -5,13 +5,13 @@ import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { deepCopy } from '../tools/deepCopy';
 import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddReferenceInCommentText';
 import { SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
-import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameConstants } from '../const/book-name/BookNameConstants';
-import * as LQ from 'linq';
-import {ReferenceOther} from 'ijn-fhl-sharefun-ts/lib/bible-text/ReferenceOther';
-import {ReferenceNcv} from 'ijn-fhl-sharefun-ts/lib/bible-text/ReferenceNcv';
+import Enumerable from 'linq';
 import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/DisplayLangSetting';
-import { IReferenceTools } from 'ijn-fhl-sharefun-ts/lib/bible-text/IReferenceTools';
+import { IReferenceTools } from 'src/ijn-fhl-sharefun-ts/bible-text/IReferenceTools';
+import { ReferenceNcv } from 'src/ijn-fhl-sharefun-ts/bible-text/ReferenceNcv';
+import { ReferenceOther } from 'src/ijn-fhl-sharefun-ts/bible-text/ReferenceOther';
+
 /**
  * 開發，是以 和合本2010 去作的
 */
@@ -75,18 +75,19 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
               if (a2 != null) return '';
               if (a3 != null) return '';
               if (a4 != null) return ';';
+              return a1
             });
             it3.w = '#' + it3.w + '|';
             re.push(it3);
           }
         }
-        it2.w = LQ.from(re).select(a1 => a1.w)
+        it2.w = Enumerable.from(re).select(a1 => a1.w)
           .reverse().toArray().join('');
 
       }
       function gRegExp() {
         BookNameConstants.CHINESE_BOOK_NAMES
-        const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)
+        const str1 = Enumerable.from(BookNameConstants.CHINESE_BOOK_NAMES)
           .orderByDescending(a1 => a1.length).toArray().join('|');
         const reg1 = new RegExp('《(' + str1 + ')》(\\d+[\\d　 :；;,\\-]*)', 'g');
         // 不行 徒3 因為，奉
@@ -128,18 +129,19 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
               if (a2 != null) return '';
               if (a3 != null) return '';
               if (a4 != null) return ';';
+              return a1
             });
             it3.w = '#' + it3.w + '|';
             re.push(it3);
           }
         }
-        it2.w = LQ.from(re).select(a1 => a1.w)
+        it2.w = Enumerable.from(re).select(a1 => a1.w)
           .reverse().toArray().join('');
 
       }
       function gRegExp() {
         BookNameConstants.CHINESE_BOOK_NAMES
-        const str1 = LQ.from(BookNameConstants.CHINESE_BOOK_NAMES)
+        const str1 = Enumerable.from(BookNameConstants.CHINESE_BOOK_NAMES)
           .concat(BookNameConstants.CHINESE_BOOK_ABBREVIATIONS)
           .orderByDescending(a1 => a1.length).toArray().join('|');
         const reg1 = new RegExp('(?:' + str1 + ')\\d+[\\d　 :；;,\\-]*', 'g');
@@ -214,6 +216,7 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             if (a2 != null) return '</FI>';
             if (a4 != null) return '<CM/>';
             if (a5 != null) return '</FO>';
+            return a1
           });
         }
       }
@@ -232,10 +235,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
 
       /** 讓參考形如 路:1-2 */
       function toStandard() {
+        
         const isGb = DisplayLangSetting.s.getValueIsGB()? 1: undefined;
-        for (const it2 of it1.children) {        
+        for (const it2 of it1.children) {     
           // 新譯本特別處理
-          const refTool:IReferenceTools = 
+          const refTool: IReferenceTools = 
           ver === 'ncv' ? new ReferenceNcv(it2.w,isGb) : new ReferenceOther(it2.w,isGb);
           if (refTool.isIncludeRef()){
             it2.w = refTool.toStandard();            

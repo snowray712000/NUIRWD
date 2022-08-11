@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DialogSearchResultOpenor } from './../../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { DText } from './../../bible-text-convertor/AddBase';
 import { BookNameToId } from './../../const/book-name/book-name-to-id';

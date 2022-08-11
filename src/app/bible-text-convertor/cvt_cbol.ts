@@ -4,7 +4,7 @@ import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParentheses
 import { AddBrStdandard } from '../version-parellel/one-ver/AddBrStdandard';
 import { SplitStringByRegexVer2 } from '../tools/SplitStringByRegex';
 import { AddSnInfo } from '../version-parellel/one-ver/AddSnInfo';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { AddReferenceCnv } from '../version-parellel/one-ver/AddReferenceCnv';
 import { AddReferenceFromOrigDictText } from '../version-parellel/one-ver/AddReferenceFromOrigDictText';
 /** 原文直譯 */

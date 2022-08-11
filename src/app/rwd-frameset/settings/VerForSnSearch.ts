@@ -9,7 +9,7 @@ export class VerForSnSearch extends LocalStorageStringBase {
   _getKey(): string {
     return 'SearchBibleSnVersion';
   }
-  _getDefaultValue(): string {    
+  override _getDefaultValue(): string {    
     return 'unv';
   }
 }

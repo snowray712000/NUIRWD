@@ -1,6 +1,6 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DOneLine, IAddBase } from '../../bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq'; // Enumerable 
 import { getNextAddress, isTheSameAddress } from 'src/app/bible-address/DAddress';
 /** 'a' 和合本 併入上節 Ps8:6-9 或 Ps8:6-9.60:1-2.92:1-4.Ps8:8 */
 export class AddMergeVerse implements IAddBase {
@@ -10,14 +10,14 @@ export class AddMergeVerse implements IAddBase {
     let isExistMerge = false;
     for (let i1 = 0; i1 < lines.length; i1++) {
       const it1 = lines[i1];
-      const isMerge = it1.children.length === 1 && it1.children[0].w === 'a';
+      const isMerge = it1.children!.length === 1 && it1.children![0].w === 'a';
       if (false === isMerge) {
         re.push(it1);
         continue;
       }
       const fnChangeMerge = () => {
-        it1.children[0].w = '〖併入上節〗';
-        it1.children[0].isMerge = 1;
+        it1.children![0].w = '〖併入上節〗';
+        it1.children![0].isMerge = 1;
         re.push(it1);
         isExistMerge = true;
       };
@@ -31,7 +31,7 @@ export class AddMergeVerse implements IAddBase {
         continue;
       }
       const fnMergeWithPreVerse = () => {
-        lines[i1 - 1].addresses.addRange(it1.addresses.verses);
+        lines[i1 - 1].addresses!.addRange(it1.addresses!.verses);
         lines.splice(i1, 1);
         i1--;
         isExistMerge = true;
@@ -46,11 +46,11 @@ export class AddMergeVerse implements IAddBase {
       return false;
     }
 
-    const v1 = LQ.from(lineA.addresses.verses).lastOrDefault();
-    const v2 = LQ.from(lineB.addresses.verses).firstOrDefault();
-    if (v1.book !== v2.book) {
+    const v1 = Enumerable.from(lineA.addresses!.verses).lastOrDefault();
+    const v2 = Enumerable.from(lineB.addresses!.verses).firstOrDefault();
+    if ( v1 == undefined || v2 == undefined || v1!.book != v2!.book ) {
       return false;
     }
-    return isTheSameAddress(getNextAddress(v1), v2);
+    return isTheSameAddress(getNextAddress(v1)!, v2);
   }
 }

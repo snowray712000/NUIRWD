@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 let r1 = [        
     { big5: "全部", gb: "全部" },
     { big5: "舊約", gb: "旧约" },
@@ -46,7 +46,7 @@ let r1 = [
 
 ];
 export function getBig5Text(str: string) {
-    let r2 = LQ.from(r1).firstOrDefault(a1 => a1.gb === str);
+    let r2 = Enumerable.from(r1).firstOrDefault(a1 => a1.gb === str);
     if (r2 !== undefined) return r2.big5;
     return str;
 }
@@ -56,7 +56,7 @@ export function getGbText(str: string) {
         return str;
     }
 
-    let r2 = LQ.from(r1).firstOrDefault(a1 => a1.big5 === str);
+    let r2 = Enumerable.from(r1).firstOrDefault(a1 => a1.big5 === str);
     if (r2 !== undefined) return r2.gb;
     return str;
 }
@@ -65,8 +65,9 @@ import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/Displ
 
 @Pipe({ name: 'gbpipe' })
 export class GbPipe implements PipeTransform {
-    transform(value: string, args: string[]): any {
-        if (!value) return value;
+    // transform(value: string, args: string[]): string {
+        transform(value: string): string {
+        if (value == undefined) { return undefined; }
 
         return getGbText(value);
     }

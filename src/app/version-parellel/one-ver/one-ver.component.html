@@ -15,9 +15,9 @@
         <a *ngIf="isShowMapPhoto && it2.isMap" [href]="getMapLink(it2)" target="_blank" [class.is-map]="it2.isMap" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined"></a>
         <a *ngIf="isShowMapPhoto && it2.isPhoto" [href]="getPhotoLink(it2)" target="_blank"
           [class.is-photo]="it2.isPhoto" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined"></a>
-        <span (click)="onClickRef(it2);" *ngIf="it2.isRef===1" class='isRef' [class.isTitle1]="it2.isTitle1===1" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined" [class.isParenthesesFW2]="it2.isParentheses2!==undefined">{{it2.w}}</span>
+        <span (click)="onClickRef(it2);" *ngIf="it2.isRef===1" class='isRef' [class.isTitle1]="it2.isTitle1===1" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined" [class.isParenthesesFW2]="it2.isParenthesesFW2!==undefined">{{it2.w}}</span>
         <br *ngIf="it2.isBr===1"/>
-        <span *ngIf="it2.sn===undefined && !it2.isMap && !it2.isPhoto && it2.isRef!==1 && it2.isBr!==1" [class.isTitle1]="it2.isTitle1===1" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined" [class.isParenthesesFW2]="it2.isParentheses2!==undefined">{{it2.w}}</span>
+        <span *ngIf="it2.sn===undefined && !it2.isMap && !it2.isPhoto && it2.isRef!==1 && it2.isBr!==1" [class.isTitle1]="it2.isTitle1===1" [class.isParenthesesHW]="it2.isParenthesesHW!==undefined" [class.isParenthesesFW]="it2.isParenthesesFW!==undefined" [class.isParenthesesFW2]="it2.isParenthesesFW2!==undefined">{{it2.w}}</span>
       </span>
     </span>
 

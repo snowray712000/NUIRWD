@@ -6,8 +6,8 @@ import { DialogDisplaySettingComponent } from './../rwd-frameset/dialog-display-
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { getAddressesText } from 'src/app/bible-address/getAddressesText';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
-import * as LQ from 'linq';
-import { of, Observable, observable } from 'rxjs';
+import Enumerable from 'linq';
+import { of, Observable, observable, lastValueFrom } from 'rxjs';
 import { Component, OnInit, Inject, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -39,51 +39,51 @@ export class VersionInterlaceComponent implements OnInit {
   datas: DOneLine[] = [];
   versions: string[] = [];
   verseRange: VerseRange = new VerseRange();
-  datasQ: IDatasQueryor = new DataForInterlaceQueryor();  
-  @ViewChild('versionInterlace', null) divVersionInterlace;
+  datasQ: IDatasQueryor = new DataForInterlaceQueryor();
+  @ViewChild('versionInterlace') divVersionInterlace;
   // tslint:disable-next-line: max-line-length
   constructor(public dialog: MatDialog, private changeDetector: ChangeDetectorRef) {
-  
+
   }
   ngOnInit() {
-    
-    const pthis = this;
+
+    const that = this;
     this.datasQ = getDataQDefaultOrNot();
-    
+
     getVersionChangedObserable().subscribe(vers => {
       if (isTheSame() === false) {
-        pthis.versions = vers;
-        if (isEnoughForQuery()) pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
+        that.versions = vers;
+        if (isEnoughForQuery()) that.reRefreshDatasAndMarkupNeedUpdateAsync();
       }
 
       return;
       function isTheSame() {
-        if (pthis.versions === undefined) { return false; }
-        if (pthis.versions.length !== vers.length) { return false; }
+        if (that.versions === undefined) { return false; }
+        if (that.versions.length !== vers.length) { return false; }
 
-        const rr1 = LQ.from(pthis.versions);
-        return LQ.from(vers).all(a1 => rr1.contains(a1));
+        const rr1 = Enumerable.from(that.versions);
+        return Enumerable.from(vers).all(a1 => rr1.contains(a1));
       }
     });
     getRouteChangedObserable().subscribe(async verseRange => {
-    if (isTheSame() === false) {
-      pthis.verseRange = verseRange;
-        if (isEnoughForQuery()) pthis.reRefreshDatasAndMarkupNeedUpdateAsync();
+      if (isTheSame() === false) {
+        that.verseRange = verseRange;
+        if (isEnoughForQuery()) that.reRefreshDatasAndMarkupNeedUpdateAsync();
       }
       return;
       function isTheSame() {
-        return VerseRange.isTheSame(pthis.verseRange, verseRange);
+        return VerseRange.isTheSame(that.verseRange, verseRange);
       }
-    });    
-    
+    });
+
     // 若不加這個，一開始就會卡在那邊。
     setTimeout(() => {
-      this.reRefreshDatasAndMarkupNeedUpdateAsync();
+      that.reRefreshDatasAndMarkupNeedUpdateAsync();
     }, 300);
-    
+
     return;
     function getDataQDefaultOrNot() {
-      return pthis.datasQ !== undefined ? pthis.datasQ : new VersionTnterlaceDatasQueryorStandardTestData();
+      return that.datasQ !== undefined ? that.datasQ : new VersionTnterlaceDatasQueryorStandardTestData();
     }
     function getVersionChangedObserable(): Observable<string[]> {
       return VerForMain.s.changed$;
@@ -94,27 +94,27 @@ export class VersionInterlaceComponent implements OnInit {
       return routeFrame.routeTools.verseRange$;
     }
     function isEnoughForQuery() {
-      if (pthis.versions === undefined || pthis.versions.length === 0) { return false; }
-      if (pthis.verseRange === undefined || pthis.verseRange.verses.length === 0) { return false; }
+      if (that.versions === undefined || that.versions.length === 0) { return false; }
+      if (that.verseRange === undefined || that.verseRange.verses.length === 0) { return false; }
       return true;
     }
   }
   async reRefreshDatasAndMarkupNeedUpdateAsync() {
-    const pthis = this;
+    const that = this;
     // console.log(pthis.verseRange.toStringChineseShort());
     // console.log(pthis.versions.join(','));    
-    
+
     var dt1 = new TestTime(false)
     // 清空後，再作，時間會大幅度縮短 (3秒 變1秒)
-    pthis.datas = [] 
-    dt1.log('清空 ');    
+    that.datas = []
+    dt1.log('清空 ');
 
-    let re = await this.datasQ.queryDatasAsync({ addresses: pthis.verseRange, versions: pthis.versions });
+    let re = await this.datasQ.queryDatasAsync({ addresses: that.verseRange, versions: that.versions });
     dt1.log('整個過程 ');
-    pthis.datas = re; 
-    
+    that.datas = re;
+
     // var dom = pthis.divVersionInterlace.nativeElement as HTMLElement
-    
+
     setTimeout(() => {
       dt1.log('設到datas後 ');
     }, 0);
@@ -137,7 +137,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     dt1.log('取得資料 ')
 
     // 各別 cvt
-    const re2b = cvtb(re1b) 
+    const re2b = cvtb(re1b)
     dt1.log('cvtb ')
 
     let re3b = mergeDifferentVersionResult(re2b, args.addresses)
@@ -153,23 +153,23 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     return re3b
     // 各別 cvt
     const re2 = cvt();
-    
+
     // 準備合併 (章節順序-多版本交錯)
     const datas1 = await Promise.all(re2);
-    
+
     let re3 = mergeDifferentVersionResult(datas1, args.addresses); // 1-3ms
-    
+
     // 合併(經文若連續)
     if (DisplayMergeSetting.s.getFromLocalStorage()) {
       re3 = mergeDOneLineIfAddressContinue(re3);
     }
     return re3;
-    
+
     function isValid() {
-      if (LQ.from([args, args.versions, args.addresses]).any(a1 => a1 === undefined)) {
+      if (Enumerable.from([args, args.versions, args.addresses]).any(a1 => a1 === undefined)) {
         return false;
       }
-      if (LQ.from([args.addresses.verses.length, args.versions.length]).any(a1 => a1 === 0)) {
+      if (Enumerable.from([args.addresses.verses.length, args.versions.length]).any(a1 => a1 === 0)) {
         return false;
       }
       return true;
@@ -179,8 +179,10 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       interface IOneVerQ { qDataAsync: (ver: string, isGb: boolean) => Promise<{ record: DRecord[] }>; }
 
       const apiQ: IOneVerQ = getQsbQ(); // getTestQ();
+      //const apiQ = getTestQ()
       const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB();
-      const re1Api = LQ.from(args.versions).select(ver => apiQ.qDataAsync(ver, isGb)).toArray();
+      const re1Api = Enumerable.from(args.versions).select(ver => apiQ.qDataAsync(ver, isGb)).toArray();
+      
       return re1Api;
 
       function getTestQ(): IOneVerQ {
@@ -213,38 +215,39 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       }
       function getQsbQ(): IOneVerQ {
         return {
-          async qDataAsync(ver, gb) {            
-            const qstr = DisplayLangSetting.s.getValueIsGB()? args.addresses.toStringChineseGBShort():
-             args.addresses.toStringChineseShort();            
-            
+          async qDataAsync(ver, gb) {
+            const qstr = DisplayLangSetting.s.getValueIsGB() ? args.addresses.toStringChineseGBShort() :
+              args.addresses.toStringChineseShort();
+
             const arg: DQsbArgs = {
               qstr,
               bibleVersion: ver,
               isExistStrong: true,
               isSimpleChinese: gb,
             };
-            const rre1 = await new ApiQsb().queryQsbAsync(arg).toPromise();
+            const rre1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))            
+            //const rre1 = await new ApiQsb().queryQsbAsync(arg).toPromise();
             return rre1 as { record: DRecord[] };
           }
         };
       }
     }
-    function cvtb(record: {record:DRecord[]}[]){
-      const rre2 = LQ.from(args.versions)
-      .zip(record, (a1,a2)=> ({ver:a1,reQ:a2}))
-      .select(a1=>{
-        try{
-          const rr1 = a1.reQ
-          const rr2 = cvtOne(a1.ver,rr1)
-          return rr2
-        }catch {
-          return [{ children: [{ w: 'QSB API錯誤 #' + args.addresses.toStringChineseShort() + '|。' }], ver: a1.ver }];
-        }
-      }).toArray()
+    function cvtb(record: { record: DRecord[] }[]) {
+      const rre2 = Enumerable.from(args.versions)
+        .zip(record, (a1, a2) => ({ ver: a1, reQ: a2 }))
+        .select(a1 => {
+          try {
+            const rr1 = a1.reQ
+            const rr2 = cvtOne(a1.ver, rr1)
+            return rr2
+          } catch {
+            return [{ children: [{ w: 'QSB API錯誤 #' + args.addresses.toStringChineseShort() + '|。' }], ver: a1.ver }];
+          }
+        }).toArray()
 
       return rre2
       function cvtOne(ver: string, reQ: { record: DRecord[] }): DOneLine[] {
-        let lines1 = LQ.from(reQ.record).select(a1 => {
+        let lines1 = Enumerable.from(reQ.record).select(a1 => {
           // verse range
           const vr = new VerseRange();
           const bk = new BookNameAndId().getIdOrUndefined(a1.chineses);
@@ -256,11 +259,11 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
 
         var lines2 = cvtCore()
 
-        LQ.from(lines2).forEach(a1=>a1.ver=ver)
+        Enumerable.from(lines2).forEach(a1 => a1.ver = ver)
 
         return lines2;
 
-        function cvtCore(){
+        function cvtCore() {
           if (ver === 'ncv') {
             // lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
             return cvt_others(lines1, args.addresses, ver);
@@ -275,7 +278,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     }
 
     function cvt() {
-      const rre2 = LQ.from(args.versions)
+      const rre2 = Enumerable.from(args.versions)
         .zip(re1, (a1, a2) => ({ ver: a1, reQ: a2 }))
         .select(async a1 => {
           try {
@@ -290,7 +293,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       return rre2;
 
       function cvtOne(ver: string, reQ: { record: DRecord[] }): DOneLine[] {
-        let lines1 = LQ.from(reQ.record).select(a1 => {
+        let lines1 = Enumerable.from(reQ.record).select(a1 => {
           // verse range
           const vr = new VerseRange();
           const bk = new BookNameAndId().getIdOrUndefined(a1.chineses);
@@ -310,7 +313,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
           lines1 = cvt_others(lines1, args.addresses, ver);
         }
 
-        LQ.from(lines1).forEach(a1 => a1.ver = ver);
+        Enumerable.from(lines1).forEach(a1 => a1.ver = ver);
         return lines1;
       }
     }

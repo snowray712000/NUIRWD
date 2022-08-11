@@ -1,20 +1,20 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
 
 export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
   const isDebug = false;
   const r1 = getMaxLevel();
-  LQ.range(0, r1).forEach(doLevel);
+  Enumerable.range(0, r1).forEach(doLevel);
   return datas;
   /** 若得到 1，只要分析第0層。 */
   function getMaxLevel() {
-    return LQ.from(datas).select(a1 => a1.list === undefined ? -1 : a1.list.length).max();
+    return Enumerable.from(datas).select(a1 => a1.list === undefined ? -1 : a1.list.length).max();
   }
   function doLevel(level: number) {
     if (isDebug) { console.log('dolevel ' + level); }
     const orders = getOrders();
     if (isDebug) { console.log('get orders ' + JSON.stringify(orders)); }
-    LQ.from(orders).reverse().forEach(doOrder);
+    Enumerable.from(orders).reverse().forEach(doOrder);
     if (isDebug) { console.log('after do level, datas ' + JSON.stringify(datas)); }
     return;
     function getOrders() {
@@ -22,11 +22,11 @@ export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
       const rr2 = rr1.map(a1 => ([a1, getEnd(a1)]));
       return rr2;
       function getLevels() {
-        return LQ.from(datas).select(a1 => a1.list === undefined ? 0 : a1.list.length).toArray();
+        return Enumerable.from(datas).select(a1 => a1.list === undefined ? 0 : a1.list.length).toArray();
       }
       function getStarts() {
         const r1Levels = getLevels();
-        const reOrderStarts = LQ.range(0, r1Levels.length).where(a1 => {
+        const reOrderStarts = Enumerable.range(0, r1Levels.length).where(a1 => {
           if (a1 !== 0) {
             if (r1Levels[a1 - 1] === level && r1Levels[a1] === level + 1) {
               return true;
@@ -41,7 +41,7 @@ export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
       }
       function getEnd(idxS: number) {
         const r1Levels = getLevels();
-        const rrr2 = LQ.from(r1Levels).skip(idxS).indexOf(a1 => a1 <= level);
+        const rrr2 = Enumerable.from(r1Levels).skip(idxS).indexOf(a1 => a1 <= level);
         if (rrr2 === -1) { return datas.length - 1; } // 0based, 所以 -1
         return rrr2 - 1 + idxS; // -1: 上一個, + idxS: 因為當時skip掉
       }
@@ -57,7 +57,7 @@ export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
       lists.forEach(a1 => { a1[0] += 1; a1[1] += 1; });
 
       // do each list reverse
-      LQ.from(lists).reverse().forEach(doList);
+      Enumerable.from(lists).reverse().forEach(doList);
       return;
       function getLists() {
         // {idx:0,item:1} 表示在 data 中 index 是0, item是指 [1]
@@ -65,7 +65,7 @@ export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
         // {idx:2,item:1}
         // {idx:3,item:2}
         // 以上例子, 就會得到 list 0,2 與 3,3
-        const rrr1 = LQ.from(datas).skip(order[0]).take(order[1] - order[0] + 1)
+        const rrr1 = Enumerable.from(datas).skip(order[0]).take(order[1] - order[0] + 1)
           .select((a1, i1) => ({ idx: i1 + order[0], item: a1.list[level] }))
           .toArray();
 
@@ -84,7 +84,7 @@ export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
         // {idx:-1,item:-1} // 額外加的, 這樣使下面簡易
         const rrrre = [];
         let lastIdx = 0;
-        LQ.from(rrr1).concat([{ idx: -1, item: -1 }]).forEach((a1, i1) => {
+        Enumerable.from(rrr1).concat([{ idx: -1, item: -1 }]).forEach((a1, i1) => {
           if (i1 === 0) {
             lastIdx = a1.idx;
             return;

@@ -4,7 +4,7 @@ import { ApiSobj, DApiSobOneRecord, DApiSobjResult } from 'src/app/fhl-api/ApiSo
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
 import { deepCopy } from 'src/app/tools/deepCopy';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 export class AddMapPhotoInfo {
   private re3: DApiSobjResult[];
   /** const re3 = await this.getPhotoMapFromApi(verses); */
@@ -39,7 +39,7 @@ export class AddMapPhotoInfo {
       na.push(it1.c2name);
       na.push(it1.mname);
       na.push(it1.ename);
-      const na2 = LQ.from(na).distinct().where(a1 => a1 !== undefined && a1.length !== 0).orderBy(a1 => -a1.length).toArray();
+      const na2 = Enumerable.from(na).distinct().where(a1 => a1 !== undefined && a1.length !== 0).orderBy(a1 => -a1.length).toArray();
       // console.log(na2);
       na2.forEach(a1 => naAll.push(a1));
       if (na2.length > 0) {
@@ -50,7 +50,7 @@ export class AddMapPhotoInfo {
         map2.set(reg, ky);
       }
     }
-    naAll = LQ.from(naAll).distinct().where(a1 => a1 !== undefined && a1.length !== 0).orderBy(a1 => -a1.length).toArray();
+    naAll = Enumerable.from(naAll).distinct().where(a1 => a1 !== undefined && a1.length !== 0).orderBy(a1 => -a1.length).toArray();
     if (naAll.length > 0) {
       // console.log(naAll);
       regAll = new RegExp(`(?:${naAll.join('|')})`, 'ig');
@@ -72,7 +72,7 @@ export class AddMapPhotoInfo {
           reThisLine.push(it2);
           continue;
         }
-        const r2 = LQ.from(keys2).firstOrDefault(a1 => a1.exec(it2.w) !== null);
+        const r2 = Enumerable.from(keys2).firstOrDefault(a1 => a1.exec(it2.w) !== null);
         r2.lastIndex = -1; // 要設定回-1, 因為是 global, 不然下次找到同個,就會找不到了
         const r4 = new SplitStringByRegexVer2().main(it2.w, r2);
         const idObj = map2.get(r2);

@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DUTFn, DUTClass } from './qunits.component';
 /** UT unit test */
 export class UT {
@@ -10,7 +10,7 @@ export class UT {
   static async testAsync(): Promise<DUTClass[]> {
     const groups = UT.groups;
 
-    const reTest = await Promise.all(LQ.from(groups).select(a1 => a1.fn()).toArray());
+    const reTest = await Promise.all(Enumerable.from(groups).select(a1 => a1.fn()).toArray());
     const re: DUTClass[] = [];
     groups.forEach((a1, i1) => {
       re.push({ na: getFuntionName(a1.fn), fns: reTest[i1] });

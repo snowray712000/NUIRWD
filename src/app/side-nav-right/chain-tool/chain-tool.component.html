@@ -8,7 +8,7 @@
           <span>{{it2.w}}</span>
         </ng-container>
         <ng-template #elseTemplate>
-          <span [attr.des]="it2.des" class='reference' (click)="onClickRef(it2)">{{it2.w}}</span>
+          <span [attr.des]="it2.des" class='reference' (click)="onClickRef({w:it2.w!,des:it2.des!})">{{it2.w}}</span>
         </ng-template>
       </span>
     </div>

@@ -6,7 +6,7 @@ import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
 export class DisplayLangSetting extends LocalStorageStringBase {
   static s = new DisplayLangSetting();
   _getKey() { return 'displaylang'; }
-  _getDefaultValue() { return '創'; }
+  override _getDefaultValue() { return '創'; }
 
   /** this.getFromLocalStorage() === '创'; */
   getFromLocalStorageIsGB(): boolean {

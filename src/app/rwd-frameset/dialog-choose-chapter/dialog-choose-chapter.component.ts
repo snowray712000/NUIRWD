@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
 import { FontSize } from '../settings/FontSize';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { getChapCount } from 'src/app/const/count-of-chap';
@@ -57,26 +57,26 @@ export class DialogChooseChapterComponent implements OnInit {
     }
     // return ['創','初','利','民','申'];
     function getBooksOld() {
-      return LQ.from(type1[0].bks).select(a1 => ({
+      return Enumerable.from(type1[0].bks).select(a1 => ({
         book: a1,
         na: BibleBookNames.getBookName(a1, styles)
       })).toArray();
     }
     function getBooksNew() {
-      return LQ.from(type1[1].bks).select(a1 => ({
+      return Enumerable.from(type1[1].bks).select(a1 => ({
         book: a1,
         na: BibleBookNames.getBookName(a1, styles)
       })).toArray();
     }
     function getBooksOld2() {
-      return LQ.from(type1[2].bks).select(a1 => ({
+      return Enumerable.from(type1[2].bks).select(a1 => ({
         book: a1,
         na: BibleBookNames.getBookName(a1, styles)
       })).toArray();
     }
     function getChaps() {
       const r1 = getChapCount(pthis.book);
-      return LQ.range(1, r1).select(a1 => ({ book: a1, na: a1.toString() })).toArray();
+      return Enumerable.range(1, r1).select(a1 => ({ book: a1, na: a1.toString() })).toArray();
     }
   }
 

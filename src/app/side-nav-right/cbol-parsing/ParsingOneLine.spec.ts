@@ -1,5 +1,5 @@
 import { ParsingOneLine } from './ParsingOneLine';
-import { ApiQb } from 'src/app/fhl-api/ApiQb';
+import { ApiQp } from 'src/app/fhl-api/ApiQp';
 
 describe('ParsingOneLine', () => {
   it('第1行', () => {
@@ -77,7 +77,7 @@ describe('ParsingOneLine', () => {
   });
 });
 function gCase(bk, ch, vs) {
-  new ApiQb().queryQbAsync(bk, ch, vs).toPromise().then(a1 => {
+  new ApiQp().queryQpAsync(bk, ch, vs).toPromise().then(a1 => {
     console.log(a1);
     console.log(JSON.stringify(a1));
   });

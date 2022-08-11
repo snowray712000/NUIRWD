@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { UT } from './UT';
 export async function test_techDOMParserTests() {
   const console = { isDebug: true, log: a1 => { if (console.isDebug) { globalThis.console.log(a1); } } };
@@ -19,7 +19,7 @@ export async function test_techDOMParserTests() {
     console.log(r2.childNodes);
 
     // 03. 使用 - 取得 class (nodeType,as HTMLElement, getAttribute)
-    const r3 = LQ.from(r2.childNodes).select(a1 => {
+    const r3 = Enumerable.from(r2.childNodes).select(a1 => {
       // a1 as ChildNode
       if (a1.nodeType === 3) {
         return ''; // text
@@ -43,7 +43,7 @@ export async function test_techDOMParserTests() {
         if (arg1.nodeType === 3) {
           return [arg1];
         } else {
-          const rr2 = LQ.from(arg1.childNodes).select(a1 => getNodes(a1)).toArray();
+          const rr2 = Enumerable.from(arg1.childNodes).select(a1 => getNodes(a1)).toArray();
           const rr3 = [];
           const rr4 = arg1 as HTMLElement; // 取得 class 之類的
           for (const it2 of rr2) {

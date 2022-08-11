@@ -11,5 +11,5 @@ export class EventVerseChanged extends LocalStorageJsonBase<DAddress>{
   _getKey(): string {
     return 'EventVerseChanged';
   }
-  _getDefaultValue() { return { book: 45, chap: 1, verse: 1 }; }
+  override _getDefaultValue() { return { book: 45, chap: 1, verse: 1 }; }
 }

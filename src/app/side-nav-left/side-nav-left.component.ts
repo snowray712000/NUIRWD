@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
 import { MatSelectionListChange, MatSelectionList } from '@angular/material/list';
-import { longStackSupport } from 'q';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
 import { Observable, Subscriber } from 'rxjs';

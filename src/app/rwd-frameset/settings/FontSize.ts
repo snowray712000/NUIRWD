@@ -20,5 +20,5 @@ export class FontSize extends LocalStorageNumberBase {
   _getKey(): string {
     return 'fontsize';
   }
-  _getDefaultValue(): number { return 1.0; }
+  override _getDefaultValue(): number { return 1.0; }
 }

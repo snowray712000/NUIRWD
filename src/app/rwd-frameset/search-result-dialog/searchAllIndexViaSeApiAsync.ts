@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { VerForSearch } from './../settings/VerForSearch';
 import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
@@ -28,7 +28,7 @@ export async function searchAllIndexViaSeApiAsync(arg: {
   const url = new FhlUrl().getJsonUrl2() + 'se.php';
   let version = arg.version === undefined ? VerForSearch.s.getValue() : arg.version;
   //
-  if (arg.orig !== 0 && false === LQ.from(['rcuv', 'unv', 'kjv']).contains(version)) {
+  if (arg.orig !== 0 && false === Enumerable.from(['rcuv', 'unv', 'kjv']).contains(version)) {
     version = 'unv'; // kjv 與 和合本２０１０好像不能找原文彙編
   }
 

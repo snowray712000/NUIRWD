@@ -1,4 +1,4 @@
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -57,7 +57,7 @@ export class DialogDisplaySettingComponent implements OnInit {
     DisplayLangSetting.s.updateValueAndSaveToStorageAndTriggerEvent(text);
     if ( isGb != DisplayLangSetting.s.getValueIsGB() ){
       alert('重新載入，使其生效')
-      location.reload(true)
+      location.reload()
     }
   }
   isMergeActived(text: string) {

@@ -1,5 +1,5 @@
 import { DText } from './../../bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { assert } from 'src/app/tools/assert';
 import { DListAdd } from 'src/app/rwd-frameset/dtexts-rendor/addListStartAndEnd';
 
@@ -25,17 +25,17 @@ export function prepareDataForAddOrderAndListAtComment(datas: DDataSpace[]): DLi
     return core();
   } else {
     const r4b = prepareDataForAddOrderAndListAtComment(reHeadAndTail[1]);
-    const r4a = LQ.from(reHeadAndTail[0]).select(a1 => cvtHeadOrBody(a1));
-    const r4c = LQ.from(reHeadAndTail[2]).select(a1 => cvtHeadOrBody(a1));
+    const r4a = Enumerable.from(reHeadAndTail[0]).select(a1 => cvtHeadOrBody(a1));
+    const r4c = Enumerable.from(reHeadAndTail[2]).select(a1 => cvtHeadOrBody(a1));
     const r4 = r4a.concat(r4b).concat(r4c).toArray();
     return r4;
   }
   return [];
   function core() {
     // tslint:disable-next-line: no-string-literal
-    LQ.from(datasClone).forEach((a1, i1) => a1['idx'] = i1);
+    Enumerable.from(datasClone).forEach((a1, i1) => a1['idx'] = i1);
     setBrSpace();
-    const idxInit = LQ.range(0, datasClone.length).toArray();
+    const idxInit = Enumerable.range(0, datasClone.length).toArray();
     const idxListData = getFitMinSpaceAndRecursiveChildren(datasClone, idxInit);
     if (isDebug) {
       console.log(JSON.stringify(idxListData));
@@ -48,7 +48,7 @@ export function prepareDataForAddOrderAndListAtComment(datas: DDataSpace[]): DLi
     }
     return r4b;
     function setBrSpace() {
-      LQ.from(datasClone).forEach((a1, i1) => {
+      Enumerable.from(datasClone).forEach((a1, i1) => {
         if (a1.isBr === 1) {
           a1.space = datasClone[i1 - 1].space;
         }
@@ -59,7 +59,7 @@ export function prepareDataForAddOrderAndListAtComment(datas: DDataSpace[]): DLi
 
 // tslint:disable-next-line: max-line-length
 function cvtToDListAdd(idxListData: { idx: any; list: number[]; }[], datasClone: DDataSpace[]) {
-  return LQ.from(idxListData).concat().orderBy(a1 => a1.idx).select(a1 => {
+  return Enumerable.from(idxListData).concat().orderBy(a1 => a1.idx).select(a1 => {
     const data: DText = {};
     const ref = datasClone[a1.idx];
     if (ref.w !== undefined) {
@@ -76,7 +76,7 @@ function cvtToDListAdd(idxListData: { idx: any; list: number[]; }[], datasClone:
 
 function doChildren(children: { idx: any; list: number[]; }[], datasClone: DDataSpace[]) {
   const re = [];
-  const r3a = LQ.range(0, children.length - 1)
+  const r3a = Enumerable.range(0, children.length - 1)
     .select(i1 => doChild(datasClone, children[i1], children[i1 + 1])).toArray();
 
   for (const it1 of r3a) {
@@ -89,10 +89,10 @@ function doChildren(children: { idx: any; list: number[]; }[], datasClone: DData
 
 function doChild(datas: DDataSpace[], arg1: { idx: number, list: number[] }, arg2: { idx: number, list: number[] }) {
   // console.log('child');
-  const idxs = LQ.range(arg1.idx + 1, arg2.idx - arg1.idx - 1).toArray();
+  const idxs = Enumerable.range(arg1.idx + 1, arg2.idx - arg1.idx - 1).toArray();
 
   const r2 = getFitMinSpaceAndRecursiveChildren(datas, idxs);
-  LQ.from(r2).forEach(a1 => a1.list.splice(0, 0, ...arg1.list));
+  Enumerable.from(r2).forEach(a1 => a1.list.splice(0, 0, ...arg1.list));
   // console.log(JSON.stringify(r2));
   return r2;
 }
@@ -113,7 +113,7 @@ function getFitMinSpaceAndRecursiveChildren(datas: DDataSpace[], idxThisRange: n
     console.log('minSpace ' + minSpace);
   }
 
-  const dataFitSpace = LQ.from(datas).skip(idxThisRange[0]).take(idxThisRange.length).where(a1 => {
+  const dataFitSpace = Enumerable.from(datas).skip(idxThisRange[0]).take(idxThisRange.length).where(a1 => {
     if (a1.isBr === 1 && a1.space !== undefined && (a1.space === minSpace || a1.space === minSpace + 1)) {
       return true;
     }
@@ -131,7 +131,7 @@ function getFitMinSpaceAndRecursiveChildren(datas: DDataSpace[], idxThisRange: n
   }
   const listThisLevel = setListInThisLevel();
   const reChildren = doChildren2();
-  const r4 = LQ.from(listThisLevel).concat(reChildren).orderBy(a1 => a1.idx).toArray();
+  const r4 = Enumerable.from(listThisLevel).concat(reChildren).orderBy(a1 => a1.idx).toArray();
   return r4;
 
   function doChildren2() {
@@ -156,7 +156,7 @@ function getFitMinSpaceAndRecursiveChildren(datas: DDataSpace[], idxThisRange: n
     }
     function generatePair(allNode: { idx?: number, list?: number[] }[]) {
       const rre: { idx?: number, list?: number[] }[][] = [];
-      LQ.range(1, allNode.length - 1).forEach(i1 => {
+      Enumerable.range(1, allNode.length - 1).forEach(i1 => {
         const pre = allNode[i1 - 1];
         const cur = allNode[i1];
         if (cur.idx === pre.idx + 1) { } else {
@@ -166,8 +166,8 @@ function getFitMinSpaceAndRecursiveChildren(datas: DDataSpace[], idxThisRange: n
       return rre;
     }
     function tryAddVirtualNode(allNode: { idx?: number, list?: number[] }[]) {
-      const idxFirstThisLevel = LQ.from(idxThisRange).firstOrDefault();
-      const idxLastThisLevel = LQ.from(idxThisRange).lastOrDefault();
+      const idxFirstThisLevel = Enumerable.from(idxThisRange).firstOrDefault();
+      const idxLastThisLevel = Enumerable.from(idxThisRange).lastOrDefault();
       if (allNode[0].idx !== idxFirstThisLevel) {
         allNode.splice(0, 0, { idx: idxFirstThisLevel - 1, list: [1] });
       }
@@ -205,20 +205,20 @@ function getFitMinSpaceAndRecursiveChildren(datas: DDataSpace[], idxThisRange: n
 /** 若回傳 undefined, 表示中間已沒有東西了 */
 function getSpaceMin(datas: DDataSpace[], idxThisRange: number[]) {
   // tslint:disable-next-line: max-line-length
-  const r1 = LQ.from(datas).skip(idxThisRange[0]).take(idxThisRange.length).where(a1 => a1.w !== undefined && a1.w.length !== 0).select(a1 => a1.space !== undefined ? a1.space : 0).toArray();
+  const r1 = Enumerable.from(datas).skip(idxThisRange[0]).take(idxThisRange.length).where(a1 => a1.w !== undefined && a1.w.length !== 0).select(a1 => a1.space !== undefined ? a1.space : 0).toArray();
 
   if (r1.length === 0) {
     return undefined;
   } else {
-    return LQ.from(r1).min();
+    return Enumerable.from(r1).min();
   }
 }
 
 function splitHeadAndBodyAndTail(datas: DDataSpace[]) {
-  const r1 = LQ.from(datas).takeWhile(a1 => isHeadOrTail(a1)).toArray();
-  const r2 = LQ.from(datas).reverse().takeWhile(a1 => isHeadOrTail(a1)).reverse().toArray();
-  // const rBody = LQ.from(datas).skipWhile(a1 => isHeadOrTail(a1)).takeWhile(a1 => !isHeadOrTail(a1)).toArray();
-  const rBody = LQ.from(datas).skipWhile(a1 => isHeadOrTail(a1))
+  const r1 = Enumerable.from(datas).takeWhile(a1 => isHeadOrTail(a1)).toArray();
+  const r2 = Enumerable.from(datas).reverse().takeWhile(a1 => isHeadOrTail(a1)).reverse().toArray();
+  // const rBody = Enumerable.from(datas).skipWhile(a1 => isHeadOrTail(a1)).takeWhile(a1 => !isHeadOrTail(a1)).toArray();
+  const rBody = Enumerable.from(datas).skipWhile(a1 => isHeadOrTail(a1))
     .reverse().skipWhile(a1 => isHeadOrTail(a1)).reverse().toArray();
   return [r1, rBody, r2];
 

@@ -1,5 +1,5 @@
 import { mergeTextAtCommentText } from 'src/app/side-nav-right/comment-tool/mergeTextAtCommentText';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { DText } from './../../bible-text-convertor/AddBase';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
@@ -85,7 +85,7 @@ export class Comment2DText {
       }
 
       function getMinSpaceItem() {
-        const rrr1 = LQ.from(arg1).where(a1 => a1.tpIdx !== undefined).select(a1 => a1.space);
+        const rrr1 = Enumerable.from(arg1).where(a1 => a1.tpIdx !== undefined).select(a1 => a1.space);
         if (rrr1.isEmpty()) {
           return 0;
         }
@@ -128,7 +128,7 @@ export class Comment2DText {
         // [1] 是空白數量，所以才從 2 開始
         // 也就是 tpIdx=0 就是這類 [零壹貳參肆伍陸柒捌玖拾]+、
         // =1 就是 [一二三四五六七八九十百]+、
-        const rrr2 = LQ.range(2, 6).firstOrDefault(aa1 => rr1[aa1] !== undefined);
+        const rrr2 = Enumerable.range(2, 6).firstOrDefault(aa1 => rr1[aa1] !== undefined);
         if (rrr2 == null) {
           return { space: rr1[1].length };
         }

@@ -3,7 +3,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { BookNameGetter } from 'src/app/const/book-name/BookNameGetter';
 import { deepCopy } from 'src/app/tools/deepCopy';
-import * as LINQ from 'linq';
+import Enumerable from 'linq';
 import { BookNameConstants } from 'src/app/const/book-name/BookNameConstants';
 /**
  * 當 原文字典查到時, 或是註釋, 應該都會需要這個
@@ -26,7 +26,7 @@ export class AddReferenceFromOrigDictText {
             r2.w = it3.w;
             re1.push(r2);
           } else {
-            const last = LINQ.from(re1).lastOrDefault();
+            const last = Enumerable.from(re1).lastOrDefault();
             // var last = FHL.linq_last(re2);
             if (last !== undefined && last.isRef === 1) {
               last.w += it3.exec[0];

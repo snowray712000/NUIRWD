@@ -1,6 +1,6 @@
 import { DOneLine } from './AddBase';
 import { VerseRange } from '../bible-address/VerseRange';
-import * as LQ from "linq";
+import Enumerable from "linq";
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
 import { AddSnInfo } from '../version-parellel/one-ver/AddSnInfo';

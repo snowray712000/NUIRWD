@@ -5,7 +5,7 @@ import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
 import { AddSnInfo } from '../version-parellel/one-ver/AddSnInfo';
 import { AddMapPhotoInfo } from '../version-parellel/one-ver/AddMapPhotoInfo';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { delay } from 'rxjs/operators';
 
 /**
@@ -48,7 +48,7 @@ function add_orig_keyword_one(it1:DOneLine,reg:RegExp,orig:string){
     if (it2.sn !== undefined) {
       const rr1 = reg.exec(it2.sn);
       if (rr1 != null) {
-        const idx = LQ.range(1, origs.length).firstOrDefault(a1 => rr1[a1] != null);
+        const idx = Enumerable.range(1, origs.length).firstOrDefault(a1 => rr1[a1] != null);
         it2.keyIdx0based = idx - 1;
         it2.key = origs[idx - 1];
       }

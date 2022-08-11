@@ -1,4 +1,4 @@
-import * as LINQ from "linq";
+import Enumerable from "linq";
 import { BookNameConstants } from './BookNameConstants';
 /** 用於 Regex 建立過程 */
 
@@ -25,7 +25,7 @@ export class BookNameGetter {
     return ['約貳', '約壹', '約參', '約翰壹書', '約翰貳書', '約翰參書', '约贰', '约壹', '约参', '约翰壹书', '约翰贰书', '约翰参书'];
   }
   static getAllOrderByLengthDesc() {
-    return LINQ.from(this.getAllNames()).orderByDescending(a1 => a1.length).toArray();
+    return Enumerable.from(this.getAllNames()).orderByDescending(a1 => a1.length).toArray();
   }
 
 }

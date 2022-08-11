@@ -5,6 +5,6 @@ export class IsColorKeyword extends LocalStorageBooleanBase {
   _getKey(): string {
     return 'IsEnableColorKeyword';
   }
-  _getDefaultValue() { return true; }
+  override _getDefaultValue() { return true; }
 
 }

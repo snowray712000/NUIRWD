@@ -1,7 +1,7 @@
 import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { DText } from 'src/app/bible-text-convertor/AddBase';
-import * as LQ from 'linq';
+import Enumerable from 'linq';
 import { getIdxPass } from './getIdxPass';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
 import { IsSnManager } from '../settings/IsSnManager';
@@ -9,10 +9,10 @@ import { SnActiveEvent } from "../settings/SnActiveEvent";
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
-import { ajaxGetJSON } from 'rxjs/internal/observable/dom/AjaxObservable';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFootComponent } from '../dialog-foot/dialog-foot.component';
+import { ApiRt } from 'src/app/fhl-api/ApiRt';
 @Component({
   selector: 'app-dtexts-rendor',
   templateUrl: './dtexts-rendor.component.html',
@@ -30,7 +30,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     const pthis = this;
     SnActiveEvent.s.changed$.subscribe(a1 => {
       if (pthis.datas !== undefined) {
-        const r1 = LQ.from(pthis.datas).where(a1 => a1.sn !== undefined);
+        const r1 = Enumerable.from(pthis.datas).where(a1 => a1.sn !== undefined);
         const r2 = g(a1);
         r1.forEach(a2 => a2.isSnActived = (r2 === g(a2) ? 1 : 0));
         pthis.detector.markForCheck();
@@ -47,7 +47,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     function isCommentUseDtextRendor() {
       // 如果是注釋, 表單載入就會跑第1次, 切換的時候, 不像 dialog 是重 new 一個, 所以它仍然是 data 改變, 但不是 isFirst.
       // tslint:disable-next-line: max-line-length
-      return changes.datas !== undefined && changes.indexs === undefined && changes.isEnableColorKeyword === undefined && false === isArrayEqual(changes.datas.previousValue, changes.datas.currentValue);
+      return changes['datas'] !== undefined && changes['indexs'] === undefined && changes['isEnableColorKeyword'] === undefined && false === isArrayEqual(changes['datas'].previousValue, changes['datas'].currentValue);
     }
   }
   init() {
@@ -58,7 +58,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     this.idxPass = this.idxPass = getIdxPass(this.datas, this.indexs);
     return;
     function gAllIndexs(datas: DText[]) {
-      return LQ.range(0, datas.length).toArray();
+      return Enumerable.range(0, datas.length).toArray();
     }
   }
 
@@ -89,7 +89,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
 
     // 從[2], 在 End在[4]例子, idxEnd會是 1
     // 從[2], 在 End在[5]例子, idxEnd會是 2
-    const idxEnd = LQ.from(this.datas).skip(i1 + 1).indexOf(a1 => {
+    const idxEnd = Enumerable.from(this.datas).skip(i1 + 1).indexOf(a1 => {
       if (tp === 0) {
         if (a1.isOrderStart === 1) {
           cntStart++;
@@ -107,7 +107,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
       return cntStart === -1; // 在沒有累積OrderStart時, 遇到的 OrderEnd
     });
 
-    const re = LQ.range(i1 + 1, idxEnd).toArray();
+    const re = Enumerable.range(i1 + 1, idxEnd).toArray();
     return re;
   }
   getIndexsForChildOrder(it1: DText, i1: number) {
@@ -117,8 +117,8 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     return this.getIndexsForChildOrderCore(it1, i1, 1);
   }
   isPass(i1: number) {
-    if (LQ.from(this.indexs).contains(i1)) {
-      if (LQ.from(this.idxPass).contains(i1)) {
+    if (Enumerable.from(this.indexs).contains(i1)) {
+      if (Enumerable.from(this.idxPass).contains(i1)) {
         // console.log(i1 + ' pass,在idxPas中');
         return true;
       }
@@ -137,7 +137,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     // aa1.key !== undefined ? 1 : 0,
     aa1.foot !== undefined ? 1 : 0,
     ];
-    return LQ.from(r).all(a1 => a1 !== 1);
+    return Enumerable.from(r).all(a1 => a1 !== 1);
   }
   onClickFoot(a1: DText) {
     const pthis = this;
@@ -158,10 +158,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
 
     interface DRtResult { record: { id: number, text: string }[], status?: 'success' };
     function getFromApi(): Observable<DRtResult> {
-      const r1 = BibleBookNames.getBookName(a1.foot.book, BookNameLang.Matt);
-      const r2 = 'engs=' + r1 + '&chap=' + a1.foot.chap + '&version=' + a1.foot.version + '&id=' + a1.foot.id;
-      const r3 = new FhlUrl().getJsonUrl() + 'rt.php?' + r2;
-      return ajaxGetJSON(r3);
+      return new ApiRt().queryQpAsync(a1.foot)
     }
   }
   getKeywordClass(a1: DText) {
