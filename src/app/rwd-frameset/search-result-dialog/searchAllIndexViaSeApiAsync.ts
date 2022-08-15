@@ -25,7 +25,7 @@ export async function searchAllIndexViaSeApiAsync(arg: {
   let re: DSeApiRecord[] = [];
   let offset = 0;
   let count = 0;
-  const url = new FhlUrl().getJsonUrl2() + 'se.php';
+  const url = new FhlUrl().getJsonUrl2() + 'se.php?';
   let version = arg.version === undefined ? VerForSearch.s.getValue() : arg.version;
   //
   if (arg.orig !== 0 && false === Enumerable.from(['rcuv', 'unv', 'kjv']).contains(version)) {
@@ -40,7 +40,8 @@ export async function searchAllIndexViaSeApiAsync(arg: {
     // console.log('post');
     // console.log(data);
 
-    const rr1 = await ajax.post(url, data).pipe(map(a1 => a1.response as DSeApiResult)).toPromise();    
+    
+    const rr1 = await ajax.getJSON<DSeApiResult>(url+data).pipe(map(a1 => a1 as DSeApiResult)).toPromise();        
 
     if (rr1 === null) {
       trigger(0);
