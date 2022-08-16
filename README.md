@@ -88,6 +88,17 @@
 - 注意 ng serve 時
   - 錯誤訊息，有時候會誤判，通常跟引用順序有關。所以 app.module.ts 若有錯，應該先處理，否則你會以為別的東西錯，但實際上是沒錯的。
 
+- 測試項目
+  - 閱讀
+  - 切換章節(透過選項/透過歷史記錄/透過網址輸入)
+  - 搜尋(關鍵字/原文彙編(例G21 H21)/交互參照)
+  - 原文(字典/彙編/交互參照)
+  - 原文解析功能
+  - 串珠功能
+  - 註釋功能
+  - 設定(字型大小/合併/多譯本)
+  - Firefox/Chrome/Safari(電腦、iPad、iPhone)/Edge
+
 # NUIRWD
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
