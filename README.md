@@ -32,6 +32,11 @@
   - npm install -s @types/jquery
   - 注意，若沒有安裝 @types 就會出錯，VSCODE 會給你畫紅線。
   - 注意，若沒有安裝 jquery, 只裝 @types，就是 compiler 時才會出錯。
+  - 在 angular.json 中設定
+    - build.options.scripts 中新增
+    - "./node_modules/jquery/dist/jquery.min.js"
+  - 使用時
+    - import 'jquery' 即可
 - jquery-ui 注意
   - 有2個超像的 jqueryui 與 jquery-ui
   - 看資料來說，應該是 jquery-ui，但 jquery-ui 又沒有 @types ， 只有 juqeryui 才有 types
@@ -49,6 +54,11 @@
   - 承上，還要加入 .css ，就是在 options 的 styles 屬性
     - 在 array 中，加入 "./node_modules/jquery-ui/themes/base/all.css",
     - 你會發現，material 已經偷偷加進來了
+  - 在 angular.json 中設定
+    - build.options.scripts 中新增
+    - "./node_modules/jquery-ui/dist/jquery-ui.min.js"
+  - 使用時
+    - import 'jquery-ui' 即可
 - hammerjs
   - npm install --save hammerjs
 - flex-layout
