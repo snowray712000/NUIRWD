@@ -9,7 +9,7 @@ import { BookNameLang } from '../const/book-name/BookNameLang';
 export class ApiSobj {
   querySobjAsync(args: DApiSobjArg): Observable<DApiSobjResult> {
     this.defaultValue(args);
-    const url = `${new FhlUrl().getJsonUrl()}sobj.php`;
+    const url = `${new FhlUrl().getJsonUrl2()}sobj.php`;
     return ajax.getJSON<DApiSobjResult>(url + this.generateQueryString(args)).pipe(
       retry(3),
       // tap(a1 => console.log(a1)),

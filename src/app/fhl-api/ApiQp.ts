@@ -17,7 +17,7 @@ export class ApiQp {
     const gb = DisplayLangSetting.s.getValueIsGB()? '1':'0';
     const param = `engs=${eng}&chap=${chapId}&sec=${verseId}&gb=${gb}`;
 
-    const url = `${new FhlUrl().getJsonUrl()}qp.php?${param}`;
+    const url = `${new FhlUrl().getJsonUrl2()}qp.php?${param}`;
     const ob$ = ajax.getJSON<DQpResult>(url);
     return ob$;
   }

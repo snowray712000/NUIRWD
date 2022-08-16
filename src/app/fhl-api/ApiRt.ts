@@ -11,7 +11,7 @@ export class ApiRt {
   queryQpAsync(foot: DFoot): Observable<DRtResult> {
     const r1 = BibleBookNames.getBookName(foot.book, BookNameLang.Matt);
     const r2 = 'engs=' + r1 + '&chap=' + foot.chap + '&version=' + foot.version + '&id=' + foot.id;
-    const r3 = new FhlUrl().getJsonUrl() + 'rt.php?' + r2;
+    const r3 = new FhlUrl().getJsonUrl2() + 'rt.php?' + r2;
     return ajax.getJSON(r3);
     // rt.php?engs=Gen&chap=4&version=cnet&id=182 真的缺一參數不可,試過只有id不行
   }
