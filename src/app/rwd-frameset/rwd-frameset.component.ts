@@ -23,6 +23,7 @@ import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { getChapCount } from '../const/count-of-chap';
 import { IsSnManager } from './settings/IsSnManager';
+import { IsParallelLayout } from "./settings/IsParallelLayout";
 import { IsVersionVisiableManager } from './IsVersionVisiableManager';
 import { VerForMain } from './settings/VerForMain';
 import { DialogVersionSelectorOpenor } from '../version-selector/version-selector.component';
@@ -56,6 +57,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   private _bottomSheet: MatBottomSheet;
   private routeVerseRange: VerseRange;
   addressActived: DAddress;
+  
   @ViewChild('snavLeft') leftSideNav;
   @ViewChild('snavRight') rightSideNav;
   @ViewChild('toptoolbar') topToolbar;
@@ -271,6 +273,13 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   onClickOrigToggle() {
     const pre = IsSnManager.s.getFromLocalStorage();
     IsSnManager.s.updateValueAndSaveToStorageAndTriggerEvent(!pre);
+  }
+  htmlOnClickRightToggle(snavRight){
+    snavRight.toggle()
+    // onOpenedRightSide onClosedRightSide 事件會觸發，不要寫在這。
+  }
+  htmlIsParallelLayout(){
+    return IsParallelLayout.s.getValue() && VerForMain.s.getValue().length > 1
   }
 
   onClickDisplaySetting() {

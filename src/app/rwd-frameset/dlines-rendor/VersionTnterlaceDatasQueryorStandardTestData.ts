@@ -1,4 +1,4 @@
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { IDatasQueryor, DArgsDatasQueryor } from '../../version-interlace/version-interlace.component';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 /** 很重要的測試資料, 也可視為顯示格式 */

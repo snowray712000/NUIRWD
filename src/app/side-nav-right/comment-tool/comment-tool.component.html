@@ -14,7 +14,7 @@
     <!-- 資料核心是 data ，誰傳給它的？-->
     <span *ngIf="data===undefined">{{'資料查詢中' | gbpipe}}</span>
     <span *ngIf="data!==undefined && data.length===0">{{'查無資料' | gbpipe}}</span>
-    <app-dtexts-rendor [datas]="data" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
+    <app-dtexts-rendor [datas]="data" [isShowOrig]="1" (clickRef)="onClickReference($event)" (clickOrig)="onClickOrig($event);">
     </app-dtexts-rendor>
 
   </div>

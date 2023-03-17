@@ -7,7 +7,7 @@ import { test_mergeTextAtCommentText } from './test_mergeTextAtCommentText';
 import { test_prepareDataForAddOrderAndListAtComment } from './test_prepareDataForAddOrderAndListAtComment';
 import { test_addListStartAndEndUnitTests } from './test_addListStartAndEndUnitTests';
 
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import { test_AddReferenceInCommentText } from 'src/app/side-nav-right/comment-tool/test_AddReferenceInCommentText';
 import { test_techDOMParserTests } from './test_techDOMParserTests';
 import { merge_nestarray } from 'src/app/tools/merge_nestarray';

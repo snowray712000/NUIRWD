@@ -5,7 +5,8 @@ import { DProgressInfo, EventTool } from './../../tools/EventTool';
 import { Component, OnInit, Inject, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
+import { DText } from "src/app/bible-text-convertor/DText";
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { DialogSearchResultOpenor } from './DialogSearchResultOpenor';
@@ -62,7 +63,8 @@ export class SearchResultDialogComponent implements OnInit {
 
   filterSetter: { setFilterAsync: (books: number[]) => Promise<void>; };
   // tslint:disable-next-line: max-line-length
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) { }
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<SearchResultDialogComponent>, @Inject(MAT_DIALOG_DATA) public dataByParent: DSearchData, private changeDetector: ChangeDetectorRef) {    
+  }
   ngOnInit() {
     this.initVersionsAsync().then(() => {
       this.isEnableColorKeyword = IsColorKeyword.s.getFromLocalStorage() ? 1 : 0;

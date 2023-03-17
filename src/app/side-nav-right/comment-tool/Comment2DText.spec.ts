@@ -1,5 +1,5 @@
 import * as Enumerable from "linq";
-import { DText } from "src/app/bible-text-convertor/AddBase";
+import { DText } from "src/app/bible-text-convertor/DText";
 import { AddBrStdandard } from "src/app/version-parellel/one-ver/AddBrStdandard";
 import { Comment2DText } from "./Comment2DText";
 

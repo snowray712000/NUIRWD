@@ -1,4 +1,4 @@
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { VerseRange } from '../bible-address/VerseRange';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
 import { AddBrStdandard } from '../version-parellel/one-ver/AddBrStdandard';

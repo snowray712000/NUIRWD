@@ -1,7 +1,7 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { merge_nestarray } from 'src/app/tools/merge_nestarray';
 import { DAddressComparor, isTheSameAddress } from 'src/app/bible-address/DAddress';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import Enumerable from 'linq';
 /** 藉unit test開發. */
 
@@ -10,18 +10,20 @@ export function mergeDifferentVersionResult(datas: DOneLine[][], verses: VerseRa
     return datas[0];
   }
   const datas2 = merge_nestarray(datas);
+  
   const datas2a = Enumerable.from(datas2).where(a1 => a1.addresses !== undefined).toArray();
   const datas2b = Enumerable.from(datas2).where(a1 => a1.addresses === undefined).toArray();
-
+  
   const versionOrder = getVersionOrder();
   const addrDistinct = verses.verses;
 
   const datas3b = doEachVerseAndJoin();
+
+
   if (datas2b.length === 0) {
     return datas3b;
-  } else {
-    return datas3b.concat(datas2b);
   }
+  return datas3b.concat(datas2b);
 
   function getVersionOrder() {
     return Enumerable.from(datas).select(a1 => a1[0].ver).toArray();

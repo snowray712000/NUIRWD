@@ -1,5 +1,6 @@
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { DOneLine, IAddBase } from '../../bible-text-convertor/AddBase';
+import { IAddBase } from '../../bible-text-convertor/AddBase';
+import { DOneLine } from "../../bible-text-convertor/DOneLine";
 import Enumerable from 'linq'; // Enumerable 
 import { getNextAddress, isTheSameAddress } from 'src/app/bible-address/DAddress';
 /** 'a' 和合本 併入上節 Ps8:6-9 或 Ps8:6-9.60:1-2.92:1-4.Ps8:8 */

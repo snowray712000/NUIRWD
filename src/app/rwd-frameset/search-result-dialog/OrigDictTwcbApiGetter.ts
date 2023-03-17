@@ -1,4 +1,4 @@
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import { AddReferenceFromOrigDictText } from 'src/app/version-parellel/one-ver/AddReferenceFromOrigDictText';
 import { ApiStwcbhdic } from 'src/app/fhl-api/Orig/ApiStwcbhdic';
 import { DApiSdResult } from 'src/app/fhl-api/Orig/DApiSdResult';

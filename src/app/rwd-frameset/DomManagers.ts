@@ -1,4 +1,5 @@
 import Enumerable from "linq";
+import { IsParallelLayout } from "./settings/IsParallelLayout";
 declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
 export class DomManagers {
     static s: DomManagers = new DomManagers();
@@ -14,6 +15,10 @@ export class DomManagers {
  * 但我不寫在此函式裡，比較能保持彈性
  */
 export function scrollToSelected() {
+    if ( IsParallelLayout.s.getValue() ) {
+        return  //TODO: not implemented yet
+    }
+
     testThenDoAsync({ cbTest: () => DomManagers.s.divContentEachLine != undefined }).then(() => {
         // 如果不加 setTimeout, 取到的 divEachLine 是上一時刻的  
 

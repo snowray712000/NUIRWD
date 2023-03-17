@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { VersionInterlaceComponent } from './version-interlace/version-interlace.component';
+import { VersionParellelComponent } from './version-parellel/version-parellel.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCommonModule } from '@angular/material/core';
@@ -49,6 +50,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DialogFootComponent } from './rwd-frameset/dialog-foot/dialog-foot.component';
 import { DialogChooseChapterComponent } from './rwd-frameset/dialog-choose-chapter/dialog-choose-chapter.component';
 import { GbPipe } from './gb/getGbText';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CommonModule } from '@angular/common';
+import { DTextRendorComponent } from './rwd-frameset/dtext-rendor/dtext-rendor.component';
 const entryComponents = [
   BibleSelectionsComponent,
   // InfoDialogComponent,
@@ -61,6 +65,7 @@ const entryComponents = [
   Dialog2bComponent,
   DialogFootComponent,
   DialogChooseChapterComponent,
+  DTextRendorComponent,
 ];
 
 
@@ -69,6 +74,7 @@ const entryComponents = [
   declarations: [
     AppComponent,   
     VersionInterlaceComponent,
+    VersionParellelComponent,
     RwdFramesetComponent,
     SideNavLeftComponent,
     SideNavRightComponent,
@@ -81,6 +87,7 @@ const entryComponents = [
     // ComTextComponent,
     OneVerComponent,
     DTextsRendorComponent,
+    DTextRendorComponent,
     EditComponent,
     QunitsComponent,
     VersionSelectorComponent,
@@ -120,6 +127,7 @@ const entryComponents = [
     MatSelectModule,
     MatInputModule,
     MatProgressBarModule,
+    FlexLayoutModule,
   ],
   providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],

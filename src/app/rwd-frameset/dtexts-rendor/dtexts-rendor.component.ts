@@ -1,6 +1,6 @@
 import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import Enumerable from 'linq';
 import { getIdxPass } from './getIdxPass';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';
@@ -47,7 +47,10 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     function isCommentUseDtextRendor() {
       // 如果是注釋, 表單載入就會跑第1次, 切換的時候, 不像 dialog 是重 new 一個, 所以它仍然是 data 改變, 但不是 isFirst.
       // tslint:disable-next-line: max-line-length
-      return changes['datas'] !== undefined && changes['indexs'] === undefined && changes['isEnableColorKeyword'] === undefined && false === isArrayEqual(changes['datas'].previousValue, changes['datas'].currentValue);
+      return changes['datas'] !== undefined && 
+      changes['indexs'] === undefined && 
+      changes['isEnableColorKeyword'] === undefined && 
+      false === isArrayEqual(changes['datas'].previousValue, changes['datas'].currentValue);
     }
   }
   init() {
@@ -68,14 +71,14 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     if (this.datas === undefined) {
       return;
     }
-
     this.init();
   }
   onClickReference(a1: string) {
     this.clickRef.emit(a1);
   }
   onClickOrig(a1: DText) {
-    this.clickOrig.emit(a1.w);
+    //this.clickOrig.emit(a1.w);
+    this.clickOrig.emit(`${a1.tp}${a1.sn}`);
     SnActiveEvent.s.updateValueAndTriggerEvent(a1); // 平板沒有 mouse move, 所以還是加這一個
   }
   onMouseEnterSn(en, a1: DText) {
@@ -213,7 +216,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
     return re.join(' ');
   }
   getIsShowOrig() {
-    // 當 原文彙編時，一定要顯示 ，
+    // 當 原文彙編時，一定要顯示 
     if (this.isShowOrig === undefined) return IsSnManager.s.getFromLocalStorage();
     return this.isShowOrig === 1;
   }

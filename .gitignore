@@ -45,3 +45,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+src/assets/img/210722a_bible_version_dialog.gif
+src/assets/img/210722a_bible_version_dialog.mov
+src/assets/img/210722a_bible_version_dialog.mp4
+src/assets/img/210722a_switch_lang_reload.gif
+src/assets/img/210722a_switch_lang_reload.mov
+src/assets/img/210722a_switch_lang_reload.mp4

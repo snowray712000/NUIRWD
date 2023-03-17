@@ -35,3 +35,4 @@ export class VerCache extends LocalStorageJsonBase<DAbvResult> {
     { na: '尚未分類', engs: '' }
   ];
 }
+

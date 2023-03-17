@@ -1,4 +1,4 @@
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 import { UT } from 'src/app/unit-test-qunit/qunits/UT';
 import { AddReferenceInCommentText } from './AddReferenceInCommentText';
 export async function test_AddReferenceInCommentText() {

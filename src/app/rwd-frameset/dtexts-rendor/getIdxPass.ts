@@ -1,4 +1,4 @@
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import Enumerable from 'linq';
 import { assert } from 'src/app/tools/assert';
 import { isArrayEqual } from 'src/app/tools/arrayEqual';

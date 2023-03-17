@@ -1,4 +1,4 @@
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
@@ -8,6 +8,7 @@ import { ApiQsb, DOneQsbRecord } from 'src/app/fhl-api/ApiQsb';
 import { map } from 'rxjs/operators';
 import { cvt_others } from 'src/app/bible-text-convertor/cvt_others';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
+import { lastValueFrom } from "rxjs";
 export class ReferenceGetter implements IReferenceGetter {
   async mainAsync(arg: { reference: string; version: string }): Promise<DOneLine[]> {
     const recordsFromApi = await getDataAsync(getStrForApi(arg.reference), arg.version);
@@ -21,8 +22,8 @@ export class ReferenceGetter implements IReferenceGetter {
     return re2;
     async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
       const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version, isExistStrong: true,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() });
-      const r2 = r1.pipe(map(a1 => a1.record));
-      return r2.toPromise();
+      const r2 = r1.pipe(map(a1 => a1.record));      
+      return lastValueFrom(r2) // return r2.toPromise();
     }
     function getStrForApi(str) {
       const r1 = /#?([^|]+)\|?/i.exec(str);

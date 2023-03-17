@@ -1,0 +1,30 @@
+.title1 {
+    text-align: center;
+    position: fixed;    
+    background-color: white;
+    z-index: 1;
+}
+.column-base{
+    position: relative;
+    word-break: break-word;
+}
+.text1 {
+    position: relative;
+}
+.text2 {
+    border-bottom-style: solid;
+    border-bottom-color: gray;
+    border-bottom-width: 1px;  
+}
+
+.addr {
+    border-bottom-style: solid;
+    border-bottom-color: gray;
+    border-bottom-width: 1px;  
+    color: blue;
+    cursor: pointer;
+}
+.row1 {
+    position: relative;
+    height: 1.5em;
+}

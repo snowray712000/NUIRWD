@@ -31,6 +31,7 @@
       <button mat-raised-button (click)="onClickVersionToggle()" [class.isActived]="isVersionShowOn()">{{'版本顯示'|gbpipe}}</button>
       <button mat-raised-button (click)="onClickColorKeywordToggle()"
         [class.isActived]="isEnableColorKeyword()">{{'關鍵字上色'|gbpipe}}</button>
+      <button mat-raised-button (click)="htmlOnClickSwitchLayout()" [class.isActived]="htmlIsParallelLayout()">{{'併排顯示'|gbpipe}}</button>
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions> </div>

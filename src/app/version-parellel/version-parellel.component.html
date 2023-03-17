@@ -1,10 +1,44 @@
-<!-- <div (window:resize)="onResize($event)" (window:orientationchange)="onResize()"
-     [(fxLayout)]="layoutSet" fxLayoutGap="20px" #baseDiv>
-     <span *ngIf="versions.length === 0">請選擇聖經版本</span>
+<div #baseDiv style="position: relative;" scrollToPosition="top">
+     <div #title1 class="title1" style="height:1.5em">
+          <div fxLayout="row">
+               <div fxFlex="0 0 2em"></div>
+               <div *ngFor="let item of gArray(cntCol-1); let i = index" fxFlex="htmlFlexCalcWidthByCotCol()">
+                    {{htmlGetVersionName(versions[i])}}
+               </div>
+               <!-- <div fxFlex="calc((100%-2em)/2)">和合本</div> -->
+               <!-- <div fxFlex="calc((100%-2em)/2)">現代中文譯本2019版</div> -->
+          </div>
+     </div>
 
-     <app-one-ver #oneVer fxFlex="100%" *ngFor="let item of getVersInEngs()" [isShowSn]="getIsShowSn()" [isShowMapPhoto]="getIsShowMapPhoto()" [isBreakLineEachVerse]="getIsBreakLineEachVerse()" [ver]="item" (clickVerse)="onClickVerse($event,item)"
-     (gettedHeight)="onGettedHeight($event)"
-     [setCy2Calced]="isChildCalced"
-     [isEnoughWidthParellel]="isEnoughWidthParellel">
-     </app-one-ver>
-</div> -->
+     <!-- 讓 row0 不會在 譯本清單下面. 方法, 多一列 空的 -->
+     <div #data1 style="height: 1.5em;"></div>
+
+     <!-- 資料. 首先, 先 3 大欄 (以2譯本為例), 第1欄為 經節位置, 所以一定是 2em, 另外就平分 column width. -->
+     <div fxLayout="row">
+          <div fxFlex="0 0 2em" class="column-base">
+               <div class="text1">
+                    <div *ngFor="let item of gArray(cntRow); let i = index" class="addr" #cell1 [attr.data-row]="i"
+                         data-col="-1" (click)="htmlOnClickAddressCell(i,0)">
+                         <span *ngFor="let item3 of gArray(data[i][0].length); let k = index">
+                              <app-dtext-rendor [data]="data[i][0][k]"></app-dtext-rendor>
+                         </span>
+                    </div>
+               </div>
+          </div>
+
+          <div *ngFor="let item of gArray(cntCol-1); let j = index" fxFlex="htmlFlexCalcWidthByCotCol()"
+               class="column-base">
+               <div class="text1">
+                    <div *ngFor="let item2 of gArray(cntRow); let i = index" class="text2" #cell1 [attr.data-row]="i"
+                         [attr.data-col]="j" (click)="htmlOnClickAddressCell(i,j+1)">
+                         <span *ngFor="let item3 of gArray(data[i][j+1].length); let k = index">
+                              <app-dtext-rendor [data]="data[i][j+1][k]"
+                                   (clickRef)="htmlBindEvent_ReferenceClickDialog($event)"
+                                   (clickOrig)="htmlBindEvent_SnClickDialog($event)">
+                              </app-dtext-rendor>
+                         </span>
+                    </div>
+               </div>
+          </div>
+     </div>
+</div>

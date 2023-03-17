@@ -39,4 +39,8 @@
 }
 .sn{
   cursor: pointer;  
+  color: darkblue;
+}
+.isSnActived {
+  color: red
 }

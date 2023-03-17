@@ -21,7 +21,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegexHtmlTag } from 'src/app/tools/regHtmlTag';
 import { GetLinesFromQbResultOldTestment } from './GetLinesFromQbResultOldTestment';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
+import { DText } from "src/app/bible-text-convertor/DText";
 import { DialogSearchResultOpenor } from 'src/app/rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { VerseActivedChangedDo, FunctionDoWhenVerseChanged } from './VerseActivedChangedDo';
 
@@ -63,13 +64,18 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
   }
-  getColorBlueOrBlackWhereSn(it: DWord): string {
-    return it.sn === this.snActived ? "blue" : "black";
+  htmlGetOrigClass(it: DWord): string {
+    let r1: string[] = []
+    if (it.sn != undefined) r1.push('orig')
+    if (`${it.sn}` === this.snActived) r1.push("isSnActived")
+    return r1.join(" ")
   }
-  getColorBlueOrDarkTurquoiseWhereSn(it: DOneRowTable): string {
-    return it.sn === this.snActived ? "blue" : "darkturquoise";
+  htmlGetSnClass(it: DOneRowTable): string {
+    let r1 = ["sn"]
+    if (it.sn === this.snActived) r1.push("isSnActived")
+    return r1.join(" ")
   }
-  
+
 
   onClickOrig(en, a1: DWord) {
     const type = this.cur.book < 40 ? 'H' : 'G';
@@ -116,7 +122,7 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
     // this.snackBar.open()
   }
   onMouseEnterSn(en, a1) {
-    this.snActived = a1.sn;
+    this.snActived = `${a1.sn}`;
   }
   ngOnInit() {
     // console.log('分析')
@@ -197,13 +203,13 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
     const that = this;
     // 此 api 取得中的 record，[0]是整節經文；之後的[1]-[N]就是每一個 table 裡的東西
     const qbResult = await new ApiQp().queryQpAsync(book, chap, verse).toPromise();
-    
+
     const isOldTestment = qbResult.N == 1// qbResult.N === 1 舊約        
     this.isOldTestment = isOldTestment // html using
-    
+
     this.updateWordsFromQbApiResult(qbResult);
     addWordsOfTp(isOldTestment);
-    if (isOldTestment){
+    if (isOldTestment) {
       this.updateLinesFromQbApiResultOfOldTestment(qbResult);
     } else {
       this.getLinesFromQbApiResult(qbResult);
@@ -253,7 +259,7 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
   private updateWordsFromQbApiResult(qbResult: DQpResult) {
     const re2: DOneRowTable[] = [];
     for (let i = 1; i < qbResult.record.length; i++) {
-      const it = qbResult.record[i];      
+      const it = qbResult.record[i];
       const sn = trimSnPrefixZeroAndCheckSnOrUndefined(it.sn)
       if (undefined == sn) {
         continue

@@ -3,7 +3,7 @@ import { BibleBookNames } from '../const/book-name/BibleBookNames';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { Observable } from 'rxjs';
 import { FhlUrl } from './FhlUrl';
-import { DFoot } from '../bible-text-convertor/AddBase';
+import { DFoot } from "../bible-text-convertor/DFoot";
 
 /** 註腳 */
 

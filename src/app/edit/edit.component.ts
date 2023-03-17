@@ -1,10 +1,10 @@
-import { DOneLine } from './../bible-text-convertor/AddBase';
+import { DOneLine } from "./../bible-text-convertor/DOneLine";
 import { EventTool } from 'src/app/tools/EventTool';
 import { LocalStorageStringBase } from 'src/app/tools/LocalStorageStringBase';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
-import { DText } from '../bible-text-convertor/AddBase';
+import { DText } from "../bible-text-convertor/DText";
 import { DAddress } from '../bible-address/DAddress';
 import { Comment2DText } from '../side-nav-right/comment-tool/Comment2DText';
 import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddReferenceInCommentText';

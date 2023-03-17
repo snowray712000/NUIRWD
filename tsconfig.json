@@ -25,7 +25,8 @@
     "paths": {
       "jquery":["node_modules/@types/jquery/index"],
       "jquery-ui":["node_modules/@types/jqueryui/index"],
-    }
+    },
+
   },  
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

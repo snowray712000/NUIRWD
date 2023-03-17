@@ -1,6 +1,7 @@
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
-import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
+import { DText } from "src/app/bible-text-convertor/DText";
 import Enumerable from 'linq';
 import { getNextAddress, isTheSameAddress } from '../bible-address/DAddress';
 export function mergeDOneLineIfAddressContinue(datas: DOneLine[]): DOneLine[] {

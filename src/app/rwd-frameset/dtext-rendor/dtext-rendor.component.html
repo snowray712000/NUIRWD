@@ -1,0 +1,12 @@
+<span>
+    <br *ngIf="data.isBr===1" />
+    <hr *ngIf="data.isHr===1" />
+    <span *ngIf="data.sn!==undefined && getIsShowOrig()" [class]="getOrigClass(data)" (click)="onClickOrig(data)" (mouseenter)="onMouseEnterSn($event,data)">
+        {{data.w}}
+    </span>
+    
+    <span *ngIf="data.isRef===1" [class.isTitle1]="data.isTitle1===1" class='reference' [attr.data-ref]="'#'+data.refDescription+'|'" (click)="onClickReference(data)">{{data.w}}</span>
+    <span *ngIf="data.foot!==undefined" [class.isTitle1]="data.isTitle1===1" class='foot' (click)="onClickFoot(data)">{{data.w}}</span>
+    <span *ngIf="isW(data)" [class]="getKeywordClass(data)" [class.isOrigNotExist]="data.isOrigNotExist===1" [class.isGODSay]="data.isGODSay===1" [class.twcbexp]="isClassTwcbExp(data)" [class.twcbidt]="isClassTwcbIdt(data)"
+        [class.twcbbibtext]="isClassTwcbBibtext(data)" [style.color]="data.cssColor" >{{data.w}}</span>
+</span>

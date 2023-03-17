@@ -1,4 +1,4 @@
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 import Enumerable from 'linq';
 import { merge_nestarray } from 'src/app/tools/merge_nestarray';
 

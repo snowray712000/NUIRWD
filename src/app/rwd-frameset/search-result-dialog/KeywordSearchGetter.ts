@@ -1,5 +1,6 @@
 import { DProgressInfo, EventTool, EventToolSingle } from './../../tools/EventTool';
-import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
+import { DText } from "src/app/bible-text-convertor/DText";
 import { IKeywordSearchGetter } from './search-result-dialog.component';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';

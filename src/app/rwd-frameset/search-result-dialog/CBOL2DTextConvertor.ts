@@ -2,7 +2,7 @@ import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard'
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import Enumerable from 'linq';
 import { AddReferenceFromOrigDictCBOLChineseText } from "src/app/version-parellel/one-ver/AddReferenceFromOrigDictCBOLChineseText";
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import { newLineNewLineSplit } from './newLineNewLineSplit';
 import { newLineNewLineMerge } from "./newLineNewLineMerge";
 import { addListStartAndEnd } from '../dtexts-rendor/addListStartAndEnd';

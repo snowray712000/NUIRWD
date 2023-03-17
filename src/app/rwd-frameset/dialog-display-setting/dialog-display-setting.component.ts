@@ -1,5 +1,5 @@
 import Enumerable from 'linq';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
@@ -10,6 +10,7 @@ import { DisplayMergeSetting } from './DisplayMergeSetting';
 import { IsSnManager } from '../settings/IsSnManager';
 import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { FontSize } from '../settings/FontSize';
+import { IsParallelLayout } from '../settings/IsParallelLayout';
 
 @Component({
   selector: 'app-dialog-display-setting',
@@ -101,6 +102,12 @@ export class DialogDisplaySettingComponent implements OnInit {
     if (r1 < 0.1) r1 = 0.1;
     FontSize.setBodyFontSize(r1);
     FontSize.s.updateValueAndSaveToStorageAndTriggerEvent(r1);
+  }
+  htmlOnClickSwitchLayout(){
+    IsParallelLayout.s.updateValueAndSaveToStorageAndTriggerEvent(!IsParallelLayout.s.getValue())
+  }
+  htmlIsParallelLayout(){
+    return IsParallelLayout.s.getValue()
   }
 }
 

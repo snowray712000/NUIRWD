@@ -1,4 +1,4 @@
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
 import { CBOL2DTextConvertor } from './CBOL2DTextConvertor';

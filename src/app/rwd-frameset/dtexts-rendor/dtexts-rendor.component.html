@@ -16,7 +16,7 @@
 
 <!-- order or list 巢狀 -->
 <ol class="myOL" *ngIf="it1.isOrderStart===1" style="list-style-type: none;margin: 0em;text-align: justify;" [class.orderOdd]="it1.idxOrder!==undefined && (it1.idxOrder%2===1)" [class.orderEvent]="it1.idxOrder!==undefined && (it1.idxOrder%2===0)">
-    <app-dtexts-rendor [datas]="datas" [indexs]="getIndexsForChildOrder(it1,i1)" (clickRef)="clickRef.emit($event);" (clickOrig)="clickOrig.emit($event);"></app-dtexts-rendor>
+    <app-dtexts-rendor [datas]="datas" [isShowOrig]="isShowOrig" [indexs]="getIndexsForChildOrder(it1,i1)" (clickRef)="clickRef.emit($event);" (clickOrig)="clickOrig.emit($event);"></app-dtexts-rendor>
 </ol>
 <li class="myLI" *ngIf="it1.isListStart===1">
     <app-dtexts-rendor [datas]="datas" [isShowOrig]="isShowOrig" [indexs]="getIndexsForChildList(it1,i1)" (clickRef)="clickRef.emit($event);" (clickOrig)="clickOrig.emit($event);">

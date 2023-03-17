@@ -99,11 +99,21 @@ function getDataList(){
         {
         na: 'dev',
         na2: [
-            '最新版本 <a href="http://bible.fhl.net/NUI/_rwd/" target="_blank">最新版本</a>',
-            'dev <a href="/NUI/_rwd_dev/" target="_blank">RD Develop versions(bkbible)</a>',
-            'dev <a href="http://bible.fhl.net/NUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
+            '最新版本 <a href="http://bible.fhl.net/NNUI/_rwd/" target="_blank">最新版本</a>',
+            'dev <a href="/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bkbible)</a>',
+            'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230313',
+            na2: [
+                'New-併排顯示。',
+                'Bug-註釋不可隨SN切換而隱藏: 創1:1，太1:1',
+                'Bug-新譯本，轉換過程出現錯誤',
+                'Bug-註釋同範圍,不該清除或重刷資料。',
+                'Bug-註解切換下一段落時，Actived Verse不要變回該章第1節',
+            ],
+            img: []
+        },{
             na: '210726a',
             na2: [
                 'Bug-切換章節時，工具資料(Parsing or 串珠 or 註釋)不同步。',

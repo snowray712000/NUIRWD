@@ -1,11 +1,10 @@
 import { IsSnManager } from './../rwd-frameset/settings/IsSnManager';
 import { DisplayMergeSetting } from './../rwd-frameset/dialog-display-setting/DisplayMergeSetting';
-import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { DialogDisplaySettingComponent } from './../rwd-frameset/dialog-display-setting/dialog-display-setting.component';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { getAddressesText } from 'src/app/bible-address/getAddressesText';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import Enumerable from 'linq';
 import { of, Observable, observable, lastValueFrom } from 'rxjs';
 import { Component, OnInit, Inject, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
@@ -20,10 +19,12 @@ import { mergeDOneLineIfAddressContinue } from '../bible-text-convertor/mergeDOn
 import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/DisplayLangSetting';
 import { VerForMain } from '../rwd-frameset/settings/VerForMain';
 import { mergeDifferentVersionResult } from './mergeDifferentVersionResult';
-import { cvt_cbol } from '../bible-text-convertor/cvt_cbol';
-import { cvt_others } from "../bible-text-convertor/cvt_others";
-import { DQsbArgs, ApiQsb } from '../fhl-api/ApiQsb';
+import { DQsbArgs, ApiQsb, DQsbResult } from '../fhl-api/ApiQsb';
 import { TestTime } from '../tools/TestTime';
+import { DQsbResult2DOneLineConvertor } from './DQsbResult2DOneLineConvertor';
+import { DText } from '../bible-text-convertor/DText';
+import { VerGetDisplayName } from '../fhl-api/BibleVersion/VerGetDisplayName';
+import { EventVerseChanged } from '../side-nav-right/cbol-parsing/EventVerseChanged';
 
 
 export interface DArgsDatasQueryor { addresses: VerseRange; versions: string[]; }
@@ -46,8 +47,12 @@ export class VersionInterlaceComponent implements OnInit {
 
   }
   ngOnInit() {
-
     const that = this;
+
+    this.versions = VerForMain.s.getValue()
+    this.verseRange = new RouteStartedWhenFrame().routeTools.verseRangeLast
+    this.resetData()
+
     this.datasQ = getDataQDefaultOrNot();
 
     getVersionChangedObserable().subscribe(vers => {
@@ -66,10 +71,16 @@ export class VersionInterlaceComponent implements OnInit {
       }
     });
     getRouteChangedObserable().subscribe(async verseRange => {
-      if (isTheSame() === false) {
-        that.verseRange = verseRange;
-        if (isEnoughForQuery()) that.reRefreshDatasAndMarkupNeedUpdateAsync();
-      }
+      if (isTheSame()) return
+      if (verseRange.verses.length == 0) return
+
+      that.verseRange = verseRange;
+      if (isEnoughForQuery()) that.reRefreshDatasAndMarkupNeedUpdateAsync().then(() => {
+        // 使用者似乎更喜歡，切過來就自動同步
+        // 不喜歡 "還沒點擊，就保持原本的 selected 網址"
+        EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(that.verseRange.verses[0])
+      })
+
       return;
       function isTheSame() {
         return VerseRange.isTheSame(that.verseRange, verseRange);
@@ -107,6 +118,7 @@ export class VersionInterlaceComponent implements OnInit {
     var dt1 = new TestTime(false)
     // 清空後，再作，時間會大幅度縮短 (3秒 變1秒)
     that.datas = []
+    this.resetData()
     dt1.log('清空 ');
 
     let re = await this.datasQ.queryDatasAsync({ addresses: that.verseRange, versions: that.versions });
@@ -121,7 +133,14 @@ export class VersionInterlaceComponent implements OnInit {
     return
 
   }
+  // data cntRow
+  resetData() {
+    const ver = (this.versions.length == 0) ? "unv" : this.versions[0]
+    const r1: DOneLine = { children: [{ w: '【取得資料中...】' }], ver, addresses: this.verseRange }
+    this.datas = [r1]
+  }
 }
+
 export class DataForInterlaceQueryor implements IDatasQueryor {
   async queryDatasAsync(args: DArgsDatasQueryor): Promise<DOneLine[]> {
     if (isValid() === false) {
@@ -133,8 +152,13 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     // 產生 api 取得資料
     var dt1 = new TestTime(false)
     const re1 = queryApiAsync(); // 約 100ms 上下 (所有版本)
-    const re1b = await Promise.all(re1)
+    var re1b = await Promise.all(re1)
     dt1.log('取得資料 ')
+
+    // 特例，此譯本沒有此段經文
+    if (Enumerable.from(re1b).any(a1 => a1.record.length == 0)) {
+      addNoDataInformation(re1b)
+    }
 
     // 各別 cvt
     const re2b = cvtb(re1b)
@@ -151,19 +175,21 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
     }
 
     return re3b
-    // 各別 cvt
-    const re2 = cvt();
+    function addNoDataInformation(records: { record: DRecord[] }[]) {
+      const tpLang = DisplayLangSetting.s.getValueIsGB() ? BookNameLang.太GB : BookNameLang.太
+      const chinese = BibleBookNames.getBookName(args.addresses.verses[0].book, tpLang)
+      const chap = args.addresses.verses[0].chap
+      const verse = args.addresses.verses[0].verse
 
-    // 準備合併 (章節順序-多版本交錯)
-    const datas1 = await Promise.all(re2);
+      for (let i = 0; i < args.versions.length; i++) {
+        if (records[i].record.length == 0) {
+          const ver = args.versions[i]
+          const ver2 = new VerGetDisplayName().main(ver)
 
-    let re3 = mergeDifferentVersionResult(datas1, args.addresses); // 1-3ms
-
-    // 合併(經文若連續)
-    if (DisplayMergeSetting.s.getFromLocalStorage()) {
-      re3 = mergeDOneLineIfAddressContinue(re3);
+          records[i].record.push({ bible_text: `【此譯本沒有此段經文,${ver2}】`, chineses: chinese, chap: chap, sec: verse } as DRecord)
+        }
+      }
     }
-    return re3;
 
     function isValid() {
       if (Enumerable.from([args, args.versions, args.addresses]).any(a1 => a1 === undefined)) {
@@ -182,7 +208,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
       //const apiQ = getTestQ()
       const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB();
       const re1Api = Enumerable.from(args.versions).select(ver => apiQ.qDataAsync(ver, isGb)).toArray();
-      
+
       return re1Api;
 
       function getTestQ(): IOneVerQ {
@@ -225,7 +251,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
               isExistStrong: true,
               isSimpleChinese: gb,
             };
-            const rre1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))            
+            const rre1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))
             //const rre1 = await new ApiQsb().queryQsbAsync(arg).toPromise();
             return rre1 as { record: DRecord[] };
           }
@@ -237,85 +263,15 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
         .zip(record, (a1, a2) => ({ ver: a1, reQ: a2 }))
         .select(a1 => {
           try {
-            const rr1 = a1.reQ
-            const rr2 = cvtOne(a1.ver, rr1)
-            return rr2
+            return new DQsbResult2DOneLineConvertor().main(
+              a1.ver,
+              a1.reQ as DQsbResult,
+              args.addresses)
           } catch {
             return [{ children: [{ w: 'QSB API錯誤 #' + args.addresses.toStringChineseShort() + '|。' }], ver: a1.ver }];
           }
         }).toArray()
-
       return rre2
-      function cvtOne(ver: string, reQ: { record: DRecord[] }): DOneLine[] {
-        let lines1 = Enumerable.from(reQ.record).select(a1 => {
-          // verse range
-          const vr = new VerseRange();
-          const bk = new BookNameAndId().getIdOrUndefined(a1.chineses);
-          vr.add({ book: bk, chap: a1.chap, verse: a1.sec });
-
-          // text
-          return { children: [{ w: a1.bible_text }], addresses: vr, ver } as DOneLine;
-        }).toArray();
-
-        var lines2 = cvtCore()
-
-        Enumerable.from(lines2).forEach(a1 => a1.ver = ver)
-
-        return lines2;
-
-        function cvtCore() {
-          if (ver === 'ncv') {
-            // lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
-            return cvt_others(lines1, args.addresses, ver);
-          } else if (ver === 'cbol') {
-            return cvt_cbol(lines1, args.addresses);
-          } else {
-            // others 裡也可以用 if ver, 所以許多都在裡面了
-            return cvt_others(lines1, args.addresses, ver);
-          }
-        }
-      }
-    }
-
-    function cvt() {
-      const rre2 = Enumerable.from(args.versions)
-        .zip(re1, (a1, a2) => ({ ver: a1, reQ: a2 }))
-        .select(async a1 => {
-          try {
-            const rr1 = await a1.reQ;
-            const rr2 = cvtOne(a1.ver, rr1); // 轉換一組 15-25ms            
-            return rr2
-          } catch {
-            return [{ children: [{ w: 'QSB API錯誤 #' + args.addresses.toStringChineseShort() + '|。' }], ver: a1.ver }];
-          }
-        }).toArray();
-
-      return rre2;
-
-      function cvtOne(ver: string, reQ: { record: DRecord[] }): DOneLine[] {
-        let lines1 = Enumerable.from(reQ.record).select(a1 => {
-          // verse range
-          const vr = new VerseRange();
-          const bk = new BookNameAndId().getIdOrUndefined(a1.chineses);
-          vr.add({ book: bk, chap: a1.chap, verse: a1.sec });
-
-          // text
-          return { children: [{ w: a1.bible_text }], addresses: vr, ver } as DOneLine;
-        }).toArray();
-
-        if (ver === 'ncv') {
-          // lines1 = cvt_ncv(lines1, args.addresses); // 新譯本
-          lines1 = cvt_others(lines1, args.addresses, ver);
-        } else if (ver === 'cbol') {
-          lines1 = cvt_cbol(lines1, args.addresses);
-        } else {
-          // others 裡也可以用 if ver, 所以許多都在裡面了
-          lines1 = cvt_others(lines1, args.addresses, ver);
-        }
-
-        Enumerable.from(lines1).forEach(a1 => a1.ver = ver);
-        return lines1;
-      }
     }
   }
 }

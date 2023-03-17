@@ -1,5 +1,5 @@
 .orig {
-  color: darkturquoise;
+  color: darkblue;
   cursor: pointer;
 }
 .reference {
@@ -14,7 +14,7 @@
   text-decoration: underline;
 }
 .isSnActived{
-  color: blue;
+  color: red;
 }
 .isGODSay {
   color: brown;

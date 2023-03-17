@@ -1,6 +1,6 @@
 import Enumerable from 'linq';
 import { deepCopy } from 'src/app/tools/deepCopy';
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';

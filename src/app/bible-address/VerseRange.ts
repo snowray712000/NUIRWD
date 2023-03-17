@@ -6,8 +6,7 @@ import { BookNameAndId } from '../const/book-name/BookNameAndId';
 import { VerseRangeToString } from 'src/app/bible-address/VerseRangeToString';
 import { BookNameLang } from '../const/book-name/BookNameLang';
 import { ParsingReferenceDescription } from './ParsingReferenceDescription';
-import { DAddress } from './DAddress';
-
+import { DAddress, DAddressComparor, DAddressComparor2 } from './DAddress';
 export class VerseRange {
   public verses: DAddress[] = [];
   /** 內容換了 由 ParsingReferenceDescription 完成 */
@@ -74,7 +73,6 @@ export class VerseRange {
   public toString(): string {
     return this.toStringChineseShort();
   }
-
 }
 
 /**
@@ -265,5 +263,72 @@ export interface IGetAddressesType {
   vr2: number;
 }
 
+/**
+ * 提供 linq 的 distinct 與 orderBy 用的
+ * Enumerable.from([]).orderBy(a1=>a1,VerseRangeComparor.s.compare)
+ * Enumerable.from([]).distinct(a1=>a1,VerseRangeComparor.s.hashNumer)
+ * 
+ * undefined 與 emtpy 特例
+ * 
+ * 個數一樣: 從前面開始比
+ * 
+ * 個數不同: 從前面開始比，若前面都一樣，少的較前面
+ */
+export class VerseRangeComparor {
+  static s: VerseRangeComparor = new VerseRangeComparor()
 
+  // undefined == undefined
+  // undefined > not undefined
+  compare(a1: VerseRange, a2: VerseRange): number {
+    if (isAnyUndefinedOrEmtpy()) {
+      return compareWhenAnyUndfinedOrEmptyCase()
+    }
 
+    const addrs1 = a1.verses!
+    const addrs2 = a2.verses!
+
+    if (addrs1.length == addrs2.length) {
+      return compareWhenTheSameAddressLength();
+    }
+
+    return compareWhenNotTheSameAddressLength();
+
+    function isUndefinedOrEmpty(aa1: VerseRange) {
+      return aa1 == undefined || aa1.verses == undefined || aa1.verses.length == 0
+    }
+    function isAnyUndefinedOrEmtpy() {
+      return Enumerable.from([a1, a2]).any(aa1 => isUndefinedOrEmpty(aa1))
+    }
+    function compareWhenAnyUndfinedOrEmptyCase() {
+      if (isUndefinedOrEmpty(a1)) {
+        if (isUndefinedOrEmpty(a2)) return 0;
+        return 1; // a1 greater
+      }
+      // assert a1 not undefined
+      return -1 // a2 greater
+    }
+    function compareWhenNotTheSameAddressLength() {
+      const cntMin = addrs1.length < addrs2.length ? addrs1.length : addrs2.length;
+      for (let i = 0; i < cntMin; ++i) {
+        const rr1 = DAddressComparor2(addrs1[i], addrs2[i])
+        if (rr1 != 0) return rr1;
+      }
+      return addrs1.length < addrs2.length ? -1 : 1
+    }
+    function compareWhenTheSameAddressLength() {
+      for (let i = 0; i < addrs2.length; ++i) {
+        const rr1 = DAddressComparor2(addrs1[i], addrs2[i]);
+        if (rr1 == 0)
+          continue;
+        return rr1; // 1 or -1
+      }
+      return 0;
+    }
+  }
+
+  hashNumer(a1:VerseRange): number {
+    if (a1 == undefined || a1.verses == undefined || a1.verses.length == undefined ) return -1;
+    return Enumerable.from(a1.verses).sum(a1=>DAddressComparor(a1))
+  }
+
+}

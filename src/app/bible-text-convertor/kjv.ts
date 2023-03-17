@@ -1,4 +1,4 @@
-import { DOneLine } from './AddBase';
+import { DOneLine } from "./DOneLine";
 import { VerseRange } from '../bible-address/VerseRange';
 import Enumerable from "linq";
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';

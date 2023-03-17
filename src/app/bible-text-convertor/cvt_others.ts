@@ -1,4 +1,5 @@
-import { DOneLine, DText } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
+import { DText } from "src/app/bible-text-convertor/DText";
 import { VerseRange } from '../bible-address/VerseRange';
 import { AddParenthesesUnvNcv } from '../version-parellel/one-ver/AddParenthesesUnv';
 import { AddMergeVerse } from '../version-parellel/one-ver/AddMergeVerse';
@@ -25,7 +26,6 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     const r1 = cvt_oneLine(it1);
     re1.push(r1);
   }
-
   return re1;
   function cvt_oneLine(it1: DOneLine) {    
     it1 = replaceNewLineToBr(it1);
@@ -35,9 +35,10 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     if (ver === 'csb_foot') replaceCsbFootReference(it1);
     it1 = doUsingDOMParsor(it1);
     it1 = addParentheses(it1);
-    it1 = addReference(it1);
+    it1 = addReference(it1);    
     it1 = addFoot(it1, ver);
 
+    
     return it1;
     /** 
      * csb(中文標準譯本－新約only) 版本注釋。在 foot dialog 要用到的
@@ -227,6 +228,8 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
     }
     /** 交互參照 */
     function addReference(it1: DOneLine): DOneLine {
+      // console.log(JSON.stringify(it1));
+      
       toStandard();
 
       const re1 = new AddReferenceInCommentText().main(
@@ -239,8 +242,9 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
         const isGb = DisplayLangSetting.s.getValueIsGB()? 1: undefined;
         for (const it2 of it1.children) {     
           // 新譯本特別處理
-          const refTool: IReferenceTools = 
-          ver === 'ncv' ? new ReferenceNcv(it2.w,isGb) : new ReferenceOther(it2.w,isGb);
+          let refTool: IReferenceTools = 
+          ver === 'ncv' ? new ReferenceNcv(it2.w,isGb) : new ReferenceOther(it2.w,isGb);          
+          
           if (refTool.isIncludeRef()){
             it2.w = refTool.toStandard();            
           }
@@ -325,7 +329,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             if (rr1[4].length !== 0)
               rrr1.isCurly = 1;
 
-            rrr1.w = `${rrr1.tp}${rrr1.sn}`;
+            if ( false  ){ // TODO: 註釋 原文匯編 都要強迫畫
+              rrr1.w = `${rrr1.tp}${rrr1.sn}`; // 需要 G2312，例如註釋
+            } else if ( true ){
+              rrr1.w = `${rrr1.sn}`; // 不需要 'G' 2312
+            }
             if (isT)
               rrr1.w = '(' + rrr1.w + ')';
             else
@@ -364,8 +372,6 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
           (a1, a2, a3) => {
             if (a2 != null) {
               return `<${a2}I></${a2}I>`; // 尾部加個 I 好了, ignore 的 i. 
-
-
               // 花括號, 不行變 <{WH834}> 因為,若是recursive 時 innerHTML 會錯.
               // return `<{${a2}}></{${a2}}>`; 
             } else if (a3 != null) {

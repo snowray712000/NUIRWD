@@ -1,5 +1,5 @@
 import Enumerable from 'linq';
-let r1 = [        
+let r1 = [
     { big5: "全部", gb: "全部" },
     { big5: "舊約", gb: "旧约" },
     { big5: "新約", gb: "新约" },
@@ -42,7 +42,7 @@ let r1 = [
     { big5: "查詢中", gb: "查询中" },
     { big5: "詳細清單", gb: "详细清单" },
     { big5: "聖經目錄", gb: "圣经目录" },
-    
+    { big5: "併排顯示", gb: "并排显示" },
 
 ];
 export function getBig5Text(str: string) {
@@ -66,7 +66,7 @@ import { DisplayLangSetting } from '../rwd-frameset/dialog-display-setting/Displ
 @Pipe({ name: 'gbpipe' })
 export class GbPipe implements PipeTransform {
     // transform(value: string, args: string[]): string {
-        transform(value: string): string {
+    transform(value: string): string {
         if (value == undefined) { return undefined; }
 
         return getGbText(value);

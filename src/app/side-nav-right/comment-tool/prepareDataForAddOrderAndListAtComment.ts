@@ -1,4 +1,4 @@
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 import Enumerable from 'linq';
 import { assert } from 'src/app/tools/assert';
 import { DListAdd } from 'src/app/rwd-frameset/dtexts-rendor/addListStartAndEnd';

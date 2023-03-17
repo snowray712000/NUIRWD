@@ -1,7 +1,7 @@
 import { EventVerseChanged } from './../../side-nav-right/cbol-parsing/EventVerseChanged';
 import { VerForMain } from 'src/app/rwd-frameset/settings/VerForMain';
 import Enumerable from 'linq';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { Component, OnInit, Input, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
@@ -15,6 +15,7 @@ import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting
 import { DisplayFormatSetting } from '../dialog-display-setting/DisplayFormatSetting';
 import { mergeDOneLineIfAddressContinue } from 'src/app/bible-text-convertor/mergeDOneLineIfAddressContinue';
 import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
+import { VerGetDisplayName } from "src/app/fhl-api/BibleVersion/VerGetDisplayName";
 import { DAddress, DAddressComparor } from 'src/app/bible-address/DAddress';
 import { RouteStartedWhenFrame } from './../RouteStartedWhenFrame';
 
@@ -60,15 +61,14 @@ export class DlinesRendorComponent implements OnInit {
       that.verseSelected = a1
 
     })
-    var r1 = new RouteStartedWhenFrame()
-
-    testThenDoAsync({ cbTest: () => r1.isReady() }).then(()=>{
-      r1.routeTools.verseRange$.subscribe(a1 => {
-        // 使用者似乎更喜歡，切過來就自動同步
-        // 不喜歡 "還沒點擊，就保持原本的 selected 網址"
-        EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(a1.verses[0])
-      })
-    })
+    // var r1 = new RouteStartedWhenFrame()
+    // testThenDoAsync({ cbTest: () => r1.isReady() }).then(()=>{
+    //   r1.routeTools.verseRange$.subscribe(a1 => {
+    //     // 使用者似乎更喜歡，切過來就自動同步
+    //     // 不喜歡 "還沒點擊，就保持原本的 selected 網址"
+    //     EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(a1.verses[0])
+    //   })
+    // })
   }
   getIsSelected(a1: DOneLine) {
     if (a1 == undefined) { return false }
@@ -106,6 +106,8 @@ export class DlinesRendorComponent implements OnInit {
   }
 
   onClickOrig(a1: string) {
+    console.log(a1);
+    
     new DialogSearchResultOpenor(this.dialog)
       .showDialog({ keyword: this.getOrigKeyword(a1), isDict: 1, addresses: this.verseRange.verses });
   }
@@ -121,12 +123,6 @@ export class DlinesRendorComponent implements OnInit {
     return IsVersionVisiableManager.s.getFromLocalStorage();
   }
   getVersionDisplayName(na: string) {
-    const rr1 = VerCache.s.getValue();
-
-    const r2 = Enumerable.from(rr1.record).firstOrDefault(a1 => a1.book === na);
-    if (r2 === undefined) {
-      return na;
-    }
-    return r2.cname;
+    return new VerGetDisplayName().main(na)
   }
 }

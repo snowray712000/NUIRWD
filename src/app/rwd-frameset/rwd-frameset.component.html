@@ -22,7 +22,7 @@
 
     <span class="example-fill-remaining-space"></span>
 
-    <button mat-icon-button (click)="snavRight.toggle()">
+    <button mat-icon-button (click)="htmlOnClickRightToggle(snavRight)">
       <mat-icon>menu</mat-icon>
     </button>
   </mat-toolbar>
@@ -40,7 +40,13 @@
     </mat-sidenav>
 
     <mat-sidenav-content #divContent>
-      <app-version-interlace></app-version-interlace>
+      <ng-container *ngIf="htmlIsParallelLayout()">
+        <app-version-parellel></app-version-parellel>
+      </ng-container>
+      <ng-container *ngIf="!htmlIsParallelLayout()">
+        <app-version-interlace></app-version-interlace>
+      </ng-container>
+
       <!-- <app-version-parellel [versions]="this.bibleVersions" (clickVerse)="onClickVerse($event)"></app-version-parellel> -->
       <mat-toolbar style="background: inherit;"><!-- toolbar不要遮住最下面的經文 --></mat-toolbar> 
       <mat-toolbar style="position: fixed;bottom:0;overflow-x: auto;">

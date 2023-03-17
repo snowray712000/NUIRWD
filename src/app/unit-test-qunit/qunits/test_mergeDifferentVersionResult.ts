@@ -1,5 +1,5 @@
 import { UT } from './UT';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { mergeDifferentVersionResult } from "src/app/version-interlace/mergeDifferentVersionResult";
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 export async function test_mergeDifferentVersionResult() {

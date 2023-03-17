@@ -1,4 +1,4 @@
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 
 export function newLineNewLineMerge(datas: DText[][]): DText[] {
   const ree = [];

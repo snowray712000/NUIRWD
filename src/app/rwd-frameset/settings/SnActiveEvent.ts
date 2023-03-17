@@ -1,4 +1,4 @@
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 import { EventTool } from 'src/app/tools/EventTool';
 
 /** 用 static .s */

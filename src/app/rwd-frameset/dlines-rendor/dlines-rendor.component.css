@@ -1,5 +1,5 @@
 .orig {
-  color: darkturquoise;
+  color: darkblue;;
   cursor: pointer;
 }
 .reference {
@@ -18,7 +18,7 @@
   text-indent: -0.5rem;
 }
 .selected{
-  background: linear-gradient(to right, rgba(150, 150, 100, 0.1) 0.2%, rgba(150, 150, 100, 0.4) 4%, rgba(150, 150, 100, 0.7) 10%, rgba(150, 150, 100, 0.7) 90%, rgba(150, 150, 100, 0.4) 96%, rgba(150, 150, 100, 0.1) 99.8%);;
+  /* background: linear-gradient(to right, rgba(150, 150, 100, 0.1) 0.2%, rgba(150, 150, 100, 0.4) 4%, rgba(150, 150, 100, 0.7) 10%, rgba(150, 150, 100, 0.7) 90%, rgba(150, 150, 100, 0.4) 96%, rgba(150, 150, 100, 0.1) 99.8%);; */
   z-index: -1;
 }
 .odd {

@@ -3,7 +3,7 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookNameToId } from 'src/app/const/book-name/book-name-to-id';
 import { AddMapPhotoInfo } from './AddMapPhotoInfo';
 import { AddSnInfo } from './AddSnInfo';
-import { DOneLine } from '../../bible-text-convertor/AddBase';
+import { DOneLine } from "../../bible-text-convertor/DOneLine";
 import { AddMergeVerse } from './AddMergeVerse';
 import { AddParenthesesUnvNcv } from './AddParenthesesUnv';
 import { AddTitleH3 } from './AddTitleHx';

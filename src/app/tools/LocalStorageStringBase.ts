@@ -1,5 +1,6 @@
 import { StorageTools } from './StorageTools';
 import { EventTool } from './EventTool';
+import { VerseRange } from '../bible-address/VerseRange';
 /**
  * 1. s。宣告一個 static s 用 static s = new XXXXXXXX();
  * 2. key。實作 getKey()
@@ -28,7 +29,7 @@ export abstract class LocalStorageStringBase {
       this.curValue = a1;
       this.eventTool.trigger(a1);
     }
-  }
+  }  
   getValue(): string {
     if (this.curValue === undefined) {
       this.getFromLocalStorage();

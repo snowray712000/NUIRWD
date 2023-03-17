@@ -6,7 +6,7 @@ import { IOrigCollectionGetter } from './search-result-dialog.component';
 import { cvt_unv, cvt_unvAsync } from 'src/app/bible-text-convertor/unv';
 import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { DAddress } from 'src/app/bible-address/DAddress';
-import { DOneLine } from 'src/app/bible-text-convertor/AddBase';
+import { DOneLine } from "src/app/bible-text-convertor/DOneLine";
 import { cvt_kjv } from 'src/app/bible-text-convertor/kjv';
 import { EventToolSingle } from 'src/app/tools/EventTool';
 import { SetFilterStatus } from './KeywordSearchGetter';

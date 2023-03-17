@@ -1,4 +1,5 @@
-import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
+import { DOneLine } from "../../bible-text-convertor/DOneLine";
+import { DText } from "../../bible-text-convertor/DText";
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { VerseRange } from 'src/app/bible-address/VerseRange';

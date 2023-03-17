@@ -1,5 +1,5 @@
 import Enumerable from 'linq';
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 export function newLineNewLineSplit(dataRef: DText[]): DText[][] {
   const re: DText[][] = [];
   const dataClone = [...dataRef];

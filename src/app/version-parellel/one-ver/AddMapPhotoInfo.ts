@@ -2,7 +2,8 @@ import { VerseRange } from 'src/app/bible-address/VerseRange';
 import { BookChapDistinctTool } from './BookChapDistinctTool';
 import { ApiSobj, DApiSobOneRecord, DApiSobjResult } from 'src/app/fhl-api/ApiSobj';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DOneLine, DText } from '../../bible-text-convertor/AddBase';
+import { DOneLine } from "../../bible-text-convertor/DOneLine";
+import { DText } from "../../bible-text-convertor/DText";
 import { deepCopy } from 'src/app/tools/deepCopy';
 import Enumerable from 'linq';
 export class AddMapPhotoInfo {

@@ -1,5 +1,7 @@
 import { TextWithSnConvertor } from 'src/app/side-nav-right/cbol-parsing/TextWithSnConvertor';
-import { DOneLine, DText, IAddBase } from '../../bible-text-convertor/AddBase';
+import { IAddBase } from '../../bible-text-convertor/AddBase';
+import { DOneLine } from "../../bible-text-convertor/DOneLine";
+import { DText } from "../../bible-text-convertor/DText";
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
 import { VerseRange } from 'src/app/bible-address/VerseRange';

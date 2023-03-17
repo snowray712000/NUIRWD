@@ -11,5 +11,3 @@ export class VerForMain extends LocalStorageArrayBase<string> {
   override _isDefaultIfEmpty() { return true; }
   override _getDefaultValue() { return ['unv']; }
 }
-
-

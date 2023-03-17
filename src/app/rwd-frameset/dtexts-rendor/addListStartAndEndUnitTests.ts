@@ -1,5 +1,5 @@
 import { DListAdd, addListStartAndEnd } from './addListStartAndEnd';
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 
 export function addListStartAndEndUnitTests() {
   let r1: DListAdd[] = [];

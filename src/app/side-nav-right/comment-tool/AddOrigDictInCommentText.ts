@@ -1,6 +1,6 @@
 import { deepCopy } from 'src/app/tools/deepCopy';
 import { SplitStringByRegexVer2 } from 'src/app/tools/SplitStringByRegex';
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 
 export class AddOrigDictInCommentText {
   main(datas: DText[]) {

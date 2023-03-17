@@ -1,6 +1,6 @@
 import { mergeTextAtCommentText } from 'src/app/side-nav-right/comment-tool/mergeTextAtCommentText';
 import Enumerable from 'linq';
-import { DText } from './../../bible-text-convertor/AddBase';
+import { DText } from "./../../bible-text-convertor/DText";
 import { DAddress } from 'src/app/bible-address/DAddress';
 import { AddBrStdandard } from 'src/app/version-parellel/one-ver/AddBrStdandard';
 import { newLineNewLineSplit } from 'src/app/rwd-frameset/search-result-dialog/newLineNewLineSplit';
@@ -15,9 +15,7 @@ export class Comment2DText {
   main(text: string, addr: DAddress): DText[] {
     // 首先 先把換行處理 (看看裡面是否真的只處理換行，還是有偷作別的) - 沒有
     // order list 又是作什麼呢？
-    console.clear();
-
-    console.log(text)
+    
     const r1 = new AddBrStdandard().main2([{ w: text }]);
     // console.log(r1)
 

@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReferenceNcv = void 0;
+
 var BookNameConstants_1 = require("../bible-const/BookNameConstants");
-var LQ = require("linq");
+var LQ = require("linq").default;
 var SplitStringByRegExp_1 = require("../str/SplitStringByRegExp");
 /**
  * 新譯本工具
@@ -17,7 +18,7 @@ var ReferenceNcv = /** @class */ (function () {
     }
     ReferenceNcv.prototype.isIncludeRef = function () {
         // var reg1 = new RegExp('（[徒太可路，:~；、0-9]+）','g');
-        var reg1 = this.generateRegExp();
+        var reg1 = this.generateRegExp();   
         var r2 = new SplitStringByRegExp_1.SplitStringByRegExp().main(this.str, reg1);
         this.regResult = r2;
         return LQ.from(r2)
@@ -38,9 +39,14 @@ var ReferenceNcv = /** @class */ (function () {
             return ReferenceNcv.regGb;
         }
         function g(isGb) {
-            var r1 = LQ.from(isGb !== 1 ? BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS : BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB)
-                .toArray()
-                .join('');
+            // console.log(BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS)
+            // console.log(BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB)
+            const books = isGb !== 1 ? BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS :
+                                       BookNameConstants_1.BookNameConstants.CHINESE_BOOK_ABBREVIATIONS_GB
+            
+            var r1 = LQ.from(books)
+                 .toArray()
+                 .join('');
             return new RegExp("\uFF08[" + r1 + "\uFF0C:~\uFF1B\u30010-9]+\uFF09", 'g');
         }
     };

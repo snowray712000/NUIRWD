@@ -1,5 +1,5 @@
 import Enumerable from 'linq';
-import { DText } from 'src/app/bible-text-convertor/AddBase';
+import { DText } from "src/app/bible-text-convertor/DText";
 
 export function addListStartAndEnd(datas: DListAdd[]): DListAdd[] {
   const isDebug = false;
