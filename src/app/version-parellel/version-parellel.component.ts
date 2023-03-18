@@ -60,9 +60,6 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     window.dispatchEvent(event);
   }
 
-  addrs: VerseRange[]
-  oneLine: DOneLine
-
   private isEnoughWidthParellel = true; //
   private isSn = false;
   private isMapPhoto = false;
@@ -120,12 +117,17 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
           this.isDataChanged = true
           this.triggerWindowResizeEvent()
-          DomManagers.s.getDivContent().scrollTop = 0
+
+          scrollToTop()
         }, 0);
       })
       return
       function isTheSame(addr1: VerseRange, addr2: VerseRange): boolean {
         return VerseRange.isTheSame(addr1, addr2);
+      }
+      function scrollToTop(){
+        const r1 = DomManagers.s.getDivContent()
+        if ( r1 != null) r1.scrollTop = 0;
       }
     });
 
@@ -215,8 +217,60 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
     return new VerGetDisplayName().main(na)
   }
   htmlOnClickAddressCell(row: number, col: number) {
+    const that = this
+    const dtext = this.getDTextOFRowCol(row, col)
+    if (dtext == null ) return 
+
+    if (isOneChap()) {
+      this.triggerActiveVerseChangedIfNotNull(dtext)
+    } else {
+      const dtext2 = gDtextOfTheSameBookChap(dtext)
+      that.showDialogOfReference(dtext2)
+    }
+    return
+
+    function isOneChap() {
+      const verses = that.addresses.verses
+      if (verses.length == 0) return true
+      const v0 = verses[0]
+      return Enumerable.from(verses).all(a1 => a1.book == v0.book && a1.chap == v0.chap)
+    }
+    function gDtextOfTheSameBookChap(dtext: DText) {
+      const r1 = dtext.refAddresses!
+      const r2 = DisplayLangSetting.s.getBookNameOfLangSet(r1[0].book)
+      let re: DText  = {w: r2, isRef:1, refDescription: `${r2}:${r1[0].chap}`}
+      return re
+    }
+  }
+  htmlOnClickTextCell(row: number, col: number) {
+    const dtext = this.getDTextOFRowCol(row, col)
+    this.triggerActiveVerseChangedIfNotNull(dtext)
+  }
+  htmlBindEvent_SnClickDialog(dtext: DText) {
+    new DialogSearchResultOpenor(this.dialog)
+      .showDialog({ keyword: `${dtext.tp}${dtext.sn}`, isDict: 1, addresses: this.addresses.verses });
+  }
+  htmlBindEvent_ReferenceClickDialog(dtext: DText) {
+   this.showDialogOfReference(dtext)
+  }
+  // dtext.refDescription = "創1" 之類的
+  showDialogOfReference(dtext: DText){
+    const keyword = `#${dtext.refDescription}|`
+    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: keyword, addresses: this.addresses.verses });
+  }
+  removeHeightStyleForDataChanged() {
+    if (this.isViewInit) {
+      for (let a1 of this.cellsRefs) {
+        this.renderer.removeStyle(a1.nativeElement, "height")
+      }
+    }
+    this.isDataChanged = true
+  }
+  getDTextOFRowCol(row: number, col: number): DText {
     const dtexts = this.data[row][0]
-    const dtext = Enumerable.from(dtexts).firstOrDefault(null)
+    return Enumerable.from(dtexts).firstOrDefault(null)
+  }
+  triggerActiveVerseChangedIfNotNull(dtext?: DText) {
     if (dtext != null && dtext.refAddresses != null && dtext.refAddresses.length > 0) {
       const addr = dtext.refAddresses[0]
       EventVerseChanged.s.updateValueAndSaveToStorageAndTriggerEvent(addr);
@@ -248,22 +302,7 @@ export class VersionParellelComponent implements OnInit, AfterViewInit, OnChange
 
   ngOnChanges(changes: SimpleChanges): void {
   }
-  htmlBindEvent_SnClickDialog(dtext: DText) {
-    new DialogSearchResultOpenor(this.dialog)
-      .showDialog({ keyword: `${dtext.tp}${dtext.sn}`, isDict: 1, addresses: this.addresses.verses });
-  }
-  htmlBindEvent_ReferenceClickDialog(dtext: DText) {
-    const keyword = `#${dtext.refDescription}|`
-    new DialogSearchResultOpenor(this.dialog).showDialog({ keyword: keyword, addresses: this.addresses.verses });
-  }
-  removeHeightStyleForDataChanged() {
-    if (this.isViewInit) {
-      for (let a1 of this.cellsRefs) {
-        this.renderer.removeStyle(a1.nativeElement, "height")
-      }
-    }
-    this.isDataChanged = true
-  }
+
   async reQueryDataAsync() {
     const that = this
 

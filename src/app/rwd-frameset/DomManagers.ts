@@ -5,7 +5,10 @@ export class DomManagers {
     static s: DomManagers = new DomManagers();
     /** 為了 scroll 內容，所以把它抓出來用，實體在 rwd-frameset */
     divContent: any
-    getDivContent(): HTMLElement { return this.divContent.elementRef.nativeElement as HTMLElement; }
+    getDivContent(): HTMLElement { 
+        if (this.divContent == null ) return  null 
+        if (this.divContent.elementRef == null ) return null
+        return this.divContent.elementRef.nativeElement as HTMLElement; }
     divContentEachLine: any
     getDivContentEachLineResult(): any[] { return this.divContentEachLine._results as any[] }
 }

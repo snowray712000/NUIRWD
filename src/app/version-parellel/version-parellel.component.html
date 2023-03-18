@@ -30,7 +30,7 @@
                class="column-base">
                <div class="text1">
                     <div *ngFor="let item2 of gArray(cntRow); let i = index" class="text2" #cell1 [attr.data-row]="i"
-                         [attr.data-col]="j" (click)="htmlOnClickAddressCell(i,j+1)">
+                         [attr.data-col]="j" (click)="htmlOnClickTextCell(i,j+1)">
                          <span *ngFor="let item3 of gArray(data[i][j+1].length); let k = index">
                               <app-dtext-rendor [data]="data[i][j+1][k]"
                                    (clickRef)="htmlBindEvent_ReferenceClickDialog($event)"
