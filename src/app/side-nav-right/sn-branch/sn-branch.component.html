@@ -1,0 +1,13 @@
+
+<div style="height: 100%;">
+    <ng-container *ngIf="urlPdf1" >
+        <mat-radio-group aria-label="Select an option" [value]="selectedOption" (change)="onSelectChanged($event)">
+            <mat-radio-button value="1" >{{ '原文樹狀圖' | gbpipe}}</mat-radio-button>
+            <mat-radio-button value="2" >{{ '樹狀圖解析參考' | gbpipe}}</mat-radio-button>
+        </mat-radio-group>   
+        <ngx-extended-pdf-viewer [src]="selectedOption === '1' ? urlPdf1 : urlPdf2" height="95%"></ngx-extended-pdf-viewer>        
+      </ng-container>
+      <ng-container *ngIf="!urlPdf1">
+        目前出版並取得版權的只有羅馬書，敬請期待。
+      </ng-container>      
+</div>

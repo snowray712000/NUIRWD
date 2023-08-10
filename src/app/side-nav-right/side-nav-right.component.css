@@ -4,3 +4,6 @@
   margin: 1px!important;
   height: 1.5em!important;
 }
+::ng-deep.mat-tab-body-wrapper {
+  height: 100%;
+}

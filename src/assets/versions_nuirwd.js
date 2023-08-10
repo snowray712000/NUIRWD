@@ -104,6 +104,12 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230810a',
+            na2: [
+                'New-原文樹狀圖功能。',                
+            ],
+            img: []
+        },{
             na: '230313',
             na2: [
                 'New-併排顯示。',

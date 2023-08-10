@@ -8,7 +8,7 @@ import { FunctionSelectionTab } from '../FunctionSelectionTab';
  * @param tabString 
  * @param fn 
  */
-export function VerseActivedChangedDo(tabString: '分析' | '註釋' | '串珠', fn: (addr: DAddress) => void) {
+export function VerseActivedChangedDo(tabString: '分析' | '註釋' | '串珠' | '樹狀圖', fn: (addr: DAddress) => void) {
   new FunctionDoWhenVerseChanged().main(tabString, fn);
 }
 

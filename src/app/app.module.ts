@@ -28,6 +28,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SideNavRightComponent } from './side-nav-right/side-nav-right.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { CbolParsingComponent } from './side-nav-right/cbol-parsing/cbol-parsing.component';
@@ -53,6 +54,9 @@ import { GbPipe } from './gb/getGbText';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
 import { DTextRendorComponent } from './rwd-frameset/dtext-rendor/dtext-rendor.component';
+import { SnBranchComponent } from './side-nav-right/sn-branch/sn-branch.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
 const entryComponents = [
   BibleSelectionsComponent,
   // InfoDialogComponent,
@@ -98,6 +102,7 @@ const entryComponents = [
     DialogFootComponent,
     DialogChooseChapterComponent,
     GbPipe,
+    SnBranchComponent,
   ],
   entryComponents,
   imports: [
@@ -116,6 +121,7 @@ const entryComponents = [
     MatButtonModule,
     MatExpansionModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatBottomSheetModule,
     MatGridListModule,
     MatButtonToggleModule,
@@ -128,6 +134,7 @@ const entryComponents = [
     MatInputModule,
     MatProgressBarModule,
     FlexLayoutModule,
+    NgxExtendedPdfViewerModule,
   ],
   providers: [HttpClient, MatSnackBar],
   bootstrap: [AppComponent],

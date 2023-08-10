@@ -31,7 +31,12 @@
                 "input": "./node_modules/jquery-ui/dist/themes/blitzer/images/",
                 "output": "/images/",
                 "glob": "**/*"
-              },              
+              },     
+              {
+                "input": "./node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/",
+                "glob": "**/*"
+              },         
               {
                 "input": "./libs/",
                 "glob": "**/*",
