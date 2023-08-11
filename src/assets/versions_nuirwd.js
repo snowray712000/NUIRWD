@@ -104,6 +104,13 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230811a',
+            na2: [
+                'Bug-馬索拉原文順序上下相反',
+                'ESV譯本修正',            
+            ],
+            img: []
+        },{
             na: '230810a',
             na2: [
                 'New-原文樹狀圖功能。',                

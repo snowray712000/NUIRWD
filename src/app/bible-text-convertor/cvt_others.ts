@@ -24,6 +24,11 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
   for (let i1 = 0; i1 < data.length; i1++) {
     const it1 = data[i1];
     const r1 = cvt_oneLine(it1);
+    
+    if (ver == 'bhs'){ // 馬索拉原文，順序會反過來的 (同一節，不同行的時候)
+      r1.children = r1.children.reverse()
+    }
+
     re1.push(r1);
   }
   return re1;
@@ -319,6 +324,8 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
           } else if (it3.nodeType === 1 && it3.tagName === 'CM') {
             rrr1.isBold = 1; rrr1.w = it3.textContent; // KJV 未知
+          } else if (it3.nodeType === 1 && it3.tagName === 'SUBHEADING') {
+            rrr1.isBold = 1; rrr1.w = it3.textContent; // ESV 詩篇101 未知
           } else if (/WA?(T?)(H|G)(\d+[aA]?)(I?)/.test(it3.tagName)) {
             let rr1 = /WA?(T?)(H|G)(\d+[aA]?)(I?)/.exec(it3.tagName);            
             const isT = rr1[1].length !== 0;
@@ -341,8 +348,10 @@ export function cvt_others(data: DOneLine[], verses: VerseRange, ver?: string) {
             if (rrr1.isCurly === 1)
               rrr1.w = '{' + rrr1.w + '}';
           }
-          else
+          else{
             rrr1.w = it3.outerHTML;
+            // console.log(it3.nodeType, it3.tagName, it3.textContent)            
+          }
           re.push(rrr1);
         }
       }
