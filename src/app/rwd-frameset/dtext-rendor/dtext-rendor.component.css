@@ -3,7 +3,7 @@
     cursor: pointer;
   }
   .reference {
-    color: blue;
+    color: blue !important;
     cursor: pointer;
   }
   .foot {
