@@ -35,6 +35,8 @@ import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/
 import { EventVerseChanged } from './EventVerseChanged';
 import { TestTime } from 'src/app/tools/TestTime';
 import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
+import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
+
 @Component({
   selector: 'app-cbol-parsing',
   templateUrl: './cbol-parsing.component.html',
@@ -137,6 +139,20 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
         dt1.log('pasring rendered')
       }, 0);
     });
+  }
+  public wform2(strWform: string): string {
+    // 創1:11 節 Bug 而新增
+    let r1 = new SplitStringByRegex()
+    let r6 = r1.main(strWform, /[\u0590-\u05FF]+/g) // hebrew
+    if (r6.data.length == 1) {
+      return strWform
+    } else {
+      // <span>&lrm;介系詞 </span><span>Hebrew</span><span>&lrm; + 3 單陽詞尾</span>
+      const mod2 = r6.isStartFromFirstChar ? 0 : 1
+      return Enumerable.range(0, r6.data.length)
+        .select( i => i % 2 == mod2 ? r6.data[i] : '&lrm;'+r6.data[i] )
+        .select( a1 => '<span>' + a1 + '</span>' ).toArray().join('')
+    }
   }
   public createDomFromString(str) {
     return this.sanitizer.bypassSecurityTrustHtml(str);

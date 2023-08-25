@@ -41,7 +41,7 @@
             <span [class]="htmlGetSnClass(a1)" (click)="onClickSn($event,a1)"> {{a1.tp}}{{a1.sn}} </span>
             <span class='item-title'> {{'分析'|gbpipe}} </span>
             <span> {{a1.pro}} </span>
-            <span [innerHTML]="createDomFromString(a1.wform)"></span>
+            <span [innerHTML]="createDomFromString(wform2(a1.wform))"></span>
             <span *ngIf="a1.remark!==undefined">
               <br />
               <span class='item-title'> {{'備註'|gbpipe}} </span>
