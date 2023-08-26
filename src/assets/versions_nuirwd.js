@@ -104,6 +104,14 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230826a',
+            na2: [
+                'Bug: SNParsing 中文順序標點符號錯亂。例如：`上帝說「要有光」，` 會錯誤顯示為 `，上帝說「要有光」` 的順序',
+                '優化: 新譯本，詩篇96抬頭，經文交互參照，可按。將顏色從原本的紫色變為藍色。',   
+                'Bug: SNParsing 的分析，於創1v11的 H9002。正確應該是 `介系詞 בְּ‎ 十 3 單陽詞尾` 但卻顯示為 `介系詞 3 十 בְּ‎ 單陽詞尾`'         
+            ],
+            img: []
+        },{
             na: '230811a',
             na2: [
                 'Bug-馬索拉原文順序上下相反',
