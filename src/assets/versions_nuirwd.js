@@ -104,6 +104,12 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230829a',
+            na2: [
+                'Bug: SNParsing，約二5節、8節沒出來。',            
+            ],
+            img: []
+        },{
             na: '230826a',
             na2: [
                 'Bug: SNParsing 中文順序標點符號錯亂。例如：`上帝說「要有光」，` 會錯誤顯示為 `，上帝說「要有光」` 的順序',

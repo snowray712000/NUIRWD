@@ -8,7 +8,7 @@ export type TpDisplayLangSetting = '創' | '创' | 'Ge'
 export class DisplayLangSetting extends LocalStorageStringBase {
   static s = new DisplayLangSetting();
   _getKey() { return 'displaylang'; }
-  override _getDefaultValue() { return '創'; }
+  override _getDefaultValue() { return '創'; } // 發版本 要改
   //override _getDefaultValue() { return '创'; }
 
   /** this.getFromLocalStorage() === '创'; */
