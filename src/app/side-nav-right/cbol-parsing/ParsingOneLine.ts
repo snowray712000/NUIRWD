@@ -1,3 +1,6 @@
+import Enumerable from "linq";
+import { SplitStringByRegex } from "src/app/tools/SplitStringByRegex";
+
 export class ParsingOneLine {
   re: { w: string, sn?: number, wid?: number }[] = [];
   constructor(
@@ -12,66 +15,33 @@ export class ParsingOneLine {
   parsing() {
     this.re = [];
     const len = this.strWord.length;
-    let k0 = 0;
-    let k1 = 0;
     let j0 = this.iRecordStart1Based;
     let m0 = this.records[j0];
-    // console.log(len);
-    while (k1 < len) {
-      if (m0.word[0] === this.strWord[k1]) {
-        break;
-      }
-      k1++;
-    }
-    // 第1個字元,不是原文
-    if (k1 !== k0) {
-      this.re.push({ w: this.strWord.substr(0, k1) });
-      k0 = k1;
-    }
-    while (true) {
-      // 接著是原文
-      {
-        const sn = parseInt(m0.sn, 10);
-        const wid = sn !== 0 ? m0.wid : undefined;
-        this.re.push({
-          w: m0.word,
-          sn,
-          wid,
-        });
-        k0 += m0.word.length;
-        k1 = k0 + 1;
-        j0++;
-        if (j0 !== this.records.length) {
-          m0 = this.records[j0];
-        } else {
-          m0 = undefined;
-        }
-        // console.log(m0);
-      }
-      // 接著可能是其它字元
-      while (k1 < len) {
-        if (m0 !== undefined && m0.word[0] === this.strWord[k1]) {
-          break;
-        }
-        k1++;
-      }
-      // 其它字元
-      if (k1 !== k0) {
-        // console.log(k0);
-        // console.log(k1);
-        if (k0 < len) {
-          this.re.push({ w: this.strWord.substr(k0, k1 - k0) });
-        }
-        k0 = k1;
-      }
-      if (k1 >= len - 1) {
-        break;
-      }
-    }
-    // console.log(this.re);
 
+    // 約4:1，約二1:5,8 都是重要的測試點
+    const rr1 = new SplitStringByRegex().main(this.strWord, /\+|[\u0370-\u03FF\u1F00-\u1FFF\u2c80-\u2cff]+|[\s\(\)\,\.]+/g)
+    const rr2 = Enumerable.from(rr1.data).where(a1=>a1.length > 0).toArray();
+    
+    for (const a1 of rr2) {
+      if ( /[\s\(\)\,\.]+/.test(a1) ){
+        this.re.push({ w: a1 });
+      } else {
+        if ( /\+/.test(a1) ) {
+          this.re.push({ w: a1, sn: 0, wid: j0++});
+        } else {
+          try {
+            m0 = this.records[j0]
+            let sn = parseInt(m0.sn, 10);
+            this.re.push({ w: a1, sn, wid: j0++ });        
+          } catch (error) {
+            throw error
+            // this.re.push({ w: a1, sn:0 , wid: j0++ });        
+          }
+        }
+      }
+    }
     this.plusX3();
-    return this.re;
+    return this.re
   }
 
   /** 處理 韋氏 聯氏, 可1:1 */
