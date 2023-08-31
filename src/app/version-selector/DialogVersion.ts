@@ -37,12 +37,12 @@ export function DDialogOfVersionArgsSetDefaultIfNeed(inoutJoArgs?: DDialogOfVers
     }
 }
 
-export class BibieVersionDialog {
+export class BibleVersionDialog {
     private constructor() { }
-    private static _s: BibieVersionDialog ;
-    static get s(): BibieVersionDialog {
+    private static _s: BibleVersionDialog ;
+    static get s(): BibleVersionDialog {
         if (this._s == undefined) {
-            this._s = new BibieVersionDialog();
+            this._s = new BibleVersionDialog();
         }
         return this._s
     }

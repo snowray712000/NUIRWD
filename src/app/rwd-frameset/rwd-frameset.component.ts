@@ -42,7 +42,7 @@ import { MatSidenavContent } from '@angular/material/sidenav';
 import { DomManagers } from './DomManagers';
 import 'jquery';
 import 'jquery-ui';
-import { BibieVersionDialog } from '../version-selector/DialogVersion';
+import { BibleVersionDialog } from '../version-selector/DialogVersion';
 import { VerOfOffenForMain } from './settings/VerOfOffenForMain';
 import { VerOfSetsForMain } from './settings/VerOfSetsForMain';
 import Enumerable from 'src/ijn-fhl-sharefun-ts/linq/linq';
@@ -290,7 +290,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
   async onClickVersions() {
     /** dialog 關閉後 */
-    BibieVersionDialog.s.setCallbackClosed(jo => {
+    BibleVersionDialog.s.setCallbackClosed(jo => {
       if (jo === undefined) {
         // 按 close
       } else {
@@ -311,7 +311,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
       }
     })
     
-    BibieVersionDialog.s.setCallbackOpened(async ()=>{
+    BibleVersionDialog.s.setCallbackOpened(async ()=>{
 
       const addresses = this.routeVerseRange.verses
       const books = Enumerable.from( addresses ).select( a1 => a1.book).distinct().toArray()
@@ -341,7 +341,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
       // console.log(na2ntot)
       
       type TpDataBookItem = {na:string; cna:string; verHide: 0|1}
-      const vers$ = BibieVersionDialog.s.getVers$()
+      const vers$ = BibleVersionDialog.s.getVers$()
       const bookItems$ = vers$.find('.book-item')      
       bookItems$.each((i1, dom)=>{
         
@@ -359,12 +359,12 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
 
         $(dom).data('data', data) // update data                              
       })
-      
+
       // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
-      BibieVersionDialog.s.hideWhereVerNotIncluded(true)
+      BibleVersionDialog.s.hideWhereVerNotIncluded(true)
     })
 
-    BibieVersionDialog.s.openAsync({
+    BibleVersionDialog.s.openAsync({
       selects: VerForMain.s.getFromLocalStorage(),
       offens: VerOfOffenForMain.s.getFromLocalStorage(),
       sets: VerOfSetsForMain.s.getFromLocalStorage(),

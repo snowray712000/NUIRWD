@@ -30,7 +30,7 @@ import { MatProgressBar } from "@angular/material/progress-bar";
 import { Observable } from 'rxjs';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { getGbText } from 'src/app/gb/getGbText';
-import { BibieVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed } from 'src/app/version-selector/DialogVersion';
+import { BibleVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed } from 'src/app/version-selector/DialogVersion';
 import { VerForMain } from '../settings/VerForMain';
 import { VerOfSetsForMain } from '../settings/VerOfSetsForMain';
 import { VerOfOffenForMain } from '../settings/VerOfOffenForMain';
@@ -275,7 +275,7 @@ export class SearchResultDialogComponent implements OnInit {
     if (isSnOnly == 1) {// 保持原本的方法
       useOrigMethod()
     } else {// 新方法
-      BibieVersionDialog.s.setCallbackClosed((jo?: DDialogOfVersionArgs) => {
+      BibleVersionDialog.s.setCallbackClosed((jo?: DDialogOfVersionArgs) => {
         if (jo == null || jo.selects == null || jo.selects.length == 0) {
           jo = jo || {};
           jo.selects = [VerForSearch.s.getFromLocalStorage()]
@@ -283,7 +283,7 @@ export class SearchResultDialogComponent implements OnInit {
         DDialogOfVersionArgsSetDefaultIfNeed(jo)
         doAfterCloseDialogNotSnVer([jo.selects[0]])//原版本，只會被選1個版本，所以取第1個版本
       });
-      BibieVersionDialog.s.openAsync({
+      BibleVersionDialog.s.openAsync({
         selects: [],
         offens: VerOfOffenForMain.s.getFromLocalStorage(),
         sets: VerOfSetsForMain.s.getFromLocalStorage(),
