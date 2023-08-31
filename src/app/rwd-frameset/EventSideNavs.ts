@@ -1,4 +1,4 @@
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, lastValueFrom } from 'rxjs';
 import { SideNavsOnFrame } from './SideNavsOnFrame';
 export interface IEventSideNavs {
   /** true, 是打開, false 是關閉 */
@@ -16,11 +16,11 @@ export class EventSideNavs implements IEventSideNavs {
     this.leftChanged$ = new Observable<boolean>(obLeft => {
       this.obLeft = obLeft;
     });
-    this.leftChanged$.toPromise().then(a1 => { }); // 這樣, 下面的 this.obLeft 才不會是 undefined
+    lastValueFrom(this.leftChanged$).then(a1 => { }); // 這樣, 下面的 this.obLeft 才不會是 undefined    
     this.rightChanged$ = new Observable<boolean>(obRight => {
       this.obRight = obRight;
     });
-    this.rightChanged$.toPromise().then(a1 => { });
+    lastValueFrom(this.rightChanged$).then(a1 => { });    
     this.navs.navLeft.openedChange.subscribe((st: boolean) => {
       this.obLeft.next(st);
     });

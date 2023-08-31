@@ -27,7 +27,7 @@ import { IsColorKeyword } from '../settings/IsColorKeyword';
 import { VerCache } from 'src/app/fhl-api/BibleVersion/VerCache';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatProgressBar } from "@angular/material/progress-bar";
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { getGbText } from 'src/app/gb/getGbText';
 import { BibleVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed } from 'src/app/version-selector/DialogVersion';
@@ -297,7 +297,7 @@ export class SearchResultDialogComponent implements OnInit {
       );
 
       /** dialog 關閉後 */
-      refdialog.afterClosed().toPromise().then((re: string[]) => {
+      lastValueFrom( refdialog.afterClosed() ).then((re: string[]) => {
         if (isSnOnly === 1) {
           doAfterCloseDialogSnVer(re);
         } else {

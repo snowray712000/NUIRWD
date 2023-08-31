@@ -1,4 +1,4 @@
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, lastValueFrom } from 'rxjs';
 /** 用 static .s */
 export class IsMapPhotoManager {
   static s = new IsMapPhotoManager();
@@ -10,7 +10,7 @@ export class IsMapPhotoManager {
     this.onChangedIsSn$ = new Observable<boolean>(ob => {
       pthis.ob = ob;
     });
-    this.onChangedIsSn$.toPromise(); // 加這行, pthis.ob = ob 裡面才會先執行一次
+    lastValueFrom(this.onChangedIsSn$); // 加這行, pthis.ob = ob 裡面才會先執行一次
     this.curValue = this.getFromLocalStorage();
     if (this.ob !== undefined) {
       this.ob.next(this.curValue);

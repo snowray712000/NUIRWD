@@ -9,7 +9,7 @@ import { SnActiveEvent } from "../settings/SnActiveEvent";
 import { BibleBookNames } from 'src/app/const/book-name/BibleBookNames';
 import { BookNameLang } from 'src/app/const/book-name/BookNameLang';
 import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFootComponent } from '../dialog-foot/dialog-foot.component';
 import { ApiRt } from 'src/app/fhl-api/ApiRt';
@@ -145,7 +145,7 @@ export class DTextsRendorComponent implements OnInit, OnChanges {
   onClickFoot(a1: DText) {
     const pthis = this;
     if (a1.foot.text === undefined) {
-      const r1 = getFromApi().toPromise().then(arg1 => {
+      const r1 = lastValueFrom( getFromApi() ).then(arg1 => {
         if (arg1.status === 'success') {
           a1.foot.text = arg1.record[0].text;
           console.log(a1);

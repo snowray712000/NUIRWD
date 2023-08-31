@@ -6,6 +6,7 @@ import { DOneLine } from "../../bible-text-convertor/DOneLine";
 import { DText } from "../../bible-text-convertor/DText";
 import { deepCopy } from 'src/app/tools/deepCopy';
 import Enumerable from 'linq';
+import { lastValueFrom } from 'rxjs';
 export class AddMapPhotoInfo {
   private re3: DApiSobjResult[];
   /** const re3 = await this.getPhotoMapFromApi(verses); */
@@ -120,7 +121,7 @@ export class AddMapPhotoInfo {
     const r2 = r1.addressesOfBookChap.map(a1 => {
       const r3 = deepCopy(a1);
       r3.verse = -1;
-      return new ApiSobj().querySobjAsync({ address: r3 }).toPromise();
+      return lastValueFrom( new ApiSobj().querySobjAsync({ address: r3 }) );
     });
     const re3 = await Promise.all(r2);
     return re3;

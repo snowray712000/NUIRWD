@@ -23,7 +23,7 @@ export class ReferenceGetter implements IReferenceGetter {
     async function getDataAsync(str: string, version: string): Promise<DOneQsbRecord[]> {
       const r1 = new ApiQsb().queryQsbAsync({ qstr: str, bibleVersion: version, isExistStrong: true,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() });
       const r2 = r1.pipe(map(a1 => a1.record));      
-      return lastValueFrom(r2) // return r2.toPromise();
+      return lastValueFrom(r2)
     }
     function getStrForApi(str) {
       const r1 = /#?([^|]+)\|?/i.exec(str);

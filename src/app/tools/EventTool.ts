@@ -1,4 +1,4 @@
-import { Observable, Subscriber, Subject, ConnectableObservable } from 'rxjs';
+import { Observable, Subscriber, Subject, ConnectableObservable, lastValueFrom } from 'rxjs';
 import { multicast } from 'rxjs/operators';
 export class EventTool<T> {
   changed$: ConnectableObservable<T>;
@@ -8,7 +8,7 @@ export class EventTool<T> {
     const r1 = new Observable<T>(ob => {
       pthis.ob = ob;
     });
-    r1.toPromise(); // 加這行, 上面那行才會先執行一次, 否則 ob 會是 undefined
+    lastValueFrom(r1) // 加這行, 上面那行才會先執行一次, 否則 ob 會是 undefined    
     this.changed$ = r1.pipe(multicast(new Subject<T>())) as ConnectableObservable<T>;
     this.changed$.connect();
     // https://ncjamieson.com/understanding-publish-and-share/
@@ -27,7 +27,7 @@ export class EventToolSingle<T> {
     const r1 = new Observable<T>(ob => {
       pthis.ob = ob;
     });
-    r1.toPromise(); // 加這行, 上面那行才會先執行一次, 否則 ob 會是 undefined
+    lastValueFrom(r1) // 加這行, 上面那行才會先執行一次, 否則 ob 會是 undefined    
     this.changed$ = r1;
   }
   trigger(arg: T) {

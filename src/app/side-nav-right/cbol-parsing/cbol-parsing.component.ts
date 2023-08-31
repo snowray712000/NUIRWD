@@ -36,6 +36,7 @@ import { EventVerseChanged } from './EventVerseChanged';
 import { TestTime } from 'src/app/tools/TestTime';
 import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
 import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-cbol-parsing',
@@ -209,16 +210,16 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
       return r1.toStringChineseShort();
     }
     function getUnvAsync() {
-      return new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }).toPromise();
+      return lastValueFrom( new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'unv' }) );
     }
     function getKjvAsync() {
-      return new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }).toPromise();
+      return lastValueFrom( new ApiQsb().queryQsbAsync({ qstr, isExistStrong: true, bibleVersion: 'kjv' }) );
     }
   }
   private async queryQbAndRefreshAsync(book: number, chap: number, verse: number) {
     const that = this;
     // 此 api 取得中的 record，[0]是整節經文；之後的[1]-[N]就是每一個 table 裡的東西
-    const qbResult = await new ApiQp().queryQpAsync(book, chap, verse).toPromise();
+    const qbResult = await lastValueFrom( new ApiQp().queryQpAsync(book, chap, verse) );
 
     const isOldTestment = qbResult.N == 1// qbResult.N === 1 舊約        
     this.isOldTestment = isOldTestment // html using
@@ -432,7 +433,7 @@ class StasticQbGreek {
   }
 
   async qbCall(bk, ch, vs) {
-    return new ApiQp().queryQpAsync(bk, ch, vs).toPromise();
+    return lastValueFrom( new ApiQp().queryQpAsync(bk, ch, vs) );
   }
 }
 

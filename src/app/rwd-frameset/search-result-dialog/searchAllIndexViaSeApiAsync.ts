@@ -6,6 +6,7 @@ import { FhlUrl } from 'src/app/fhl-api/FhlUrl';
 import { cvtChinesesToBookAndSecToVerse } from './cvtChinesesToBookAndSecToVerse';
 import { DProgressInfo } from 'src/app/tools/EventTool';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
+import { lastValueFrom } from 'rxjs';
 /**
  * 內部自動呼叫 cvtChinesesToBookAndSecToVerse 了, 所以 book, verse 會存在
  * @param arg orig:0, 關鍵字 1:Greek 2:Hebrew
@@ -41,7 +42,7 @@ export async function searchAllIndexViaSeApiAsync(arg: {
     // console.log(data);
 
     
-    const rr1 = await ajax.getJSON<DSeApiResult>(url+data).pipe(map(a1 => a1 as DSeApiResult)).toPromise();        
+    const rr1 = await lastValueFrom( ajax.getJSON<DSeApiResult>(url+data).pipe(map(a1 => a1 as DSeApiResult)));
 
     if (rr1 === null) {
       trigger(0);

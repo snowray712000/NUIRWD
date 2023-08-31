@@ -1,7 +1,7 @@
 import Enumerable from 'linq';
 import { HttpRequest, HttpXhrBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { delay, mergeMap, takeUntil } from 'rxjs/operators';
 
@@ -81,6 +81,6 @@ async function getData2bAsync(): Promise<string[]> {
   return ['1sec', '2sec', '3sec', '4sec', '5sec'];
 
   async function sleep1(ms: number): Promise<string[]> {
-    return of([]).pipe(delay(ms)).toPromise();
+    return lastValueFrom(of([]).pipe(delay(ms)));
   }
 }

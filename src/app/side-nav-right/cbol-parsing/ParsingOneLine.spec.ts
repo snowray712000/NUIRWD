@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import { ParsingOneLine } from './ParsingOneLine';
 import { ApiQp } from 'src/app/fhl-api/ApiQp';
 
@@ -77,7 +78,7 @@ describe('ParsingOneLine', () => {
   });
 });
 function gCase(bk, ch, vs) {
-  new ApiQp().queryQpAsync(bk, ch, vs).toPromise().then(a1 => {
+  lastValueFrom(new ApiQp().queryQpAsync(bk, ch, vs)).then(a1 => {
     console.log(a1);
     console.log(JSON.stringify(a1));
   });

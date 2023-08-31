@@ -1,5 +1,5 @@
 import { tap, retry, } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable, lastValueFrom, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { FhlUrl } from '../FhlUrl';
 import { DAbvResult } from './DAbvResult';
@@ -52,8 +52,8 @@ class ApiAbv {
 export async function ApiAbv_getRecordsFromApiAsync(): Promise<DAbvResult> {
   let abvResult = getTestAbvData() // 因 CROS 限制，開發要用此
   if (false == IsLocalHostDevelopment.isLocalHost) {
-      const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()
-      abvResult = (await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise())!
+      const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()      
+      abvResult = (await lastValueFrom(new ApiAbv().queryAbvPhpOrCache(isGb)))!
   } 
 
   return abvResult

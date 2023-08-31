@@ -4,6 +4,7 @@ import { linq_range } from 'src/app/linq-like/linq_range';
 import { NumberStringGet, NumberType } from './NumberStringGet';
 import { ICommentToolDataGetter, DCommentOneData, DCommentQueryResult } from './comment-tool-interfaces';
 import { ScApiNextPrevGetter } from '../../fhl-api/ScApiNextPrevGetter';
+import { lastValueFrom } from 'rxjs';
 
 
 export class CommentToolDataGetter implements ICommentToolDataGetter {
@@ -199,7 +200,7 @@ export class CommentToolDataGetter implements ICommentToolDataGetter {
 
   private async getDataFromApi(address: DAddress) {
     // const re1 = test1();
-    const re1 = await new ApiSc().queryScAsync({ bookId: 3, address }).toPromise();
+    const re1 = await lastValueFrom(new ApiSc().queryScAsync({ bookId: 3, address }) );
     return re1;
   }
 }
