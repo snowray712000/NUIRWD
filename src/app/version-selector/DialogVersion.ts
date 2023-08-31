@@ -5,7 +5,7 @@ import Enumerable from 'linq';
 
 import { getHtmlOfDialogVersions } from "./getHtmlOfDialogVersions";
 import { constants } from "./ConstantsUsingByDialogVersion";
-import { ApiAbv } from "../fhl-api/BibleVersion/ApiAbv";
+import { ApiAbv_getRecordsFromApiAsync } from "../fhl-api/BibleVersion/ApiAbv";
 import { DAbvResult } from "../fhl-api/BibleVersion/DAbvResult";
 import { IsLocalHostDevelopment } from "../fhl-api/IsLocalHostDevelopment";
 import { DisplayLangSetting } from "../rwd-frameset/dialog-display-setting/DisplayLangSetting";
@@ -73,12 +73,7 @@ export class BibieVersionDialog {
     // 若是簡體，會在此時更新 顯示名稱
     // 若是abv新增了資料，會加在其它
     private async setVersionsFromApiAsync() {
-        let abvResult = getTestAbvData() // 因 CROS 限制，開發要用此
-        if (false == IsLocalHostDevelopment.isLocalHost) {
-            const isGb = DisplayLangSetting.s.getFromLocalStorageIsGB()
-            abvResult = (await new ApiAbv().queryAbvPhpOrCache(isGb).toPromise())!
-        }
-
+        const abvResult = await ApiAbv_getRecordsFromApiAsync()
         const abvResult2 = Enumerable.from(abvResult.record).select(a1 => {
             return {
                 na: a1.book,
@@ -109,13 +104,6 @@ export class BibieVersionDialog {
             }
         })
         return
-        function getTestAbvData() {
-            return {
-                record: [
-                    { book: 'unv', cname: '和合本' }
-                ]
-            } as DAbvResult
-        }
     }
     // 模擬點擊 語言 選項中的第1個, 即 中文
     // 只有第1次，初始化 dialog 時才會用。
@@ -132,6 +120,13 @@ export class BibieVersionDialog {
     public setCallbackClosed(cb: (jo?: DDialogOfVersionArgs) => void) {
         this._cbClosed = cb;
     }
+    public setCallbackOpened(cb: ()=>void ){
+        this._cbOpened = cb
+    }
+    public getVers$(){
+        const vers$ = this.dlg$.find('.vers')
+        return vers$
+    }
     // 第1次，會是 async，之後不會 
     public async openAsync(joArgs?: DDialogOfVersionArgs) {
         if (this.dlg$.length == 0) {
@@ -142,8 +137,7 @@ export class BibieVersionDialog {
 
         defaultJo(); // maybe change joArgs                
         this.dlg$Data = joArgs!;
-        this.dlg$.dialog("open")
-        this.triggerCbOpened();
+        this.dlg$.dialog("open")        
         return
         function defaultJo() {
             DDialogOfVersionArgsSetDefaultIfNeed(joArgs)
@@ -171,6 +165,18 @@ export class BibieVersionDialog {
 
     private get dlg$(): JQuery<HTMLElement> {
         return $("#" + this.id)
+    }
+    public hideWhereVerNotIncluded(isShowAllFirst: boolean):void {
+        const vers$ = this.getVers$()
+        const bookItems = vers$.find('.book-item')
+        if (isShowAllFirst) // 不是每個引用的地方，都要先顯示先有
+            bookItems.show()
+        bookItems.filter( (a1,a2) => {
+            console.log('filter',a1,a2);
+            if ( $(a2).data('data')["verHide"] == 1 )
+                return true
+            return false
+        }).hide()        
     }
     // 可使用 const { sets$ } = this.dlgs$ 選，要用的
     private get dlgs$() {
@@ -204,31 +210,39 @@ export class BibieVersionDialog {
 
         lang$.find('.lang-item').on('click', function () {
             var this$ = $(this)
+
+            // 防呆: 已經是英文，又按了一英文
             var isOrignal = this$.hasClass('active')
             if (isOrignal) {
                 return
             }
 
+            // 所有去掉 active，再設定「按的這個」是 active
             lang$.children().removeClass('active')
             this$.addClass('active')
 
 
-            var lang = this$.data('data').na
-
+            var lang = this$.data('data').na // ch en hg fo mi ha ... etc
+            
+            // 開啟次分類 選項，只有中文才有
             if (lang == 'ch') {
                 chSubs$.show()
             } else {
                 chSubs$.hide()
             }
 
+            // 符合的語言才顯示 (不是把每個 book-item 關閉，而是那個群組，但中文是另外方式處理)
             for (var a1 of vers$.children()) {
-                if (lang != $(a1).data('lang')) {
+                if (lang != $(a1).data('lang')) { // ch en hg fo mi ha ... etc
                     $(a1).hide()
                 } else {
                     $(a1).show()
                 }
             }
-
+            
+            // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
+            that.hideWhereVerNotIncluded(true)
+            
             if (lang == 'ch') {
                 flexCheckDefault$.trigger('change')
             }
@@ -244,6 +258,9 @@ export class BibieVersionDialog {
             } else {
                 chSub$.hide()
                 vers$.children('.ch').children().show() // true -> false, 全變 visible
+                
+                // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
+                that.hideWhereVerNotIncluded(false)
             }
         })
 
@@ -428,6 +445,9 @@ export class BibieVersionDialog {
                 }
             }
 
+            // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
+            that.hideWhereVerNotIncluded(false)
+            
             return
             function getConditions() {
                 /** @type {string[]} */
