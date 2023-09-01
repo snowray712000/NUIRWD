@@ -1,6 +1,6 @@
 import { EventSideNavs } from "src/app/rwd-frameset/EventSideNavs";
 // import { EventVersionsChanged } from 'src/app/side-nav-left/ver-select/EventVersionControlBridge';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, lastValueFrom } from 'rxjs';
 import { EventWindowSizeChanged } from 'src/app/rwd-frameset/EventWindowSizeChanged';
 import { debounceTime } from 'rxjs/operators';
 import { EventIsSnToggleChanged } from 'src/app/side-nav-left/side-nav-left.component';
@@ -19,7 +19,7 @@ export class EventOneVerWidthChanged {
   constructor(fnGetWidth: () => number) {
     this.fnGetWidth = fnGetWidth;
     this.changed$ = new Observable<number>(ob => { this.ob = ob; });
-    this.changed$.toPromise().then(a1 => { });
+    lastValueFrom(this.changed$).then(a1=>{})
     // const eVer$ = new EventVersionsChanged();
     // eVer$.changed$.subscribe(vers => {
     //   this.chkIt();

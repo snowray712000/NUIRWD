@@ -22,6 +22,7 @@ import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/
 import { EventVerseChanged } from '../cbol-parsing/EventVerseChanged';
 import { TestTime } from 'src/app/tools/TestTime';
 import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-comment-tool',
@@ -135,7 +136,7 @@ export class CommentToolComponent implements OnInit, OnChanges {
 interface DCommentResult { title: string; next?: DAddress; prev?: DAddress; data: DText[]; }
 async function queryCommentAsync(addr: DAddress): Promise<DCommentResult> {
   // 看起來 rr1 才是真正的原始 api 資料
-  const rr1 = await new ApiSc().queryScAsync({ bookId: 3, address: addr, isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }).toPromise();
+  const rr1 = await lastValueFrom( new ApiSc().queryScAsync({ bookId: 3, address: addr, isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }) );
   // console.log(rr1);
   //  要找的轉換在這
   const rrData = cvtData(rr1.record[0].com_text, addr);

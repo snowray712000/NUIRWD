@@ -8,6 +8,7 @@ import { BookNameAndId } from 'src/app/const/book-name/BookNameAndId';
 import { FixDesDefaultBookChap } from '../comment-tool/com-text/FixDesDefaultBookChap';
 import { ScApiNextPrevGetter } from 'src/app/fhl-api/ScApiNextPrevGetter';
 import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { lastValueFrom } from 'rxjs';
 export class ChainToolDataGetter implements IChainToolDataGetter {
   reNext: DAddress;
   rePrev: DAddress;
@@ -66,7 +67,7 @@ export class ChainToolDataGetter implements IChainToolDataGetter {
     }
   }
   private async getChainDataFromApi(address: DAddress) {
-    const r1 = await new ApiSc().queryScAsync({ bookId: 4, address,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }).toPromise();
+    const r1 = await lastValueFrom( new ApiSc().queryScAsync({ bookId: 4, address,isSimpleChinese: DisplayLangSetting.s.getValueIsGB() }));
     // console.log(r1);
     const { reNext, rePrev } = new ScApiNextPrevGetter().getNextAndPrev(r1);
     this.reNext = reNext;

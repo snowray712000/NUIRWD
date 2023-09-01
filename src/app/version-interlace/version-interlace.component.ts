@@ -251,8 +251,7 @@ export class DataForInterlaceQueryor implements IDatasQueryor {
               isExistStrong: true,
               isSimpleChinese: gb,
             };
-            const rre1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))
-            //const rre1 = await new ApiQsb().queryQsbAsync(arg).toPromise();
+            const rre1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))            
             return rre1 as { record: DRecord[] };
           }
         };

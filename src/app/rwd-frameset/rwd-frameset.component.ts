@@ -36,15 +36,17 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { FontSize } from './settings/FontSize';
 import { DialogChooseChapterComponent } from './dialog-choose-chapter/dialog-choose-chapter.component';
 import { HistorysLink } from './settings/HistorysLink';
-import { ApiAbv } from '../fhl-api/BibleVersion/ApiAbv';
-import { DAbvResult } from '../fhl-api/BibleVersion/DAbvResult';
+import { ApiAbv_getRecordsFromApiAsync } from '../fhl-api/BibleVersion/ApiAbv';
+
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { DomManagers } from './DomManagers';
 import 'jquery';
 import 'jquery-ui';
-import { BibieVersionDialog } from '../version-selector/DialogVersion';
+import { BibleVersionDialog, updateVerHideAsync } from '../version-selector/DialogVersion';
 import { VerOfOffenForMain } from './settings/VerOfOffenForMain';
 import { VerOfSetsForMain } from './settings/VerOfSetsForMain';
+import Enumerable from 'src/ijn-fhl-sharefun-ts/linq/linq';
+import { assert } from '../tools/assert';
 declare function testThenDoAsync(args: { cbTest: () => boolean; ms?: number; msg?: string; cntMax?: number }): Promise<any>
 
 @Component({
@@ -288,7 +290,7 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
   }
   async onClickVersions() {
     /** dialog 關閉後 */
-    BibieVersionDialog.s.setCallbackClosed(jo => {
+    BibleVersionDialog.s.setCallbackClosed(jo => {
       if (jo === undefined) {
         // 按 close
       } else {
@@ -306,71 +308,20 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
         if (jo.sets != undefined) {
           VerOfSetsForMain.s.updateValueAndSaveToStorageAndTriggerEvent(jo.sets)
         }
-
       }
-
+    })
+    
+    BibleVersionDialog.s.setCallbackOpened(async ()=>{
+      const addresses = this.routeVerseRange.verses
+      await updateVerHideAsync(addresses)
     })
 
-    BibieVersionDialog.s.openAsync({
+    BibleVersionDialog.s.openAsync({
       selects: VerForMain.s.getFromLocalStorage(),
       offens: VerOfOffenForMain.s.getFromLocalStorage(),
       sets: VerOfSetsForMain.s.getFromLocalStorage(),
     })
-    return
-    // console.log(jQueryUI);
-
-    // var dlg = FHL.BibleVersionDialog.s
-    // dlg.open()
-
-    // var dialog1: Ijnjs.BibleVersionDialog
-    // Ijnjs.testThenDo(() => {
-    //   new ApiAbv().queryAbvPhpOrCache(DisplayLangSetting.s.getValueIsGB()).toPromise().then(abvResult => {
-    //     dialog1 = initDialog(abvResult)
-    //     show()
-    //     return
-    //     function initDialog(abvResult: DAbvResult) {
-    //       var abv = abvResult.record.map(a2 => ({ book: a2.book, cname: a2.cname }))
-    //       return new Ijnjs.BibleVersionDialog('dialog-version', cbDialogHide, abv, cbDialogShow)
-    //     }
-    //     function show() {
-    //       const vers = VerForMain.s.getFromLocalStorage();
-    //       dialog1.show(vers)
-    //     }
-
-    //   })
-    // })
-
-    // function cbDialogHide(vers: string[]) {
-    //   const r1 = VerForMain.s.getFromLocalStorage();
-    //   var isChanged = vers.length != r1.length || Enumerable.from(vers).any(a1 => r1.includes(a1) == false)
-
-    //   if (isChanged) {
-    //     VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(vers);
-    //   }
-    // }
-    // function cbDialogShow() {
-    //   $('#dialog-version').css('z-index', '3')
-    // }
-
-    //return
-    const vers = VerForMain.s.getFromLocalStorage();
-    const refdialog = new DialogVersionSelectorOpenor(this.dialog).showDialog(
-      { isSnOnly: 0, isLimitOne: 0, versions: vers },
-    );
-
-    /** dialog 關閉後 */
-    const pthis = this;
-    refdialog.afterClosed().toPromise().then((re: string[]) => {
-      if (re === undefined) {
-        // 按 close
-      } else {
-        // 按 ok, 但沒有選
-        if (re.length === 0) {
-          re = ['unv'];
-        }
-        VerForMain.s.updateValueAndSaveToStorageAndTriggerEvent(re);
-      }
-    });
+    return        
   }
 }
 interface SideWidthStyle {

@@ -15,6 +15,7 @@ import { cvt_unv } from 'src/app/bible-text-convertor/unv';
 import { cvt_ncv } from "src/app/bible-text-convertor/cvt_ncv";
 import { cvt_cbol } from 'src/app/bible-text-convertor/cvt_cbol';
 import { DisplayLangSetting } from 'src/app/rwd-frameset/dialog-display-setting/DisplayLangSetting';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 export class BibleTextOneVersionQuery {
   dataMapAndPhoto: DApiSobjResult[];
   constructor(dataMapAndPhoto?: DApiSobjResult[]) {
@@ -75,7 +76,9 @@ export class BibleTextOneVersionQuery {
       isExistStrong: true,
       isSimpleChinese: false,
     };
-    const re1 = await new ApiQsb().queryQsbAsync(arg).toPromise();
+    
+    const re1 = await lastValueFrom(new ApiQsb().queryQsbAsync(arg))
+
     return re1;
   }
 }

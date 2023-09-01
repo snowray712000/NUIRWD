@@ -143,7 +143,7 @@
           if (na[i] == '/') {
             return undefined
           } else if (na[i] == '.') {
-            return na.substr(i + 1)
+            return na.substring(i + 1)
           }
         }
         return undefined
@@ -398,7 +398,7 @@
       var n = src.length
       for (let i = n - 1; i >= 0; i--) {
         if (src[i] == '/') {
-          return src.substr(i + 1)
+          return src.substring(i + 1)
         }
       }
       return undefined

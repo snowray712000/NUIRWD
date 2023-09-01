@@ -15,7 +15,7 @@ var SplitStringByRegExp = /** @class */ (function () {
         }
         else {
             if (r1[0].index > 0) {
-                var w = str.substr(0, r1[0].index);
+                var w = str.substring(0, r1[0].index);
                 data.push({ w: w });
             }
             for (var i = 0; i < r1.length; i++) {
@@ -24,8 +24,8 @@ var SplitStringByRegExp = /** @class */ (function () {
                 data.push({ w: it_1[0], exec: it_1 });
                 // tslint:disable-next-line: max-line-length
                 var w = i !== r1.length - 1
-                    ? str.substr(it_1.index + len, r1[i + 1].index - it_1.index - len)
-                    : str.substr(it_1.index + len, str.length - it_1.index - len);
+                    ? str.substring(it_1.index + len, r1[i + 1].index)
+                    : str.substring(it_1.index + len, str.length);
                 if (w.length !== 0) {
                     data.push({ w: w });
                 }

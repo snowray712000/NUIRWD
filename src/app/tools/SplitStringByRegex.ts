@@ -11,18 +11,18 @@ export class SplitStringByRegex {
       data.push(str);
     } else {
       if (r1[0].index > 0) {
-        data.push(str.substr(0, r1[0].index));
+        data.push(str.substring(0, r1[0].index));        
         isStartFromFirstChar = false;
       }
       for (let i = 0; i < r1.length; i++) {
         const it = r1[i];
         const len = it[0].length;
         data.push(it[0]);
-        if (i !== r1.length - 1) {
-          data.push(str.substr(it.index + len, r1[i + 1].index - it.index - len));
+        if (i !== r1.length - 1) {          
+          data.push(str.substring(it.index + len, r1[i + 1].index));
         }
         else {
-          data.push(str.substr(it.index + len, str.length - it.index - len));
+          data.push(str.substring(it.index + len));
         }
       }
     }
@@ -43,7 +43,7 @@ export class SplitStringByRegexVer2 {
       data.push({ w: str });
     } else {
       if (r1[0].index > 0) {
-        const w = str.substr(0, r1[0].index);
+        const w = str.substring(0, r1[0].index);
         data.push({ w });
       }
 
@@ -53,7 +53,7 @@ export class SplitStringByRegexVer2 {
         data.push({ w: it[0], exec: it });
 
         // tslint:disable-next-line: max-line-length
-        const w = (i !== r1.length - 1) ? str.substr(it.index + len, r1[i + 1].index - it.index - len) : str.substr(it.index + len, str.length - it.index - len);
+        const w = (i !== r1.length - 1) ? str.substring(it.index + len, r1[i + 1].index) : str.substring(it.index + len);
         if (w.length !== 0) {
           data.push({ w });
         }

@@ -204,7 +204,7 @@ var ijnjs = (() => {
           if (na[i] == '/') {
             return undefined
           } else if (na[i] == '.') {
-            return na.substr(i + 1)
+            return na.substring(i + 1)
           }
         }
         return undefined

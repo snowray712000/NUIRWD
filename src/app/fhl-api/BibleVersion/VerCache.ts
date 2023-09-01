@@ -3,6 +3,7 @@ import { LocalStorageJsonBase } from '../../tools/LocalStorageJsonBase';
 import { ajax } from 'rxjs/ajax';
 import { FhlUrl } from '../FhlUrl';
 import { map } from 'rxjs/operators';
+import { lastValueFrom } from "rxjs";
 
 export class VerCache extends LocalStorageJsonBase<DAbvResult> {
   static s = new VerCache();
@@ -14,8 +15,8 @@ export class VerCache extends LocalStorageJsonBase<DAbvResult> {
     });
 
     async function verQ() {
-      const r1 = await ajax({ url: `${new FhlUrl().getJsonUrl2()}uiabv.php` })
-        .pipe(map(a1 => a1.response as DAbvResult)).toPromise();
+      const r1 = await lastValueFrom( ajax({ url: `${new FhlUrl().getJsonUrl2()}uiabv.php` })
+        .pipe(map(a1 => a1.response as DAbvResult)) );
       return r1;
     }
   }

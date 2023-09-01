@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, QueryList, ViewChild, Query, Output, E
 import { MatSelectionListChange, MatSelectionList } from '@angular/material/list';
 import { IsSnManager } from '../rwd-frameset/settings/IsSnManager';
 import { IsMapPhotoManager } from '../rwd-frameset/settings/IsMapPhotoManager';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, lastValueFrom } from 'rxjs';
 import { RouteStartedWhenFrame } from '../rwd-frameset/RouteStartedWhenFrame';
 import { HistorysLink } from '../rwd-frameset/settings/HistorysLink';
 import { FhlUrl } from '../fhl-api/FhlUrl';
@@ -60,7 +60,7 @@ export class SideNavLeftComponent implements OnInit {
     const eventIsSnToggle$ = new Observable<boolean>(obIsSnToggle => {
       this.obIsSnToggle = obIsSnToggle;
     });
-    eventIsSnToggle$.toPromise();
+    lastValueFrom(eventIsSnToggle$);
     // tslint:disable-next-line: no-unused-expression
     new EventIsSnToggleChanged(eventIsSnToggle$);
   }
