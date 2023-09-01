@@ -27,7 +27,7 @@
             data.push({ w: str })
         } else {
             if (r1[0].index > 0) {
-                var w = str.substr(0, r1[0].index)
+                var w = str.substring(0, r1[0].index)
                 data.push({ w: w })
             }
 
@@ -37,7 +37,7 @@
 
                 var isLast = i == cnt - 1
                 var len = it[0].length
-                var w = !isLast ? str.substr(it.index + len, r1[i + 1].index - it.index - len) : str.substr(it.index + len, str.length - it.index - len);
+                var w = !isLast ? str.substring(it.index + len, r1[i + 1].index) : str.substring(it.index + len);
                 if (w.length != 0) {
                     data.push({ w: w })
                 }

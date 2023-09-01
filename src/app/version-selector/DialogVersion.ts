@@ -698,7 +698,7 @@ export class BibleVersionDialog {
             function getText() {
                 /** @type {string[]} */
                 var nas = Enumerable.from(r2).select(a1 => a1.cna).toArray()
-                var two = Enumerable.from(nas).select(a1 => a1.substr(0, 2)).toArray().join(',')
+                var two = Enumerable.from(nas).select(a1 => a1.substring(0, 2)).toArray().join(',')
                 // (4) 和合,ES,KJ,CV
                 return '(' + nas.length + ')' + two
             }
