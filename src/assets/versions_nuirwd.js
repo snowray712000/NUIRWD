@@ -104,6 +104,16 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230901a',
+            na2: [
+                '新功能: # 功能: 選擇譯本時，若在讀舊約，則不顯示沒有舊約的譯本',
+                'deprecated: rxjs toPromise，用 lastValueFrom 取代',
+                'deprecated: typescript substr，用 substring 取代',
+                'deprecated: rxjs ConnectableObservable, multicast',
+                'Bug: 譯本 Dialog 的 Opened 會被觸發兩次，已解決'
+            ],
+            img: []
+        },{
             na: '230829a',
             na2: [
                 'Bug: SNParsing，約二5節、8節沒出來。',            
