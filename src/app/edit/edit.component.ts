@@ -11,7 +11,7 @@ import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddRef
 import { AddOrigDictInCommentText } from '../side-nav-right/comment-tool/AddOrigDictInCommentText';
 import { DialogSearchResultOpenor } from '../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { MatDialog } from '@angular/material/dialog';
-import { ConnectableObservable } from 'rxjs';
+import { Connectable, ConnectableObservable } from 'rxjs';
 
 @Component({
   selector: 'app-edit',
@@ -155,7 +155,7 @@ class ValueEvent<T> {
     this.events.trigger(arg);
   }
   get(): T { return this.curValue; }
-  get changed$(): ConnectableObservable<T> { return this.events.changed$; }
+  get changed$(): Connectable<T> { return this.events.changed$; }
 }
 class MyEdit extends LocalStorageStringBase {
   static s = new MyEdit();
