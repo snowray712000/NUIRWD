@@ -9,6 +9,8 @@ import { ApiAbv_getRecordsFromApiAsync } from "../fhl-api/BibleVersion/ApiAbv";
 import { DAbvResult } from "../fhl-api/BibleVersion/DAbvResult";
 import { IsLocalHostDevelopment } from "../fhl-api/IsLocalHostDevelopment";
 import { DisplayLangSetting } from "../rwd-frameset/dialog-display-setting/DisplayLangSetting";
+import { DAddress } from "../bible-address/DAddress";
+import { assert } from "../tools/assert";
 
 
 export interface DDialogOfVersionArgs {
@@ -172,7 +174,6 @@ export class BibleVersionDialog {
         if (isShowAllFirst) // 不是每個引用的地方，都要先顯示先有
             bookItems.show()
         bookItems.filter( (a1,a2) => {
-            console.log('filter',a1,a2);
             if ( $(a2).data('data')["verHide"] == 1 )
                 return true
             return false
@@ -733,4 +734,59 @@ export class BibleVersionDialog {
             }
         }
     }
+}
+
+/**
+ * 譯本選擇功能用，當目前閱讀的經文範圍，只有舊約時，譯本選擇不要跳出沒有舊約的譯本。
+ * @param addresses 目前閱讀經文範圍
+ */
+export async function updateVerHideAsync(addresses: DAddress[]){    
+    const books = Enumerable.from( addresses ).select( a1 => a1.book).distinct().toArray()
+    const isIncludeNT = Enumerable.from( books ).any( a1 => a1 > 39)
+    const isIncludeOT = Enumerable.from( books ).any( a1 => a1 < 40)
+    // console.log(books,isIncludeOT,isIncludeNT)
+
+      const abvResult = await ApiAbv_getRecordsFromApiAsync()
+      type TpOne = { ntonly: 0|1; otonly: 0|1 };
+      const fnIsIncludeNt = (a1: TpOne) => {        
+        if (a1.ntonly == 0 && a1.otonly == 0 )
+          return 1
+        if (a1.otonly != 1 ) return 1
+        return 0
+      }
+      const fnIsIncludeOt = (a1: TpOne) => {
+        if (a1.ntonly == 0 && a1.otonly == 0 )
+          return 1
+        if (a1.ntonly != 1 ) return 1
+        return 0        
+      }
+      const na2ntot = Enumerable.from( abvResult.record )
+                                .select( a1 => ({ na: a1.book, 
+                                  nt: fnIsIncludeNt(a1), 
+                                  ot: fnIsIncludeOt(a1)}) )
+                                .toDictionary(a1=>a1.na, a1=>a1 )
+      // console.log(na2ntot)
+      
+      type TpDataBookItem = {na:string; cna:string; verHide: 0|1}
+      const vers$ = BibleVersionDialog.s.getVers$()
+      const bookItems$ = vers$.find('.book-item')      
+      bookItems$.each((i1, dom)=>{
+        
+        let data = $(dom).data('data') as TpDataBookItem
+        const ntot = na2ntot.get(data.na) ?? {nt: 1, ot: 1, verHide: 0}
+
+        assert ( () => isIncludeNT || isIncludeOT )
+        if ( isIncludeOT && isIncludeNT ){
+          data['verHide'] = 0 // 不隱藏
+        } else if ( isIncludeOT ){
+          data['verHide'] = ntot.ot == 0 ? 1 : 0
+        } else {
+          data['verHide'] = ntot.nt == 0 ? 1 : 0
+        }
+
+        $(dom).data('data', data) // update data                              
+      })
+
+      // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
+      BibleVersionDialog.s.hideWhereVerNotIncluded(true)
 }

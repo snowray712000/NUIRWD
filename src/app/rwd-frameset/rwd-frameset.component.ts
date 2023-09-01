@@ -42,7 +42,7 @@ import { MatSidenavContent } from '@angular/material/sidenav';
 import { DomManagers } from './DomManagers';
 import 'jquery';
 import 'jquery-ui';
-import { BibleVersionDialog } from '../version-selector/DialogVersion';
+import { BibleVersionDialog, updateVerHideAsync } from '../version-selector/DialogVersion';
 import { VerOfOffenForMain } from './settings/VerOfOffenForMain';
 import { VerOfSetsForMain } from './settings/VerOfSetsForMain';
 import Enumerable from 'src/ijn-fhl-sharefun-ts/linq/linq';
@@ -312,56 +312,8 @@ export class RwdFramesetComponent implements AfterViewInit, OnInit {
     })
     
     BibleVersionDialog.s.setCallbackOpened(async ()=>{
-
       const addresses = this.routeVerseRange.verses
-      const books = Enumerable.from( addresses ).select( a1 => a1.book).distinct().toArray()
-      const isIncludeNT = Enumerable.from( books ).any( a1 => a1 > 39)
-      const isIncludeOT = Enumerable.from( books ).any( a1 => a1 < 40)
-      // console.log(books,isIncludeOT,isIncludeNT)
-
-      const abvResult = await ApiAbv_getRecordsFromApiAsync()
-      type TpOne = { ntonly: 0|1; otonly: 0|1 };
-      const fnIsIncludeNt = (a1: TpOne) => {        
-        if (a1.ntonly == 0 && a1.otonly == 0 )
-          return 1
-        if (a1.otonly != 1 ) return 1
-        return 0
-      }
-      const fnIsIncludeOt = (a1: TpOne) => {
-        if (a1.ntonly == 0 && a1.otonly == 0 )
-          return 1
-        if (a1.ntonly != 1 ) return 1
-        return 0        
-      }
-      const na2ntot = Enumerable.from( abvResult.record )
-                                .select( a1 => ({ na: a1.book, 
-                                  nt: fnIsIncludeNt(a1), 
-                                  ot: fnIsIncludeOt(a1)}) )
-                                .toDictionary(a1=>a1.na, a1=>a1 )
-      // console.log(na2ntot)
-      
-      type TpDataBookItem = {na:string; cna:string; verHide: 0|1}
-      const vers$ = BibleVersionDialog.s.getVers$()
-      const bookItems$ = vers$.find('.book-item')      
-      bookItems$.each((i1, dom)=>{
-        
-        let data = $(dom).data('data') as TpDataBookItem
-        const ntot = na2ntot.get(data.na) ?? {nt: 1, ot: 1, verHide: 0}
-
-        assert ( () => isIncludeNT || isIncludeOT )
-        if ( isIncludeOT && isIncludeNT ){
-          data['verHide'] = 0 // 不隱藏
-        } else if ( isIncludeOT ){
-          data['verHide'] = ntot.ot == 0 ? 1 : 0
-        } else {
-          data['verHide'] = ntot.nt == 0 ? 1 : 0
-        }
-
-        $(dom).data('data', data) // update data                              
-      })
-
-      // 若正在讀「舊約」，沒有舊約的譯本，就不要顯示
-      BibleVersionDialog.s.hideWhereVerNotIncluded(true)
+      await updateVerHideAsync(addresses)
     })
 
     BibleVersionDialog.s.openAsync({

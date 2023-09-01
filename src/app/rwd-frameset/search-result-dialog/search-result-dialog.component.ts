@@ -30,7 +30,7 @@ import { MatProgressBar } from "@angular/material/progress-bar";
 import { Observable, lastValueFrom } from 'rxjs';
 import { DisplayLangSetting } from '../dialog-display-setting/DisplayLangSetting';
 import { getGbText } from 'src/app/gb/getGbText';
-import { BibleVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed } from 'src/app/version-selector/DialogVersion';
+import { BibleVersionDialog, DDialogOfVersionArgs, DDialogOfVersionArgsSetDefaultIfNeed, updateVerHideAsync } from 'src/app/version-selector/DialogVersion';
 import { VerForMain } from '../settings/VerForMain';
 import { VerOfSetsForMain } from '../settings/VerOfSetsForMain';
 import { VerOfOffenForMain } from '../settings/VerOfOffenForMain';
@@ -283,6 +283,9 @@ export class SearchResultDialogComponent implements OnInit {
         DDialogOfVersionArgsSetDefaultIfNeed(jo)
         doAfterCloseDialogNotSnVer([jo.selects[0]])//原版本，只會被選1個版本，所以取第1個版本
       });
+      BibleVersionDialog.s.setCallbackOpened(async ()=>{        
+        await updateVerHideAsync(that.dataByParent.addresses ?? [{book:1,chap:1,verse:1}])
+      })
       BibleVersionDialog.s.openAsync({
         selects: [],
         offens: VerOfOffenForMain.s.getFromLocalStorage(),
