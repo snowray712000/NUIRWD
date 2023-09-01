@@ -11,7 +11,7 @@ import { AddReferenceInCommentText } from '../side-nav-right/comment-tool/AddRef
 import { AddOrigDictInCommentText } from '../side-nav-right/comment-tool/AddOrigDictInCommentText';
 import { DialogSearchResultOpenor } from '../rwd-frameset/search-result-dialog/DialogSearchResultOpenor';
 import { MatDialog } from '@angular/material/dialog';
-import { Connectable, ConnectableObservable } from 'rxjs';
+import { Connectable } from 'rxjs';
 
 @Component({
   selector: 'app-edit',
