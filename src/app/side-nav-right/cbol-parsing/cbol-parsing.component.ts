@@ -281,7 +281,21 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
       if (undefined == sn) {
         continue
       }
-      const remark = trimStringAndLength0ReturnUndefined(it.remark)
+      let remark = trimStringAndLength0ReturnUndefined(it.remark)      
+      
+      // [#2.13, 3.16#] 創1:2
+      if (remark !== undefined && /\[#[\d., ]+#\]/.test(remark)){
+        const regex = /\[#(\d+\.\d+(?: *, *\d+\.\d+)*)#\]/g;
+        let r2 = remark.replace(regex, (match, chaptersAndVerses) => {
+          const links = chaptersAndVerses.split(',').map((chapterAndVerse) => {
+            const link = `https://bible.fhl.net/new/pimg/${chapterAndVerse.trim()}.png`;
+            return `<a target="_blank" href="${link}">&lrm;§${chapterAndVerse.trim()}</a>`;
+          });
+          return links.join(', ');
+        });
+        remark = r2        
+      }
+      
       re2.push({
         wid: it.wid,
         word: it.word,
@@ -295,6 +309,7 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
     }
     // console.log(re2);
     this.words = re2;
+    return 
     function trimStringAndLength0ReturnUndefined(r1?: string) {
       // fn("") -> undefined
       // fn("\t") -> undefined
