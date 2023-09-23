@@ -104,6 +104,16 @@ function getDataList(){
             'dev <a href="http://bible.fhl.net/NNUI/_rwd_dev/" target="_blank">RD Develop versions(bible)</a>',
             '',
         ]},{
+            na: '230923a',
+            na2: [
+                '優化: 經文閱讀，併排時，加個細線(有時候中文太接近時，會不易分辨譯本)',
+                'Bug: SnParsing，希伯來文文法重點，目前 RWD 顯示為 `備註 [#2.25#]`，應該要變成超連結，發生於創1:2',
+                'Bug: SnParsing，RWD 顯示 `=`，實際應該是要顯示`διό = δι᾽ ὅ`。它的原始資料是 `remark:"<!διό!>=<!δι᾽ ὅ!>"`，發於於羅2:1',
+                'Bug: SnParsing，詩篇93:3節，Bug，無顯示',
+                'Bug: SNParsing。詩篇92:3，Bug，無顯示'
+            ],
+            img: []
+        },{
             na: '230901a',
             na2: [
                 '新功能: # 功能: 選擇譯本時，若在讀舊約，則不顯示沒有舊約的譯本',
