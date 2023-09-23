@@ -1,6 +1,6 @@
 import { DQpResult } from 'src/app/fhl-api/ApiQp';
 export class GetExpsFromQbResult {
-  main(arg: DQpResult): { w: string }[][] {
+  main(arg: DQpResult): { w?: string, isBr?:1 }[][] {
     const r1 = arg.record[0].exp.replace('\r', ''); // 換行一致用 \n 就好,
     const r2 = r1.split('\n');
     // console.log(JSON.stringify(r2));

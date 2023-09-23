@@ -349,7 +349,16 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
     // console.log(JSON.stringify(exps));
     // [[{"w":"起初，"}],[{"w":"上帝創造天和地。"}]]
 
-    assert(() => words.length === exps.length, '行數要一 樣');
+    assert(()=> exps.length >= words.length, '行數限制') // 大於的在 詩篇92:3
+    if (exps.length > words.length ) {
+      let cnt = exps.length - words.length 
+      for (let index = 0; index < cnt; index++) {
+        exps[1].unshift({isBr:1})
+        exps[1].unshift(exps[0][0])
+        exps.shift()
+      }
+    }
+
     const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
@@ -367,8 +376,7 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
     // console.log(JSON.stringify(exps));
     // [[{"w":"施洗者約翰出現在曠野裡，"}],[{"w":"宣講悔改的洗禮，"}],[{"w":"為了罪惡的赦免。"}]]
 
-
-    assert(() => words.length === exps.length, '行數要一 樣');
+    assert(() => words.length === exps.length, '行數要一樣');
     const re = linq_zip(words, exps, (a1, a2) => {
       return { words: a1, exps: a2 };
     });
@@ -380,7 +388,7 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
 /** 對應的 原文/中文 */
 interface DLineOnePair {
   words: DWord[];
-  exps: { w: string }[];
+  exps: { w?: string, isBr?:1 }[];
   origs?: DOneRowTable[];
 }
 interface DWord {

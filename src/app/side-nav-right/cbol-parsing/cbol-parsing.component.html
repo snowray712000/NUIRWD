@@ -25,7 +25,10 @@
         </div>
         <!-- 中文 -->
         <div>
-          <span *ngFor="let it2 of it1.exps">{{it2.w}}</span>
+          <span *ngFor="let it2 of it1.exps">
+            <br *ngIf="it2.isBr"/>
+            <span>{{it2.w}}</span>            
+          </span>
         </div>
         <!-- 這一行的字典 -->
         <div style="direction:ltr;background: lightgray;">
