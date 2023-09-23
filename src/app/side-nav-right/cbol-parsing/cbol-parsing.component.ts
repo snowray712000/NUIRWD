@@ -37,6 +37,7 @@ import { TestTime } from 'src/app/tools/TestTime';
 import { scrollToSelected } from 'src/app/rwd-frameset/DomManagers';
 import { SplitStringByRegex } from 'src/app/tools/SplitStringByRegex';
 import { lastValueFrom } from 'rxjs';
+import { regStrGreeksAll, regStrHebrewsAll } from 'src/app/tools/regStrGreeksHebrews';
 
 @Component({
   selector: 'app-cbol-parsing',
@@ -143,8 +144,8 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
   }
   public wform2(strWform: string): string {
     // 創1:11 節 Bug 而新增
-    let r1 = new SplitStringByRegex()
-    let r6 = r1.main(strWform, /[\u0590-\u05FF]+/g) // hebrew
+    let r1 = new SplitStringByRegex()    
+    let r6 = r1.main(strWform,new RegExp(`[${regStrHebrewsAll}]+`,'g')) // hebrew
     if (r6.data.length == 1) {
       return strWform
     } else {
@@ -286,15 +287,17 @@ export class CbolParsingComponent implements OnInit, AfterViewInit {
       // [#2.13, 3.16#] 創1:2
       if (remark !== undefined && /\[#[\d., ]+#\]/.test(remark)){
         const regex = /\[#(\d+\.\d+(?: *, *\d+\.\d+)*)#\]/g;
-        let r2 = remark.replace(regex, (match, chaptersAndVerses) => {
+        remark = remark.replace(regex, (match, chaptersAndVerses) => {
           const links = chaptersAndVerses.split(',').map((chapterAndVerse) => {
             const link = `https://bible.fhl.net/new/pimg/${chapterAndVerse.trim()}.png`;
             return `<a target="_blank" href="${link}">&lrm;§${chapterAndVerse.trim()}</a>`;
           });
           return links.join(', ');
         });
-        remark = r2        
       }
+      
+      // 羅2:1,1:19 出現 <! διό=δι᾽ ὅ !> 的奇特東西
+      remark = remark?.replace(new RegExp(`<!([${regStrGreeksAll}= ,]+)!>`, 'g'), '$1')
       
       re2.push({
         wid: it.wid,
