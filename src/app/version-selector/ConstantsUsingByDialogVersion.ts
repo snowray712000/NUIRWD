@@ -73,21 +73,26 @@ export const constants = {
                 { na: 'russian', od: 3, cna: '俄文聖經' },
                 { na: 'korean', od: 5, cna: '韓文聖經' },
                 { na: 'jp', od: 7, cna: '日語聖經' },
+                { na: 'baru', od: 9, cna: '印尼聖經' }, 
+                { na: 'cvul', od: 11, cna: '武加大譯本' },
+                { na: 'nvul', od: 13, cna: '新武加大譯本' },                
             ]
         },
         {
             na: 'mi', cna: '台語', od: 9, vers: [
+                { na: 'ttvhl2021', od: 29, cna: '現代台語2021版漢字' },
+                { na: 'ttvcl2021', od: 27, cna: '現代台語2021版全羅' },
+                { na: 'ttvh', od: 3, cna: '聖經公會現代臺語漢字' },            
                 { na: 'tte', od: 1, cna: '聖經公會現代臺語全羅' },
-                { na: 'ttvh', od: 3, cna: '聖經公會現代臺語漢字' },
-                { na: 'apskcl', od: 9, cna: '紅皮聖經全羅' },
+                { na: 'sgebklhl', od: 25, cna: '全民台語聖經漢羅' },
+                { na: 'sgebklcl', od: 23, cna: '全民台語聖經全羅' },
                 { na: 'apskhl', od: 11, cna: '紅皮聖經漢羅' },
-                { na: 'bklcl', od: 13, cna: '巴克禮全羅' },
+                { na: 'apskcl', od: 9, cna: '紅皮聖經全羅' },
                 { na: 'bklhl', od: 15, cna: '巴克禮漢羅' },
+                { na: 'bklcl', od: 13, cna: '巴克禮全羅' },
                 { na: 'tghg', od: 17, cna: '聖經公會巴克禮台漢本' },
                 { na: 'prebklcl', od: 19, cna: '馬雅各全羅' },
                 // {na:'prebklhl',od:20,cna:'馬雅各漢羅'}, // 要廢棄的，因為目前漢羅轉換差異，沒辦法順利轉換
-                { na: 'sgebklcl', od: 23, cna: '全民台語聖經全羅' },
-                { na: 'sgebklhl', od: 25, cna: '全民台語聖經漢羅' },
             ]
         },
         {
@@ -100,12 +105,18 @@ export const constants = {
         {
             na: 'in', cna: '台灣原住民語', od: 11, vers: [
                 { na: 'rukai', od: 1, cna: '聖經公會魯凱語聖經' },
+                { na: 'wanshandia', od: 19, cna: '萬山魯凱語馬可福音' },
+                { na: 'maolindia', od: 21, cna: '茂林魯凱語馬可福音' },
+                { na: 'tonadia', od: 23, cna: '多納魯凱語馬可福音' },
                 { na: 'tsou', od: 3, cna: '聖經公會鄒語聖經' },
                 { na: 'ams', od: 5, cna: '聖經公會阿美語1997' },
                 { na: 'amis2', od: 7, cna: '聖經公會阿美語2019' },
                 { na: 'ttnt94', od: 9, cna: '聖經公會達悟語新約聖經' },
                 { na: 'sed', od: 11, cna: '賽德克語' },
-                { na: 'tru', od: 13, cna: '聖經公會太魯閣語聖經' }
+                { na: 'tru', od: 13, cna: '聖經公會太魯閣語聖經' },
+                { na: 'bunun', od: 15, cna: '聖經公會布農語聖經' },
+                { na: 'tay', od: 17, cna: '聖經公會泰雅爾語聖經' },
+                { na: 'pinuyan', od: 25, cna: '卑南語' },
             ]
         },
         { na: 'ot', cna: '其它', od: 13, vers: [{ na: 'tibet', od: 1, cna: '藏語聖經' },] },
